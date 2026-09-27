@@ -4,6 +4,8 @@
 
 ## 2026-09-27
 
+- `docs/records/managed/BACKLOG.md` へ、フローティングの設定メニューからアプリ本体を起動する機能（BL-052）と、その人手検証（BL-053）を
+  登録した（自律ループ第1イテレーション）。
 - 実機検証 BL-048（`docs/VERIFICATION.md` の F1〜F15。M3・M4 と BL-034〜BL-051 の表示・操作）がすべて OK だったため完了とし、
   BACKLOG と `docs/VERIFICATION.md` から削除した。README の状態表から確認済みの「実機確認待ち」を外し、DESIGN に確認済みを反映した。
 - `docs/records/managed/BACKLOG.md` へ、実機確認での指摘（退避中のつまみの横幅を広げる）を BL-051 として登録した
