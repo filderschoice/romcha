@@ -17,7 +17,8 @@
 
 - 対象: Android アプリ（applicationId `io.github.filderschoice.romcha`、ライセンス MIT）
 - 前提環境: minSdk 34 / targetSdk 36 / compileSdk 36、JDK 17、Gradle 8.13、AGP 8.13.0、Kotlin 2.0.21
-- 動作確認端末: Pixel 8 Pro（実機確認は人手検証）
+- 動作確認端末: Pixel 8 Pro（実機確認は人手検証。手順と最新の結果は `docs/VERIFICATION.md`）。MediaSession の取得（Q-01。Premium 有り）、
+  リプレイ同期（N-02）、ライブ・プレミアの最新追従は確認済み。Premium 無しの環境、ライブ終了後のリプレイ切り替え、広告中の扱いは未確認
 
 ## 実装済み機能要件
 
@@ -89,7 +90,8 @@
   受理するのは `youtu.be/ID`、`(www.|m.)youtube.com/watch?v=ID`、`/live/ID`、`/shorts/ID`（http/https・スキーム省略可）。
   ホストは完全一致で判定し、ID は `[A-Za-z0-9_-]{11}` のみ受理する。ID 単体の入力は受理しない。
 - `resolve.VideoResolver.resolve(TrackMetadata)`（PLAN 4.3）: 次の順に試し、確定した時点で打ち切る。
-  1. `videoIdHints` の先頭 → `Confirmed(METADATA)`（キャッシュにも登録）
+  1. `videoIdHints` の先頭 → `Confirmed(METADATA)`（キャッシュにも登録）。公式アプリは動画IDを公開しないため（Q-02）、
+     現状は常に手順2以降で特定する。公式アプリの変化に備えて残す
   2. `ResolutionCache`（キーは `TrackMetadata.identity`）→ `Confirmed(CACHE)`
   3. 長さが 0 以下（ライブ・プレミア中）でチャンネル名があれば、`search(チャンネル名, liveOnly = true)`（検索の絞り込み
      「ライブ」`params`）の結果のうちライブ表示のあるものを同じ規則で採点し、確定すれば `Confirmed(LIVE)`。
@@ -152,7 +154,9 @@
     `videoIdHints`。`identity`（タイトル・チャンネル名・長さ）の変化で動画の切り替えとみなす（F-VID-03）。
   - `videoIdHints`（PLAN 4.3 手順1）: MediaMetadata の全キー、MediaDescription の mediaId / mediaUri / extras、controller と
     PlaybackState の extras、キューの mediaId / mediaUri を集め、値に YouTube URL があればその ID、キー名の末尾要素に `id` を含み
-    値が 11 桁 ID 形式ならその値を候補にする。
+    値が 11 桁 ID 形式ならその値を候補にする。実機（YouTube 21.38.130）では候補は常に空（Q-02）。
+  - 広告再生中もタイトル・チャンネル名・長さは本編の値のままと記録されている（Premium 有りの環境。PLAN K-05）。
+    Premium 無しの環境での確認と、広告中の位置・他の手掛かりは BL-031 で確認する。
   - デバッグ一覧（Q-02 の実機確認用）は画面表示のみで、ログへ出さない（N-07）。
 
 ### 同期エンジン（`core:sync`）
