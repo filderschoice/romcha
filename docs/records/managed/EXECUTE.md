@@ -6,6 +6,27 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 17:55
+  summary: 公式アプリの MediaSession から再生状態を取得する PlaybackMonitor を core:media に実装
+  details:
+    変更内容: >-
+      F-SYNC-01/02 と PLAN 4.2 に基づき、通知へのアクセス許可を受ける MediaListenerService、MediaSession を追跡する PlaybackMonitor、
+      値を Android 非依存モデルへ変換する MediaMapping を追加した。4.3 手順1 のためメタデータの全キーから動画IDの候補を探し、
+      M0（Q-02）の実機確認用に全キーの一覧を公開する（画面表示のみ）。TrackMetadata を core:chat の resolve パッケージに追加した。
+    変更ファイル:
+      - core/media/src/main/AndroidManifest.xml
+      - core/media/src/main/res/values/strings.xml
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/MediaListenerService.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/MediaMapping.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/PlaybackMonitor.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/MediaMappingTest.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/TrackMetadata.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:media の単体テスト 7 件成功
+    関連ID:
+      - BL-008
 - date: 2026-09-27 17:30
   summary: YouTube URL から動画IDを取り出す VideoUrlParser を core:chat に実装
   details:

@@ -25,6 +25,7 @@
 - F-CHAT-01/08、N-08: メッセージモデルとチャット応答の解析（`core:chat` の `ChatResponseParser`）
 - F-CHAT-10、F-VID-07: InnerTube クライアント（`next` からの continuation 取得・チャット無効の判定、リプレイ／ライブ取得、指数バックオフ）
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
+- F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
@@ -76,6 +77,24 @@
   受理するのは `youtu.be/ID`、`(www.|m.)youtube.com/watch?v=ID`、`/live/ID`、`/shorts/ID`（http/https・スキーム省略可）。
   ホストは完全一致で判定し、ID は `[A-Za-z0-9_-]{11}` のみ受理する。ID 単体の入力は受理しない。
 - テストの fixture（`core/chat/src/test/resources/fixtures/`）は既知の応答構造に基づく合成データ。実応答との照合は人手検証。
+
+### 再生状態の取得（`core:media`）
+
+- `MediaListenerService`（`NotificationListenerService`）は「通知へのアクセス」の許可を受けるためだけに置き、通知内容は読まない。
+  manifest は `exported=true`・`permission=BIND_NOTIFICATION_LISTENER_SERVICE`。
+- `PlaybackMonitor`: `MediaSessionManager.getActiveSessions(リスナーのコンポーネント)` と `addOnActiveSessionsChangedListener` で
+  パッケージ `com.google.android.youtube` の `MediaController` を追跡し、`MediaController.Callback` で状態・メタデータの変化を
+  `state: StateFlow<NowPlaying>`（スナップショット・`TrackMetadata`・セッション有無・デバッグ用の全キー一覧）へ反映する。
+  コールバックはメインスレッド。許可が無い・`SecurityException` の場合は開始しない。
+- `MediaMapping`（純粋関数。JVM テスト可能）:
+  - 状態: PLAYING / FAST_FORWARDING / REWINDING → PLAYING、PAUSED → PAUSED、BUFFERING / CONNECTING / SKIPPING_* → BUFFERING、
+    STOPPED / ERROR → STOPPED、その他 → NONE。速度が 0 以下なら 1.0 とみなす。負の位置は 0。
+  - `TrackMetadata`（`core:chat` の `resolve` パッケージ）: タイトル（無ければメタデータ無し）、ARTIST をチャンネル名、DURATION を長さ、
+    `videoIdHints`。`identity`（タイトル・チャンネル名・長さ）の変化で動画の切り替えとみなす（F-VID-03）。
+  - `videoIdHints`（PLAN 4.3 手順1）: MediaMetadata の全キー、MediaDescription の mediaId / mediaUri / extras、controller と
+    PlaybackState の extras、キューの mediaId / mediaUri を集め、値に YouTube URL があればその ID、キー名の末尾要素に `id` を含み
+    値が 11 桁 ID 形式ならその値を候補にする。
+  - デバッグ一覧（Q-02 の実機確認用）は画面表示のみで、ログへ出さない（N-07）。
 
 ### 同期エンジン（`core:sync`）
 
