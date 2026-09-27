@@ -6,6 +6,23 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 21:30
+  summary: ライブ・プレミアのチャットをポーリングで追従する LiveChatSession を core:sync に実装
+  details:
+    変更内容: >-
+      F-CHAT-04/05 に基づき、応答の継続トークンを更新しながら推奨間隔（1〜10 秒に制限）でライブチャットを取得する LiveChatSession を追加した。
+      受信時刻付きで重複を除いて保持し、継続トークンが無くなったら終了とする。公式アプリの一時停止中は取得せず（N-03）、
+      プレミア待機中を考慮して一時停止以外の状態では取得を続ける。MockWebServer と InnerTubeClient を使う単体テスト 6 件を追加した。
+    変更ファイル:
+      - core/sync/build.gradle.kts
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/LiveChatSession.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/LiveChatSessionTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:sync の単体テスト 24 件成功
+    関連ID:
+      - BL-014
 - date: 2026-09-27 20:50
   summary: 再生検出から動画特定・リプレイ取得・同期・オーバーレイ表示までをつなぐセッション統合を実装
   details:

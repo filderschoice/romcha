@@ -29,6 +29,7 @@
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
 - F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
+- F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
 - F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session.WatchCoordinator`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
@@ -94,6 +95,17 @@
   から videoId・タイトル・チャンネル名（`ownerText` → `longBylineText` → `shortBylineText`）・長さ（`lengthText` の `h:mm:ss`）・
   ライブ表示（`BADGE_STYLE_TYPE_LIVE_NOW`）を読む。
 - テストの fixture（`core/chat/src/test/resources/fixtures/`）は既知の応答構造に基づく合成データ。実応答との照合は人手検証。
+
+### ライブチャットの取得（`core:sync` の `LiveChatSession`）
+
+- 取得元 `LiveChatSource`（本番は `InnerTubeClient.fetchLive`）を、応答の継続トークンを更新しながら繰り返し呼ぶ。
+  次の取得までの待ち時間は応答の `timeoutMs`（無ければ 5 秒）を 1〜10 秒に収めた値（`LivePolling`）。
+- 受信したメッセージは ID で重複を除き、受信時刻（`clock` 基準）を付けて `LiveState.received` に受信順で保持する（上限 500 件。
+  重複判定の ID は上限の 4 倍まで覚える）。受信時刻は表示遅延（F-SYNC-08）の起点に使う。
+- 継続トークンが無い応答で終了（`ended = true`）とし、ループを抜ける（F-CHAT-06）。
+- 公式アプリが一時停止（`PAUSED`）の間は取得せず、1 秒ごとに再開を確かめる（N-03）。プレミアの待機中は公式アプリが再生状態に
+  ならないため、一時停止以外の状態（再生中・未検出・停止・バッファ中）では取得を続ける（F-CHAT-05）。
+- 失敗（クライアントの再試行後）は `FetchStatus.Failed` とし、10 秒後に同じトークンで取り直す。
 
 ### 再生状態の取得（`core:media`）
 
