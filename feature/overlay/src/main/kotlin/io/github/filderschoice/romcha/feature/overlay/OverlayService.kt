@@ -26,6 +26,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.PlaybackMonitor
+import io.github.filderschoice.romcha.core.sync.LiveTimeline
 import io.github.filderschoice.romcha.feature.overlay.session.DeviceState
 import io.github.filderschoice.romcha.feature.overlay.session.InnerTubeBackend
 import io.github.filderschoice.romcha.feature.overlay.session.PersistentResolutionCache
@@ -55,6 +56,7 @@ class OverlayService :
     private var params: WindowManager.LayoutParams? = null
     private var bounds = WindowBounds(0, 0, 0, 0)
     private val opacity = mutableFloatStateOf(OverlayPrefs.DEFAULT_OPACITY)
+    private val liveDelaySeconds = MutableStateFlow(LiveTimeline.DEFAULT_DELAY_SECONDS)
     private var visible = true
     private val screenOn = MutableStateFlow(true)
     private lateinit var monitor: PlaybackMonitor
@@ -77,6 +79,7 @@ class OverlayService :
         windowManager = getSystemService(WindowManager::class.java)
         prefs = OverlayPrefs(this)
         opacity.floatValue = prefs.opacity
+        liveDelaySeconds.value = prefs.liveDelaySeconds
         lifecycleScope.launch {
             OverlayChannel.events.collect { if (it is OverlayEvent.StopRequested) stopSelf() }
         }
@@ -176,7 +179,13 @@ class OverlayService :
                 setViewTreeSavedStateRegistryOwner(this@OverlayService)
                 setContent {
                     val state by OverlayChannel.state.collectAsState()
-                    ChatOverlay(state = state, opacity = opacity.floatValue, actions = actions)
+                    val delay by liveDelaySeconds.collectAsState()
+                    ChatOverlay(
+                        state = state,
+                        opacity = opacity.floatValue,
+                        liveDelaySeconds = delay,
+                        actions = actions,
+                    )
                 }
             }
         windowManager.addView(composeView, layoutParams)
@@ -217,6 +226,11 @@ class OverlayService :
             override fun onGestureEnd() {
                 prefs.saveBounds(bounds)
                 prefs.opacity = opacity.floatValue
+                prefs.liveDelaySeconds = liveDelaySeconds.value
+            }
+
+            override fun onLiveDelayChange(seconds: Int) {
+                liveDelaySeconds.value = seconds
             }
 
             override fun onOpacityChange(opacity: Float) {

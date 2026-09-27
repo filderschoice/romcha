@@ -44,11 +44,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
+import io.github.filderschoice.romcha.core.sync.LiveTimeline
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.R
+import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
+import kotlin.math.roundToInt
 
 internal val OverlayTextColor = Color(0xFFF5F5F5)
 internal val SubTextColor = Color(0xFFB0BEC5)
@@ -58,6 +61,7 @@ internal val SubTextColor = Color(0xFFB0BEC5)
 fun ChatOverlay(
     state: OverlayUiState,
     opacity: Float,
+    liveDelaySeconds: Int,
     actions: OverlayActions,
 ) {
     var showSettings by remember { mutableStateOf(false) }
@@ -69,7 +73,10 @@ fun ChatOverlay(
                 .background(Color.Black.copy(alpha = OverlayFormat.clampOpacity(opacity))),
     ) {
         Header(state, actions, onToggleSettings = { showSettings = !showSettings })
-        if (showSettings) OpacitySlider(opacity, actions)
+        if (showSettings) {
+            OpacitySlider(opacity, actions)
+            if (state.indicator == SyncIndicator.LIVE) LiveDelaySlider(liveDelaySeconds, actions)
+        }
         state.notice?.let { Notice(it) }
         if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
@@ -137,6 +144,25 @@ private fun OpacitySlider(
             onValueChange = actions::onOpacityChange,
             onValueChangeFinished = actions::onGestureEnd,
             valueRange = OverlayFormat.MIN_OPACITY..1f,
+            modifier = Modifier.weight(1f).padding(start = 8.dp),
+        )
+    }
+}
+
+/** ライブ・プレミア中の表示遅延（F-SYNC-08）。映像より先にチャットが流れる場合に遅らせる。 */
+@Composable
+private fun LiveDelaySlider(
+    seconds: Int,
+    actions: OverlayActions,
+) {
+    Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(stringResource(R.string.overlay_live_delay, seconds), color = SubTextColor, fontSize = 11.sp)
+        Slider(
+            value = seconds.toFloat(),
+            onValueChange = { actions.onLiveDelayChange(it.roundToInt()) },
+            onValueChangeFinished = actions::onGestureEnd,
+            valueRange = LiveTimeline.MIN_DELAY_SECONDS.toFloat()..LiveTimeline.MAX_DELAY_SECONDS.toFloat(),
+            steps = LiveTimeline.MAX_DELAY_SECONDS - LiveTimeline.MIN_DELAY_SECONDS - 1,
             modifier = Modifier.weight(1f).padding(start = 8.dp),
         )
     }

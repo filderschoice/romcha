@@ -17,6 +17,9 @@ interface OverlayActions {
 
     fun onOpacityChange(opacity: Float)
 
+    /** ライブ・プレミア中の表示遅延（秒）を変えた（F-SYNC-08） */
+    fun onLiveDelayChange(seconds: Int)
+
     fun onHide()
 
     fun onCandidateSelected(videoId: String)

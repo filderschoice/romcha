@@ -6,6 +6,27 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 22:15
+  summary: ライブ・プレミア中の最新追従表示（LiveTimeline）と表示遅延の設定を追加
+  details:
+    変更内容: >-
+      F-SYNC-08 に基づき、受信時刻から表示遅延だけ経ったメッセージを表示する LiveTimeline を core:sync に追加し、
+      オーバーレイの設定パネルに LIVE 時だけ表示する表示遅延のスライダー（0〜30 秒）と、その端末内保存を追加した。
+      単体テスト 4 件を追加した。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/LiveTimeline.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/LiveTimelineTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:sync の単体テスト 32 件成功
+    関連ID:
+      - BL-016
 - date: 2026-09-27 21:55
   summary: ライブ・プレミア終了後にリプレイの準備を待って切り替える ReplaySwitcher を core:sync に実装
   details:

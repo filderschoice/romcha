@@ -30,6 +30,7 @@
 - F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
+- F-SYNC-08: ライブ・プレミア中の最新追従表示と表示遅延の設定（`core:sync` の `LiveTimeline`、オーバーレイの設定パネル）
 - F-CHAT-06: ライブ・プレミア終了の検知とリプレイへの切り替え待ち（`core:sync` の `LiveChatSession.ended` と `ReplaySwitcher`）
 - F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session.WatchCoordinator`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
@@ -107,6 +108,13 @@
 - 公式アプリが一時停止（`PAUSED`）の間は取得せず、1 秒ごとに再開を確かめる（N-03）。プレミアの待機中は公式アプリが再生状態に
   ならないため、一時停止以外の状態（再生中・未検出・停止・バッファ中）では取得を続ける（F-CHAT-05）。
 - 失敗（クライアントの再試行後）は `FetchStatus.Failed` とし、10 秒後に同じトークンで取り直す。
+
+### ライブの最新追従表示（`core:sync` の `LiveTimeline`）
+
+- `LiveTimeline.visible(received, now, delayMs)`: 受信時刻 + 表示遅延 ≦ 現在時刻 のメッセージを受信順に返す（上限 500 件、新しい方を残す）。
+- 表示遅延は 0〜30 秒（既定 0 秒）。公式アプリの映像は配信より遅れて届くため、チャットが映像より先に流れる場合に利用者が遅らせる。
+- 設定はオーバーレイの設定パネル（同期状態が LIVE の時だけ表示するスライダー、1 秒刻み）で変え、SharedPreferences `overlay` の
+  `liveDelaySeconds` に保存する。`OverlayService` が `StateFlow` で保持し、セッションへ渡す。
 
 ### ライブ終了後のリプレイへの切り替え（`core:sync` の `ReplaySwitcher`）
 
