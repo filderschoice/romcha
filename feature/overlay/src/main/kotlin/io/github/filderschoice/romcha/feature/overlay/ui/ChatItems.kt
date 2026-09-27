@@ -1,0 +1,133 @@
+package io.github.filderschoice.romcha.feature.overlay.ui
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import io.github.filderschoice.romcha.core.chat.AuthorRole
+import io.github.filderschoice.romcha.core.chat.ChatMessage
+import io.github.filderschoice.romcha.core.chat.ChatMessageKind
+import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
+import io.github.filderschoice.romcha.feature.overlay.R
+
+private val OwnerColor = Color(0xFFFFD600)
+private val ModeratorColor = Color(0xFF5E84F1)
+private val MemberColor = Color(0xFF2BA640)
+private val MembershipColor = Color(0xFF0F9D58)
+
+/** チャット1件の表示。種別ごとに強調を変える（F-CHAT-08、F-VIEW-02）。 */
+@Composable
+internal fun ChatItem(message: ChatMessage) {
+    val paid = message.paid
+    when {
+        paid != null -> PaidItem(message)
+        message.kind == ChatMessageKind.MEMBERSHIP ||
+            message.kind == ChatMessageKind.GIFT_PURCHASE ||
+            message.kind == ChatMessageKind.GIFT_REDEMPTION -> BandItem(message, MembershipColor)
+        else -> TextItem(message)
+    }
+}
+
+@Composable
+private fun TextItem(message: ChatMessage) {
+    Row(modifier = Modifier.padding(vertical = 2.dp)) {
+        Text(
+            text = message.author.name,
+            color = authorColor(message.author.roles),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(AUTHOR_WEIGHT, fill = false).padding(end = 6.dp),
+        )
+        Text(text = message.plainText, color = OverlayTextColor, fontSize = 13.sp)
+    }
+}
+
+/** スーパーチャット・スーパーステッカーは金額と色帯で強調する（F-VIEW-02）。 */
+@Composable
+private fun PaidItem(message: ChatMessage) {
+    val paid = message.paid ?: return
+    val body = Color(paid.bodyColorArgb ?: DEFAULT_PAID_ARGB)
+    val header = Color(paid.headerColorArgb ?: paid.bodyColorArgb ?: DEFAULT_PAID_ARGB)
+    val textColor =
+        if (OverlayFormat.prefersDarkText(
+                paid.bodyColorArgb ?: DEFAULT_PAID_ARGB,
+            )
+        ) {
+            Color.Black
+        } else {
+            Color.White
+        }
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp).clip(RoundedCornerShape(4.dp))) {
+        Row(modifier = Modifier.fillMaxWidth().background(header).padding(horizontal = 6.dp, vertical = 2.dp)) {
+            Text(message.author.name, color = textColor, fontSize = 12.sp, modifier = Modifier.weight(1f), maxLines = 1)
+            Text(paid.amountText, color = textColor, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+        }
+        val text =
+            if (message.kind == ChatMessageKind.SUPER_STICKER) {
+                stringResource(
+                    R.string.overlay_sticker,
+                )
+            } else {
+                message.plainText
+            }
+        if (text.isNotEmpty()) {
+            Text(
+                text = text,
+                color = textColor,
+                fontSize = 13.sp,
+                modifier = Modifier.fillMaxWidth().background(body).padding(horizontal = 6.dp, vertical = 3.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun BandItem(
+    message: ChatMessage,
+    color: Color,
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp).clip(RoundedCornerShape(4.dp)).background(color),
+    ) {
+        Text(
+            text = listOfNotNull(message.author.name.takeIf { it.isNotEmpty() }, message.headerText).joinToString("  "),
+            color = Color.White,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+        )
+        if (message.plainText.isNotEmpty()) {
+            Text(
+                message.plainText,
+                color = Color.White,
+                fontSize = 13.sp,
+                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            )
+        }
+    }
+}
+
+private fun authorColor(roles: Set<AuthorRole>): Color =
+    when {
+        AuthorRole.OWNER in roles -> OwnerColor
+        AuthorRole.MODERATOR in roles -> ModeratorColor
+        AuthorRole.MEMBER in roles -> MemberColor
+        else -> SubTextColor
+    }
+
+private const val AUTHOR_WEIGHT = 0.4f
+private const val DEFAULT_PAID_ARGB = 0xFF1E88E5.toInt()

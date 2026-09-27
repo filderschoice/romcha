@@ -6,6 +6,32 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 19:20
+  summary: フローティングウィンドウ（フォアグラウンドサービスと Compose の表示）を feature:overlay に実装
+  details:
+    変更内容: >-
+      F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07 と PLAN 4.6 に基づき、TYPE_APPLICATION_OVERLAY のウィンドウへ Compose の画面を載せる
+      OverlayService（specialUse のフォアグラウンドサービス、常駐通知から表示切り替え・終了）、ドラッグ移動・サイズ変更・不透明度変更、
+      新着の自動スクロールと「最新へ」ボタン、スーパーチャットの色帯表示、表示内容を受け渡す OverlayChannel を追加した。
+      表示値の計算（位置表記・文字色の選択・ウィンドウの収め方・自動スクロール判断）の単体テスト 7 件を追加した。
+    変更ファイル:
+      - feature/overlay/src/main/AndroidManifest.xml
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/drawable/ic_overlay_notification.xml
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatItems.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、feature:overlay の単体テスト 7 件成功、Android lint 指摘0件
+    関連ID:
+      - BL-010
 - date: 2026-09-27 18:30
   summary: 動画の自動特定パイプライン（MediaSession の ID、端末内キャッシュ、検索照合と採点）を core:chat に実装
   details:

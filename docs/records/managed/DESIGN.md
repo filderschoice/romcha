@@ -27,6 +27,7 @@
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
 - F-VID-01/02: 動画の自動特定パイプライン手順1・2・4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
+- F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
@@ -133,6 +134,26 @@
   - 通信量の抑制（K-04）: 続きの取得は最小 1 秒間隔。再試行しても失敗した後は 10 秒の冷却期間を置く（取り直しも含む）。
   - 取得状態 `FetchStatus`（Idle / Loading / Retrying(attempt) / Failed(failure)）を UI へ出す（F-CHAT-10）。
   - 間隔は `SessionTiming`（tick 250ms・冷却 10 秒・最小間隔 1 秒）でまとめて渡す。
+
+### フローティングウィンドウ（`feature:overlay`）
+
+- `OverlayService`（`LifecycleService` + `SavedStateRegistryOwner`）: `foregroundServiceType="specialUse"`（用途を
+  `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` に記載）で常駐し、`WindowManager.addView`（`TYPE_APPLICATION_OVERLAY`、
+  `FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCH_MODAL`、`TOP|START`）で `ComposeView` を表示する。
+  `ComposeView` にはサービス自身を `ViewTreeLifecycleOwner` / `ViewTreeSavedStateRegistryOwner` として設定する。
+  - 起動は `OverlayService.start(context)`（オーバーレイ権限が無ければ false）。前面のアクティビティから呼ぶ。
+  - 常駐通知（チャンネル `overlay`、重要度 LOW）に「表示／非表示」「終了」の操作を付け、本文タップでアプリを開く（F-OVL-08）。
+  - ウィンドウの位置・大きさ・不透明度は SharedPreferences `overlay` に保存し、表示時に画面内へ収める（`WindowBounds.clampTo`）。
+    既定 280×360dp、最小 160dp。ヘッダーのドラッグで移動、右下のハンドルのドラッグでサイズ変更（F-OVL-02）。
+  - 不透明度は 0.2〜1.0（既定 0.6）。ヘッダーの設定ボタンでスライダーを出す（F-OVL-03）。
+- 表示内容の受け渡し: プロセス内オブジェクト `OverlayChannel` の `state: StateFlow<OverlayUiState>`（タイトル・メッセージ・
+  再生位置・同期状態・お知らせ文・候補）へセッション側が書き込み、ウィンドウが購読する。利用者の操作は
+  `events: SharedFlow<OverlayEvent>`（候補の選択・終了）でセッション側へ返す。
+- 一覧（F-OVL-07）: `AutoScrollPolicy` で、利用者が遡ってドラッグを終えた時点で最下部でなければ追従を止めて「最新へ」ボタンを出し、
+  最下部に戻るかボタン押下で追従を再開する。追従中は新着ごとに最下部へスクロールする。
+- 表示: 通常メッセージは投稿者名（所有者＝黄・モデレーター＝青・メンバー＝緑）と本文（絵文字は代替テキスト）。
+  スーパーチャット・スーパーステッカーは見出し帯（投稿者名・金額）と本文帯を応答の色で塗り、輝度で黒／白文字を選ぶ（F-VIEW-02）。
+  メンバー加入・ギフトは緑の帯。お知らせ文（チャット無効 F-VID-07・通信失敗など）は赤帯で表示する。
 
 ## 非機能要件
 
