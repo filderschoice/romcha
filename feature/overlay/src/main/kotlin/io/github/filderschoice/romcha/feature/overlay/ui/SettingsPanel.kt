@@ -1,7 +1,11 @@
 package io.github.filderschoice.romcha.feature.overlay.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -12,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
+import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.core.sync.SyncOffset
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
@@ -23,25 +28,33 @@ import kotlin.math.roundToLong
 /**
  * ヘッダーの設定ボタンで開く設定パネル（不透明度・文字サイズ・同期の補正または表示遅延・タッチ透過）。
  *
- * ライブ・プレミア中は表示遅延（F-SYNC-08）、それ以外（リプレイ）は同期オフセットの補正（F-SYNC-06）を出す。
+ * ライブ・プレミア中は表示遅延（F-SYNC-08）、それ以外（リプレイ）は同期オフセットの補正（F-SYNC-06）と
+ * 手動タイマーモード（F-SYNC-07）の操作を出す。
  */
 @Composable
 internal fun SettingsPanel(
     indicator: SyncIndicator,
     settings: OverlaySettings,
+    manualTimer: PlaybackSnapshot?,
     actions: OverlayActions,
     onTouchThrough: () -> Unit,
 ) {
     val change = { next: OverlaySettings -> actions.onSettingsChange(next) }
-    OpacitySlider(settings.opacity, actions) { change(settings.copy(opacity = it)) }
-    FontScaleSlider(settings.fontScale, actions) { change(settings.copy(fontScale = it)) }
-    if (indicator == SyncIndicator.LIVE) {
-        LiveDelaySlider(settings.liveDelaySeconds, actions) { change(settings.copy(liveDelaySeconds = it)) }
-    } else {
-        SyncOffsetSlider(settings.syncOffsetMs, actions) { change(settings.copy(syncOffsetMs = it)) }
+    // 項目が増えてもチャット欄が潰れないよう、高さに上限を設けてスクロールさせる
+    Column(modifier = Modifier.heightIn(max = MAX_HEIGHT).verticalScroll(rememberScrollState())) {
+        OpacitySlider(settings.opacity, actions) { change(settings.copy(opacity = it)) }
+        FontScaleSlider(settings.fontScale, actions) { change(settings.copy(fontScale = it)) }
+        if (indicator == SyncIndicator.LIVE) {
+            LiveDelaySlider(settings.liveDelaySeconds, actions) { change(settings.copy(liveDelaySeconds = it)) }
+        } else {
+            SyncOffsetSlider(settings.syncOffsetMs, actions) { change(settings.copy(syncOffsetMs = it)) }
+            ManualPanel(manualTimer, actions)
+        }
+        TouchThroughButton(onTouchThrough)
     }
-    TouchThroughButton(onTouchThrough)
 }
+
+private val MAX_HEIGHT = 200.dp
 
 /** リプレイの同期オフセットの補正（F-SYNC-06）。＋でチャットを早く、－で遅く表示する。 */
 @Composable

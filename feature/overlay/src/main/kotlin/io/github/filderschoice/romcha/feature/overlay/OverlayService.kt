@@ -21,12 +21,14 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.PlaybackMonitor
+import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.session.InnerTubeBackend
 import io.github.filderschoice.romcha.feature.overlay.session.PersistentResolutionCache
 import io.github.filderschoice.romcha.feature.overlay.session.SessionEnvironment
 import io.github.filderschoice.romcha.feature.overlay.session.SessionIo
 import io.github.filderschoice.romcha.feature.overlay.session.WatchCoordinator
 import io.github.filderschoice.romcha.feature.overlay.ui.ChatOverlay
+import io.github.filderschoice.romcha.feature.overlay.ui.ManualCommand
 import io.github.filderschoice.romcha.feature.overlay.ui.OverlayActions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -53,6 +55,7 @@ class OverlayService :
     private val settings = MutableStateFlow(OverlaySettings())
     private val touchThrough = mutableStateOf(false)
     private val minimized = mutableStateOf(false)
+    private val manualTimer = MutableStateFlow<PlaybackSnapshot?>(null)
     private var visible = true
     private val screenOn = MutableStateFlow(true)
     private lateinit var monitor: PlaybackMonitor
@@ -114,6 +117,7 @@ class OverlayService :
                 liveDelaySeconds = settings.part { it.liveDelaySeconds },
                 clock = SystemClock::elapsedRealtime,
                 syncOffsetMs = settings.part { it.syncOffsetMs },
+                manualTimer = manualTimer,
             )
         return WatchCoordinator(backend = backend, resolver = resolver, env = env, io = io)
     }
@@ -180,11 +184,13 @@ class OverlayService :
         window.show {
             val state by OverlayChannel.state.collectAsState()
             val current by settings.collectAsState()
+            val timer by manualTimer.collectAsState()
             ChatOverlay(
                 state = state,
                 settings = current,
                 touchThrough = touchThrough.value,
                 minimized = minimized.value,
+                manualTimer = timer,
                 actions = actions,
             )
         }
@@ -225,6 +231,20 @@ class OverlayService :
 
             override fun onCandidateSelected(videoId: String) {
                 OverlayChannel.send(OverlayEvent.CandidateSelected(videoId))
+            }
+
+            override fun onManual(command: ManualCommand) {
+                manualTimer.value =
+                    ManualControl.apply(
+                        timer = manualTimer.value,
+                        command = command,
+                        displayedPositionMs = OverlayChannel.state.value.positionMs - settings.value.syncOffsetMs,
+                        nowElapsedMs = SystemClock.elapsedRealtime(),
+                    )
+            }
+
+            override fun onInputFocus(focused: Boolean) {
+                window.focusable = focused
             }
         }
 

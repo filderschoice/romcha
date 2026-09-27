@@ -15,6 +15,7 @@ import io.github.filderschoice.romcha.core.chat.resolve.SearchCandidate
 import io.github.filderschoice.romcha.core.chat.resolve.TrackMetadata
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.NowPlaying
+import io.github.filderschoice.romcha.core.sync.ManualTimer
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.core.sync.PlaybackStatus
 import io.github.filderschoice.romcha.core.sync.SessionTiming
@@ -142,6 +143,7 @@ class WatchCoordinatorTest {
         val nowPlaying = MutableStateFlow(NowPlaying())
         val screenOn = MutableStateFlow(true)
         val liveDelaySeconds = MutableStateFlow(0)
+        val manualTimer = MutableStateFlow<PlaybackSnapshot?>(null)
         val requested = MutableStateFlow<String?>(null)
         val events = MutableSharedFlow<OverlayEvent>(extraBufferCapacity = 8)
         var published = OverlayUiState()
@@ -157,6 +159,7 @@ class WatchCoordinatorTest {
                             screenOn,
                             liveDelaySeconds,
                             clock = { scope.testScheduler.currentTime },
+                            manualTimer = manualTimer,
                         ),
                     io =
                         SessionIo(
@@ -262,6 +265,22 @@ class WatchCoordinatorTest {
 
             assertEquals(listOf("m_candidate01"), h.published.messages.map { it.id })
             assertEquals("candidate01", h.cache.get(h.nowPlaying.value.metadata!!.identity))
+        }
+
+    @Test
+    fun 手動タイマーモードではその位置でリプレイを表示する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.replayVideo("manual00001", "指定した動画")
+            h.manualTimer.value = ManualTimer.paused(2_000, nowElapsedMs = 0)
+
+            h.requested.value = "manual00001"
+            advanceTimeBy(1_000)
+
+            assertEquals(SyncIndicator.MANUAL, h.published.indicator)
+            assertEquals(null, h.published.notice)
+            assertEquals(listOf("m_manual00001"), h.published.messages.map { it.id })
+            assertEquals(2_000L, h.published.positionMs)
         }
 
     @Test

@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
+import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
@@ -67,6 +68,7 @@ fun ChatOverlay(
     settings: OverlaySettings,
     touchThrough: Boolean,
     minimized: Boolean,
+    manualTimer: PlaybackSnapshot?,
     actions: OverlayActions,
 ) {
     if (minimized) {
@@ -83,6 +85,7 @@ fun ChatOverlay(
                 SettingsPanel(
                     indicator = state.indicator,
                     settings = settings,
+                    manualTimer = manualTimer,
                     actions = actions,
                     onTouchThrough = {
                         showSettings = false

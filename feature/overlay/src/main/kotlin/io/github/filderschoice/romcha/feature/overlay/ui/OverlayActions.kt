@@ -29,4 +29,25 @@ interface OverlayActions {
     fun onHide()
 
     fun onCandidateSelected(videoId: String)
+
+    /** 手動タイマーモードの操作（F-SYNC-07） */
+    fun onManual(command: ManualCommand)
+
+    /** 文字入力の開始・終了。入力中だけウィンドウがフォーカスを取れるようにする */
+    fun onInputFocus(focused: Boolean)
+}
+
+/** 手動タイマーモードの操作（F-SYNC-07）。 */
+sealed interface ManualCommand {
+    data object Enable : ManualCommand
+
+    data object Disable : ManualCommand
+
+    data object Start : ManualCommand
+
+    data object Stop : ManualCommand
+
+    data class Seek(
+        val positionMs: Long,
+    ) : ManualCommand
 }

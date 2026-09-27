@@ -22,6 +22,9 @@ enum class SyncIndicator {
 
     /** ライブ・プレミアの最新追従 */
     LIVE,
+
+    /** 手動タイマーモード（F-SYNC-07） */
+    MANUAL,
 }
 
 /** 動画の切り替え候補（F-VID-02）。 */

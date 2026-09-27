@@ -6,6 +6,45 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:22
+  summary: 手動タイマーモード（開始・停止・位置入力）と同期状態「手動」を追加
+  details:
+    変更内容: >-
+      core:sync に ManualTimer（再生状態 PlaybackSnapshot を開始・停止・位置入力で作る。等速）を追加した。
+      設定パネル（リプレイ時）に「手動タイマー」を追加し、オンにすると表示中の位置（同期の補正を除く）で停止した状態から始め、
+      「開始／停止」「位置を入力」（h:mm:ss・m:ss・秒数。全角コロン可）で操作する。手動中はリプレイの同期に公式アプリの再生状態の
+      代わりに手動タイマーを使い、同期状態を「手動」（SyncIndicator.MANUAL）と表示し、「再生を検出していません」の表示を出さない。
+      ライブ・プレミアは受信時刻で表示するため手動タイマーの対象外とした。
+      ウィンドウは通常 FLAG_NOT_FOCUSABLE のため、位置の入力中だけフォーカスを取れるようにし（OverlayWindow.focusable）、
+      確定・取消で元に戻す。設定パネルは項目が増えたため高さ 200dp を上限にスクロールさせる。
+      手動タイマーの状態は保存しない。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/ManualTimer.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/ManualTimerTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ManualControl.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ManualPanel.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は ktlint の行長と detekt ReturnCount で失敗し修正）。
+      入力欄でキーボードが出るかは BL-048 で確認する
+    関連ID:
+      - BL-040
 - date: 2026-09-27 15:16
   summary: リプレイの同期オフセットの手動補正を追加し、設定パネルの値を OverlaySettings にまとめた
   details:

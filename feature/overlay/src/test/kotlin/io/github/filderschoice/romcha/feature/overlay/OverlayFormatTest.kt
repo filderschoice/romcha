@@ -47,6 +47,17 @@ class OverlayFormatTest {
     }
 
     @Test
+    fun 手動タイマーの位置入力を解釈する() {
+        assertEquals(5_025_000L, OverlayFormat.parsePosition("1:23:45"))
+        assertEquals(1_425_000L, OverlayFormat.parsePosition(" 23：45 "))
+        assertEquals(90_000L, OverlayFormat.parsePosition("90"))
+        assertEquals(null, OverlayFormat.parsePosition("1:60"))
+        assertEquals(null, OverlayFormat.parsePosition("abc"))
+        assertEquals(null, OverlayFormat.parsePosition(""))
+        assertEquals(null, OverlayFormat.parsePosition("1:2:3:4"))
+    }
+
+    @Test
     fun 画面の向きは幅と高さで決める() {
         assertEquals(ScreenOrientation.LANDSCAPE, ScreenOrientation.of(2_000, 1_000))
         assertEquals(ScreenOrientation.PORTRAIT, ScreenOrientation.of(1_000, 2_000))

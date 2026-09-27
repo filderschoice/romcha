@@ -49,6 +49,13 @@ internal class OverlayWindow<T>(
             updateLayout()
         }
 
+    /** 文字入力中だけフォーカスを取れるようにする（通常は `FLAG_NOT_FOCUSABLE` で公式アプリの操作を妨げない） */
+    var focusable: Boolean = false
+        set(value) {
+            field = value
+            updateLayout()
+        }
+
     fun show(content: @Composable () -> Unit) {
         if (view != null) return
         placement.load()
@@ -114,14 +121,15 @@ internal class OverlayWindow<T>(
         layoutParams.y = bounds.y
         layoutParams.width = bounds.width
         layoutParams.height = bounds.height
-        layoutParams.flags =
-            if (touchThrough) {
-                layoutParams.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-            } else {
-                layoutParams.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
-            }
+        layoutParams.flags = layoutParams.flags.with(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, touchThrough)
+        layoutParams.flags = layoutParams.flags.with(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, !focusable)
         layoutParams.alpha = if (touchThrough) TOUCH_THROUGH_MAX_ALPHA else 1f
     }
+
+    private fun Int.with(
+        flag: Int,
+        on: Boolean,
+    ): Int = if (on) this or flag else this and flag.inv()
 
     companion object {
         /** タッチを下のアプリへ通せるウィンドウの不透明度の上限（Android 12 以降の制約） */

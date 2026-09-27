@@ -8,6 +8,14 @@
     <string name="overlay_opacity">背景 %1$d%%</string>
     <string name="overlay_font_scale">文字 %1$d%%</string>
     <string name="overlay_sync_offset">補正 %1$s 秒</string>
+    <string name="overlay_manual_on">手動タイマー</string>
+    <string name="overlay_manual_off">手動を終了</string>
+    <string name="overlay_manual_start">開始</string>
+    <string name="overlay_manual_stop">停止</string>
+    <string name="overlay_manual_input">位置を入力</string>
+    <string name="overlay_manual_hint">1:23:45</string>
+    <string name="overlay_manual_seek">移動</string>
+    <string name="overlay_manual_cancel">取消</string>
     <string name="overlay_live_delay">遅延 %1$d 秒</string>
     <string name="overlay_jump_to_latest">最新へ</string>
     <string name="overlay_sticker">（スーパーステッカー）</string>

@@ -38,6 +38,11 @@
 - F-SYNC-06: 同期オフセットの手動補正（`core:sync` の `SyncOffset`。±10 秒・0.5 秒刻み。正の値でチャットを早く表示）。
   `ChatPlayer` がリプレイの同期に使う再生状態の位置へ補正を足す（PLAN 4.5 の「推定位置 + 手動補正」）。
   補正は SharedPreferences `overlay` の `syncOffsetMs` に保存して引き継ぐ。ライブ・プレミアには効かない（表示遅延を使う）
+- F-SYNC-07、F-OVL-09: 手動タイマーモード（`core:sync` の `ManualTimer`。再生状態 `PlaybackSnapshot` を開始・停止・位置入力で作る。等速）。
+  設定パネル（リプレイ時）の「手動タイマー」でオンにすると、表示中の位置（補正を除く）で停止した状態から始める。
+  手動中は `SessionEnvironment.manualTimer` を公式アプリの再生状態の代わりにリプレイの同期へ使い、同期状態を「手動」と表示する。
+  ライブ・プレミアは対象外。位置入力（`OverlayFormat.parsePosition`。`h:mm:ss`・`m:ss`・秒数、全角コロン可）の間だけ
+  ウィンドウの `FLAG_NOT_FOCUSABLE` を外し（`OverlayWindow.focusable`）、確定・取消で戻す。手動タイマーの状態は保存しない
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
 ## 設計方針
@@ -218,7 +223,8 @@
   - 最小化（F-OVL-04）: ヘッダーの最小化ボタンで 48dp の丸いバブル（`ui/Bubble.kt`）にする。タップで復帰、ドラッグで移動。
     バブルは通常表示の左上に出し、バブル自身の大きさで画面内へ収める（移動は通常表示の位置にも反映し、復帰時に収め直す）。
     縁の色で同期状態を示し（同期中・ライブは緑）、不透明度には下限 0.7 を置く。最小化状態は保存しない。
-  - 設定パネル（`ui/SettingsPanel.kt`）: 不透明度・文字サイズ・表示遅延（LIVE の時）または同期の補正（それ以外）・タッチ透過。
+  - 設定パネル（`ui/SettingsPanel.kt`。高さ 200dp を上限にスクロール）: 不透明度・文字サイズ・表示遅延（LIVE の時）または
+    同期の補正と手動タイマー（それ以外）・タッチ透過。
     値は `OverlaySettings`（不透明度・文字サイズ・表示遅延・補正）にまとめ、`OverlayActions.onSettingsChange` で受け取り、
     操作の終わり（`onGestureEnd`）に `OverlayPrefs.settings` へ保存する。セッションへは表示遅延と補正を `StateFlow` で渡す。
   - チャットの文字サイズは倍率 0.8〜1.5（0.1 刻み、既定 1.0＝中）。設定パネルのスライダーで変え、`fontScale` に保存する。

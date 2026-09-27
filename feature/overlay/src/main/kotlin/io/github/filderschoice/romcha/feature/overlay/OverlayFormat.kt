@@ -6,6 +6,7 @@ import kotlin.math.roundToInt
 object OverlayFormat {
     private const val MILLIS_PER_SECOND = 1_000L
     private const val TENTH_MS = 100L
+    private const val MAX_POSITION_PARTS = 3
     private const val SECONDS_PER_MINUTE = 60L
     private const val MINUTES_PER_HOUR = 60L
     private const val CHANNEL_MAX = 255.0
@@ -37,6 +38,7 @@ object OverlayFormat {
             SyncIndicator.PAUSED -> "一時停止"
             SyncIndicator.NOT_DETECTED -> "未検出"
             SyncIndicator.LIVE -> "ライブ"
+            SyncIndicator.MANUAL -> "手動"
         }
 
     /**
@@ -78,6 +80,22 @@ object OverlayFormat {
             }
         val abs = kotlin.math.abs(offsetMs)
         return "%s%d.%d".format(sign, abs / MILLIS_PER_SECOND, abs % MILLIS_PER_SECOND / TENTH_MS)
+    }
+
+    /**
+     * 手動タイマーの位置入力（`h:mm:ss`・`m:ss`・秒数）をミリ秒にする（F-SYNC-07）。解釈できなければ null。
+     *
+     * 区切りは半角・全角のコロンを受け付ける。分・秒の欄は 0〜59 に限る（先頭の欄は上限なし）。
+     */
+    fun parsePosition(text: String): Long? {
+        val parts = text.trim().replace('：', ':').split(':')
+        val numbers = parts.mapNotNull { part -> part.takeIf { it.all(Char::isDigit) }?.toLongOrNull() }
+        val valid =
+            numbers.size == parts.size &&
+                numbers.size <= MAX_POSITION_PARTS &&
+                numbers.drop(1).all { it < SECONDS_PER_MINUTE }
+        if (!valid) return null
+        return numbers.fold(0L) { total, n -> total * SECONDS_PER_MINUTE + n } * MILLIS_PER_SECOND
     }
 
     /** 文字サイズの倍率をスライダー表示用の百分率にする。 */

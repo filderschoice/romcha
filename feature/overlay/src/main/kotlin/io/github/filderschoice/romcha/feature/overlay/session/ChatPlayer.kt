@@ -7,6 +7,7 @@ import io.github.filderschoice.romcha.core.chat.VideoChatInfo
 import io.github.filderschoice.romcha.core.sync.LiveChatSession
 import io.github.filderschoice.romcha.core.sync.LiveState
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
+import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.core.sync.PlaybackStatus
 import io.github.filderschoice.romcha.core.sync.PositionEstimator
 import io.github.filderschoice.romcha.core.sync.ReplaySession
@@ -136,27 +137,39 @@ internal class ChatPlayer(
             ReplaySession(
                 source = { token, offset, listener -> backend.replay(token, offset, listener) },
                 initialContinuation = continuation,
-                playback = { SyncOffset.apply(env.nowPlaying.value.snapshot, env.syncOffsetMs.value) },
+                playback = { SyncOffset.apply(replayPlayback(), env.syncOffsetMs.value) },
                 clock = env.clock,
                 timing = timing,
             )
         coroutineScope {
             launch { session.run() }
             session.state.collect { replay ->
+                val manual = env.manualTimer.value != null
                 val found = env.nowPlaying.value.sessionFound
-                val notice =
-                    SessionMessages.describe(replay.fetchStatus) ?: SessionMessages.NOT_DETECTED.takeIf { !found }
+                val notDetected = SessionMessages.NOT_DETECTED.takeIf { !found && !manual }
+                val notice = SessionMessages.describe(replay.fetchStatus) ?: notDetected
                 publisher.frame(
                     publisher.base.copy(
                         messages = replay.messages,
                         positionMs = replay.positionMs,
-                        indicator = SessionMessages.indicator(replay.status, found),
+                        indicator =
+                            if (manual) {
+                                SyncIndicator.MANUAL
+                            } else {
+                                SessionMessages.indicator(
+                                    replay.status,
+                                    found,
+                                )
+                            },
                         notice = notice,
                     ),
                 )
             }
         }
     }
+
+    /** リプレイの同期に使う再生状態。手動タイマーモード中はその状態を使う（F-SYNC-07） */
+    private fun replayPlayback(): PlaybackSnapshot = env.manualTimer.value ?: env.nowPlaying.value.snapshot
 
     /** ライブを最新追従で表示する。ライブが終わったら戻る。 */
     private suspend fun liveLoop(continuation: String) =
