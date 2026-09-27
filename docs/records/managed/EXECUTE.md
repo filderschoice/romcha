@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 16:10
+  summary: チャットのメッセージモデルとリプレイ／ライブ応答の解析を core:chat に実装
+  details:
+    変更内容: >-
+      F-CHAT-01・F-CHAT-08・N-08 に基づき、ChatMessage モデルと ChatResponseParser を追加した。
+      通常・スーパーチャット・スーパーステッカー・メンバー加入・ギフトを解析し、未知の種別は読み飛ばして件数を返す。
+      壊れた応答では例外を投げず Failure を返す。合成 fixture 3 件と単体テスト 10 件を追加した。
+      detekt の ReturnCount をガード節除外・上限3へ調整し、参考にした方式の出典を docs/REFERENCES.md へ記録した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/ChatMessage.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/ChatResponseParser.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/internal/JsonNav.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/ChatResponseParserTest.kt
+      - core/chat/src/test/resources/fixtures/replay_chunk.json
+      - core/chat/src/test/resources/fixtures/live_chunk.json
+      - core/chat/src/test/resources/fixtures/live_ended.json
+      - config/detekt/detekt.yml
+      - docs/REFERENCES.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:chat の単体テスト 10 件成功
+    関連ID:
+      - BL-004
 - date: 2026-09-27 15:40
   summary: SyncEngine（位置推定・一時停止・シーク判定・速度追従・表示バッファ）を core:sync に実装
   details:

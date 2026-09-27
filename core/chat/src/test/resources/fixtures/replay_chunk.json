@@ -1,0 +1,363 @@
+{
+  "responseContext": {},
+  "continuationContents": {
+    "liveChatContinuation": {
+      "continuations": [
+        {
+          "liveChatReplayContinuationData": {
+            "timeUntilLastMessageMsec": 5000,
+            "continuation": "REPLAY_NEXT_TOKEN"
+          }
+        },
+        {
+          "playerSeekContinuationData": {
+            "continuation": "SEEK_TOKEN"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "id": "msg1",
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "こんにちは "
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "😀",
+                              "shortcuts": [
+                                ":grinning:"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "url": "https://www.youtube.com/s/gaming/emoji/grinning.png"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者A"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "url": "https://yt4.ggpht.com/a/small=s32",
+                            "width": 32
+                          },
+                          {
+                            "url": "https://yt4.ggpht.com/a/large=s64",
+                            "width": 64
+                          }
+                        ]
+                      },
+                      "authorExternalChannelId": "UCtestmsg1",
+                      "timestampUsec": "1700000000000000",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "icon": {
+                              "iconType": "MODERATOR"
+                            },
+                            "tooltip": "モデレーター"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "1000"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "id": "msg2",
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCxx/abc",
+                              "shortcuts": [
+                                ":_stamp:"
+                              ],
+                              "isCustomEmoji": true,
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "url": "//yt3.ggpht.com/stamp"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者B"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "url": "https://yt4.ggpht.com/a/small=s32",
+                            "width": 32
+                          },
+                          {
+                            "url": "https://yt4.ggpht.com/a/large=s64",
+                            "width": 64
+                          }
+                        ]
+                      },
+                      "authorExternalChannelId": "UCtestmsg2",
+                      "timestampUsec": "1700000000000000",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "url": "https://yt3.ggpht.com/badge"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 か月）"
+                          }
+                        },
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "icon": {
+                              "iconType": "OWNER"
+                            },
+                            "tooltip": "所有者"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "2000"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatPaidMessageRenderer": {
+                      "id": "sc1",
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "応援しています"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者C"
+                      },
+                      "purchaseAmountText": {
+                        "simpleText": "¥1,000"
+                      },
+                      "headerBackgroundColor": 4278239141,
+                      "bodyBackgroundColor": 4280150454,
+                      "timestampUsec": "1700000003000000"
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "3000"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatPaidStickerRenderer": {
+                      "id": "st1",
+                      "authorName": {
+                        "simpleText": "視聴者D"
+                      },
+                      "purchaseAmountText": {
+                        "simpleText": "¥200"
+                      },
+                      "backgroundColor": 4280191205,
+                      "sticker": {
+                        "thumbnails": [
+                          {
+                            "url": "//lh3.googleusercontent.com/sticker"
+                          }
+                        ]
+                      },
+                      "timestampUsec": "1700000004000000"
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "4000"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatMembershipItemRenderer": {
+                      "id": "mb1",
+                      "authorName": {
+                        "simpleText": "視聴者E"
+                      },
+                      "headerPrimaryText": {
+                        "runs": [
+                          {
+                            "text": "メンバー歴 "
+                          },
+                          {
+                            "text": "3"
+                          },
+                          {
+                            "text": " か月"
+                          }
+                        ]
+                      },
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "いつもありがとう"
+                          }
+                        ]
+                      },
+                      "timestampUsec": "1700000005000000"
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "5000"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatSponsorshipsGiftPurchaseAnnouncementRenderer": {
+                      "id": "gf1",
+                      "authorExternalChannelId": "UCgift",
+                      "timestampUsec": "1700000006000000",
+                      "header": {
+                        "liveChatSponsorshipsHeaderRenderer": {
+                          "authorName": {
+                            "simpleText": "視聴者F"
+                          },
+                          "primaryText": {
+                            "runs": [
+                              {
+                                "text": "5 件のメンバーシップ ギフトを贈りました"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "6000"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatViewerEngagementMessageRenderer": {
+                      "id": "sys1",
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "システムメッセージ"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "6500"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addLiveChatTickerItemAction": {
+                  "item": {},
+                  "durationSec": "10"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "7000"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "id が無い"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "clientId": "c"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "7500"
+          }
+        }
+      ]
+    }
+  }
+}

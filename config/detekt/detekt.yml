@@ -18,6 +18,10 @@ style:
       - Composable
     excludes:
       - "**/test/**"
+  # JSON を必要箇所だけ辿る解析コードは `?: return null` のガード節が多くなるため、ガード節を数えず上限も緩める
+  ReturnCount:
+    max: 3
+    excludeGuardClauses: true
   UnusedPrivateMember:
     ignoreAnnotated:
       - Preview

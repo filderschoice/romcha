@@ -22,6 +22,7 @@
 ## 実装済み機能要件
 
 - プロジェクト雛形と品質ゲート（静的解析・型検査・単体テスト）
+- F-CHAT-01/08、N-08: メッセージモデルとチャット応答の解析（`core:chat` の `ChatResponseParser`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 
 ## 設計方針
@@ -38,6 +39,25 @@
 
 - 依存の向き: `app` → `feature:overlay` / `core:media` → `core:sync` → `core:chat`。
 - 依存バージョンは `gradle/libs.versions.toml` に集約する。
+
+### チャット応答の解析（`core:chat`）
+
+- モデル: `ChatMessage`（id・種別・投稿者・本文 runs・投稿時刻 μs・動画内オフセット ms（リプレイのみ）・金額と色・見出し）。
+  種別は TEXT / SUPER_CHAT / SUPER_STICKER / MEMBERSHIP / GIFT_PURCHASE / GIFT_REDEMPTION。
+  投稿者の役割は OWNER / MODERATOR / MEMBER（バッジに customThumbnail）/ VERIFIED。
+  本文は `MessageRun.Text` と `MessageRun.Emoji`（カスタム絵文字はショートカット、標準絵文字は絵文字そのものを代替テキストに）。
+- 解析対象の応答: `continuationContents.liveChatContinuation`。リプレイは `replayChatItemAction`（`videoOffsetTimeMsec`）の中の
+  `addChatItemAction.item`、ライブは直下の `addChatItemAction.item`。項目は renderer 名で種別を判定する。
+  - `liveChatTextMessageRenderer` / `liveChatPaidMessageRenderer` / `liveChatPaidStickerRenderer` /
+    `liveChatMembershipItemRenderer` / `liveChatSponsorshipsGiftPurchaseAnnouncementRenderer`（投稿者は `header` 内）/
+    `liveChatSponsorshipsGiftRedemptionAnnouncementRenderer`
+  - 色（`bodyBackgroundColor` / `headerBackgroundColor` / `backgroundColor`）は符号なし整数の ARGB を Int へ変換する。
+  - それ以外の renderer と id の無い項目は読み飛ばして `skipped` に数える。チャット項目以外のアクション（ティッカー等）は数えない。
+- 継続トークン: `continuations` から `liveChatReplayContinuationData` → `timedContinuationData` → `invalidationContinuationData`
+  → `reloadContinuationData` の順で最初に見つかったもの。`timeoutMs` を推奨間隔として持つ。無ければ終端・終了。
+- JSON は `kotlinx.serialization` の `JsonElement` を必要箇所だけ辿る（`internal/JsonNav.kt`）。型不一致・欠落は null とし、
+  `liveChatContinuation` が無い・JSON でない場合は `ChatParseResult.Failure` を返す（例外を投げない）。
+- テストの fixture（`core/chat/src/test/resources/fixtures/`）は既知の応答構造に基づく合成データ。実応答との照合は人手検証。
 
 ### 同期エンジン（`core:sync`）
 
@@ -64,6 +84,7 @@
 
 - ビルド環境のメモリ: 開発機（8GB）に合わせ `org.gradle.jvmargs=-Xmx2g`、`workers.max=2`、
   Kotlin コンパイラは Gradle デーモン内で実行する（`kotlin.compiler.execution.strategy=in-process`）。
+- detekt の `ReturnCount` はガード節を数えず上限 3 とする（JSON 解析の `?: return null` が多いため）。
 - テスト名は日本語で振る舞いを書く。ktlint の関数命名規則はテストソースのみ無効化する（`.editorconfig`）。
 - 静的解析: ktlint（`ktlint_official`、`@Composable` 関数は命名規則の対象外）、detekt（既定設定＋`config/detekt/detekt.yml` の差分）、
   Android lint（`warningsAsErrors = true`。依存の新版警告のみ `lint.xml` で無効化）。
@@ -74,7 +95,7 @@
 
 - 品質ゲートは `CLAUDE.md`「本リポジトリの品質ゲート定義」のコマンドを使う。
 - 外部 API（YouTube・GitHub）への実通信はテストで行わない。MockWebServer と保存済み JSON fixture を使う（guardrails 12.5）。
-- 参考にした外部実装は `docs/REFERENCES.md` へ記録し、GPL・ライセンス無しのコードは流用しない（PLAN 5章）。
+- 参考にした外部実装は `docs/REFERENCES.md` へ記録し（現状は chat-downloader・pytchat・yt-dlp の方式のみ）、GPL・ライセンス無しのコードは流用しない（PLAN 5章）。
 - 要件トレーサビリティ: 実装時は PLAN.md の要件ID（F-*/N-*）をコミット・EXECUTE.md の変更内容へ記載する。
 
 <!-- COPILOT_RECORDS:END -->
