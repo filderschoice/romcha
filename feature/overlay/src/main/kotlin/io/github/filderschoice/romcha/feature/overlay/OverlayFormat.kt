@@ -1,10 +1,16 @@
 package io.github.filderschoice.romcha.feature.overlay
 
+import io.github.filderschoice.romcha.core.chat.ChatMessage
+import java.time.Instant
+import java.time.ZoneId
 import kotlin.math.roundToInt
 
 /** 表示用の値の計算（Android 非依存の純粋関数。単体テストで検証する）。 */
 object OverlayFormat {
     private const val MILLIS_PER_SECOND = 1_000L
+    private const val MICROS_PER_MILLI = 1_000L
+    private const val TENTH_MS = 100L
+    private const val MAX_POSITION_PARTS = 3
     private const val SECONDS_PER_MINUTE = 60L
     private const val MINUTES_PER_HOUR = 60L
     private const val CHANNEL_MAX = 255.0
@@ -29,6 +35,18 @@ object OverlayFormat {
         }
     }
 
+    /**
+     * メッセージの時刻の表示（F-VIEW-01）。リプレイは動画内の位置（[position] と同じ形式）、ライブ・プレミアは投稿時刻の `H:mm`。
+     */
+    fun messageTime(
+        message: ChatMessage,
+        zone: ZoneId = ZoneId.systemDefault(),
+    ): String {
+        message.videoOffsetMs?.let { return position(it) }
+        val time = Instant.ofEpochMilli(message.timestampUsec / MICROS_PER_MILLI).atZone(zone)
+        return "%d:%02d".format(time.hour, time.minute)
+    }
+
     /** 同期状態の表示文（F-OVL-09）。 */
     fun indicatorLabel(indicator: SyncIndicator): String =
         when (indicator) {
@@ -36,6 +54,7 @@ object OverlayFormat {
             SyncIndicator.PAUSED -> "一時停止"
             SyncIndicator.NOT_DETECTED -> "未検出"
             SyncIndicator.LIVE -> "ライブ"
+            SyncIndicator.MANUAL -> "手動"
         }
 
     /**
@@ -56,8 +75,72 @@ object OverlayFormat {
     /** 不透明度をスライダー表示用の百分率にする。 */
     fun opacityPercent(opacity: Float): Int = (clampOpacity(opacity) * PERCENT).roundToInt()
 
+    /**
+     * チャットの文字サイズの倍率（F-VIEW-01）を 0.8〜1.5 に収め、0.1 刻みに丸める。
+     *
+     * 1.0（100%）が従来の大きさ（中）。スライダーの途中の値を保存しても刻みに揃うよう丸める。
+     */
+    fun clampFontScale(scale: Float): Float =
+        (
+            (scale.coerceIn(MIN_FONT_SCALE, MAX_FONT_SCALE) * PERCENT / FONT_SCALE_STEP_PERCENT).roundToInt() *
+                FONT_SCALE_STEP_PERCENT / PERCENT.toFloat()
+        )
+
+    /** 同期オフセットの補正（ミリ秒）を符号付きの秒の表示にする（例 `+1.5`・`-0.5`・`0.0`。F-SYNC-06）。 */
+    fun offsetSeconds(offsetMs: Long): String {
+        val sign =
+            when {
+                offsetMs > 0 -> "+"
+                offsetMs < 0 -> "-"
+                else -> ""
+            }
+        val abs = kotlin.math.abs(offsetMs)
+        return "%s%d.%d".format(sign, abs / MILLIS_PER_SECOND, abs % MILLIS_PER_SECOND / TENTH_MS)
+    }
+
+    /**
+     * 手動タイマーの位置入力（`h:mm:ss`・`m:ss`・秒数）をミリ秒にする（F-SYNC-07）。解釈できなければ null。
+     *
+     * 区切りは半角・全角のコロンを受け付ける。分・秒の欄は 0〜59 に限る（先頭の欄は上限なし）。
+     */
+    fun parsePosition(text: String): Long? {
+        val parts = text.trim().replace('：', ':').split(':')
+        val numbers = parts.mapNotNull { part -> part.takeIf { it.all(Char::isDigit) }?.toLongOrNull() }
+        val valid =
+            numbers.size == parts.size &&
+                numbers.size <= MAX_POSITION_PARTS &&
+                numbers.drop(1).all { it < SECONDS_PER_MINUTE }
+        if (!valid) return null
+        return numbers.fold(0L) { total, n -> total * SECONDS_PER_MINUTE + n } * MILLIS_PER_SECOND
+    }
+
+    /** 文字サイズの倍率をスライダー表示用の百分率にする。 */
+    fun fontScalePercent(scale: Float): Int = (clampFontScale(scale) * PERCENT).roundToInt()
+
     const val MIN_OPACITY = 0.2f
+    const val MIN_FONT_SCALE = 0.8f
+    const val MAX_FONT_SCALE = 1.5f
+    const val DEFAULT_FONT_SCALE = 1f
+
+    /** スライダーの刻みの数（両端を除く）。0.8〜1.5 を 0.1 刻みにする */
+    const val FONT_SCALE_STEPS = 6
+    private const val FONT_SCALE_STEP_PERCENT = 10
     private const val PERCENT = 100
+}
+
+/** 画面の向き。ウィンドウの位置・大きさを向きごとに記憶する（F-OVL-06）。 */
+enum class ScreenOrientation {
+    PORTRAIT,
+    LANDSCAPE,
+    ;
+
+    companion object {
+        /** 画面の幅と高さから向きを決める（正方形は縦とみなす）。 */
+        fun of(
+            screenWidth: Int,
+            screenHeight: Int,
+        ): ScreenOrientation = if (screenWidth > screenHeight) LANDSCAPE else PORTRAIT
+    }
 }
 
 /** 画面内でのウィンドウの位置と大きさ（px）。 */

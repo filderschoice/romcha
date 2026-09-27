@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)
     implementation(libs.compose.material3)
+    implementation(libs.coil.compose)
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)

@@ -15,6 +15,7 @@ import io.github.filderschoice.romcha.core.chat.resolve.SearchCandidate
 import io.github.filderschoice.romcha.core.chat.resolve.TrackMetadata
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.NowPlaying
+import io.github.filderschoice.romcha.core.sync.ManualTimer
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.core.sync.PlaybackStatus
 import io.github.filderschoice.romcha.core.sync.SessionTiming
@@ -142,6 +143,8 @@ class WatchCoordinatorTest {
         val nowPlaying = MutableStateFlow(NowPlaying())
         val screenOn = MutableStateFlow(true)
         val liveDelaySeconds = MutableStateFlow(0)
+        val manualTimer = MutableStateFlow<PlaybackSnapshot?>(null)
+        val topChatOnly = MutableStateFlow(false)
         val requested = MutableStateFlow<String?>(null)
         val events = MutableSharedFlow<OverlayEvent>(extraBufferCapacity = 8)
         var published = OverlayUiState()
@@ -155,8 +158,9 @@ class WatchCoordinatorTest {
                         SessionEnvironment(
                             nowPlaying,
                             screenOn,
-                            liveDelaySeconds,
+                            SessionSettings(liveDelaySeconds = liveDelaySeconds, topChatOnly = topChatOnly),
                             clock = { scope.testScheduler.currentTime },
+                            manualTimer = manualTimer,
                         ),
                     io =
                         SessionIo(
@@ -262,6 +266,42 @@ class WatchCoordinatorTest {
 
             assertEquals(listOf("m_candidate01"), h.published.messages.map { it.id })
             assertEquals("candidate01", h.cache.get(h.nowPlaying.value.metadata!!.identity))
+        }
+
+    @Test
+    fun 手動タイマーモードではその位置でリプレイを表示する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.replayVideo("manual00001", "指定した動画")
+            h.manualTimer.value = ManualTimer.paused(2_000, nowElapsedMs = 0)
+
+            h.requested.value = "manual00001"
+            advanceTimeBy(1_000)
+
+            assertEquals(SyncIndicator.MANUAL, h.published.indicator)
+            assertEquals(null, h.published.notice)
+            assertEquals(listOf("m_manual00001"), h.published.messages.map { it.id })
+            assertEquals(2_000L, h.published.positionMs)
+        }
+
+    @Test
+    fun 上位チャットのみにすると上位チャットで取り直す() =
+        runTest {
+            val h = Harness(this)
+            h.backend.replayVideo("video000001", "配信A")
+            // 表示の確認に再生位置が要るため、手動タイマーで位置を与える
+            h.manualTimer.value = ManualTimer.paused(2_000, nowElapsedMs = 0)
+            h.requested.value = "video000001"
+            advanceTimeBy(1_000)
+            assertEquals(listOf("TOP_video000001", "ALL_video000001"), h.backend.replayCalls.take(2))
+
+            h.backend.replayCalls.clear()
+            h.topChatOnly.value = true
+            advanceTimeBy(1_000)
+
+            assertEquals("TOP_video000001", h.backend.replayCalls.first())
+            assertTrue(h.backend.replayCalls.none { it.startsWith("ALL_") })
+            assertEquals(listOf("m_video000001"), h.published.messages.map { it.id })
         }
 
     @Test

@@ -6,6 +6,469 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 20:38
+  summary: フローティングの設定メニューからアプリ本体を開けるようにした
+  details:
+    変更内容: >-
+      設定パネルの下部に「アプリを開く」を追加し、押すとアプリ本体の起動用インテント（FLAG_ACTIVITY_NEW_TASK）でアプリの画面を
+      前面に出すようにした。フローティングウィンドウは表示したまま残す。オーバーレイを表示中のサービスからの起動のため、
+      バックグラウンドからのアクティビティ起動制限の例外に当たる。配置はヘッダーではなく設定メニューを選んだ（BACKLOG の根拠に記録）。
+      detekt の関数数上限のため、OverlayActions の onTouchThrough・onHide と新しい操作を onCommand(OverlayCommand) に統合し、
+      起動処理はサービスの操作オブジェクト内に置いた。README の使い方と docs/VERIFICATION.md（G1）を更新した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、起動処理を操作オブジェクト内へ移して解消）。
+      実機での起動は BL-053 で確認する
+    関連ID:
+      - BL-052
+- date: 2026-09-27 18:19
+  summary: 画面端へ退避中のつまみの横幅を 20dp から 28dp に広げた
+  details:
+    変更内容: >-
+      実機確認での指摘を受け、退避中のつまみ（WindowPlacement.TAB_WIDTH_DP）の横幅を 20dp から 28dp に広げた。高さ 72dp は維持した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見え方は BL-048（F15）で確認する
+    関連ID:
+      - BL-051
+- date: 2026-09-27 18:11
+  summary: 退避のドラッグでウィンドウを画面の左右の外へも運べるようにした
+  details:
+    変更内容: >-
+      実機確認で、外へ押し出すドラッグが画面幅で止まり退避している感じがしないとの指摘を受けた。
+      ウィンドウに FLAG_LAYOUT_NO_LIMITS を付け、ヘッダーのドラッグ中は画面の左右の外へのはみ出しを許すようにした
+      （画面内に 48dp は残す。縦は従来どおり画面内に収める）。離した時に「48dp とウィンドウ幅の 3 分の 1 の大きい方」以上
+      はみ出していればその側へ退避し、そうでなければ画面内へ戻す。
+      従来の「画面端で止まった後の押し込み量」による判定（移動中の未収め位置の保持）はやめ、はみ出し量で判定する
+      （StashRule.dragX・overshoot・threshold を追加し単体テストを追加）。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowMode.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/StashRuleTest.kt
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での操作感は BL-048（F15）で確認する
+    関連ID:
+      - BL-050
+- date: 2026-09-27 17:13
+  summary: フローティングウィンドウを画面の左右の外へスワイプして退避し、つまみから復帰できるようにした
+  details:
+    変更内容: >-
+      YouTube 公式アプリの PiP と同様に、ヘッダーのドラッグでウィンドウを画面の左右の端でさらに 48dp 以上押し込んで離すと、
+      その側の画面端へ退避し、20×72dp のつまみだけを残すようにした。つまみを画面の内側へ 24dp 以上スワイプするか、タップすると、
+      退避した側の画面端に寄せた通常表示で復帰する。つまみは上下にドラッグして動かせる。
+      表示状態（通常・最小化・退避）を WindowMode にまとめ、OverlayActions の onMinimizeChange を onWindowModeChange に置き換えた
+      （detekt の関数数上限のため）。退避の判定（押し込み量・復帰のスワイプ量・つまみの位置）は StashRule（Android 非依存）に置き、
+      単体テストを追加した。WindowPlacement は移動中の画面内へ収める前の横位置を保持して押し込み量を求める。
+      退避の向きは左右のみ、退避状態は保存しない（BACKLOG の根拠に記録した既定値）。
+      README の使い方と docs/VERIFICATION.md（F15）を更新した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowMode.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/StashTab.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/Bubble.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/StashRuleTest.kt
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt LongParameterList と MaxLineLength で失敗し修正）。
+      実機での操作感は BL-048（F15）で確認する
+    関連ID:
+      - BL-049
+- date: 2026-09-27 16:24
+  summary: ライト／ダーク／システム追従のテーマを追加し、アプリ画面とフローティングウィンドウへ反映
+  details:
+    変更内容: >-
+      DisplaySettings に theme（ThemeMode。SYSTEM・LIGHT・DARK、既定 SYSTEM）を追加し、表示設定画面にラジオボタンを置いた。
+      ユーザー回答（2026-09-27）により、既定は現状維持とした。アプリ画面は SYSTEM ならシステムの設定に合わせ（従来どおり）、
+      フローティングウィンドウは SYSTEM・DARK なら従来の暗色、LIGHT なら明るい配色にする。
+      フローティングの配色を OverlayColors（Dark / Light）と CompositionLocal にまとめ、既存の OverlayTextColor などは
+      CompositionLocal を読むプロパティに置き換えた（呼び出し側は変更なし）。投稿者の役割の色も配色ごとに持つ。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColors.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatItems.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilterTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColorsTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。ライト配色の見え方は BL-048 で確認する
+    関連ID:
+      - BL-047
+- date: 2026-09-27 16:20
+  summary: URL 入力欄に「クリップボードから貼り付け」を追加（押した時だけクリップボードを読む）
+  details:
+    変更内容: >-
+      F-VID-06 の実現方法として、ユーザー回答（2026-09-27）により、アプリを開いた時の自動検出ではなく、URL 入力欄の
+      「クリップボードから貼り付け」ボタンを押した時だけクリップボードを読む方式にした（Android 12 以降の貼り付け通知が毎回出ることと、
+      無関係な内容を勝手に読まないため）。読んだ文字列を入力欄へ入れ、YouTube の動画 URL として読めなければ入力欄に誤りを表示する。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0
+    関連ID:
+      - BL-041
+- date: 2026-09-27 15:44
+  summary: 表示設定に「上位のチャットのみ」を追加し、「すべてのチャット」との切り替えに対応
+  details:
+    変更内容: >-
+      DisplaySettings に topChatOnly（既定オフ＝従来どおり「すべてのチャット」）を追加し、表示設定画面にスイッチを置いた。
+      オンの時は動画情報の「上位チャット」の continuation をそのまま使い、「すべてのチャット」への切り替え用の取得を行わない。
+      ChatPlayer の whileScreenOn を画面のオン・オフと設定の組で transformLatest するように変え、設定が変わったら取得をやり直す。
+      SessionSettings に topChatOnly を追加した。切り替えの単体テストを追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0（1回目は追加したテストの前提不足で失敗し、テストに再生位置を与えて解消）
+    関連ID:
+      - BL-046
+- date: 2026-09-27 15:40
+  summary: 表示保持件数の上限を表示設定で変えられるようにした
+  details:
+    変更内容: >-
+      DisplaySettings に表示保持件数の上限 maxVisible（100〜1000、100 刻み、既定 500。N-04）を追加し、表示設定画面にスライダーを置いた。
+      上限はセッションの開始時にリプレイの SyncConfig.maxVisible・ライブの LivePolling.maxMessages と LiveTimeline.visible へ渡し、
+      上限を下げた時はウィンドウの表示直前でも切り詰めてすぐ反映する（増やした分は次に動画を開いた時から）。
+      detekt の引数数上限に達したため、SessionEnvironment の設定値（表示遅延・同期の補正・表示保持件数）を SessionSettings にまとめた。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilterTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0（1回目は detekt LongParameterList で失敗し、SessionSettings への統合で解消）
+    関連ID:
+      - BL-045
+- date: 2026-09-27 15:36
+  summary: 表示設定に NG ワードと「スパチャのみ」「メンバーのみ」「モデレーター・配信者のみ」の絞り込みを追加
+  details:
+    変更内容: >-
+      ChatFilter（Android 非依存）を追加した。3 つの「のみ」はオンにしたもののいずれかに当てはまるメッセージだけを出し
+      （どれもオフなら絞り込まない）、NG ワードを本文に含むメッセージは大文字・小文字を区別せず除く。
+      メンバーはメンバーの投稿とメンバー加入・ギフト、モデレーター・配信者は MODERATOR / OWNER の役割で判定する。
+      NG ワードは 1 行 1 語で入力し「保存」で取り込む（空行・重複を除き、最大 100 語・1 語 50 字）。
+      DisplaySettings に項目を追加して display に保存し、フローティングウィンドウは表示直前に絞り込む。単体テストを追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilter.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilterTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0
+    関連ID:
+      - BL-044
+- date: 2026-09-27 15:32
+  summary: アプリ画面に表示設定を追加し、投稿者名・アイコン・時刻の表示有無を切り替えられるようにした
+  details:
+    変更内容: >-
+      feature:overlay に DisplaySettings（投稿者名・アイコン・時刻の表示有無）と DisplaySettingsStore（SharedPreferences display に保存し、
+      同一プロセスのアプリ画面とフローティングウィンドウが同じ StateFlow を購読する）を追加した。既定値は従来の表示（名前のみ）。
+      アプリのホームに「表示設定」ボタンと DisplaySettingsScreen（スイッチ）を追加し、変更は表示中のウィンドウへすぐ反映する。
+      時刻はリプレイなら動画内の位置、ライブ・プレミアなら投稿時刻（H:mm）を出す（OverlayFormat.messageTime）。
+      アイコンは ImagePolicy を通した URL だけ 18dp の丸で表示する。スーパーチャットの帯の投稿者名は設定によらず出す。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatItems.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見た目は BL-048 で確認する
+    関連ID:
+      - BL-043
+- date: 2026-09-27 15:28
+  summary: カスタム絵文字・メンバースタンプ・スーパーステッカーを画像で表示（Coil を導入）
+  details:
+    変更内容: >-
+      画像読み込みに Coil 2.7.0（coil-compose。Apache-2.0、PLAN 4.7 の採用候補）を追加した。
+      メッセージ本文を MessageText で描き、カスタム絵文字・メンバースタンプを文中へ画像（1.4em）で差し込む。
+      画像の URL が無い・許可していない配信元・読み込み失敗の時は代替テキスト（:name: など）を出し、Unicode の絵文字は文字のまま出す。
+      スーパーステッカーは 56dp の画像で表示し、表示できない時は従来の「（スーパーステッカー）」を出す。
+      応答の URL は外部入力のため、ImagePolicy で HTTPS かつ YouTube の画像配信元（*.ggpht.com・*.ytimg.com・*.googleusercontent.com）に
+      限って読み込む（N-05）。README のプライバシー節の通信先を更新した。
+    変更ファイル:
+      - gradle/libs.versions.toml
+      - feature/overlay/build.gradle.kts
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ImagePolicy.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/MessageText.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatItems.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ImagePolicyTest.kt
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実際の絵文字画像の表示は BL-048 で確認する
+    関連ID:
+      - BL-042
+- date: 2026-09-27 15:22
+  summary: 手動タイマーモード（開始・停止・位置入力）と同期状態「手動」を追加
+  details:
+    変更内容: >-
+      core:sync に ManualTimer（再生状態 PlaybackSnapshot を開始・停止・位置入力で作る。等速）を追加した。
+      設定パネル（リプレイ時）に「手動タイマー」を追加し、オンにすると表示中の位置（同期の補正を除く）で停止した状態から始め、
+      「開始／停止」「位置を入力」（h:mm:ss・m:ss・秒数。全角コロン可）で操作する。手動中はリプレイの同期に公式アプリの再生状態の
+      代わりに手動タイマーを使い、同期状態を「手動」（SyncIndicator.MANUAL）と表示し、「再生を検出していません」の表示を出さない。
+      ライブ・プレミアは受信時刻で表示するため手動タイマーの対象外とした。
+      ウィンドウは通常 FLAG_NOT_FOCUSABLE のため、位置の入力中だけフォーカスを取れるようにし（OverlayWindow.focusable）、
+      確定・取消で元に戻す。設定パネルは項目が増えたため高さ 200dp を上限にスクロールさせる。
+      手動タイマーの状態は保存しない。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/ManualTimer.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/ManualTimerTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ManualControl.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ManualPanel.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は ktlint の行長と detekt ReturnCount で失敗し修正）。
+      入力欄でキーボードが出るかは BL-048 で確認する
+    関連ID:
+      - BL-040
+- date: 2026-09-27 15:16
+  summary: リプレイの同期オフセットの手動補正を追加し、設定パネルの値を OverlaySettings にまとめた
+  details:
+    変更内容: >-
+      core:sync に SyncOffset（±10 秒・0.5 秒刻み。PLAN 4.5 の「推定位置 + 手動補正」で、正の値でチャットを早く表示）を追加し、
+      ChatPlayer がリプレイの同期に使う再生状態へ補正を足すようにした。補正値は SessionEnvironment.syncOffsetMs で渡す（既定 0）。
+      設定パネルでは、ライブ・プレミア中は従来の表示遅延、それ以外は補正のスライダー（「補正 +1.5 秒」）を出す。
+      補正は SharedPreferences overlay の syncOffsetMs に保存し、次回も引き継ぐ（端末の遅れは動画によらず一定のことが多いため）。
+      detekt の関数数上限に達したため、設定パネルの値（不透明度・文字サイズ・表示遅延・補正）を OverlaySettings データクラスへまとめ、
+      OverlayActions の個別の変更通知を onSettingsChange の1つに統合した。保存キーは従来のまま。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/SyncOffset.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/SyncOffsetTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlaySettingsTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、OverlaySettings への統合で解消）。
+      実機での補正の効き方は BL-048 で確認する
+    関連ID:
+      - BL-039
+- date: 2026-09-27 15:11
+  summary: フローティングウィンドウの最小化（バブル）と復帰を追加
+  details:
+    変更内容: >-
+      ヘッダーに最小化ボタンを追加した。最小化中はウィンドウを 48dp の丸いバブルにし、タップで元の大きさに戻し、ドラッグで移動する。
+      バブルは通常表示の左上の位置に出し、バブル自身の大きさで画面内へ収める（移動は通常表示の位置にも反映し、復帰時に収め直す）。
+      縁の色で同期状態を示す（同期中・ライブは緑）。背景の不透明度が低くても見失わないよう、バブルの不透明度には下限 0.7 を置く。
+      最小化状態は保存しない。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/Bubble.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での操作感は BL-048 で確認する
+    関連ID:
+      - BL-038
+- date: 2026-09-27 15:07
+  summary: タッチ透過モードを追加し、解除を常駐通知から行えるようにした
+  details:
+    変更内容: >-
+      設定パネルに「タッチ透過にする」を追加した。透過中はウィンドウに FLAG_NOT_TOUCHABLE を付け、他アプリのオーバーレイ越しの
+      タッチが遮断されないようウィンドウの不透明度（LayoutParams.alpha）を 0.8 に下げる（PLAN 4.6）。
+      透過中はウィンドウを触れないため、常駐通知に「タッチ透過を解除」の操作を追加し、ヘッダーに「タッチ透過中」と表示する。
+      透過モードは保存せず、サービスの起動ごとに解除した状態から始める。
+      detekt の関数数上限に達したため、位置と大きさの計算を WindowPlacement へ、設定パネルの部品を ui/SettingsPanel.kt へ切り出した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayNotifications.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、切り出しで解消）。
+      下のアプリを実際に操作できるかは BL-048 で確認する
+    関連ID:
+      - BL-037
+- date: 2026-09-27 15:03
+  summary: フローティングウィンドウの位置・大きさを画面の縦横それぞれで記憶
+  details:
+    変更内容: >-
+      OverlayPrefs の位置・大きさを画面の向き（ScreenOrientation。幅＞高さで横）ごとに保存するようにした。
+      縦は従来のキーを使い、既存の保存値を引き継ぐ。横は landscape. を前置したキーに保存する。
+      サービスの onConfigurationChanged で向きの変化を検知し、その向きの保存値へ切り替える。
+      detekt の関数数上限に達したため、ウィンドウの追加・削除・位置と大きさの管理を OverlayWindow クラスへ切り出した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、OverlayWindow への切り出しで解消）。回転時の動作は BL-048 で確認する
+    関連ID:
+      - BL-036
+- date: 2026-09-27 15:00
+  summary: フローティングのヘッダーの色味をチャット欄と分け、不透明度を両方に反映
+  details:
+    変更内容: >-
+      ヘッダー（ドラッグで移動する領域）の背景を青みの灰色（#37474F）、チャット欄を黒にし、ドラッグできる範囲を見分けやすくした。
+      不透明度はウィンドウ全体ではなくヘッダーとチャット欄それぞれの背景に掛け、スライダーが両方に効くようにした。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見え方の確認は BL-048（人手検証）で行う
+    関連ID:
+      - BL-035
+- date: 2026-09-27 14:57
+  summary: フローティングの設定パネルにチャットの文字サイズのスライダーを追加
+  details:
+    変更内容: >-
+      設定パネルに文字サイズのスライダー（80〜150%、10% 刻み、既定 100%＝従来の大きさ）を追加した。
+      チャット欄だけを LocalDensity の fontScale に倍率を掛けて拡大・縮小する（端末の文字サイズ設定に掛け合わせる）。
+      倍率は SharedPreferences overlay の fontScale に保存し、OverlayFormat.clampFontScale で範囲と刻みに揃える。単体テストを追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見た目の確認は BL-048（人手検証）で行う
+    関連ID:
+      - BL-034
 - date: 2026-09-27 14:36
   summary: 常駐通知の本文の動画タイトルが動画の切り替えに追従しない問題を修正
   details:

@@ -5,14 +5,18 @@ import io.github.filderschoice.romcha.core.chat.FetchResult
 import io.github.filderschoice.romcha.core.chat.RetryListener
 import io.github.filderschoice.romcha.core.chat.VideoChatInfo
 import io.github.filderschoice.romcha.core.sync.LiveChatSession
+import io.github.filderschoice.romcha.core.sync.LivePolling
 import io.github.filderschoice.romcha.core.sync.LiveState
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
+import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.core.sync.PlaybackStatus
 import io.github.filderschoice.romcha.core.sync.PositionEstimator
 import io.github.filderschoice.romcha.core.sync.ReplaySession
 import io.github.filderschoice.romcha.core.sync.ReplaySwitch
 import io.github.filderschoice.romcha.core.sync.ReplaySwitcher
 import io.github.filderschoice.romcha.core.sync.SessionTiming
+import io.github.filderschoice.romcha.core.sync.SyncConfig
+import io.github.filderschoice.romcha.core.sync.SyncOffset
 import io.github.filderschoice.romcha.core.sync.VideoInfoSource
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
@@ -20,6 +24,8 @@ import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
@@ -74,8 +80,14 @@ internal class ChatPlayer(
     }
 
     private suspend fun playReplay(topChatToken: String) {
-        whileScreenOn {
-            replayLoop(allChatToken(topChatToken) { token, listener -> backend.replay(token, 0L, listener) })
+        whileScreenOn { topOnly ->
+            val token =
+                if (topOnly) {
+                    topChatToken
+                } else {
+                    allChatToken(topChatToken) { token, listener -> backend.replay(token, 0L, listener) }
+                }
+            replayLoop(token)
         }
     }
 
@@ -84,7 +96,15 @@ internal class ChatPlayer(
         videoId: String,
         topChatToken: String,
     ) {
-        whileScreenOn { liveLoop(allChatToken(topChatToken) { token, listener -> backend.live(token, listener) }) }
+        whileScreenOn { topOnly ->
+            val token =
+                if (topOnly) {
+                    topChatToken
+                } else {
+                    allChatToken(topChatToken) { token, listener -> backend.live(token, listener) }
+                }
+            liveLoop(token)
+        }
         val switcher = ReplaySwitcher(VideoInfoSource { backend.videoInfo(it) }, timing.replayWaitsMs)
         val switch =
             switcher.await(videoId) { attempt, _ ->
@@ -103,7 +123,7 @@ internal class ChatPlayer(
     /**
      * 「上位チャット」の continuation で 1 回取得し、応答の見出しから「すべてのチャット」の continuation を得る。
      *
-     * 既定は「すべてのチャット」。閲覧専用ビューワーとして取りこぼしの無い表示を優先する（切り替え F-CHAT-07 は M4）。
+     * 既定は「すべてのチャット」。閲覧専用ビューワーとして取りこぼしの無い表示を優先する（「上位チャットのみ」の設定は F-CHAT-07）。
      * 取得に失敗した・見出しが無い場合は「上位チャット」のまま続ける（失敗の表示と再試行は各セッションに任せる）。
      * 画面オンのたびに取り直す（前回の失敗で「上位チャット」になっていても、次の画面オンで切り替えられる）。
      */
@@ -115,13 +135,18 @@ internal class ChatPlayer(
         return (result as? FetchResult.Success)?.value?.allChatToken ?: topChatToken
     }
 
-    /** 画面が点いている間だけ [block] を動かし、消えたら止めて、点いたらやり直す（N-03）。[block] が戻ったら終わる。 */
+    /**
+     * 画面が点いている間だけ [block] を動かし、消えたら止めて、点いたらやり直す（N-03）。[block] が戻ったら終わる。
+     *
+     * 「上位チャットのみ」の設定（F-CHAT-07）が変わった時もやり直し、[block] へ現在の設定を渡す。
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
-    private suspend fun whileScreenOn(block: suspend () -> Unit) {
-        env.screenOn
-            .transformLatest { on ->
+    private suspend fun whileScreenOn(block: suspend (topChatOnly: Boolean) -> Unit) {
+        combine(env.screenOn, env.settings.topChatOnly, ::Pair)
+            .distinctUntilChanged()
+            .transformLatest { (on, topOnly) ->
                 if (on) {
-                    block()
+                    block(topOnly)
                     emit(Unit)
                 } else {
                     publisher.show(publisher.base.copy(notice = SessionMessages.SCREEN_OFF))
@@ -135,27 +160,40 @@ internal class ChatPlayer(
             ReplaySession(
                 source = { token, offset, listener -> backend.replay(token, offset, listener) },
                 initialContinuation = continuation,
-                playback = { env.nowPlaying.value.snapshot },
+                playback = { SyncOffset.apply(replayPlayback(), env.settings.syncOffsetMs.value) },
                 clock = env.clock,
+                config = SyncConfig(maxVisible = env.settings.maxVisible.value),
                 timing = timing,
             )
         coroutineScope {
             launch { session.run() }
             session.state.collect { replay ->
+                val manual = env.manualTimer.value != null
                 val found = env.nowPlaying.value.sessionFound
-                val notice =
-                    SessionMessages.describe(replay.fetchStatus) ?: SessionMessages.NOT_DETECTED.takeIf { !found }
+                val notDetected = SessionMessages.NOT_DETECTED.takeIf { !found && !manual }
+                val notice = SessionMessages.describe(replay.fetchStatus) ?: notDetected
                 publisher.frame(
                     publisher.base.copy(
                         messages = replay.messages,
                         positionMs = replay.positionMs,
-                        indicator = SessionMessages.indicator(replay.status, found),
+                        indicator =
+                            if (manual) {
+                                SyncIndicator.MANUAL
+                            } else {
+                                SessionMessages.indicator(
+                                    replay.status,
+                                    found,
+                                )
+                            },
                         notice = notice,
                     ),
                 )
             }
         }
     }
+
+    /** リプレイの同期に使う再生状態。手動タイマーモード中はその状態を使う（F-SYNC-07） */
+    private fun replayPlayback(): PlaybackSnapshot = env.manualTimer.value ?: env.nowPlaying.value.snapshot
 
     /** ライブを最新追従で表示する。ライブが終わったら戻る。 */
     private suspend fun liveLoop(continuation: String) =
@@ -166,6 +204,7 @@ internal class ChatPlayer(
                     initialContinuation = continuation,
                     playback = { env.nowPlaying.value.snapshot },
                     clock = env.clock,
+                    polling = LivePolling(maxMessages = env.settings.maxVisible.value),
                 )
             val runner = launch { session.run() }
             val ticker =
@@ -184,10 +223,10 @@ internal class ChatPlayer(
     private fun publishLive(state: LiveState) {
         val now = env.clock()
         val snapshot = env.nowPlaying.value.snapshot
-        val delayMs = LiveTimeline.delayMs(env.liveDelaySeconds.value)
+        val delayMs = LiveTimeline.delayMs(env.settings.liveDelaySeconds.value)
         publisher.frame(
             publisher.base.copy(
-                messages = LiveTimeline.visible(state.received, now, delayMs),
+                messages = LiveTimeline.visible(state.received, now, delayMs, env.settings.maxVisible.value),
                 positionMs = PositionEstimator.estimate(snapshot, now),
                 indicator = if (snapshot.status == PlaybackStatus.PAUSED) SyncIndicator.PAUSED else SyncIndicator.LIVE,
                 notice = SessionMessages.describe(state.fetchStatus),

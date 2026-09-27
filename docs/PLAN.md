@@ -177,7 +177,7 @@ F-FUT-01 の設計上の制約（着手時に詳細化する）:
   （`STATE_PLAYING` の時のみ加算）。表示更新は 250ms 間隔、状態変化は `MediaController.Callback` で即時反映。
 - **PiP・全画面の違い**: MediaSession は表示形態に依存しないため、同一方式で両対応できる見込み。
 - **不採用**: AccessibilityService による画面読み取り。権限が過大で、画面構成の変更に弱いため。
-- **M0 の実機検証結果（2026-09-27、Pixel 8 Pro / YouTube 21.38.130。`docs/VERIFICATION.md` 1 章）**:
+- **M0 の実機検証結果（2026-09-27、Pixel 8 Pro / YouTube 21.38.130。当時の `docs/VERIFICATION.md` 1 章。確認済みのため削除済み）**:
   - Premium 有り／無しの両環境で、通常表示・全画面・一時停止・PiP・バックグラウンド再生・広告再生中・ライブ視聴中の
     いずれでも MediaSession が公開され、状態・位置（シークバーと数秒以内）・速度・タイトル・チャンネル名・長さが取れる（Q-01）。
   - `MediaMetadata` ほか全キーに動画IDは含まれない（Q-02）。4.3 の手順1は使えず、手順2以降で特定する。

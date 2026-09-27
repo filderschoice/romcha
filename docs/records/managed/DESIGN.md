@@ -18,7 +18,7 @@
 - 対象: Android アプリ（applicationId `io.github.filderschoice.romcha`、ライセンス MIT）
 - 前提環境: minSdk 34 / targetSdk 36 / compileSdk 36、JDK 17、Gradle 8.13、AGP 8.13.0、Kotlin 2.0.21
 - 動作確認端末: Pixel 8 Pro（実機確認は人手検証。手順と最新の結果は `docs/VERIFICATION.md`）。MediaSession の取得（Q-01。Premium 有り／無し）、
-  リプレイ同期（N-02）、ライブ・プレミアの最新追従は確認済み。ライブ終了後のリプレイ切り替えは未確認
+  リプレイ同期（N-02）、ライブ・プレミアの最新追従、M3・M4 と BL-034〜BL-052 の表示・操作は確認済み。ライブ終了後のリプレイ切り替えは未確認
 
 ## 実装済み機能要件
 
@@ -28,14 +28,29 @@
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
 - F-VID-01/02: 動画の自動特定パイプライン手順1〜4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
-- F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
+- F-OVL-01〜08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`。画面端への退避 BL-049 を含む）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
 - F-SYNC-08: ライブ・プレミア中の最新追従表示と表示遅延の設定（`core:sync` の `LiveTimeline`、オーバーレイの設定パネル）
 - F-CHAT-06: ライブ・プレミア終了の検知とリプレイへの切り替え待ち（`core:sync` の `LiveChatSession.ended` と `ReplaySwitcher`）
 - F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ／ライブ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session` パッケージ）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
+- F-SYNC-06: 同期オフセットの手動補正（`core:sync` の `SyncOffset`。±10 秒・0.5 秒刻み。正の値でチャットを早く表示）。
+  `ChatPlayer` がリプレイの同期に使う再生状態の位置へ補正を足す（PLAN 4.5 の「推定位置 + 手動補正」）。
+  補正は SharedPreferences `overlay` の `syncOffsetMs` に保存して引き継ぐ。ライブ・プレミアには効かない（表示遅延を使う）
+- F-SYNC-07、F-OVL-09: 手動タイマーモード（`core:sync` の `ManualTimer`。再生状態 `PlaybackSnapshot` を開始・停止・位置入力で作る。等速）。
+  設定パネル（リプレイ時）の「手動タイマー」でオンにすると、表示中の位置（補正を除く）で停止した状態から始める。
+  手動中は `SessionEnvironment.manualTimer` を公式アプリの再生状態の代わりにリプレイの同期へ使い、同期状態を「手動」と表示する。
+  ライブ・プレミアは対象外。位置入力（`OverlayFormat.parsePosition`。`h:mm:ss`・`m:ss`・秒数、全角コロン可）の間だけ
+  ウィンドウの `FLAG_NOT_FOCUSABLE` を外し（`OverlayWindow.focusable`）、確定・取消で戻す。手動タイマーの状態は保存しない
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
+- F-CHAT-07: 「上位のチャットのみ」と「すべてのチャット」（既定）の切り替え（アプリの表示設定画面。切り替えると取得をやり直す）
+- F-VID-06: URL 入力欄の「クリップボードから貼り付け」（押した時だけクリップボードを読む。自動検出はしない。ユーザー判断）
+- F-VIEW-01: 文字サイズ（フローティングの設定パネル）と、投稿者名・アイコン・時刻の表示有無（アプリの表示設定画面）
+- F-VIEW-03: NG ワードと種別（スパチャ・メンバー・モデレーター／配信者）の絞り込み（`feature:overlay` の `ChatFilter`）
+- F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
+- F-VIEW-05: ライト／ダーク／システム追従のテーマ（アプリの表示設定画面。システム追従ではフローティングは従来どおり暗色）
+- F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
 
 ## 設計方針
 
@@ -201,24 +216,71 @@
   - 常駐通知（チャンネル `overlay`、重要度 LOW）に「表示／非表示」「終了」の操作を付け、本文タップでアプリを開く（F-OVL-08）。
   - 常駐通知の本文は表示中の動画タイトル。`OverlayNotifications.titleChanges(OverlayChannel.state)`（タイトルの変化だけを流す）を
     購読し、変わったときだけ通知を出し直す（BL-033。状態は表示の更新ごとに発行されるため、同じタイトルでは出し直さない）。
-  - ウィンドウの位置・大きさ・不透明度は SharedPreferences `overlay` に保存し、表示時に画面内へ収める（`WindowBounds.clampTo`）。
+  - ウィンドウの位置・大きさ・不透明度・文字サイズは SharedPreferences `overlay` に保存し、表示時に画面内へ収める（`WindowBounds.clampTo`）。
     既定 280×360dp、最小 160dp。ヘッダーのドラッグで移動、右下のハンドルのドラッグでサイズ変更（F-OVL-02）。
+  - ウィンドウの追加・削除と `LayoutParams` の反映は `OverlayWindow`、位置・大きさの計算と保存は `WindowPlacement` に置く。
+    位置・大きさは画面の向き（`ScreenOrientation`。
+    幅＞高さで横）ごとに保存し、縦は従来のキー、横は `landscape.` を前置したキーを使う。`onConfigurationChanged` で向きの変化を
+    検知したら、その向きの保存値へ切り替える（F-OVL-06）。
   - 不透明度は 0.2〜1.0（既定 0.6）。ヘッダーの設定ボタンでスライダーを出す（F-OVL-03）。
+    ヘッダー（ドラッグ領域）は青みの灰色 #37474F、チャット欄は黒（暗色の配色の場合）で塗り分け、不透明度は両方の背景に同じ値を掛ける（BL-035）。
+  - タッチ透過モード（F-OVL-05）: 設定パネルから入り、`FLAG_NOT_TOUCHABLE` を付けてウィンドウの `LayoutParams.alpha` を 0.8 に
+    下げる（0.8 を超える他アプリのオーバーレイ越しのタッチは OS に遮断される）。透過中はウィンドウを触れないため、解除は常駐通知の
+    「タッチ透過を解除」で行い、ヘッダーに「タッチ透過中」と出す。透過モードは保存しない（起動ごとに解除状態から始める）。
+  - 最小化（F-OVL-04）: ヘッダーの最小化ボタンで 48dp の丸いバブル（`ui/Bubble.kt`）にする。タップで復帰、ドラッグで移動。
+    バブルは通常表示の左上に出し、バブル自身の大きさで画面内へ収める（移動は通常表示の位置にも反映し、復帰時に収め直す）。
+    縁の色で同期状態を示し（同期中・ライブは緑）、不透明度には下限 0.7 を置く。最小化状態は保存しない。
+  - 画面端への退避（BL-049/050。YouTube 公式アプリの PiP と同じ操作）: ウィンドウに `FLAG_LAYOUT_NO_LIMITS` を付け、
+    ヘッダーのドラッグ中は画面の左右の外へのはみ出しを許す（画面内に 48dp は残す。縦は画面内に収める。`StashRule.dragX`）。
+    離した時に「48dp とウィンドウ幅の 3 分の 1 の大きい方」（`threshold`）以上はみ出していれば（`overshoot`・`sideFor`）その側の
+    端へ退避して 28×72dp のつまみ（`ui/StashTab.kt`）だけを残し、そうでなければ画面内へ戻す（`WindowPlacement.endGesture`）。
+    つまみを内側へ 24dp 以上スワイプするかタップすると、退避した側の端に寄せた通常表示で復帰する。つまみは上下にドラッグで動かせる。
+    表示状態は `WindowMode`（Normal・Minimized・Stashed(side)）で表し、`OverlayActions.onWindowModeChange` で切り替える。
+    退避の向きは左右のみ、状態は保存しない。
+  - 設定パネル（`ui/SettingsPanel.kt`。高さ 200dp を上限にスクロール）: 不透明度・文字サイズ・表示遅延（LIVE の時）または
+    同期の補正と手動タイマー（それ以外）・アプリを開く・タッチ透過。
+  - アプリを開く（BL-052）: 設定パネルの「アプリを開く」で、サービスがアプリの起動用インテント（`FLAG_ACTIVITY_NEW_TASK`）を
+    `startActivity` する。ウィンドウは表示したまま。オーバーレイを表示中のため、バックグラウンドからの起動制限の例外に当たる。
+    ウィンドウからの単発の操作（タッチ透過・隠す・アプリを開く）は `OverlayActions.onCommand(OverlayCommand)` で受け取る。
+    値は `OverlaySettings`（不透明度・文字サイズ・表示遅延・補正）にまとめ、`OverlayActions.onSettingsChange` で受け取り、
+    操作の終わり（`onGestureEnd`）に `OverlayPrefs.settings` へ保存する。セッションへは表示遅延と補正を `StateFlow` で渡す。
+  - チャットの文字サイズは倍率 0.8〜1.5（0.1 刻み、既定 1.0＝中）。設定パネルのスライダーで変え、`fontScale` に保存する。
+    チャット欄だけ `LocalDensity` の `fontScale` に倍率を掛けて反映する（各 `Text` の sp は変えない。F-VIEW-01 の文字サイズ）。
 - 表示内容の受け渡し: プロセス内オブジェクト `OverlayChannel` の `state: StateFlow<OverlayUiState>`（タイトル・メッセージ・
   再生位置・同期状態・お知らせ文・候補）へセッション側が書き込み、ウィンドウが購読する。利用者の操作は
   `events: SharedFlow<OverlayEvent>`（候補の選択・終了）でセッション側へ返す。
 - 一覧（F-OVL-07）: `AutoScrollPolicy` で、利用者が遡ってドラッグを終えた時点で最下部でなければ追従を止めて「最新へ」ボタンを出し、
   最下部に戻るかボタン押下で追従を再開する。追従中は新着ごとに最下部へスクロールする。
-- 表示: 通常メッセージは投稿者名（所有者＝黄・モデレーター＝青・メンバー＝緑）と本文（絵文字は代替テキスト）。
+- 表示: 通常メッセージは投稿者名（所有者＝黄・モデレーター＝青・メンバー＝緑）と本文。
   スーパーチャット・スーパーステッカーは見出し帯（投稿者名・金額）と本文帯を応答の色で塗り、輝度で黒／白文字を選ぶ（F-VIEW-02）。
   メンバー加入・ギフトは緑の帯。お知らせ文（チャット無効 F-VID-07・通信失敗など）は赤帯で表示する。
+- 表示設定（F-VIEW-01）: `DisplaySettings`（投稿者名・アイコン・時刻の表示有無。既定は名前のみで従来と同じ）を
+  `DisplaySettingsStore`（SharedPreferences `display`。`init(context)` 後に `state: StateFlow` を購読、`update` で保存）で共有する。
+  アプリ画面の「表示設定」（`DisplaySettingsScreen`）で変え、表示中のウィンドウへすぐ反映する。時刻はリプレイなら動画内の位置、
+  ライブ・プレミアなら投稿時刻 `H:mm`（`OverlayFormat.messageTime`）。アイコンは `ImagePolicy` を通した URL だけ 18dp の丸で出す。
+  スーパーチャットの帯の投稿者名は設定によらず出す。
+- 絞り込み（F-VIEW-03）: `ChatFilter.apply` でウィンドウの表示直前に絞る。「スパチャのみ」（`paid` あり）・「メンバーのみ」
+  （MEMBER の役割、またはメンバー加入・ギフト）・「モデレーター・配信者のみ」（MODERATOR / OWNER）はオンにしたもののいずれかに
+  当てはまれば出す（すべてオフなら絞らない）。NG ワードを本文（`plainText`）に含むものは大文字・小文字を区別せず常に除く。
+  NG ワードは表示設定画面で 1 行 1 語で入力し「保存」で取り込む（`parseNgWords`。空行・重複を除き最大 100 語・1 語 50 字）。
+- 表示保持件数（F-VIEW-04、N-04）: `DisplaySettings.maxVisible` をセッションの開始時にリプレイの `SyncConfig.maxVisible`・
+  ライブの `LivePolling.maxMessages` と `LiveTimeline.visible` へ渡す。上限を下げた時はウィンドウの表示直前でも `takeLast` で
+  切り詰めてすぐ反映する（増やした分は次に動画を開いた時から）。
+- テーマ（F-VIEW-05）: `DisplaySettings.theme`（`ThemeMode`。既定 SYSTEM＝従来の見た目）。アプリ画面は SYSTEM ならシステムの設定、
+  LIGHT / DARK なら固定（`RomchaApp` の動的配色）。フローティングは `OverlayColors`（Dark / Light）を `LocalOverlayColors` で渡し、
+  SYSTEM・DARK は暗色、LIGHT は明るい配色（文字 #212121、ヘッダー #B0BEC5、背景 白、役割の色も読める濃さに変える）。
+  `OverlayTextColor`・`SubTextColor`・`HeaderColor` は `LocalOverlayColors` を読む `@Composable` プロパティ。
+- 画像（F-CHAT-09）: Coil（`coil-compose`）で読み込む。本文は `MessageText` で描き、カスタム絵文字・メンバースタンプを
+  `InlineTextContent`（1.4em）で文中に差し込む。URL が無い・許可外・読み込み失敗なら代替テキスト、Unicode の絵文字は文字のまま。
+  スーパーステッカーは 56dp の画像（失敗時は「（スーパーステッカー）」）。応答の URL は `ImagePolicy` で HTTPS かつ
+  `*.ggpht.com`・`*.ytimg.com`・`*.googleusercontent.com` に限る（N-05）。
 
 ### アプリ画面（`app`）
 
-- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME` と `LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
+- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
 - HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、診断情報（折りたたみ）、OSS ライセンスへのリンク。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
@@ -238,7 +300,8 @@
   `onStartCommand` のたびに `PlaybackMonitor.start()` を試す（通知へのアクセスが後から許可された場合に備える）。
   終了時はモニター・レシーバーを止め、表示内容を初期化する。
 - 構成: `WatchCoordinator`（入力の命令化・動画の特定）、`ChatPlayer`（1 本の動画の取得・同期・表示）、`OverlayPublisher`
-  （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, liveDelaySeconds, clock)`、
+  （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, settings, clock, manualTimer)`
+  （`settings` は `SessionSettings(liveDelaySeconds, syncOffsetMs, maxVisible, topChatOnly)`）、
   `SessionIo(requestedVideo, takeRequestedVideo, events, publish)`、`ChatBackend`（videoInfo・replay・live・search）。
 - `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに
   実行中の処理を取り消して新しい処理を始める。
@@ -251,7 +314,9 @@
 - `ChatPlayer.open(videoId, alternatives)`: `next` で情報を取り、チャット無効なら説明文（応答の文言、無ければ既定文。F-VID-07）。
   チャットがあれば、アーカイブならリプレイ、ライブ・プレミア中（待機中を含む）ならライブを表示する。表示の開始時（画面オンのたび）に
   `topChatToken` で 1 回取得し、応答の `allChatToken` があれば「すべてのチャット」へ切り替える（取得失敗・見出し無しなら上位チャットのまま）。
-  既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を優先するため（切り替え F-CHAT-07 は M4）。
+  既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を優先するため。表示設定の「上位のチャットのみ」
+  （`SessionSettings.topChatOnly`。F-CHAT-07）がオンなら切り替えの取得をせず `topChatToken` のまま使う。`whileScreenOn` は
+  画面のオン・オフと同設定の組で `transformLatest` し、どちらが変わっても取得をやり直す。
   - リプレイ: `ReplaySession` の状態から、メッセージ・位置・同期状態（再生中＝同期中、一時停止・バッファ中＝一時停止、
     MediaSession 無し＝未検出）・お知らせ（再接続中 n 回目・失敗の説明・未検出）を表示する。
   - ライブ（F-CHAT-04/05、F-SYNC-08）: `LiveChatSession` を動かし、250ms ごとに `LiveTimeline.visible`（表示遅延は
@@ -263,6 +328,7 @@
 - `PersistentResolutionCache`: 特定のキャッシュを `filesDir/resolution-cache.json`（`[{identity, videoId}]`）へ `AtomicFile` で保存し、
   起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
+- `feature:overlay` は画像読み込みに Coil 2.7.0（`io.coil-kt:coil-compose`）を使う。既定の `ImageLoader`（シングルトン）で足りるため設定しない。
 
 ## 非機能要件
 
