@@ -25,6 +25,7 @@
 - F-CHAT-01/08、N-08: メッセージモデルとチャット応答の解析（`core:chat` の `ChatResponseParser`）
 - F-CHAT-10、F-VID-07: InnerTube クライアント（`next` からの continuation 取得・チャット無効の判定、リプレイ／ライブ取得、指数バックオフ）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
+- F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
 ## 設計方針
 
@@ -86,6 +87,15 @@
     キーで重複を除く。表示保持は既定 500 件で、超えたら古いものから捨てる（N-04）。
   - `changed = false` の時は `visible` を空で返し、呼び出し側は前回表示を維持する（毎回のリストコピーを避ける）。
   - スレッドセーフではない。単一のコルーチン（単一スレッド）から呼ぶ。
+- `ReplaySession`: `SyncEngine` と取得元 `ReplayChatSource`（本番は `InnerTubeClient.fetchReplay`）をつなぐ。
+  - `run()` はキャンセルまで 250ms ごとに tick し、`state: StateFlow<ReplayState>`（位置・再生状態・表示メッセージ・取得状態・終端）を更新する。
+    単一スレッドのディスパッチャーで実行する（取得結果の反映も同じスレッドで行うため）。
+  - 取り直し（初回・シーク）は `initialContinuation` と `playerOffsetMs = 推定位置 - 30 秒` で取得し、実行中の取得を取り消す。
+    続きは直前の応答の継続トークンで、位置を指定せずに取得する。継続トークンが無ければ終端（`ended`）。
+  - 取得済み範囲の終端は応答内の最大オフセット。空の応答は要求位置 + 10 秒を取得済みとみなす。
+  - 通信量の抑制（K-04）: 続きの取得は最小 1 秒間隔。再試行しても失敗した後は 10 秒の冷却期間を置く（取り直しも含む）。
+  - 取得状態 `FetchStatus`（Idle / Loading / Retrying(attempt) / Failed(failure)）を UI へ出す（F-CHAT-10）。
+  - 間隔は `SessionTiming`（tick 250ms・冷却 10 秒・最小間隔 1 秒）でまとめて渡す。
 
 ## 非機能要件
 

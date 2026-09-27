@@ -6,6 +6,23 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 17:15
+  summary: リプレイの先読み取得とシーク時の再取得を行う ReplaySession を core:sync に実装
+  details:
+    変更内容: >-
+      F-CHAT-02/03 と PLAN 4.5 に基づき、SyncEngine の取得要求を ReplayChatSource へ中継する ReplaySession を追加した。
+      初回・シーク時は初期トークンと推定位置の 30 秒前から取り直し、続きは継続トークンで取得する。
+      続きの取得は最小 1 秒間隔、失敗後は 10 秒の冷却期間を置く（K-04）。取得状態を StateFlow で公開する（F-CHAT-10）。
+      仮想時間を使う単体テスト 7 件を追加した。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/ReplaySession.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/ReplaySessionTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:sync の単体テスト 18 件成功
+    関連ID:
+      - BL-006
 - date: 2026-09-27 16:45
   summary: InnerTube クライアント（continuation 取得、リプレイ／ライブ取得、指数バックオフ）を core:chat に実装
   details:
