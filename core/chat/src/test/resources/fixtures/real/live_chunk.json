@@ -1,0 +1,3151 @@
+{
+  "continuationContents": {
+    "liveChatContinuation": {
+      "continuations": [
+        {
+          "invalidationContinuationData": {
+            "invalidationId": {
+              "objectSource": 1056,
+              "objectId": "Y2hhdH5tdVdkY0hWaVdXMA==",
+              "topic": "chat~muWdcHViWW0",
+              "subscribeToGcmTopics": true,
+              "protoCreationTimestampMs": "1790485451202"
+            },
+            "timeoutMs": 10000,
+            "continuation": "0ofMyAOUAhpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRCjZtIP9_Y2XAzAAQAJKbggAGAAgAEoIEAAYACAAMABQq5Wqiv6NlwNYBHgAogEEGgIIPKoBDBAAGgAiACoECAAQALABAMABAMgBq5Wqiv6NlwPiAQsIy8fi1QYQ2f_FRugBAPgBAIgCAJACAJoCCwjLx-LVBhDZ_8VGiAMAUMz0wv39jZcDWLv52or_jJcDggEGCAQYATAAiAEAoAHlwa2K_o2XA7IBALoBAggK0AHJx-LVBg%3D%3D"
+          }
+        }
+      ],
+      "header": {
+        "liveChatHeaderRenderer": {
+          "overflowMenu": {
+            "menuRenderer": {
+              "items": [
+                {
+                  "menuServiceItemRenderer": {
+                    "text": {
+                      "runs": [
+                        {
+                          "text": "参加者"
+                        }
+                      ]
+                    },
+                    "icon": {
+                      "iconType": "PERSON"
+                    }
+                  }
+                },
+                {
+                  "clientSideToggleMenuItemRenderer": {
+                    "defaultText": {
+                      "runs": [
+                        {
+                          "text": "タイムスタンプ"
+                        }
+                      ]
+                    },
+                    "defaultIcon": {
+                      "iconType": "ACCESS_TIME"
+                    },
+                    "toggledText": {
+                      "runs": [
+                        {
+                          "text": "タイムスタンプ"
+                        }
+                      ]
+                    },
+                    "toggledIcon": {
+                      "iconType": "ACCESS_TIME"
+                    },
+                    "menuItemIdentifier": "timestamp_toggle",
+                    "command": {
+                      "toggleLiveChatTimestampsEndpoint": {
+                        "hack": true
+                      }
+                    }
+                  }
+                },
+                {
+                  "clientSideToggleMenuItemRenderer": {
+                    "defaultText": {
+                      "runs": [
+                        {
+                          "text": "リアクション"
+                        }
+                      ]
+                    },
+                    "defaultIcon": {
+                      "iconType": "HEART_CIRCLE"
+                    },
+                    "toggledText": {
+                      "runs": [
+                        {
+                          "text": "リアクション"
+                        }
+                      ]
+                    },
+                    "toggledIcon": {
+                      "iconType": "HEART_CIRCLE"
+                    },
+                    "isToggled": true,
+                    "menuItemIdentifier": "reactions_toggle",
+                    "command": {
+                      "toggleLiveReactionsMuteCommand": {
+                        "hack": true
+                      }
+                    }
+                  }
+                },
+                {
+                  "menuServiceItemRenderer": {
+                    "text": {
+                      "runs": [
+                        {
+                          "text": "チャットをポップアウト"
+                        }
+                      ]
+                    },
+                    "icon": {
+                      "iconType": "OPEN_IN_NEW"
+                    }
+                  }
+                },
+                {
+                  "menuNavigationItemRenderer": {
+                    "text": {
+                      "runs": [
+                        {
+                          "text": "フィードバックを送信"
+                        }
+                      ]
+                    },
+                    "icon": {
+                      "iconType": "FEEDBACK"
+                    },
+                    "navigationEndpoint": {
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "ignoreNavigation": true
+                        }
+                      },
+                      "userFeedbackEndpoint": {
+                        "hack": true,
+                        "bucketIdentifier": "live_chat"
+                      }
+                    }
+                  }
+                }
+              ],
+              "accessibility": {
+                "accessibilityData": {
+                  "label": "その他のオプション"
+                }
+              }
+            }
+          },
+          "collapseButton": {
+            "buttonRenderer": {
+              "style": "STYLE_DEFAULT",
+              "size": "SIZE_DEFAULT",
+              "isDisabled": false,
+              "icon": {
+                "iconType": "CLOSE"
+              },
+              "accessibility": {
+                "label": "閉じる"
+              },
+              "command": {
+                "commandMetadata": {
+                  "webCommandMetadata": {
+                    "sendPost": true
+                  }
+                },
+                "signalServiceEndpoint": {
+                  "signal": "CLIENT_SIGNAL",
+                  "actions": [
+                    {
+                      "signalAction": {
+                        "signal": "HIDE_LIVE_CHAT"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "viewSelector": {
+            "sortFilterSubMenuRenderer": {
+              "subMenuItems": [
+                {
+                  "title": "トップチャット",
+                  "selected": true,
+                  "continuation": {
+                    "reloadContinuationData": {
+                      "continuation": "0ofMyAPkARpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRDABSm4IABgAIABKCBAAGAAgADAAUKuVqor-jZcDWAR4AKIBBBoCCDyqAQwQABoAIgAqBAgAEACwAQDAAQDIAauVqor-jZcD4gELCMvH4tUGENn_xUboAQD4AQCIAgCQAgCaAgsIy8fi1QYQ2f_FRogDAIIBDAgEGAEgACgBMAA4AKgBAQ%3D%3D"
+                    }
+                  },
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "トップチャット"
+                    }
+                  },
+                  "subtitle": "一部のメッセージ（不適切な可能性があるものなど）を非表示にします"
+                },
+                {
+                  "title": "チャット",
+                  "selected": false,
+                  "continuation": {
+                    "reloadContinuationData": {
+                      "continuation": "0ofMyAPkARpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRDABSm4IABgAIABKCBAAGAAgADAAUKuVqor-jZcDWAR4AKIBBBoCCDyqAQwQABoAIgAqBAgAEACwAQDAAQDIAauVqor-jZcD4gELCMvH4tUGENn_xUboAQD4AQCIAgCQAgCaAgsIy8fi1QYQ2f_FRogDAIIBDAgBGAEgACgBMAA4AKgBAQ%3D%3D"
+                    }
+                  },
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "チャット"
+                    }
+                  },
+                  "subtitle": "すべてのメッセージが表示されます"
+                }
+              ],
+              "accessibility": {
+                "accessibilityData": {
+                  "label": "チャットのモードの選択"
+                }
+              },
+              "targetId": "live-chat-view-selector-sub-menu"
+            }
+          },
+          "viewerLeaderboardEntryPoint": {
+            "liveViewerLeaderboardChatEntryPointViewModel": {
+              "defaultButton": {
+                "buttonViewModel": {
+                  "iconName": "CROWN",
+                  "onTap": {
+                    "innertubeCommand": {
+                      "showEngagementPanelEndpoint": {
+                        "identifier": {
+                          "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                          "tag": "PAlive_viewer_leaderboard"
+                        },
+                        "globalConfiguration": {
+                          "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                        }
+                      }
+                    }
+                  },
+                  "accessibilityText": "トップファン",
+                  "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
+                  "isFullWidth": true,
+                  "type": "BUTTON_VIEW_MODEL_TYPE_TEXT",
+                  "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                  "accessibilityId": "id.ui.pdg.leaderboard.entrypoint"
+                }
+              },
+              "pointsButton": {
+                "buttonViewModel": {
+                  "iconName": "CROWN_FILLED",
+                  "title": "トップファン",
+                  "onTap": {
+                    "innertubeCommand": {
+                      "showEngagementPanelEndpoint": {
+                        "identifier": {
+                          "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                          "tag": "PAlive_viewer_leaderboard"
+                        },
+                        "globalConfiguration": {
+                          "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                        }
+                      }
+                    }
+                  },
+                  "accessibilityText": "トップファン",
+                  "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
+                  "isFullWidth": true,
+                  "type": "BUTTON_VIEW_MODEL_TYPE_OUTLINE",
+                  "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                  "accessibilityId": "id.ui.pdg.leaderboard.entrypoint"
+                }
+              },
+              "entryPointStateEntityKey": "EgttdVdkY0hWaVdXMCCzBCgB",
+              "pointsEntityKey": "EgttdVdkY0hWaVdXMCC0BCgB",
+              "isImmersive": false,
+              "isCameo": false,
+              "experiments": {
+                "enableHighlight": true
+              }
+            }
+          }
+        }
+      },
+      "actions": [
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント34"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNLdXVySXoxalpjREZVbjM1d01kSkJvQ3Zn",
+                "timestampUsec": "1790483039467386",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CKuurIz1jZcDFUn35wMdJBoCvg"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント35"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNMVDI4WXoxalpjREZXN0Y1d01kay1vaG1R",
+                "timestampUsec": "1790483040601454",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CLT28Yz1jZcDFW7F5wMdk-ohmQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント36"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "🤩",
+                        "shortcuts": [
+                          ":star_struck:"
+                        ],
+                        "searchTerms": [
+                          "star",
+                          "struck"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "🤩"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "👏",
+                        "shortcuts": [
+                          ":clapping_hands:",
+                          ":clap:"
+                        ],
+                        "searchTerms": [
+                          "clapping",
+                          "hands",
+                          "clap"
+                        ],
+                        "supportsSkinTone": true,
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "👏"
+                            }
+                          }
+                        },
+                        "variantIds": [
+                          "👏",
+                          "👏🏻",
+                          "👏🏼",
+                          "👏🏽",
+                          "👏🏾",
+                          "👏🏿"
+                        ]
+                      }
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "👏",
+                        "shortcuts": [
+                          ":clapping_hands:",
+                          ":clap:"
+                        ],
+                        "searchTerms": [
+                          "clapping",
+                          "hands",
+                          "clap"
+                        ],
+                        "supportsSkinTone": true,
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "👏"
+                            }
+                          }
+                        },
+                        "variantIds": [
+                          "👏",
+                          "👏🏻",
+                          "👏🏼",
+                          "👏🏽",
+                          "👏🏾",
+                          "👏🏿"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者34"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNPbmpqNUgxalpjREZabnp3Z1Fkc0VzWGRR",
+                "timestampUsec": "1790483049485916",
+                "authorExternalChannelId": "UCanonymous0000000000034"
+              }
+            },
+            "clientId": "COnjj5H1jZcDFZnzwgQdsEsXdQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント37"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNPek0tNUgxalpjREZiSVFkZ1lkcG8wU09B",
+                "timestampUsec": "1790483051251667",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "COzM-5H1jZcDFbIQdgYdpo0SOA"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント38"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNQYVc1NVgxalpjREZaakl3Z1FkYVI0YXpn",
+                "timestampUsec": "1790483059302109",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CPaW55X1jZcDFZjIwgQdaR4azg"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント39"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNNYXE2cHoxalpjREZkckV3Z1FkV1U4OC1n",
+                "timestampUsec": "1790483074035965",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CMaq6pz1jZcDFdrEwgQdWU88-g"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント40"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNPcW1uNkwxalpjREZhVjZUQWdkamM0cS1R",
+                "timestampUsec": "1790483085388436",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "COqmn6L1jZcDFaV6TAgdjc4q-Q"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント41"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "😭",
+                        "shortcuts": [
+                          ":loudly_crying_face:",
+                          ":sob:",
+                          "T_T",
+                          ";_;"
+                        ],
+                        "searchTerms": [
+                          "loudly",
+                          "crying",
+                          "face",
+                          "sob"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "😭"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者34"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNJbl9scWYxalpjREZZUlFUQWdkSXdnZm93",
+                "timestampUsec": "1790483095739211",
+                "authorExternalChannelId": "UCanonymous0000000000034"
+              }
+            },
+            "clientId": "CIn_lqf1jZcDFYRQTAgdIwgfow"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント42"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "😊",
+                        "shortcuts": [
+                          ":smiling_face_with_smiling_eyes:",
+                          ":blush:"
+                        ],
+                        "searchTerms": [
+                          "smiling",
+                          "face",
+                          "with",
+                          "eyes",
+                          "blush"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "😊"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNKZUJfcWoxalpjREZaSEh3Z1FkLVo4bkZ3",
+                "timestampUsec": "1790483099525791",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CJeB_qj1jZcDFZHHwgQd-Z8nFw"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント43"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNPRHNoTFgxalpjREZlN001d01kM3BNVzFR",
+                "timestampUsec": "1790483124802078",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CODshLX1jZcDFe7M5wMd3pMW1Q"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント44"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "😄",
+                        "shortcuts": [
+                          ":grinning_face_with_smiling_eyes:",
+                          ":smile:"
+                        ],
+                        "searchTerms": [
+                          "grinning",
+                          "face",
+                          "with",
+                          "smiling",
+                          "eyes",
+                          "smile"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "😄"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNKU0VrYjMxalpjREZkYkV3Z1FkZEhrS0R3",
+                "timestampUsec": "1790483141778445",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CJSEkb31jZcDFdbEwgQddHkKDw"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント45"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者34"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNJdmp5cl8xalpjREZVQURkZ1lkTlBjSmNB",
+                "timestampUsec": "1790483146918333",
+                "authorExternalChannelId": "UCanonymous0000000000034"
+              }
+            },
+            "clientId": "CIvjyr_1jZcDFUADdgYdNPcJcA"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント46"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNKcXFtY0wxalpjREZiSVFkZ1lkcG8wU09B",
+                "timestampUsec": "1790483152400667",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CJqqmcL1jZcDFbIQdgYdpo0SOA"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント47"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者34"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNQRG4yY1AxalpjREZaZm01d01kak5vcXZ3",
+                "timestampUsec": "1790483155554041",
+                "authorExternalChannelId": "UCanonymous0000000000034"
+              }
+            },
+            "clientId": "CPDn2cP1jZcDFZfm5wMdjNoqvw"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント48"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNJT0Y1c2oxalpjREZVVEl3Z1FkemxrRXlB",
+                "timestampUsec": "1790483166238964",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CIOF5sj1jZcDFUTIwgQdzlkEyA"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント49"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "😊",
+                        "shortcuts": [
+                          ":smiling_face_with_smiling_eyes:",
+                          ":blush:"
+                        ],
+                        "searchTerms": [
+                          "smiling",
+                          "face",
+                          "with",
+                          "eyes",
+                          "blush"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "😊"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者34"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNKalV0TTcxalpjREZUVENMUUFkOTRvRHdn",
+                "timestampUsec": "1790483178014290",
+                "authorExternalChannelId": "UCanonymous0000000000034"
+              }
+            },
+            "clientId": "CJjUtM71jZcDFTTCLQAd94oDwg"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント50"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNQemwtTkQxalpjREZiclo1d01keUhJb1hR",
+                "timestampUsec": "1790483183325046",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CPzl-ND1jZcDFbrZ5wMdyHIoXQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント51"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNNaVUtZFAxalpjREZSRUpkZ1lkbTBvUldR",
+                "timestampUsec": "1790483189625056",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CMiU-dP1jZcDFREJdgYdm0oRWQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント52"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNLM3BoLUwxalpjREZVSkVRd1VkLWtncmxR",
+                "timestampUsec": "1790483219222669",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CK3ph-L1jZcDFUJEQwUd-kgrlQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント53"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "😉",
+                        "shortcuts": [
+                          ":winking_face:",
+                          ":wink:",
+                          ";)",
+                          ";-)"
+                        ],
+                        "searchTerms": [
+                          "winking",
+                          "face",
+                          "wink"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "😉"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNMZVJqdWoxalpjREZlMTdUQWdkel9vYkhR",
+                "timestampUsec": "1790483231910659",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CLeRjuj1jZcDFe17TAgdz_obHQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント54"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "🙇‍♂",
+                        "shortcuts": [
+                          ":man_bowing:"
+                        ],
+                        "searchTerms": [
+                          "man",
+                          "bowing"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "🙇‍♂"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者34"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNOSGlxZXIxalpjREZhWi1UQWdkc1VNZ2Zn",
+                "timestampUsec": "1790483236556649",
+                "authorExternalChannelId": "UCanonymous0000000000034"
+              }
+            },
+            "clientId": "CNHiqer1jZcDFaZ-TAgdsUMgfg"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント55"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNON011X0wxalpjREZhbElUQWdkLVJFOFBn",
+                "timestampUsec": "1790483253627515",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CN7Mu_L1jZcDFalITAgd-RE8Pg"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント56"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNJal8wUFAxalpjREZiNFJkZ1lkLUhvbVp3",
+                "timestampUsec": "1790483256070101",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CIj_0PP1jZcDFb4RdgYd-HomZw"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント57"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNKRExtUG4xalpjREZUSEU1d01kdlpBUm1R",
+                "timestampUsec": "1790483267731703",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CJDLmPn1jZcDFTHE5wMdvZARmQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント58"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNLbXJxdjcxalpjREZTZkV3Z1FkRi1VczlB",
+                "timestampUsec": "1790483278515381",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "CKmrqv71jZcDFSfEwgQdF-Us9A"
+          }
+        },
+        {
+          "replaceChatItemAction": {
+            "targetItemId": "ChwKGkNLbXJxdjcxalpjREZTZkV3Z1FkRi1VczlB",
+            "replacementItem": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント59"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNLbXJxdjcxalpjREZTZkV3Z1FkRi1VczlB",
+                "timestampUsec": "1790483278515381",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            }
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント60"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "😄",
+                        "shortcuts": [
+                          ":grinning_face_with_smiling_eyes:",
+                          ":smile:"
+                        ],
+                        "searchTerms": [
+                          "grinning",
+                          "face",
+                          "with",
+                          "smiling",
+                          "eyes",
+                          "smile"
+                        ],
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "😄"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者32"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNPV0dtbzMyalpjREZkTTdkZ1lkcl9RUjl3",
+                "timestampUsec": "1790483309698901",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（2 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（2 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000032"
+              }
+            },
+            "clientId": "COWGmo32jZcDFdM7dgYdr_QR9w"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント61"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNLdnk3SkgyalpjREZZSEg1d01kc3M4ZDF3",
+                "timestampUsec": "1790483319447181",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CKvy7JH2jZcDFYHH5wMdss8d1w"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント62"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNQLTAyNV8yalpjREZmdDdUQWdkOXg4Um5n",
+                "timestampUsec": "1790483348519406",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CP-025_2jZcDFft7TAgd9x8Rng"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント63"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者34"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNMNmgyNlQyalpjREZmN1hMUUFkam1JZTJ3",
+                "timestampUsec": "1790483359002349",
+                "authorExternalChannelId": "UCanonymous0000000000034"
+              }
+            },
+            "clientId": "CL6h26T2jZcDFf7XLQAdjmIe2w"
+          }
+        },
+        {
+          "removeChatItemAction": {
+            "targetItemId": "ChwKGkNJVDV4YXIyalpjREZZVVFkZ1lkZDNRMVln"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント64"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNLYmducjcyalpjREZRWklUQWdkazRJaGV3",
+                "timestampUsec": "1790483412537737",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CKbgnr72jZcDFQZITAgdk4Ihew"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント65"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者35"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNOeXYxc1QyalpjREZaZm01d01kak5vcXZ3",
+                "timestampUsec": "1790483426030747",
+                "authorExternalChannelId": "UCanonymous0000000000035",
+                "beforeContentButtons": [
+                  {
+                    "buttonViewModel": {
+                      "iconName": "CROWN_FILLED",
+                      "title": "#2",
+                      "onTap": {
+                        "innertubeCommand": {
+                          "showEngagementPanelEndpoint": {
+                            "identifier": {
+                              "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                              "tag": "PAlive_viewer_leaderboard"
+                            },
+                            "globalConfiguration": {
+                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                            }
+                          }
+                        }
+                      },
+                      "accessibilityText": "#2",
+                      "style": "BUTTON_VIEW_MODEL_STYLE_CUSTOM",
+                      "isFullWidth": true,
+                      "type": "BUTTON_VIEW_MODEL_TYPE_FILLED",
+                      "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                      "customBackgroundColor": 4285793964,
+                      "customFontColor": 4294967295
+                    }
+                  }
+                ]
+              }
+            },
+            "clientId": "CNyv1sT2jZcDFZfm5wMdjNoqvw"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント66"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNQTFlwTTcyalpjREZhOTlUQWdkVm9zc21R",
+                "timestampUsec": "1790483446191212",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CPLYpM72jZcDFa99TAgdVossmQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント67"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者35"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNNTGE2dHoyalpjREZlRmpUQWdkVHpReEhB",
+                "timestampUsec": "1790483476695356",
+                "authorExternalChannelId": "UCanonymous0000000000035",
+                "beforeContentButtons": [
+                  {
+                    "buttonViewModel": {
+                      "iconName": "CROWN_FILLED",
+                      "title": "#2",
+                      "onTap": {
+                        "innertubeCommand": {
+                          "showEngagementPanelEndpoint": {
+                            "identifier": {
+                              "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                              "tag": "PAlive_viewer_leaderboard"
+                            },
+                            "globalConfiguration": {
+                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                            }
+                          }
+                        }
+                      },
+                      "accessibilityText": "#2",
+                      "style": "BUTTON_VIEW_MODEL_STYLE_CUSTOM",
+                      "isFullWidth": true,
+                      "type": "BUTTON_VIEW_MODEL_TYPE_FILLED",
+                      "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                      "customBackgroundColor": 4285793964,
+                      "customFontColor": 4294967295
+                    }
+                  }
+                ]
+              }
+            },
+            "clientId": "CMLa6tz2jZcDFeFjTAgdTzQxHA"
+          }
+        },
+        {
+          "replaceChatItemAction": {
+            "targetItemId": "ChwKGkNNTGE2dHoyalpjREZlRmpUQWdkVHpReEhB",
+            "replacementItem": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント68"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者35"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNNTGE2dHoyalpjREZlRmpUQWdkVHpReEhB",
+                "timestampUsec": "1790483476695356",
+                "authorExternalChannelId": "UCanonymous0000000000035",
+                "beforeContentButtons": [
+                  {
+                    "buttonViewModel": {
+                      "iconName": "CROWN_FILLED",
+                      "title": "#2",
+                      "onTap": {
+                        "innertubeCommand": {
+                          "showEngagementPanelEndpoint": {
+                            "identifier": {
+                              "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                              "tag": "PAlive_viewer_leaderboard"
+                            },
+                            "globalConfiguration": {
+                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                            }
+                          }
+                        }
+                      },
+                      "accessibilityText": "#2",
+                      "style": "BUTTON_VIEW_MODEL_STYLE_CUSTOM",
+                      "isFullWidth": true,
+                      "type": "BUTTON_VIEW_MODEL_TYPE_FILLED",
+                      "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                      "customBackgroundColor": 4285793964,
+                      "customFontColor": 4294967295
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント69"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "👍",
+                        "shortcuts": [
+                          ":thumbs_up:",
+                          ":+1:",
+                          ":thumbsup:",
+                          "(Y)",
+                          "(y)"
+                        ],
+                        "searchTerms": [
+                          "thumbs",
+                          "up",
+                          "+1",
+                          "thumbsup"
+                        ],
+                        "supportsSkinTone": true,
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "👍"
+                            }
+                          }
+                        },
+                        "variantIds": [
+                          "👍",
+                          "👍🏻",
+                          "👍🏼",
+                          "👍🏽",
+                          "👍🏾",
+                          "👍🏿"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者35"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNLeWw1ZUgyalpjREZUWW1kZ1lkd3JNV0pR",
+                "timestampUsec": "1790483487097199",
+                "authorExternalChannelId": "UCanonymous0000000000035",
+                "beforeContentButtons": [
+                  {
+                    "buttonViewModel": {
+                      "iconName": "CROWN_FILLED",
+                      "title": "#2",
+                      "onTap": {
+                        "innertubeCommand": {
+                          "showEngagementPanelEndpoint": {
+                            "identifier": {
+                              "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                              "tag": "PAlive_viewer_leaderboard"
+                            },
+                            "globalConfiguration": {
+                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                            }
+                          }
+                        }
+                      },
+                      "accessibilityText": "#2",
+                      "style": "BUTTON_VIEW_MODEL_STYLE_CUSTOM",
+                      "isFullWidth": true,
+                      "type": "BUTTON_VIEW_MODEL_TYPE_FILLED",
+                      "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                      "customBackgroundColor": 4285793964,
+                      "customFontColor": 4294967295
+                    }
+                  }
+                ]
+              }
+            },
+            "clientId": "CKyl5eH2jZcDFTYmdgYdwrMWJQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント70"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者33"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNJZXlyT2oyalpjREZlMTdUQWdkel9vYkhR",
+                "timestampUsec": "1790483500839420",
+                "authorBadges": [
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "icon": {
+                        "iconType": "MODERATOR"
+                      },
+                      "tooltip": "モデレーター",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "モデレーター"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "liveChatAuthorBadgeRenderer": {
+                      "customThumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 16,
+                            "height": 16,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "tooltip": "メンバー（3 年）",
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "メンバー（3 年）"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "authorExternalChannelId": "UCanonymous0000000000033"
+              }
+            },
+            "clientId": "CIeyrOj2jZcDFe17TAgdz_obHQ"
+          }
+        },
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント71"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "👍",
+                        "shortcuts": [
+                          ":thumbs_up:",
+                          ":+1:",
+                          ":thumbsup:",
+                          "(Y)",
+                          "(y)"
+                        ],
+                        "searchTerms": [
+                          "thumbs",
+                          "up",
+                          "+1",
+                          "thumbsup"
+                        ],
+                        "supportsSkinTone": true,
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "👍"
+                            }
+                          }
+                        },
+                        "variantIds": [
+                          "👍",
+                          "👍🏻",
+                          "👍🏼",
+                          "👍🏽",
+                          "👍🏾",
+                          "👍🏿"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者35"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNQajZpdjcyalpjREZVdkV3Z1FkcjJZMVZB",
+                "timestampUsec": "1790483546428844",
+                "authorExternalChannelId": "UCanonymous0000000000035",
+                "beforeContentButtons": [
+                  {
+                    "buttonViewModel": {
+                      "iconName": "CROWN_FILLED",
+                      "title": "#2",
+                      "onTap": {
+                        "innertubeCommand": {
+                          "showEngagementPanelEndpoint": {
+                            "identifier": {
+                              "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                              "tag": "PAlive_viewer_leaderboard"
+                            },
+                            "globalConfiguration": {
+                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                            }
+                          }
+                        }
+                      },
+                      "accessibilityText": "#2",
+                      "style": "BUTTON_VIEW_MODEL_STYLE_CUSTOM",
+                      "isFullWidth": true,
+                      "type": "BUTTON_VIEW_MODEL_TYPE_FILLED",
+                      "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                      "customBackgroundColor": 4285793964,
+                      "customFontColor": 4294967295
+                    }
+                  }
+                ]
+              }
+            },
+            "clientId": "CPj6iv72jZcDFUvEwgQdr2Y1VA"
+          }
+        },
+        {
+          "replaceChatItemAction": {
+            "targetItemId": "ChwKGkNQajZpdjcyalpjREZVdkV3Z1FkcjJZMVZB",
+            "replacementItem": {
+              "liveChatTextMessageRenderer": {
+                "message": {
+                  "runs": [
+                    {
+                      "text": "コメント72"
+                    },
+                    {
+                      "emoji": {
+                        "emojiId": "👍",
+                        "shortcuts": [
+                          ":thumbs_up:",
+                          ":+1:",
+                          ":thumbsup:",
+                          "(Y)",
+                          "(y)"
+                        ],
+                        "searchTerms": [
+                          "thumbs",
+                          "up",
+                          "+1",
+                          "thumbsup"
+                        ],
+                        "supportsSkinTone": true,
+                        "image": {
+                          "thumbnails": [
+                            {
+                              "url": "https://example.invalid/image.png"
+                            }
+                          ],
+                          "accessibility": {
+                            "accessibilityData": {
+                              "label": "👍"
+                            }
+                          }
+                        },
+                        "variantIds": [
+                          "👍",
+                          "👍🏻",
+                          "👍🏼",
+                          "👍🏽",
+                          "👍🏾",
+                          "👍🏿"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者35"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "width": 32,
+                      "height": 32,
+                      "url": "https://example.invalid/image.png"
+                    },
+                    {
+                      "width": 64,
+                      "height": 64,
+                      "url": "https://example.invalid/image.png"
+                    }
+                  ]
+                },
+                "id": "ChwKGkNQajZpdjcyalpjREZVdkV3Z1FkcjJZMVZB",
+                "timestampUsec": "1790483546428844",
+                "authorExternalChannelId": "UCanonymous0000000000035",
+                "beforeContentButtons": [
+                  {
+                    "buttonViewModel": {
+                      "iconName": "CROWN_FILLED",
+                      "title": "#2",
+                      "onTap": {
+                        "innertubeCommand": {
+                          "showEngagementPanelEndpoint": {
+                            "identifier": {
+                              "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                              "tag": "PAlive_viewer_leaderboard"
+                            },
+                            "globalConfiguration": {
+                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                            }
+                          }
+                        }
+                      },
+                      "accessibilityText": "#2",
+                      "style": "BUTTON_VIEW_MODEL_STYLE_CUSTOM",
+                      "isFullWidth": true,
+                      "type": "BUTTON_VIEW_MODEL_TYPE_FILLED",
+                      "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                      "customBackgroundColor": 4285793964,
+                      "customFontColor": 4294967295
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

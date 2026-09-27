@@ -1,0 +1,3516 @@
+{
+  "continuationContents": {
+    "liveChatContinuation": {
+      "continuations": [
+        {
+          "liveChatReplayContinuationData": {
+            "timeUntilLastMessageMsec": 5000,
+            "continuation": "op2w0wR9Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEKOafvlZAAEgDUgggALABAPgBAHIGCAQYATAAeAA%3D"
+          }
+        },
+        {
+          "playerSeekContinuationData": {
+            "continuation": "op2w0wR9Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEKOafvlZAAEgEUgggALABAPgBAHIGCAQYATAAeAA%3D"
+          }
+        }
+      ],
+      "header": {
+        "liveChatHeaderRenderer": {
+          "overflowMenu": {
+            "menuRenderer": {
+              "items": [
+                {
+                  "clientSideToggleMenuItemRenderer": {
+                    "defaultText": {
+                      "runs": [
+                        {
+                          "text": "タイムスタンプ"
+                        }
+                      ]
+                    },
+                    "defaultIcon": {
+                      "iconType": "ACCESS_TIME"
+                    },
+                    "toggledText": {
+                      "runs": [
+                        {
+                          "text": "タイムスタンプ"
+                        }
+                      ]
+                    },
+                    "toggledIcon": {
+                      "iconType": "ACCESS_TIME"
+                    },
+                    "menuItemIdentifier": "timestamp_toggle",
+                    "command": {
+                      "toggleLiveChatTimestampsEndpoint": {
+                        "hack": true
+                      }
+                    }
+                  }
+                },
+                {
+                  "menuNavigationItemRenderer": {
+                    "text": {
+                      "runs": [
+                        {
+                          "text": "フィードバックを送信"
+                        }
+                      ]
+                    },
+                    "icon": {
+                      "iconType": "FEEDBACK"
+                    },
+                    "navigationEndpoint": {
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "ignoreNavigation": true
+                        }
+                      },
+                      "userFeedbackEndpoint": {
+                        "hack": true,
+                        "bucketIdentifier": "live_chat"
+                      }
+                    }
+                  }
+                }
+              ],
+              "accessibility": {
+                "accessibilityData": {
+                  "label": "その他のオプション"
+                }
+              }
+            }
+          },
+          "collapseButton": {
+            "buttonRenderer": {
+              "style": "STYLE_DEFAULT",
+              "size": "SIZE_DEFAULT",
+              "isDisabled": false,
+              "icon": {
+                "iconType": "CLOSE"
+              },
+              "accessibility": {
+                "label": "閉じる"
+              },
+              "command": {
+                "commandMetadata": {
+                  "webCommandMetadata": {
+                    "sendPost": true
+                  }
+                },
+                "signalServiceEndpoint": {
+                  "signal": "CLIENT_SIGNAL",
+                  "actions": [
+                    {
+                      "signalAction": {
+                        "signal": "HIDE_LIVE_CHAT"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "viewSelector": {
+            "sortFilterSubMenuRenderer": {
+              "subMenuItems": [
+                {
+                  "title": "上位のチャットのリプレイ",
+                  "selected": true,
+                  "continuation": {
+                    "reloadContinuationData": {
+                      "continuation": "op2w0wR6Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEQAFSCCAAsAEA-AEAcgwIBBgBIAAoATAAOAA%3D"
+                    }
+                  },
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "上位のチャットのリプレイ"
+                    }
+                  },
+                  "subtitle": "一部のメッセージ（不適切な可能性があるものなど）を非表示にします"
+                },
+                {
+                  "title": "チャットのリプレイ",
+                  "selected": false,
+                  "continuation": {
+                    "reloadContinuationData": {
+                      "continuation": "op2w0wR6Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEQAFSCCAAsAEA-AEAcgwIARgBIAAoATAAOAA%3D"
+                    }
+                  },
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "チャットのリプレイ"
+                    }
+                  },
+                  "subtitle": "すべてのメッセージが表示されます"
+                }
+              ],
+              "accessibility": {
+                "accessibilityData": {
+                  "label": "チャットのモードの選択"
+                }
+              },
+              "targetId": "live-chat-view-selector-sub-menu"
+            }
+          },
+          "viewerLeaderboardEntryPoint": {
+            "liveViewerLeaderboardChatEntryPointViewModel": {
+              "defaultButton": {
+                "buttonViewModel": {
+                  "iconName": "CROWN",
+                  "onTap": {
+                    "innertubeCommand": {
+                      "showEngagementPanelEndpoint": {
+                        "identifier": {
+                          "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                          "tag": "PAlive_viewer_leaderboard"
+                        },
+                        "globalConfiguration": {
+                          "params": "wgovGAEiKSonChhVQ0JwTHQ1b1duRG5HMW5pNWYzM2djRVESCzltUTJpb2VheTRJMAE%3D"
+                        }
+                      }
+                    }
+                  },
+                  "accessibilityText": "トップファン",
+                  "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
+                  "isFullWidth": true,
+                  "type": "BUTTON_VIEW_MODEL_TYPE_TEXT",
+                  "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                  "accessibilityId": "id.ui.pdg.leaderboard.entrypoint"
+                }
+              },
+              "pointsButton": {
+                "buttonViewModel": {
+                  "iconName": "CROWN_FILLED",
+                  "title": "トップファン",
+                  "onTap": {
+                    "innertubeCommand": {
+                      "showEngagementPanelEndpoint": {
+                        "identifier": {
+                          "surface": "ENGAGEMENT_PANEL_SURFACE_LIVE_CHAT",
+                          "tag": "PAlive_viewer_leaderboard"
+                        },
+                        "globalConfiguration": {
+                          "params": "wgovGAEiKSonChhVQ0JwTHQ1b1duRG5HMW5pNWYzM2djRVESCzltUTJpb2VheTRJMAE%3D"
+                        }
+                      }
+                    }
+                  },
+                  "accessibilityText": "トップファン",
+                  "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
+                  "isFullWidth": true,
+                  "type": "BUTTON_VIEW_MODEL_TYPE_OUTLINE",
+                  "buttonSize": "BUTTON_VIEW_MODEL_SIZE_XSMALL",
+                  "accessibilityId": "id.ui.pdg.leaderboard.entrypoint"
+                }
+              },
+              "entryPointStateEntityKey": "Egs5bVEyaW9lYXk0SSCzBCgB",
+              "pointsEntityKey": "Egs5bVEyaW9lYXk0SSC0BCgB",
+              "isImmersive": false,
+              "isCameo": false
+            }
+          }
+        }
+      },
+      "isReplay": true,
+      "actions": [
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatViewerEngagementMessageRenderer": {
+                      "id": "CiMKIVJFUExBWV9WRU0yMDI2LzA5LzI2LTIyOjA0OjA5LjQ1OQ%3D%3D",
+                      "timestampUsec": "1790485449459494",
+                      "icon": {
+                        "iconType": "YOUTUBE_ROUND"
+                      },
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント1"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "0"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者1"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNQeWg3ZnpHaEpjREZWM2V3Z1FkOW80SlN3",
+                      "timestampUsec": "1790161421302410",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（6 か月）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（6 か月）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000001",
+                      "timestampText": {
+                        "simpleText": "0:02"
+                      }
+                    }
+                  },
+                  "clientId": "CPyh7fzGhJcDFV3ewgQd9o4JSw"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "2696"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント2"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者2"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLN0J0UDNHaEpjREZkWHA1d01kaW5VY09R",
+                      "timestampUsec": "1790161422461389",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000002",
+                      "timestampText": {
+                        "simpleText": "0:03"
+                      }
+                    }
+                  },
+                  "clientId": "CK7BtP3GhJcDFdXp5wMdinUcOQ"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "3848"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者3"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNQR01rWURIaEpjREZSVEN3Z1FkQTJJcWh3",
+                      "timestampUsec": "1790161428175309",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000003",
+                      "timestampText": {
+                        "simpleText": "0:09"
+                      }
+                    }
+                  },
+                  "clientId": "CPGMkYDHhJcDFRTCwgQdA2Iqhw"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "9592"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント3"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者4"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNNN1Y2NERIaEpjREZlWGQ1d01kLVBVZTFB",
+                      "timestampUsec": "1790161429662104",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000004",
+                      "timestampText": {
+                        "simpleText": "0:11"
+                      }
+                    }
+                  },
+                  "clientId": "CM7V64DHhJcDFeXd5wMd-PUe1A"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "11070"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント4"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者5"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNMQ2Zpb0hIaEpjREZUSEU1d01kZUxzcTJn",
+                      "timestampUsec": "1790161430162810",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000005",
+                      "timestampText": {
+                        "simpleText": "0:11"
+                      }
+                    }
+                  },
+                  "clientId": "CLCfioHHhJcDFTHE5wMdeLsq2g"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "11587"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント5"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者6"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNKdWFyb0hIaEpjREZhSGg1d01kXzBzbHdR",
+                      "timestampUsec": "1790161430746041",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000006",
+                      "timestampText": {
+                        "simpleText": "0:12"
+                      }
+                    }
+                  },
+                  "clientId": "CJuaroHHhJcDFaHh5wMd_0slwQ"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "12167"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント6"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者7"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNJejJ4WUhIaEpjREZUNUZUQWdkT0M4eWpB",
+                      "timestampUsec": "1790161431140982",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 か月）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 か月）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000007",
+                      "timestampText": {
+                        "simpleText": "0:12"
+                      }
+                    }
+                  },
+                  "clientId": "CIz2xYHHhJcDFT5FTAgdOC8yjA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "12575"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント7"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者8"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNNWGRnWUxIaEpjREZlX0x3Z1Fkd0lVWlNn",
+                      "timestampUsec": "1790161432117962",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000008",
+                      "timestampText": {
+                        "simpleText": "0:13"
+                      }
+                    }
+                  },
+                  "clientId": "CMXdgYLHhJcDFe_LwgQdwIUZSg"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "13546"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント8"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者9"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLaS0xNExIaEpjREZlN001d01keVVzRUNR",
+                      "timestampUsec": "1790161433523882",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000009",
+                      "timestampText": {
+                        "simpleText": "0:14"
+                      }
+                    }
+                  },
+                  "clientId": "CKi-14LHhJcDFe7M5wMdyUsECQ"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "14971"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント9"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者10"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNQSFZtSVBIaEpjREZSalg1d01kNHlNWmFn",
+                      "timestampUsec": "1790161434593208",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000010",
+                      "timestampText": {
+                        "simpleText": "0:16"
+                      }
+                    }
+                  },
+                  "clientId": "CPHVmIPHhJcDFRjX5wMd4yMZag"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "16029"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント10"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者11"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNKNjJ4SVBIaEpjREZhQWlkZ1lkNkhjVW5n",
+                      "timestampUsec": "1790161435311374",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 か月）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 か月）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000011",
+                      "timestampText": {
+                        "simpleText": "0:16"
+                      }
+                    }
+                  },
+                  "clientId": "CJ62xIPHhJcDFaAidgYd6HcUng"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "16714"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント11"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者12"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNPbXN4WVBIaEpjREZWM2V3Z1FkOW80SlN3",
+                      "timestampUsec": "1790161435319587",
+                      "authorExternalChannelId": "UCanonymous0000000000012",
+                      "timestampText": {
+                        "simpleText": "0:16"
+                      }
+                    }
+                  },
+                  "clientId": "COmsxYPHhJcDFV3ewgQd9o4JSw"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "16727"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント12"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者2"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNQcUszb1BIaEpjREZlTnJUQWdkazYwdDBB",
+                      "timestampUsec": "1790161435725103",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000002",
+                      "timestampText": {
+                        "simpleText": "0:17"
+                      }
+                    }
+                  },
+                  "clientId": "CPqK3oPHhJcDFeNrTAgdk60t0A"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "17170"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント13"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者13"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNPTFpsNFRIaEpjREZlNDlyUVlkTXJBV1RB",
+                      "timestampUsec": "1790161436673550",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000013",
+                      "timestampText": {
+                        "simpleText": "0:18"
+                      }
+                    }
+                  },
+                  "clientId": "COLZl4THhJcDFe49rQYdMrAWTA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "18113"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント14"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者14"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNOejluNFRIaEpjREZhSGg1d01kXzBzbHdR",
+                      "timestampUsec": "1790161436804538",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000014",
+                      "timestampText": {
+                        "simpleText": "0:18"
+                      }
+                    }
+                  },
+                  "clientId": "CNz9n4THhJcDFaHh5wMd_0slwQ"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "18200"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント15"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者9"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNNMncwNFRIaEpjREZZRVNkZ1lkaExvWjhR",
+                      "timestampUsec": "1790161437651253",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000009",
+                      "timestampText": {
+                        "simpleText": "0:19"
+                      }
+                    }
+                  },
+                  "clientId": "CM2w04THhJcDFYESdgYdhLoZ8Q"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "19053"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント16"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者15"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNOUGx1WVhIaEpjREZmSVZkZ1lkUlJ3eURR",
+                      "timestampUsec": "1790161439328347",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000015",
+                      "timestampText": {
+                        "simpleText": "0:20"
+                      }
+                    }
+                  },
+                  "clientId": "CNPluYXHhJcDFfIVdgYdRRwyDQ"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "20752"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント17"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者16"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLejN2b1hIaEpjREZYM0d3Z1FkUWJJUmlB",
+                      "timestampUsec": "1790161439409369",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000016",
+                      "timestampText": {
+                        "simpleText": "0:20"
+                      }
+                    }
+                  },
+                  "clientId": "CKz3voXHhJcDFX3GwgQdQbIRiA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "20812"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者17"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNNS0o4WVhIaEpjREZjWGV3Z1FkSmtFN2Fn",
+                      "timestampUsec": "1790161440230603",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000017",
+                      "timestampText": {
+                        "simpleText": "0:21"
+                      }
+                    }
+                  },
+                  "clientId": "CMKJ8YXHhJcDFcXewgQdJkE7ag"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "21632"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/CZroZMPDCNGR_9EPzJqOkA4",
+                              "shortcuts": [
+                                ":_kao:",
+                                ":kao:"
+                              ],
+                              "searchTerms": [
+                                "_kao",
+                                "kao"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "kao"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者18"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLWC14NGJIaEpjREZRYkU1d01kYkpZcmtR",
+                      "timestampUsec": "1790161441659796",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000018",
+                      "timestampText": {
+                        "simpleText": "0:23"
+                      }
+                    }
+                  },
+                  "clientId": "CKX-x4bHhJcDFQbE5wMdbJYrkQ"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "23104"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント18"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者19"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNKNkc1SWJIaEpjREZXZkV3Z1FkQUo0akl3",
+                      "timestampUsec": "1790161442117718",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000019",
+                      "timestampText": {
+                        "simpleText": "0:23"
+                      }
+                    }
+                  },
+                  "clientId": "CJ6G5IbHhJcDFWfEwgQdAJ4jIw"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "23476"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント19"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者20"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLZjJfb2JIaEpjREZSRUpkZ1lkMU9JN21R",
+                      "timestampUsec": "1790161442557819",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000020",
+                      "timestampText": {
+                        "simpleText": "0:23"
+                      }
+                    }
+                  },
+                  "clientId": "CKf2_obHhJcDFREJdgYd1OI7mQ"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "23917"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント20"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者21"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNMQ3UySWZIaEpjREZVeGZUQWdkeWpVRFd3",
+                      "timestampUsec": "1790161444022999",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000021",
+                      "timestampText": {
+                        "simpleText": "0:25"
+                      }
+                    }
+                  },
+                  "clientId": "CLCu2IfHhJcDFUxfTAgdyjUDWw"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "25470"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント21"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者13"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLYXgzNGZIaEpjREZXbkN3Z1FkMjNRZnFB",
+                      "timestampUsec": "1790161444133967",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000013",
+                      "timestampText": {
+                        "simpleText": "0:25"
+                      }
+                    }
+                  },
+                  "clientId": "CKax34fHhJcDFWnCwgQd23QfqA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "25504"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント22"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者22"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNMaXloSWpIaEpjREZiREx3Z1Fkb3BRZWlB",
+                      "timestampUsec": "1790161444744459",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000022",
+                      "timestampText": {
+                        "simpleText": "0:26"
+                      }
+                    }
+                  },
+                  "clientId": "CLiyhIjHhJcDFbDLwgQdopQeiA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "26117"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント23"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者23"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLaXVyWWpIaEpjREZRWEV3Z1FkajJveGhB",
+                      "timestampUsec": "1790161445414531",
+                      "authorExternalChannelId": "UCanonymous0000000000023",
+                      "timestampText": {
+                        "simpleText": "0:26"
+                      }
+                    }
+                  },
+                  "clientId": "CKiurYjHhJcDFQXEwgQdj2oxhA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "26858"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCkszU2WH9gy1mb0dV-11UJg/ygF1XpGUMMjk8gSDrI2wCw",
+                              "shortcuts": [
+                                ":chillwdog:"
+                              ],
+                              "searchTerms": [
+                                "chillwdog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "chillwdog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者24"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNPN0wtNGpIaEpjREZYSEh3Z1FkNXJNWDVR",
+                      "timestampUsec": "1790161446697913",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000024",
+                      "timestampText": {
+                        "simpleText": "0:28"
+                      }
+                    }
+                  },
+                  "clientId": "CO7L-4jHhJcDFXHHwgQd5rMX5Q"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "28118"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント24"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者2"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLeVQ3SW5IaEpjREZlTHM1d01kQXZ3cC1n",
+                      "timestampUsec": "1790161448542485",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000002",
+                      "timestampText": {
+                        "simpleText": "0:29"
+                      }
+                    }
+                  },
+                  "clientId": "CKyT7InHhJcDFeLs5wMdAvwp-g"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "29944"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント25"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者3"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNNWFRtNHZIaEpjREZmOGlkZ1lkYWo0WmFB",
+                      "timestampUsec": "1790161451420252",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000003",
+                      "timestampText": {
+                        "simpleText": "0:32"
+                      }
+                    }
+                  },
+                  "clientId": "CMXTm4vHhJcDFf8idgYdaj4ZaA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "32852"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント26"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者25"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNPeUdnSXpIaEpjREZjOHpkZ1lkQzZjajdn",
+                      "timestampUsec": "1790161453063686",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000025",
+                      "timestampText": {
+                        "simpleText": "0:34"
+                      }
+                    }
+                  },
+                  "clientId": "COyGgIzHhJcDFc8zdgYdC6cj7g"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "34485"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント27"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者26"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNPX2tqWXpIaEpjREZlWGQ1d01kLVBVZTFB",
+                      "timestampUsec": "1790161453283558",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000026",
+                      "timestampText": {
+                        "simpleText": "0:34"
+                      }
+                    }
+                  },
+                  "clientId": "CO_kjYzHhJcDFeXd5wMd-PUe1A"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "34723"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント28"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者8"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLdU9ub3pIaEpjREZlNDlyUVlkTXJBV1RB",
+                      "timestampUsec": "1790161453554968",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000008",
+                      "timestampText": {
+                        "simpleText": "0:34"
+                      }
+                    }
+                  },
+                  "clientId": "CKuOnozHhJcDFe49rQYdMrAWTA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "34982"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント29"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者27"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLMkdwWXpIaEpjREZiMFlyUVlkVFRzVHh3",
+                      "timestampUsec": "1790161453670457",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000027",
+                      "timestampText": {
+                        "simpleText": "0:35"
+                      }
+                    }
+                  },
+                  "clientId": "CK2GpYzHhJcDFb0YrQYdTTsTxw"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "35075"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者28"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNPYll6NDNIaEpjREZZWEx3Z1FkYVU0UTNn",
+                      "timestampUsec": "1790161456465465",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000028",
+                      "timestampText": {
+                        "simpleText": "0:37"
+                      }
+                    }
+                  },
+                  "clientId": "CObYz43HhJcDFYXLwgQdaU4Q3g"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "37912"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント30"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者29"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNMdkoySV9IaEpjREZVN3M1d01kTjBzR3ln",
+                      "timestampUsec": "1790161460807471",
+                      "authorExternalChannelId": "UCanonymous0000000000029",
+                      "timestampText": {
+                        "simpleText": "0:42"
+                      }
+                    }
+                  },
+                  "clientId": "CLvJ2I_HhJcDFU7s5wMdN0sGyg"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "42203"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント31"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者5"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNJMjR6NUhIaEpjREZXbkN3Z1FkMjNRZnFB",
+                      "timestampUsec": "1790161464853868",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（2 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（2 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000005",
+                      "timestampText": {
+                        "simpleText": "0:46"
+                      }
+                    }
+                  },
+                  "clientId": "CI24z5HHhJcDFWnCwgQd23QfqA"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "46278"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント32"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者1"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNNLVdnNUxIaEpjREZlTHM1d01kQXZ3cC1n",
+                      "timestampUsec": "1790161465697234",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（6 か月）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（6 か月）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000001",
+                      "timestampText": {
+                        "simpleText": "0:47"
+                      }
+                    }
+                  },
+                  "clientId": "CM-Wg5LHhJcDFeLs5wMdAvwp-g"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "47149"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "text": "コメント33"
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者30"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNPcmJsNUxIaEpjREZacm41d01kRG80VjJB",
+                      "timestampUsec": "1790161466028957",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（1 年）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（1 年）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000030",
+                      "timestampText": {
+                        "simpleText": "0:47"
+                      }
+                    }
+                  },
+                  "clientId": "COrbl5LHhJcDFZrn5wMdDo4V2A"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "47445"
+          }
+        },
+        {
+          "replayChatItemAction": {
+            "actions": [
+              {
+                "addChatItemAction": {
+                  "item": {
+                    "liveChatTextMessageRenderer": {
+                      "message": {
+                        "runs": [
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          },
+                          {
+                            "emoji": {
+                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "shortcuts": [
+                                ":_dog:",
+                                ":dog:"
+                              ],
+                              "searchTerms": [
+                                "_dog",
+                                "dog"
+                              ],
+                              "image": {
+                                "thumbnails": [
+                                  {
+                                    "width": 24,
+                                    "height": 24,
+                                    "url": "https://example.invalid/image.png"
+                                  },
+                                  {
+                                    "width": 48,
+                                    "height": 48,
+                                    "url": "https://example.invalid/image.png"
+                                  }
+                                ],
+                                "accessibility": {
+                                  "accessibilityData": {
+                                    "label": "dog"
+                                  }
+                                }
+                              },
+                              "isCustomEmoji": true
+                            }
+                          }
+                        ]
+                      },
+                      "authorName": {
+                        "simpleText": "視聴者31"
+                      },
+                      "authorPhoto": {
+                        "thumbnails": [
+                          {
+                            "width": 32,
+                            "height": 32,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 64,
+                            "height": 64,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "id": "ChwKGkNLYmlycExIaEpjREZjTEh3Z1FkeHY4Nkt3",
+                      "timestampUsec": "1790161466411055",
+                      "authorBadges": [
+                        {
+                          "liveChatAuthorBadgeRenderer": {
+                            "customThumbnail": {
+                              "thumbnails": [
+                                {
+                                  "width": 16,
+                                  "height": 16,
+                                  "url": "https://example.invalid/image.png"
+                                },
+                                {
+                                  "width": 32,
+                                  "height": 32,
+                                  "url": "https://example.invalid/image.png"
+                                }
+                              ]
+                            },
+                            "tooltip": "メンバー（6 か月）",
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "メンバー（6 か月）"
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "authorExternalChannelId": "UCanonymous0000000000031",
+                      "timestampText": {
+                        "simpleText": "0:47"
+                      }
+                    }
+                  },
+                  "clientId": "CKbirpLHhJcDFcLHwgQdxv86Kw"
+                }
+              }
+            ],
+            "videoOffsetTimeMsec": "47741"
+          }
+        }
+      ]
+    }
+  }
+}

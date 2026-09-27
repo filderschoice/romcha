@@ -6,6 +6,32 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 14:14
+  summary: 実応答由来の fixture を追加し、fixture 作成スクリプトの IP アドレス混入を修正
+  details:
+    変更内容: >-
+      scripts/fetch-real-fixtures.py を実応答（アーカイブ 9mQ2ioeay4I と検索の絞り込み「ライブ」の先頭の配信）で実行し、
+      core/chat/src/test/resources/fixtures/real に 5 ファイルを追加した（投稿者 35 人・コメント 72 件を置き換え済み）。
+      実行時の点検で、検索結果の watchEndpointSupportedOnesieConfig に取得した端末の IP アドレスを含む動画配信サーバーの
+      署名付き URL が残ることが分かったため、同キーを削除対象に加え、googlevideo.com が出力に残る場合は保存を中止する検査を追加した。
+    変更ファイル:
+      - scripts/fetch-real-fixtures.py
+      - core/chat/src/test/resources/fixtures/real/next_replay.json
+      - core/chat/src/test/resources/fixtures/real/replay_chunk.json
+      - core/chat/src/test/resources/fixtures/real/search_results.json
+      - core/chat/src/test/resources/fixtures/real/next_live.json
+      - core/chat/src/test/resources/fixtures/real/live_chunk.json
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      python scripts/fetch-real-fixtures.py --replay 9mQ2ioeay4I、出力の URL ホスト・ip= パラメータ・投稿者名の点検、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - RealResponseFixtureTest 5 件が実行され成功（スキップ 0）。出力の URL は example.invalid と youtube.com 内のパスのみで、
+      ip= パラメータ・元の投稿者名は残っていない。品質ゲートは終了コード0
+    関連ID:
+      - BL-022
 - date: 2026-09-27 13:59
   summary: 実応答から fixture を作るスクリプトと、実応答 fixture で Parser を検証する単体テストを追加
   details:

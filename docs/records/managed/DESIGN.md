@@ -109,9 +109,11 @@
   ライブ表示（`BADGE_STYLE_TYPE_LIVE_NOW`）を読む。
 - テストの fixture（`core/chat/src/test/resources/fixtures/`）は既知の応答構造に基づく合成データで、値まで検証する。
   実応答由来の fixture は `fixtures/real/` に置き、`RealResponseFixtureTest` が構造（解析できること・必要な値があること）だけを検証する
-  （無ければスキップ）。`fixtures/real/` は `scripts/fetch-real-fixtures.py` が作る。アプリと同じリクエスト（`clientVersion` は
+  （無ければスキップ。現在はアーカイブ・配信中の動画・検索の実応答を置いている）。
+  `fixtures/real/` は `scripts/fetch-real-fixtures.py` が作る。アプリと同じリクエスト（`clientVersion` は
   `InnerTubeClient.kt` から読む）で next・リプレイ・ライブ・検索の応答を取得し、解析に使わない部分木と追跡用の値を削り、
-  投稿者名・投稿者のチャンネルID・画像 URL・コメント本文を仮の値へ置き換え、元の値が残っていないことを検査してから保存する。
+  投稿者名・投稿者のチャンネルID・画像 URL・コメント本文を仮の値へ置き換え、元の値と動画配信サーバーの URL（取得した端末の
+  IP アドレスを含む）が残っていないことを検査してから保存する。
   元の応答は保存しない。`--raw-dir` で通信せずに置き換えだけを行える。実通信を伴う実行は人が行う（guardrails 12.5）。
 
 ### ライブチャットの取得（`core:sync` の `LiveChatSession`）

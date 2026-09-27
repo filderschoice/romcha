@@ -1,0 +1,1519 @@
+{
+  "contents": {
+    "twoColumnSearchResultsRenderer": {
+      "primaryContents": {
+        "sectionListRenderer": {
+          "contents": [
+            {
+              "itemSectionRenderer": {
+                "contents": [
+                  {
+                    "videoRenderer": {
+                      "videoId": "9mQ2ioeay4I",
+                      "thumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 360,
+                            "height": 202,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 720,
+                            "height": 404,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【SILENT HILL f】 DAY07｜1周目最終回！世界線どうなってんのぉ！？【#ヴイアラ / レトラ】※ネタバレあり"
+                          }
+                        ],
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "【SILENT HILL f】 DAY07｜1周目最終回！世界線どうなってんのぉ！？【#ヴイアラ / レトラ】※ネタバレあり 4 時間 53 分"
+                          }
+                        }
+                      },
+                      "longBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "publishedTimeText": {
+                        "simpleText": "3 日前 に配信済み"
+                      },
+                      "lengthText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "4 時間 53 分 16 秒"
+                          }
+                        },
+                        "simpleText": "4:53:16"
+                      },
+                      "viewCountText": {
+                        "simpleText": "6,387回視聴"
+                      },
+                      "navigationEndpoint": {
+                        "commandMetadata": {
+                          "webCommandMetadata": {
+                            "url": "/watch?v=9mQ2ioeay4I&pp=ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D",
+                            "webPageType": "WEB_PAGE_TYPE_WATCH",
+                            "rootVe": 3832
+                          }
+                        },
+                        "watchEndpoint": {
+                          "videoId": "9mQ2ioeay4I",
+                          "params": "qgPEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJG6Aw8SDVBMQk44OXdDeXNYYWe6AwoI4N_MrcHroLtWugMLCKjT6efCsKviswG6AwoI_5zhqMzvxIZuugMLCN6C0fynx4r3ywG6AwsI6uCp9-v6vZP8AboDCgjRoKPKx_6Buya6AwsI-6vIh-XrjvvsAboDCgjuu-Lthqj7rBG6AwsI4LbAl_eNob7zAboDCgjTlNGOmc2YmgG6AyQSIlBMNWc2andEOThOdzhnekhYRkNSM2hrbm1BZFFRT2lLRES6AwoI5PCIr8KU1p59ugMKCJ748ZKi-u3AUg%3D%3D",
+                          "playerParams": "ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D"
+                        }
+                      },
+                      "badges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "style": "BADGE_STYLE_TYPE_SIMPLE",
+                            "label": "新着"
+                          }
+                        }
+                      ],
+                      "ownerBadges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "icon": {
+                              "iconType": "AUDIO_BADGE"
+                            },
+                            "style": "BADGE_STYLE_TYPE_VERIFIED_ARTIST",
+                            "tooltip": "公式アーティスト チャンネル",
+                            "accessibilityData": {
+                              "label": "公式アーティスト チャンネル"
+                            }
+                          }
+                        }
+                      ],
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "shortBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "showActionMenu": false,
+                      "shortViewCountText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "6,387回視聴"
+                          }
+                        },
+                        "simpleText": "6387回視聴"
+                      },
+                      "thumbnailOverlays": [
+                        {
+                          "thumbnailOverlayTimeStatusRenderer": {
+                            "text": {
+                              "accessibility": {
+                                "accessibilityData": {
+                                  "label": "4 時間 53 分 16 秒"
+                                }
+                              },
+                              "simpleText": "4:53:16"
+                            },
+                            "style": "DEFAULT"
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "isToggled": false,
+                            "untoggledIcon": {
+                              "iconType": "WATCH_LATER"
+                            },
+                            "toggledIcon": {
+                              "iconType": "CHECK"
+                            },
+                            "untoggledTooltip": "後で見る",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "addedVideoId": "9mQ2ioeay4I",
+                                    "action": "ACTION_ADD_VIDEO"
+                                  }
+                                ]
+                              }
+                            },
+                            "toggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                    "removedVideoId": "9mQ2ioeay4I"
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "後で見る"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "untoggledIcon": {
+                              "iconType": "ADD_TO_QUEUE_TAIL"
+                            },
+                            "toggledIcon": {
+                              "iconType": "PLAYLIST_ADD_CHECK"
+                            },
+                            "untoggledTooltip": "キューに追加",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true
+                                }
+                              },
+                              "signalServiceEndpoint": {
+                                "signal": "CLIENT_SIGNAL",
+                                "actions": [
+                                  {
+                                    "addToPlaylistCommand": {
+                                      "openMiniplayer": true,
+                                      "videoId": "9mQ2ioeay4I",
+                                      "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                      "onCreateListCommand": {
+                                        "commandMetadata": {
+                                          "webCommandMetadata": {
+                                            "sendPost": true,
+                                            "apiUrl": "/youtubei/v1/playlist/create"
+                                          }
+                                        },
+                                        "createPlaylistServiceEndpoint": {
+                                          "videoIds": [
+                                            "9mQ2ioeay4I"
+                                          ],
+                                          "params": "CAQ%3D"
+                                        }
+                                      },
+                                      "videoIds": [
+                                        "9mQ2ioeay4I"
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "キューに追加"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayNowPlayingRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "再生中"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayLoadingPreviewRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "カーソルを合わせて再生"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "videoRenderer": {
+                      "videoId": "VnaDXBWzL-A",
+                      "thumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 360,
+                            "height": 202,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 720,
+                            "height": 404,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【SILENT HILL f】 DAY04｜結局１番怖いのは人間な気がする【#ヴイアラ / レトラ】※ネタバレあり"
+                          }
+                        ],
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "【SILENT HILL f】 DAY04｜結局１番怖いのは人間な気がする【#ヴイアラ / レトラ】※ネタバレあり 2 時間 11 分"
+                          }
+                        }
+                      },
+                      "longBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "publishedTimeText": {
+                        "simpleText": "1 か月前 に配信済み"
+                      },
+                      "lengthText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "2 時間 11 分 7 秒"
+                          }
+                        },
+                        "simpleText": "2:11:07"
+                      },
+                      "viewCountText": {
+                        "simpleText": "2,119回視聴"
+                      },
+                      "navigationEndpoint": {
+                        "commandMetadata": {
+                          "webCommandMetadata": {
+                            "url": "/watch?v=VnaDXBWzL-A&pp=ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D",
+                            "webPageType": "WEB_PAGE_TYPE_WATCH",
+                            "rootVe": 3832
+                          }
+                        },
+                        "watchEndpoint": {
+                          "videoId": "VnaDXBWzL-A",
+                          "params": "qgPEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJG6AwsIgpfrvKjRjbL2AboDDxINUExCTjg5d0N5c1hhZ7oDCwio0-nnwrCr4rMBugMKCP-c4ajM78SGbroDCwjegtH8p8eK98sBugMLCOrgqffr-r2T_AG6AwoI0aCjysf-gbsmugMLCPuryIfl64777AG6AwoI7rvi7Yao-6wRugMLCOC2wJf3jaG-8wG6AwoI05TRjpnNmJoBugMkEiJQTDVnNmp3RDk4Tnc4Z3pIWEZDUjNoa25tQWRRUU9pS0REugMKCOTwiK_ClNaefboDCgie-PGSovrtwFI%3D",
+                          "playerParams": "ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D"
+                        }
+                      },
+                      "ownerBadges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "icon": {
+                              "iconType": "AUDIO_BADGE"
+                            },
+                            "style": "BADGE_STYLE_TYPE_VERIFIED_ARTIST",
+                            "tooltip": "公式アーティスト チャンネル",
+                            "accessibilityData": {
+                              "label": "公式アーティスト チャンネル"
+                            }
+                          }
+                        }
+                      ],
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "shortBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "showActionMenu": false,
+                      "shortViewCountText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "2,119回視聴"
+                          }
+                        },
+                        "simpleText": "2119回視聴"
+                      },
+                      "thumbnailOverlays": [
+                        {
+                          "thumbnailOverlayTimeStatusRenderer": {
+                            "text": {
+                              "accessibility": {
+                                "accessibilityData": {
+                                  "label": "2 時間 11 分 7 秒"
+                                }
+                              },
+                              "simpleText": "2:11:07"
+                            },
+                            "style": "DEFAULT"
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "isToggled": false,
+                            "untoggledIcon": {
+                              "iconType": "WATCH_LATER"
+                            },
+                            "toggledIcon": {
+                              "iconType": "CHECK"
+                            },
+                            "untoggledTooltip": "後で見る",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "addedVideoId": "VnaDXBWzL-A",
+                                    "action": "ACTION_ADD_VIDEO"
+                                  }
+                                ]
+                              }
+                            },
+                            "toggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                    "removedVideoId": "VnaDXBWzL-A"
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "後で見る"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "untoggledIcon": {
+                              "iconType": "ADD_TO_QUEUE_TAIL"
+                            },
+                            "toggledIcon": {
+                              "iconType": "PLAYLIST_ADD_CHECK"
+                            },
+                            "untoggledTooltip": "キューに追加",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true
+                                }
+                              },
+                              "signalServiceEndpoint": {
+                                "signal": "CLIENT_SIGNAL",
+                                "actions": [
+                                  {
+                                    "addToPlaylistCommand": {
+                                      "openMiniplayer": true,
+                                      "videoId": "VnaDXBWzL-A",
+                                      "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                      "onCreateListCommand": {
+                                        "commandMetadata": {
+                                          "webCommandMetadata": {
+                                            "sendPost": true,
+                                            "apiUrl": "/youtubei/v1/playlist/create"
+                                          }
+                                        },
+                                        "createPlaylistServiceEndpoint": {
+                                          "videoIds": [
+                                            "VnaDXBWzL-A"
+                                          ],
+                                          "params": "CAQ%3D"
+                                        }
+                                      },
+                                      "videoIds": [
+                                        "VnaDXBWzL-A"
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "キューに追加"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayNowPlayingRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "再生中"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayLoadingPreviewRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "カーソルを合わせて再生"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "videoRenderer": {
+                      "videoId": "s8SthCz6aag",
+                      "thumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 360,
+                            "height": 202,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 720,
+                            "height": 404,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【SILENT HILL f】 DAY1｜初の本格ホラー正直ちょっとビビってます【#ヴイアラ / レトラ】※ネタバレあり"
+                          }
+                        ],
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "【SILENT HILL f】 DAY1｜初の本格ホラー正直ちょっとビビってます【#ヴイアラ / レトラ】※ネタバレあり 4 時間 59 分"
+                          }
+                        }
+                      },
+                      "longBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "publishedTimeText": {
+                        "simpleText": "1 か月前 に配信済み"
+                      },
+                      "lengthText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "4 時間 59 分 8 秒"
+                          }
+                        },
+                        "simpleText": "4:59:08"
+                      },
+                      "viewCountText": {
+                        "simpleText": "6,504回視聴"
+                      },
+                      "navigationEndpoint": {
+                        "commandMetadata": {
+                          "webCommandMetadata": {
+                            "url": "/watch?v=s8SthCz6aag&pp=ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D",
+                            "webPageType": "WEB_PAGE_TYPE_WATCH",
+                            "rootVe": 3832
+                          }
+                        },
+                        "watchEndpoint": {
+                          "videoId": "s8SthCz6aag",
+                          "params": "qgPEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJG6AwsIgpfrvKjRjbL2AboDDxINUExCTjg5d0N5c1hhZ7oDCgjg38ytweugu1a6AwoI_5zhqMzvxIZuugMLCN6C0fynx4r3ywG6AwsI6uCp9-v6vZP8AboDCgjRoKPKx_6Buya6AwsI-6vIh-XrjvvsAboDCgjuu-Lthqj7rBG6AwsI4LbAl_eNob7zAboDCgjTlNGOmc2YmgG6AyQSIlBMNWc2andEOThOdzhnekhYRkNSM2hrbm1BZFFRT2lLRES6AwoI5PCIr8KU1p59ugMKCJ748ZKi-u3AUg%3D%3D",
+                          "playerParams": "ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D"
+                        }
+                      },
+                      "ownerBadges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "icon": {
+                              "iconType": "AUDIO_BADGE"
+                            },
+                            "style": "BADGE_STYLE_TYPE_VERIFIED_ARTIST",
+                            "tooltip": "公式アーティスト チャンネル",
+                            "accessibilityData": {
+                              "label": "公式アーティスト チャンネル"
+                            }
+                          }
+                        }
+                      ],
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "shortBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "showActionMenu": false,
+                      "shortViewCountText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "6,504回視聴"
+                          }
+                        },
+                        "simpleText": "6504回視聴"
+                      },
+                      "thumbnailOverlays": [
+                        {
+                          "thumbnailOverlayTimeStatusRenderer": {
+                            "text": {
+                              "accessibility": {
+                                "accessibilityData": {
+                                  "label": "4 時間 59 分 8 秒"
+                                }
+                              },
+                              "simpleText": "4:59:08"
+                            },
+                            "style": "DEFAULT"
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "isToggled": false,
+                            "untoggledIcon": {
+                              "iconType": "WATCH_LATER"
+                            },
+                            "toggledIcon": {
+                              "iconType": "CHECK"
+                            },
+                            "untoggledTooltip": "後で見る",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "addedVideoId": "s8SthCz6aag",
+                                    "action": "ACTION_ADD_VIDEO"
+                                  }
+                                ]
+                              }
+                            },
+                            "toggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                    "removedVideoId": "s8SthCz6aag"
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "後で見る"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "untoggledIcon": {
+                              "iconType": "ADD_TO_QUEUE_TAIL"
+                            },
+                            "toggledIcon": {
+                              "iconType": "PLAYLIST_ADD_CHECK"
+                            },
+                            "untoggledTooltip": "キューに追加",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true
+                                }
+                              },
+                              "signalServiceEndpoint": {
+                                "signal": "CLIENT_SIGNAL",
+                                "actions": [
+                                  {
+                                    "addToPlaylistCommand": {
+                                      "openMiniplayer": true,
+                                      "videoId": "s8SthCz6aag",
+                                      "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                      "onCreateListCommand": {
+                                        "commandMetadata": {
+                                          "webCommandMetadata": {
+                                            "sendPost": true,
+                                            "apiUrl": "/youtubei/v1/playlist/create"
+                                          }
+                                        },
+                                        "createPlaylistServiceEndpoint": {
+                                          "videoIds": [
+                                            "s8SthCz6aag"
+                                          ],
+                                          "params": "CAQ%3D"
+                                        }
+                                      },
+                                      "videoIds": [
+                                        "s8SthCz6aag"
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "キューに追加"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayNowPlayingRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "再生中"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayLoadingPreviewRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "カーソルを合わせて再生"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "videoRenderer": {
+                      "videoId": "bg0TfMUYTn8",
+                      "thumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 360,
+                            "height": 202,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 720,
+                            "height": 404,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【SILENT HILL f】 DAY08/クリア後｜謎だらけすぎる！2周目もしたい！！するぞ！！！【#ヴイアラ / レトラ】※ネタバレあり"
+                          }
+                        ],
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "【SILENT HILL f】 DAY08/クリア後｜謎だらけすぎる！2周目もしたい！！するぞ！！！【#ヴイアラ / レトラ】※ネタバレあり 4 時間 18 分"
+                          }
+                        }
+                      },
+                      "longBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "publishedTimeText": {
+                        "simpleText": "2 日前 に配信済み"
+                      },
+                      "lengthText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "4 時間 18 分 55 秒"
+                          }
+                        },
+                        "simpleText": "4:18:55"
+                      },
+                      "viewCountText": {
+                        "simpleText": "6,041回視聴"
+                      },
+                      "navigationEndpoint": {
+                        "commandMetadata": {
+                          "webCommandMetadata": {
+                            "url": "/watch?v=bg0TfMUYTn8&pp=ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D",
+                            "webPageType": "WEB_PAGE_TYPE_WATCH",
+                            "rootVe": 3832
+                          }
+                        },
+                        "watchEndpoint": {
+                          "videoId": "bg0TfMUYTn8",
+                          "params": "qgPEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJG6AwsIgpfrvKjRjbL2AboDDxINUExCTjg5d0N5c1hhZ7oDCgjg38ytweugu1a6AwsIqNPp58Kwq-KzAboDCwjegtH8p8eK98sBugMLCOrgqffr-r2T_AG6AwoI0aCjysf-gbsmugMLCPuryIfl64777AG6AwoI7rvi7Yao-6wRugMLCOC2wJf3jaG-8wG6AwoI05TRjpnNmJoBugMkEiJQTDVnNmp3RDk4Tnc4Z3pIWEZDUjNoa25tQWRRUU9pS0REugMKCOTwiK_ClNaefboDCgie-PGSovrtwFI%3D",
+                          "playerParams": "ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D"
+                        }
+                      },
+                      "badges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "style": "BADGE_STYLE_TYPE_SIMPLE",
+                            "label": "新着"
+                          }
+                        }
+                      ],
+                      "ownerBadges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "icon": {
+                              "iconType": "AUDIO_BADGE"
+                            },
+                            "style": "BADGE_STYLE_TYPE_VERIFIED_ARTIST",
+                            "tooltip": "公式アーティスト チャンネル",
+                            "accessibilityData": {
+                              "label": "公式アーティスト チャンネル"
+                            }
+                          }
+                        }
+                      ],
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "shortBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "showActionMenu": false,
+                      "shortViewCountText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "6,041回視聴"
+                          }
+                        },
+                        "simpleText": "6041回視聴"
+                      },
+                      "thumbnailOverlays": [
+                        {
+                          "thumbnailOverlayTimeStatusRenderer": {
+                            "text": {
+                              "accessibility": {
+                                "accessibilityData": {
+                                  "label": "4 時間 18 分 55 秒"
+                                }
+                              },
+                              "simpleText": "4:18:55"
+                            },
+                            "style": "DEFAULT"
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "isToggled": false,
+                            "untoggledIcon": {
+                              "iconType": "WATCH_LATER"
+                            },
+                            "toggledIcon": {
+                              "iconType": "CHECK"
+                            },
+                            "untoggledTooltip": "後で見る",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "addedVideoId": "bg0TfMUYTn8",
+                                    "action": "ACTION_ADD_VIDEO"
+                                  }
+                                ]
+                              }
+                            },
+                            "toggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                    "removedVideoId": "bg0TfMUYTn8"
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "後で見る"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "untoggledIcon": {
+                              "iconType": "ADD_TO_QUEUE_TAIL"
+                            },
+                            "toggledIcon": {
+                              "iconType": "PLAYLIST_ADD_CHECK"
+                            },
+                            "untoggledTooltip": "キューに追加",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true
+                                }
+                              },
+                              "signalServiceEndpoint": {
+                                "signal": "CLIENT_SIGNAL",
+                                "actions": [
+                                  {
+                                    "addToPlaylistCommand": {
+                                      "openMiniplayer": true,
+                                      "videoId": "bg0TfMUYTn8",
+                                      "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                      "onCreateListCommand": {
+                                        "commandMetadata": {
+                                          "webCommandMetadata": {
+                                            "sendPost": true,
+                                            "apiUrl": "/youtubei/v1/playlist/create"
+                                          }
+                                        },
+                                        "createPlaylistServiceEndpoint": {
+                                          "videoIds": [
+                                            "bg0TfMUYTn8"
+                                          ],
+                                          "params": "CAQ%3D"
+                                        }
+                                      },
+                                      "videoIds": [
+                                        "bg0TfMUYTn8"
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "キューに追加"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayNowPlayingRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "再生中"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayLoadingPreviewRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "カーソルを合わせて再生"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "videoRenderer": {
+                      "videoId": "y-4qOn-UQV4",
+                      "thumbnail": {
+                        "thumbnails": [
+                          {
+                            "width": 360,
+                            "height": 202,
+                            "url": "https://example.invalid/image.png"
+                          },
+                          {
+                            "width": 720,
+                            "height": 404,
+                            "url": "https://example.invalid/image.png"
+                          }
+                        ]
+                      },
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【SILENT HILL f】 DAY06｜500円の呪いは深い【#ヴイアラ / レトラ】※ネタバレあり"
+                          }
+                        ],
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "【SILENT HILL f】 DAY06｜500円の呪いは深い【#ヴイアラ / レトラ】※ネタバレあり 4 時間 27 分"
+                          }
+                        }
+                      },
+                      "longBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "publishedTimeText": {
+                        "simpleText": "10 日前 に配信済み"
+                      },
+                      "lengthText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "4 時間 27 分 45 秒"
+                          }
+                        },
+                        "simpleText": "4:27:45"
+                      },
+                      "viewCountText": {
+                        "simpleText": "6,349回視聴"
+                      },
+                      "navigationEndpoint": {
+                        "commandMetadata": {
+                          "webCommandMetadata": {
+                            "url": "/watch?v=y-4qOn-UQV4&pp=ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D",
+                            "webPageType": "WEB_PAGE_TYPE_WATCH",
+                            "rootVe": 3832
+                          }
+                        },
+                        "watchEndpoint": {
+                          "videoId": "y-4qOn-UQV4",
+                          "params": "qgPEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJG6AwsIgpfrvKjRjbL2AboDDxINUExCTjg5d0N5c1hhZ7oDCgjg38ytweugu1a6AwsIqNPp58Kwq-KzAboDCgj_nOGozO_Ehm66AwsI6uCp9-v6vZP8AboDCgjRoKPKx_6Buya6AwsI-6vIh-XrjvvsAboDCgjuu-Lthqj7rBG6AwsI4LbAl_eNob7zAboDCgjTlNGOmc2YmgG6AyQSIlBMNWc2andEOThOdzhnekhYRkNSM2hrbm1BZFFRT2lLRES6AwoI5PCIr8KU1p59ugMKCJ748ZKi-u3AUg%3D%3D",
+                          "playerParams": "ygXEAeOAkFNJTEVOVCBISUxMIGbjgJEgREFZMDfvvZwx5ZGo55uu5pyA57WC5Zue77yB5LiW55WM57ea44Gp44GG44Gq44Gj44Gm44KT44Gu44GJ77yB77yf44CQI-ODtOOCpOOCouODqSAvIOODrOODiOODqeOAkeKAu-ODjeOCv-ODkOODrOOBguOCiiDjg6zjg4jjg6kgLyBMZXRvcmEgVXRhZ2F3YSDjgJDjg7TjgqTjgqLjg6kgLyA4Nzbjg5fjg63jgJE%3D"
+                        }
+                      },
+                      "ownerBadges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "icon": {
+                              "iconType": "AUDIO_BADGE"
+                            },
+                            "style": "BADGE_STYLE_TYPE_VERIFIED_ARTIST",
+                            "tooltip": "公式アーティスト チャンネル",
+                            "accessibilityData": {
+                              "label": "公式アーティスト チャンネル"
+                            }
+                          }
+                        }
+                      ],
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "shortBylineText": {
+                        "runs": [
+                          {
+                            "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                            "navigationEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                  "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                  "rootVe": 3611,
+                                  "apiUrl": "/youtubei/v1/browse"
+                                }
+                              },
+                              "browseEndpoint": {
+                                "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "showActionMenu": false,
+                      "shortViewCountText": {
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "6,349回視聴"
+                          }
+                        },
+                        "simpleText": "6349回視聴"
+                      },
+                      "thumbnailOverlays": [
+                        {
+                          "thumbnailOverlayTimeStatusRenderer": {
+                            "text": {
+                              "accessibility": {
+                                "accessibilityData": {
+                                  "label": "4 時間 27 分 45 秒"
+                                }
+                              },
+                              "simpleText": "4:27:45"
+                            },
+                            "style": "DEFAULT"
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "isToggled": false,
+                            "untoggledIcon": {
+                              "iconType": "WATCH_LATER"
+                            },
+                            "toggledIcon": {
+                              "iconType": "CHECK"
+                            },
+                            "untoggledTooltip": "後で見る",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "addedVideoId": "y-4qOn-UQV4",
+                                    "action": "ACTION_ADD_VIDEO"
+                                  }
+                                ]
+                              }
+                            },
+                            "toggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true,
+                                  "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                                }
+                              },
+                              "playlistEditEndpoint": {
+                                "playlistId": "WL",
+                                "actions": [
+                                  {
+                                    "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                    "removedVideoId": "y-4qOn-UQV4"
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "後で見る"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayToggleButtonRenderer": {
+                            "untoggledIcon": {
+                              "iconType": "ADD_TO_QUEUE_TAIL"
+                            },
+                            "toggledIcon": {
+                              "iconType": "PLAYLIST_ADD_CHECK"
+                            },
+                            "untoggledTooltip": "キューに追加",
+                            "toggledTooltip": "追加済み",
+                            "untoggledServiceEndpoint": {
+                              "commandMetadata": {
+                                "webCommandMetadata": {
+                                  "sendPost": true
+                                }
+                              },
+                              "signalServiceEndpoint": {
+                                "signal": "CLIENT_SIGNAL",
+                                "actions": [
+                                  {
+                                    "addToPlaylistCommand": {
+                                      "openMiniplayer": true,
+                                      "videoId": "y-4qOn-UQV4",
+                                      "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                      "onCreateListCommand": {
+                                        "commandMetadata": {
+                                          "webCommandMetadata": {
+                                            "sendPost": true,
+                                            "apiUrl": "/youtubei/v1/playlist/create"
+                                          }
+                                        },
+                                        "createPlaylistServiceEndpoint": {
+                                          "videoIds": [
+                                            "y-4qOn-UQV4"
+                                          ],
+                                          "params": "CAQ%3D"
+                                        }
+                                      },
+                                      "videoIds": [
+                                        "y-4qOn-UQV4"
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "untoggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "キューに追加"
+                              }
+                            },
+                            "toggledAccessibility": {
+                              "accessibilityData": {
+                                "label": "追加済み"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayNowPlayingRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "再生中"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "thumbnailOverlayLoadingPreviewRenderer": {
+                            "text": {
+                              "runs": [
+                                {
+                                  "text": "カーソルを合わせて再生"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

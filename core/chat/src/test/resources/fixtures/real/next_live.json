@@ -1,0 +1,281 @@
+{
+  "contents": {
+    "twoColumnWatchNextResults": {
+      "results": {
+        "results": {
+          "contents": [
+            {
+              "videoPrimaryInfoRenderer": {
+                "title": {
+                  "runs": [
+                    {
+                      "text": "🔵羽田空港 ライブカメラ Haneda Airport Live September 27, 2026   生中継 2026年9月27日 羽田空港ライブ"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "videoSecondaryInfoRenderer": {
+                "owner": {
+                  "videoOwnerRenderer": {
+                    "title": {
+                      "runs": [
+                        {
+                          "text": "Japan 8K12K TV ",
+                          "navigationEndpoint": {
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@japan8k12ktv6",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCkcGBzZQKLMvMO3IbT5TgLg",
+                              "canonicalBaseUrl": "/@japan8k12ktv6"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "conversationBar": {
+        "liveChatRenderer": {
+          "continuations": [
+            {
+              "reloadContinuationData": {
+                "continuation": "0ofMyAOEARpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRDABggEMCAQYAiAAKAAwADgAiAEBoAHyhoWK_o2XA6gBALIBAA%3D%3D"
+              }
+            }
+          ],
+          "header": {
+            "liveChatHeaderRenderer": {
+              "overflowMenu": {
+                "menuRenderer": {
+                  "items": [
+                    {
+                      "menuServiceItemRenderer": {
+                        "text": {
+                          "runs": [
+                            {
+                              "text": "参加者"
+                            }
+                          ]
+                        },
+                        "icon": {
+                          "iconType": "PERSON"
+                        }
+                      }
+                    },
+                    {
+                      "clientSideToggleMenuItemRenderer": {
+                        "defaultText": {
+                          "runs": [
+                            {
+                              "text": "タイムスタンプ"
+                            }
+                          ]
+                        },
+                        "defaultIcon": {
+                          "iconType": "ACCESS_TIME"
+                        },
+                        "toggledText": {
+                          "runs": [
+                            {
+                              "text": "タイムスタンプ"
+                            }
+                          ]
+                        },
+                        "toggledIcon": {
+                          "iconType": "ACCESS_TIME"
+                        },
+                        "menuItemIdentifier": "timestamp_toggle",
+                        "command": {
+                          "toggleLiveChatTimestampsEndpoint": {
+                            "hack": true
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "menuServiceItemRenderer": {
+                        "text": {
+                          "runs": [
+                            {
+                              "text": "チャットをポップアウト"
+                            }
+                          ]
+                        },
+                        "icon": {
+                          "iconType": "OPEN_IN_NEW"
+                        }
+                      }
+                    },
+                    {
+                      "menuNavigationItemRenderer": {
+                        "text": {
+                          "runs": [
+                            {
+                              "text": "フィードバックを送信"
+                            }
+                          ]
+                        },
+                        "icon": {
+                          "iconType": "FEEDBACK"
+                        },
+                        "navigationEndpoint": {
+                          "commandMetadata": {
+                            "webCommandMetadata": {
+                              "ignoreNavigation": true
+                            }
+                          },
+                          "userFeedbackEndpoint": {
+                            "hack": true,
+                            "bucketIdentifier": "live_chat"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "その他のオプション"
+                    }
+                  }
+                }
+              },
+              "collapseButton": {
+                "buttonRenderer": {
+                  "style": "STYLE_DEFAULT",
+                  "size": "SIZE_DEFAULT",
+                  "isDisabled": false,
+                  "icon": {
+                    "iconType": "CLOSE"
+                  },
+                  "accessibility": {
+                    "label": "閉じる"
+                  },
+                  "command": {
+                    "commandMetadata": {
+                      "webCommandMetadata": {
+                        "sendPost": true
+                      }
+                    },
+                    "signalServiceEndpoint": {
+                      "signal": "CLIENT_SIGNAL",
+                      "actions": [
+                        {
+                          "signalAction": {
+                            "signal": "HIDE_LIVE_CHAT"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "viewSelector": {
+                "sortFilterSubMenuRenderer": {
+                  "subMenuItems": [
+                    {
+                      "title": "トップチャット",
+                      "selected": true,
+                      "continuation": {
+                        "reloadContinuationData": {
+                          "continuation": "0ofMyAMWGgAwAYIBDAgEGAAgACgBMAA4AKgBAQ%3D%3D"
+                        }
+                      },
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "トップチャット"
+                        }
+                      },
+                      "subtitle": "一部のメッセージ（不適切な可能性があるものなど）を非表示にします"
+                    },
+                    {
+                      "title": "チャット",
+                      "selected": false,
+                      "continuation": {
+                        "reloadContinuationData": {
+                          "continuation": "0ofMyAMWGgAwAYIBDAgBGAAgACgBMAA4AKgBAQ%3D%3D"
+                        }
+                      },
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "チャット"
+                        }
+                      },
+                      "subtitle": "すべてのメッセージが表示されます"
+                    }
+                  ],
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "チャットのモードの選択"
+                    }
+                  },
+                  "targetId": "live-chat-view-selector-sub-menu"
+                }
+              }
+            }
+          },
+          "clientMessages": {
+            "reconnectMessage": {
+              "runs": [
+                {
+                  "text": "チャットが切断されました。再接続するまでしばらくお待ちください。"
+                }
+              ]
+            },
+            "unableToReconnectMessage": {
+              "runs": [
+                {
+                  "text": "チャットに接続できません。しばらくしてからもう一度お試しください。"
+                }
+              ]
+            },
+            "fatalError": {
+              "runs": [
+                {
+                  "text": "チャットに接続できません。しばらくしてからもう一度お試しください。"
+                }
+              ]
+            },
+            "reconnectedMessage": {
+              "runs": [
+                {
+                  "text": "接続しました。"
+                }
+              ]
+            },
+            "genericError": {
+              "runs": [
+                {
+                  "text": "エラーが発生しました。もう一度お試しください。"
+                }
+              ]
+            }
+          },
+          "initialDisplayState": "LIVE_CHAT_DISPLAY_STATE_EXPANDED",
+          "showButton": {
+            "buttonRenderer": {
+              "style": "STYLE_DEFAULT",
+              "size": "SIZE_DEFAULT",
+              "isDisabled": false,
+              "text": {
+                "simpleText": "チャットを表示"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

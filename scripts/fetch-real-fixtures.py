@@ -17,9 +17,10 @@
 - 投稿者のチャンネルID（``authorExternalChannelId``）→ 連番の仮ID
 - 画像の URL（アイコン・スタンプ・絵文字等の ``thumbnails``）→ ``https://example.invalid/image.png``
 - コメント本文（``message`` の文字列部分）→「コメントN」（絵文字の部分は残す）
-- 追跡用の値（``trackingParams`` 等）と、解析に使わない大きな部分木は削除する
+- 追跡用の値（``trackingParams`` 等）、再生用の署名付き URL（取得した端末の IP アドレスを含む）と、
+  解析に使わない大きな部分木は削除する
 
-保存前に、元の投稿者名・チャンネルIDが出力に残っていないかを検査し、残っていれば保存を中止する。
+保存前に、元の投稿者名・チャンネルID・動画配信サーバーの URL が出力に残っていないかを検査し、残っていれば保存を中止する。
 元の応答はファイルへ保存しない（--keep-raw を指定した場合のみ、指定したリポジトリ外のディレクトリへ保存する）。
 
 使い方:
@@ -69,7 +70,12 @@ DROP_KEYS = {
     "inlinePlaybackEndpoint",
     "searchVideoResultEntityKey",
     "serviceEndpoint",
+    # 再生用の署名付き URL（取得した端末の IP アドレスを含む）
+    "watchEndpointSupportedOnesieConfig",
 }
+
+# 出力に含まれてはならない文字列（動画配信サーバーの URL は取得した端末の IP アドレスを含む）
+FORBIDDEN_SUBSTRINGS = ["googlevideo.com"]
 
 FILES = ["next_replay.json", "replay_chunk.json", "search_results.json", "next_live.json", "live_chunk.json"]
 
@@ -308,6 +314,9 @@ def build(raw: dict[str, dict]) -> dict[str, str]:
         leaked = anonymizer.leaks(text)
         if leaked:
             sys.exit(f"{name}: 置き換え後も投稿者の情報が {len(leaked)} 件残っているため保存を中止しました")
+        forbidden = [value for value in FORBIDDEN_SUBSTRINGS if value in text]
+        if forbidden:
+            sys.exit(f"{name}: 取得した端末の情報を含む URL（{', '.join(forbidden)}）が残っているため保存を中止しました")
         outputs[name] = text
     print(f"投稿者 {len(anonymizer.names)} 人、コメント {anonymizer.comment_count} 件を置き換えました")
     return outputs
