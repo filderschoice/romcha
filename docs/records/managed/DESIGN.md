@@ -23,6 +23,7 @@
 
 - プロジェクト雛形と品質ゲート（静的解析・型検査・単体テスト）
 - F-CHAT-01/08、N-08: メッセージモデルとチャット応答の解析（`core:chat` の `ChatResponseParser`）
+- F-CHAT-10、F-VID-07: InnerTube クライアント（`next` からの continuation 取得・チャット無効の判定、リプレイ／ライブ取得、指数バックオフ）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 
 ## 設計方針
@@ -57,6 +58,18 @@
   → `reloadContinuationData` の順で最初に見つかったもの。`timeoutMs` を推奨間隔として持つ。無ければ終端・終了。
 - JSON は `kotlinx.serialization` の `JsonElement` を必要箇所だけ辿る（`internal/JsonNav.kt`）。型不一致・欠落は null とし、
   `liveChatContinuation` が無い・JSON でない場合は `ChatParseResult.Failure` を返す（例外を投げない）。
+- `InnerTubeClient`（通信先は `https://www.youtube.com/` のみ。Cookie を保持しない）:
+  - 共通: `POST youtubei/v1/<path>?prettyPrint=false`、本文に `context.client`（`clientName=WEB`・`clientVersion`・`hl=ja`・`gl=JP`）。
+    `clientVersion` の既定値は定数で持ち、実応答での有効性は人手検証で確認する。
+  - `fetchVideoChatInfo(videoId)`: `next` 応答の `twoColumnWatchNextResults` から、タイトル（`videoPrimaryInfoRenderer.title`）、
+    チャンネル名（`videoSecondaryInfoRenderer.owner.videoOwnerRenderer.title`）、`conversationBar.liveChatRenderer` の
+    `isReplay` と continuation（見出しの切り替えメニュー 0 = 上位チャット、1 = すべてのチャット。無ければ `reloadContinuationData`）を読む。
+    `liveChatRenderer` が無ければ `VideoChatInfo.Unavailable`（`conversationBarRenderer.availabilityMessage` の説明文付き）。
+  - `fetchReplay(continuation, playerOffsetMs)`: `live_chat/get_live_chat_replay`。初回・シーク後のみ
+    `currentPlayerState.playerOffsetMs`（文字列）を付ける。`fetchLive(continuation)`: `live_chat/get_live_chat`。
+  - 結果は `FetchResult`（成功／`FetchFailure.Network`・`Http(code)`・`Parse(reason)`）。
+  - 再試行（F-CHAT-10）: 通信断・429・5xx のみ。待ち時間 1 秒から倍々で最大 30 秒、既定 5 回。`RetryListener` で UI へ通知する。
+    解析失敗と 4xx（429 以外）は再試行しない。
 - テストの fixture（`core/chat/src/test/resources/fixtures/`）は既知の応答構造に基づく合成データ。実応答との照合は人手検証。
 
 ### 同期エンジン（`core:sync`）

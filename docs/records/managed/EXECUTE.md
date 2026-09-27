@@ -6,6 +6,27 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 16:45
+  summary: InnerTube クライアント（continuation 取得、リプレイ／ライブ取得、指数バックオフ）を core:chat に実装
+  details:
+    変更内容: >-
+      PLAN 4.4、F-CHAT-10、F-VID-07 に基づき、next 応答からタイトル・チャンネル名・チャットの continuation を読む WatchInfoParser と、
+      get_live_chat_replay / get_live_chat を呼ぶ InnerTubeClient を追加した。通信断・429・5xx は指数バックオフ（1 秒から最大 30 秒）で再試行する。
+      チャット無効・チャット欄の無い動画は Unavailable を返す。MockWebServer を使う単体テスト 10 件と next 応答の合成 fixture 4 件を追加した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/InnerTubeClient.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/WatchInfoParser.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/InnerTubeClientTest.kt
+      - core/chat/src/test/resources/fixtures/next_replay.json
+      - core/chat/src/test/resources/fixtures/next_live.json
+      - core/chat/src/test/resources/fixtures/next_chat_disabled.json
+      - core/chat/src/test/resources/fixtures/next_no_chat.json
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:chat の単体テスト 20 件成功
+    関連ID:
+      - BL-005
 - date: 2026-09-27 16:10
   summary: チャットのメッセージモデルとリプレイ／ライブ応答の解析を core:chat に実装
   details:

@@ -1,0 +1,85 @@
+{
+  "contents": {
+    "twoColumnWatchNextResults": {
+      "results": {
+        "results": {
+          "contents": [
+            {
+              "videoPrimaryInfoRenderer": {
+                "title": {
+                  "runs": [
+                    {
+                      "text": "アーカイブ配信のタイトル"
+                    }
+                  ]
+                },
+                "viewCount": {
+                  "videoViewCountRenderer": {
+                    "viewCount": {
+                      "simpleText": "1,234 回視聴"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "videoSecondaryInfoRenderer": {
+                "owner": {
+                  "videoOwnerRenderer": {
+                    "title": {
+                      "runs": [
+                        {
+                          "text": "テストチャンネル"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "conversationBar": {
+        "liveChatRenderer": {
+          "continuations": [
+            {
+              "reloadContinuationData": {
+                "continuation": "RELOAD_TOKEN"
+              }
+            }
+          ],
+          "header": {
+            "liveChatHeaderRenderer": {
+              "viewSelector": {
+                "sortFilterSubMenuRenderer": {
+                  "subMenuItems": [
+                    {
+                      "title": "上位のチャットのリプレイ",
+                      "selected": true,
+                      "continuation": {
+                        "reloadContinuationData": {
+                          "continuation": "TOP_TOKEN"
+                        }
+                      }
+                    },
+                    {
+                      "title": "チャットのリプレイ",
+                      "selected": false,
+                      "continuation": {
+                        "reloadContinuationData": {
+                          "continuation": "ALL_TOKEN"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "isReplay": true
+        }
+      }
+    }
+  }
+}
