@@ -1,10 +1,12 @@
 package io.github.filderschoice.romcha.feature.overlay.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +18,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.SubcomposeAsyncImage
 import io.github.filderschoice.romcha.core.chat.AuthorRole
 import io.github.filderschoice.romcha.core.chat.ChatMessage
 import io.github.filderschoice.romcha.core.chat.ChatMessageKind
+import io.github.filderschoice.romcha.feature.overlay.ImagePolicy
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.R
 
@@ -52,7 +56,7 @@ private fun TextItem(message: ChatMessage) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(AUTHOR_WEIGHT, fill = false).padding(end = 6.dp),
         )
-        Text(text = message.plainText, color = OverlayTextColor, fontSize = 13.sp)
+        MessageText(message.runs, color = OverlayTextColor, fontSize = 13.sp)
     }
 }
 
@@ -76,21 +80,10 @@ private fun PaidItem(message: ChatMessage) {
             Text(message.author.name, color = textColor, fontSize = 12.sp, modifier = Modifier.weight(1f), maxLines = 1)
             Text(paid.amountText, color = textColor, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         }
-        val text =
-            if (message.kind == ChatMessageKind.SUPER_STICKER) {
-                stringResource(
-                    R.string.overlay_sticker,
-                )
-            } else {
-                message.plainText
-            }
-        if (text.isNotEmpty()) {
-            Text(
-                text = text,
-                color = textColor,
-                fontSize = 13.sp,
-                modifier = Modifier.fillMaxWidth().background(body).padding(horizontal = 6.dp, vertical = 3.dp),
-            )
+        val bodyModifier = Modifier.fillMaxWidth().background(body).padding(horizontal = 6.dp, vertical = 3.dp)
+        when {
+            message.kind == ChatMessageKind.SUPER_STICKER -> Sticker(paid.stickerImageUrl, textColor, bodyModifier)
+            message.runs.isNotEmpty() -> MessageText(message.runs, textColor, 13.sp, bodyModifier)
         }
     }
 }
@@ -110,13 +103,35 @@ private fun BandItem(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
         )
-        if (message.plainText.isNotEmpty()) {
-            Text(
-                message.plainText,
+        if (message.runs.isNotEmpty()) {
+            MessageText(
+                message.runs,
                 color = Color.White,
                 fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
             )
+        }
+    }
+}
+
+/** スーパーステッカーの画像（F-CHAT-09）。表示できない時は「（スーパーステッカー）」と出す。 */
+@Composable
+private fun Sticker(
+    url: String?,
+    textColor: Color,
+    modifier: Modifier,
+) {
+    val fallback = @Composable { Text(stringResource(R.string.overlay_sticker), color = textColor, fontSize = 13.sp) }
+    Box(modifier = modifier) {
+        if (url != null && ImagePolicy.isAllowed(url)) {
+            SubcomposeAsyncImage(
+                model = url,
+                contentDescription = stringResource(R.string.overlay_sticker),
+                modifier = Modifier.size(STICKER_SIZE),
+                error = { fallback() },
+            )
+        } else {
+            fallback()
         }
     }
 }
@@ -130,4 +145,5 @@ private fun authorColor(roles: Set<AuthorRole>): Color =
     }
 
 private const val AUTHOR_WEIGHT = 0.4f
+private val STICKER_SIZE = 56.dp
 private const val DEFAULT_PAID_ARGB = 0xFF1E88E5.toInt()

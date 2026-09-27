@@ -116,7 +116,8 @@ MockWebServer で行い、YouTube へは通信しません。実際の応答か�
 ## プライバシー
 
 - ログイン機能はありません。解析・広告の SDK を含みません。
-- 通信先は YouTube（`www.youtube.com`）のみです（画像の表示に対応した時点で YouTube の画像配信元が加わります）。
+- 通信先は YouTube（`www.youtube.com`）と、カスタム絵文字・スタンプなどの画像を配信する YouTube の画像配信元
+  （`*.ggpht.com`・`*.ytimg.com`・`*.googleusercontent.com`。HTTPS のみ）だけです。
 - 動画の特定結果のキャッシュとウィンドウの設定は端末内にのみ保存し、バックアップの対象外にしています。
 
 ## ライセンス

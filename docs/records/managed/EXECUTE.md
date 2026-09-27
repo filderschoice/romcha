@@ -6,6 +6,32 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:28
+  summary: カスタム絵文字・メンバースタンプ・スーパーステッカーを画像で表示（Coil を導入）
+  details:
+    変更内容: >-
+      画像読み込みに Coil 2.7.0（coil-compose。Apache-2.0、PLAN 4.7 の採用候補）を追加した。
+      メッセージ本文を MessageText で描き、カスタム絵文字・メンバースタンプを文中へ画像（1.4em）で差し込む。
+      画像の URL が無い・許可していない配信元・読み込み失敗の時は代替テキスト（:name: など）を出し、Unicode の絵文字は文字のまま出す。
+      スーパーステッカーは 56dp の画像で表示し、表示できない時は従来の「（スーパーステッカー）」を出す。
+      応答の URL は外部入力のため、ImagePolicy で HTTPS かつ YouTube の画像配信元（*.ggpht.com・*.ytimg.com・*.googleusercontent.com）に
+      限って読み込む（N-05）。README のプライバシー節の通信先を更新した。
+    変更ファイル:
+      - gradle/libs.versions.toml
+      - feature/overlay/build.gradle.kts
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ImagePolicy.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/MessageText.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatItems.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ImagePolicyTest.kt
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実際の絵文字画像の表示は BL-048 で確認する
+    関連ID:
+      - BL-042
 - date: 2026-09-27 15:22
   summary: 手動タイマーモード（開始・停止・位置入力）と同期状態「手動」を追加
   details:

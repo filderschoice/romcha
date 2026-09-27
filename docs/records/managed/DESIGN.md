@@ -44,6 +44,7 @@
   ライブ・プレミアは対象外。位置入力（`OverlayFormat.parsePosition`。`h:mm:ss`・`m:ss`・秒数、全角コロン可）の間だけ
   ウィンドウの `FLAG_NOT_FOCUSABLE` を外し（`OverlayWindow.focusable`）、確定・取消で戻す。手動タイマーの状態は保存しない
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
+- F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
 
 ## 設計方針
 
@@ -234,9 +235,13 @@
   `events: SharedFlow<OverlayEvent>`（候補の選択・終了）でセッション側へ返す。
 - 一覧（F-OVL-07）: `AutoScrollPolicy` で、利用者が遡ってドラッグを終えた時点で最下部でなければ追従を止めて「最新へ」ボタンを出し、
   最下部に戻るかボタン押下で追従を再開する。追従中は新着ごとに最下部へスクロールする。
-- 表示: 通常メッセージは投稿者名（所有者＝黄・モデレーター＝青・メンバー＝緑）と本文（絵文字は代替テキスト）。
+- 表示: 通常メッセージは投稿者名（所有者＝黄・モデレーター＝青・メンバー＝緑）と本文。
   スーパーチャット・スーパーステッカーは見出し帯（投稿者名・金額）と本文帯を応答の色で塗り、輝度で黒／白文字を選ぶ（F-VIEW-02）。
   メンバー加入・ギフトは緑の帯。お知らせ文（チャット無効 F-VID-07・通信失敗など）は赤帯で表示する。
+- 画像（F-CHAT-09）: Coil（`coil-compose`）で読み込む。本文は `MessageText` で描き、カスタム絵文字・メンバースタンプを
+  `InlineTextContent`（1.4em）で文中に差し込む。URL が無い・許可外・読み込み失敗なら代替テキスト、Unicode の絵文字は文字のまま。
+  スーパーステッカーは 56dp の画像（失敗時は「（スーパーステッカー）」）。応答の URL は `ImagePolicy` で HTTPS かつ
+  `*.ggpht.com`・`*.ytimg.com`・`*.googleusercontent.com` に限る（N-05）。
 
 ### アプリ画面（`app`）
 
@@ -288,6 +293,7 @@
 - `PersistentResolutionCache`: 特定のキャッシュを `filesDir/resolution-cache.json`（`[{identity, videoId}]`）へ `AtomicFile` で保存し、
   起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
+- `feature:overlay` は画像読み込みに Coil 2.7.0（`io.coil-kt:coil-compose`）を使う。既定の `ImageLoader`（シングルトン）で足りるため設定しない。
 
 ## 非機能要件
 

@@ -11,6 +11,7 @@ coreKtx = "1.15.0"
 savedstate = "1.2.1"
 datastore = "1.1.1"
 aboutlibraries = "11.2.3"
+coil = "2.7.0"
 junit = "4.13.2"
 turbine = "1.2.0"
 detekt = "1.23.7"
@@ -35,6 +36,7 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 aboutlibraries-compose = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlibraries" }
 junit = { module = "junit:junit", version.ref = "junit" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
