@@ -139,6 +139,8 @@ gh release create vX.Y.Z app/build/dist/romcha-vX.Y.Z.apk app/build/dist/romcha-
 
 - アセット名（`romcha-vX.Y.Z.apk`）は変えないでください（Obtainium 等の追従インストーラが名前で取得します）。
 - 下書き（`--draft`）・プレリリース（`--prerelease`）は `releases/latest` の対象外のため、アプリの更新通知に出ません。
+- リポジトリが非公開（private）の間は、アプリの「更新を確認」（認証なしの `releases/latest`）が 404 を受けて
+  「公開されている版はまだありません。」になり、利用者は Releases のページも開けません。7章の確認はリポジトリの公開後に行います。
 
 ## 7. 公開後の確認
 

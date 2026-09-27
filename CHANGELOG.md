@@ -2,6 +2,19 @@
 
 このリポジトリの主要な変更は本ファイルに記録します。
 
+## 2026-09-28
+
+- 履歴に残る検証端末のシリアル番号は、履歴を書き換えずにそのまま公開することとした（ユーザー判断）。BL-070 を閉じ、BL-069 の依存から外した。
+- `README.md` に「問題の報告」節（GitHub Issues の窓口、報告に書く情報、個人情報を書かないお願い）を追加した（BL-068）。
+- `.github/CODEOWNERS` の配布テンプレートのプレースホルダ（`@your-org/...`）を、リポジトリ所有者（`@filderschoice`）へ置き換えた（BL-067）。
+- `docs/VERIFICATION.md` から検証端末のシリアル番号を除き、`<シリアル>`（`adb devices -l` で確認する値）へ置き換えた（BL-066）。
+- リポジトリの公開（public 化）に向けた点検の指摘を `docs/records/managed/BACKLOG.md` へ登録した（BL-066〜BL-070。
+  検証端末のシリアル番号・CODEOWNERS のプレースホルダ・README の問い合わせ窓口・公開の操作・履歴に残るシリアルの扱い。自律ループ第1イテレーション）。
+- `docs/records/managed/BACKLOG.md` へ、v1.0.0 の GitHub Releases 公開をドキュメントへ反映するタスク（BL-064）と、
+  Releases の公開を誰が行うかの規定の見直し（BL-065。要確認）を登録した（自律ループ第1イテレーション）。
+- v1.0.0 の GitHub Release 作成を `README.md` の状態表・DESIGN・BACKLOG（BL-058 を残りの確認へ絞った）・`site/app.json`・`docs/RELEASE.md` 6章へ反映した（BL-064）。
+  リポジトリが非公開の間は「更新を確認」が「公開されている版はまだありません。」になること（API が 404 を返す）を記載した。
+
 ## 2026-09-27
 
 - `docs/records/managed/BACKLOG.md` へ、リリースビルドを簡易化するスクリプトの作成（BL-063。ユーザー指示）を登録した
