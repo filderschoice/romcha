@@ -157,6 +157,23 @@ class InnerTubeClientTest {
         }
 
     @Test
+    fun ライブに絞った検索では絞り込みの指定を送る() =
+        runTest {
+            server.enqueue(MockResponse().setBody(fixture("search_results.json")))
+            server.enqueue(MockResponse().setBody(fixture("search_results.json")))
+
+            val result = client().search("テストチャンネル", liveOnly = true)
+            client().search("タイトル")
+
+            assertEquals(3, (result as FetchResult.Success).value.size)
+            val live = server.takeRequest()
+            assertEquals("/youtubei/v1/search?prettyPrint=false", live.path)
+            val liveBody = Json.parseToJsonElement(live.body.readUtf8()).jsonObject
+            assertEquals(InnerTubeClient.SEARCH_PARAMS_LIVE, liveBody["params"]!!.jsonPrimitive.content)
+            assertNull(requestJson()["params"])
+        }
+
+    @Test
     fun 待ち時間は倍々で増え上限で頭打ちになる() {
         val policy = RetryPolicy(initialDelayMs = 1_000, maxDelayMs = 30_000)
         assertEquals(

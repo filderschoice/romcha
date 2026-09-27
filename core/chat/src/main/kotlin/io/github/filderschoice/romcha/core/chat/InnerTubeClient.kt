@@ -127,12 +127,21 @@ class InnerTubeClient(
         return post("youtubei/v1/live_chat/get_live_chat", body, listener, ::toChatResult)
     }
 
-    /** 動画を検索する（PLAN 4.3 手順4）。 */
+    /**
+     * 動画を検索する（PLAN 4.3 手順3・4）。
+     *
+     * @param liveOnly true なら検索の絞り込み「ライブ」を付ける（配信中・プレミア公開中の動画）
+     */
     suspend fun search(
         query: String,
+        liveOnly: Boolean = false,
         listener: RetryListener? = null,
     ): FetchResult<List<SearchCandidate>> {
-        val body = buildJsonObject { put("query", query) }
+        val body =
+            buildJsonObject {
+                put("query", query)
+                if (liveOnly) put("params", SEARCH_PARAMS_LIVE)
+            }
         return post("youtubei/v1/search", body, listener) { response ->
             SearchResultParser.parse(response)?.let { FetchResult.Success(it) }
                 ?: FetchResult.Failure(FetchFailure.Parse("search 応答に検索結果の構造が無い"))
@@ -233,6 +242,9 @@ class InnerTubeClient(
 
     companion object {
         const val DEFAULT_BASE_URL = "https://www.youtube.com/"
+
+        /** 検索の絞り込み「ライブ」（Web 版の検索結果 URL の sp と同じ値）。実応答での有効性は人手検証（BL-022）で確認する。 */
+        const val SEARCH_PARAMS_LIVE = "EgJAAQ%3D%3D"
 
         /** InnerTube の WEB クライアント版数。実応答での有効性は人手検証（BL-022）で確認する。 */
         const val DEFAULT_CLIENT_VERSION = "2.20250925.01.00"

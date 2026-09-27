@@ -84,7 +84,10 @@ class WatchCoordinatorTest {
             )
         }
 
-        override suspend fun search(query: String): FetchResult<List<SearchCandidate>> {
+        override suspend fun search(
+            query: String,
+            liveOnly: Boolean,
+        ): FetchResult<List<SearchCandidate>> {
             searchQueries += query
             return FetchResult.Success(searchResults[query].orEmpty())
         }
@@ -105,7 +108,7 @@ class WatchCoordinatorTest {
             val coordinator =
                 WatchCoordinator(
                     backend = backend,
-                    resolver = VideoResolver(search = { backend.search(it) }, cache = cache),
+                    resolver = VideoResolver(search = { query, live -> backend.search(query, live) }, cache = cache),
                     device = DeviceState(nowPlaying, screenOn),
                     io =
                         SessionIo(

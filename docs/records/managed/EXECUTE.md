@@ -6,6 +6,27 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 22:45
+  summary: 動画特定パイプラインの手順3（配信中・プレミア公開中の動画とのタイトル照合）を実装
+  details:
+    変更内容: >-
+      PLAN 4.3 手順3 に基づき、再生中の動画の長さが不明（0 以下）の場合にチャンネル名で「ライブ」に絞った検索を行い、
+      ライブ表示のある候補をタイトル・チャンネル名で採点して確定する処理を VideoResolver に追加した。確定しなければ通常の検索（手順4）へ進む。
+      InnerTubeClient.search に liveOnly（検索の絞り込み params）を追加し、検索元のインターフェースを変更した。単体テスト 4 件を追加した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/InnerTubeClient.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolver.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/InnerTubeClientTest.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolverTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatBackend.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:chat の単体テスト 38 件成功
+    関連ID:
+      - BL-017
 - date: 2026-09-27 22:15
   summary: ライブ・プレミア中の最新追従表示（LiveTimeline）と表示遅延の設定を追加
   details:

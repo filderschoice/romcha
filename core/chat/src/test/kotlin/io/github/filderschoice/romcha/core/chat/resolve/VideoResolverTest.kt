@@ -13,10 +13,19 @@ class VideoResolverTest {
 
     private class FakeSearch(
         private val result: FetchResult<List<SearchCandidate>>,
+        private val liveResult: FetchResult<List<SearchCandidate>> = FetchResult.Success(emptyList()),
     ) : VideoSearchSource {
         val queries = mutableListOf<String>()
+        val liveQueries = mutableListOf<String>()
 
-        override suspend fun search(query: String): FetchResult<List<SearchCandidate>> {
+        override suspend fun search(
+            query: String,
+            liveOnly: Boolean,
+        ): FetchResult<List<SearchCandidate>> {
+            if (liveOnly) {
+                liveQueries += query
+                return liveResult
+            }
             queries += query
             return result
         }
@@ -152,6 +161,43 @@ class VideoResolverTest {
         assertNull(cache.get("b"))
         assertEquals(listOf("a", "c"), cache.snapshot().keys.toList())
     }
+
+    @Test
+    fun 長さが不明ならチャンネルの配信中の動画とタイトルを照合して確定する() =
+        runTest {
+            val live = metadata.copy(title = "【雑談】ライブ中", durationMs = 0)
+            val liveCandidates = SearchResultParser.parse(fixture("search_results.json"))!!
+            val search = FakeSearch(FetchResult.Success(emptyList()), liveResult = FetchResult.Success(liveCandidates))
+
+            val result = VideoResolver(search, InMemoryResolutionCache()).resolve(live) as Resolution.Confirmed
+
+            assertEquals("ccccccccccc", result.videoId)
+            assertEquals(ResolutionSource.LIVE, result.source)
+            assertEquals(listOf("テストチャンネル"), search.liveQueries)
+            assertTrue(search.queries.isEmpty())
+        }
+
+    @Test
+    fun 配信中の動画と照合できなければ通常の検索へ進む() =
+        runTest {
+            val live = metadata.copy(durationMs = 0)
+            val normal = listOf(candidate("normal00000", "【歌枠】夜の配信", durationMs = null))
+            val search =
+                FakeSearch(FetchResult.Success(normal), liveResult = FetchResult.Failure(FetchFailure.Http(500)))
+
+            val result = VideoResolver(search, InMemoryResolutionCache()).resolve(live) as Resolution.Confirmed
+
+            assertEquals("normal00000", result.videoId)
+            assertEquals(ResolutionSource.SEARCH, result.source)
+        }
+
+    @Test
+    fun 長さが分かっている動画では配信中の照合をしない() =
+        runTest {
+            val search = FakeSearch(FetchResult.Success(emptyList()))
+            VideoResolver(search, InMemoryResolutionCache()).resolve(metadata)
+            assertTrue(search.liveQueries.isEmpty())
+        }
 
     @Test
     fun 検索結果の長さ表記を読む() {

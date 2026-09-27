@@ -25,7 +25,7 @@
 - F-CHAT-01/08、N-08: メッセージモデルとチャット応答の解析（`core:chat` の `ChatResponseParser`）
 - F-CHAT-10、F-VID-07: InnerTube クライアント（`next` からの continuation 取得・チャット無効の判定、リプレイ／ライブ取得、指数バックオフ）
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
-- F-VID-01/02: 動画の自動特定パイプライン手順1・2・4（`core:chat` の `resolve.VideoResolver`）
+- F-VID-01/02: 動画の自動特定パイプライン手順1〜4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
 - F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
@@ -86,13 +86,17 @@
 - `resolve.VideoResolver.resolve(TrackMetadata)`（PLAN 4.3）: 次の順に試し、確定した時点で打ち切る。
   1. `videoIdHints` の先頭 → `Confirmed(METADATA)`（キャッシュにも登録）
   2. `ResolutionCache`（キーは `TrackMetadata.identity`）→ `Confirmed(CACHE)`
-  3. （手順3 のライブ・プレミア照合は M2 で追加）
+  3. 長さが 0 以下（ライブ・プレミア中）でチャンネル名があれば、`search(チャンネル名, liveOnly = true)`（検索の絞り込み
+     「ライブ」`params`）の結果のうちライブ表示のあるものを同じ規則で採点し、確定すれば `Confirmed(LIVE)`。
+     確定しなければ（確度不足・0 件・通信失敗）手順4へ進む。
   4. `InnerTubeClient.search("タイトル チャンネル名")` の結果を採点。タイトル完全一致 50・部分一致 25、チャンネル名一致 30、
      長さ ±2 秒一致 20。比較は NFKC 正規化・小文字化・空白除去後。1 位が 80 点以上かつ 2 位との差 10 点以上なら
      `Confirmed(SEARCH, alternatives=他の候補)`、それ以外で 1 点以上の候補があれば `Ambiguous`（上位 5 件）、無ければ `NotFound`。
      通信失敗は `Failed`。
   - ユーザーが候補を選んだら `remember()` でキャッシュへ登録する（`ResolutionSource.USER`）。
   - `InMemoryResolutionCache`: 最大 200 件の LRU。`snapshot()` で永続化用に取り出せる（端末内にのみ保存。N-06）。
+- 検索元 `VideoSearchSource.search(query, liveOnly)`。本番は `InnerTubeClient.search`（`liveOnly` で `params = SEARCH_PARAMS_LIVE`。
+  値の有効性は人手検証で確認する）。
 - `resolve.SearchResultParser`: `twoColumnSearchResultsRenderer…sectionListRenderer.contents[].itemSectionRenderer.contents[].videoRenderer`
   から videoId・タイトル・チャンネル名（`ownerText` → `longBylineText` → `shortBylineText`）・長さ（`lengthText` の `h:mm:ss`）・
   ライブ表示（`BADGE_STYLE_TYPE_LIVE_NOW`）を読む。

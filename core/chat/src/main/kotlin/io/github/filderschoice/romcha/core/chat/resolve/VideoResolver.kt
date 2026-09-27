@@ -7,7 +7,11 @@ import kotlin.math.abs
 
 /** 検索の実行元。本番は `InnerTubeClient.search`、テストは偽物を渡す。 */
 fun interface VideoSearchSource {
-    suspend fun search(query: String): FetchResult<List<SearchCandidate>>
+    /** @param liveOnly true なら配信中・プレミア公開中の動画に絞る（PLAN 4.3 手順3） */
+    suspend fun search(
+        query: String,
+        liveOnly: Boolean,
+    ): FetchResult<List<SearchCandidate>>
 }
 
 /**
@@ -56,6 +60,9 @@ class InMemoryResolutionCache(
 enum class ResolutionSource {
     METADATA,
     CACHE,
+
+    /** 配信中・プレミア公開中の動画との照合（手順3） */
+    LIVE,
     SEARCH,
     USER,
 }
@@ -110,8 +117,8 @@ data class ScoringRule(
 /**
  * 再生中の動画を自動特定するパイプライン（F-VID-01/02、PLAN 4.3）。
  *
- * 手順1（MediaSession の ID）→ 手順2（端末内キャッシュ）→ 手順4（検索照合）の順に試し、確定した時点で打ち切る。
- * 手順3（ライブ・プレミアのチャンネル照合）は M2 で追加する。
+ * 手順1（MediaSession の ID）→ 手順2（端末内キャッシュ）→ 手順3（長さが不明なら配信中・プレミア公開中の動画と照合）
+ * → 手順4（検索照合）の順に試し、確定した時点で打ち切る。
  */
 class VideoResolver(
     private val search: VideoSearchSource,
@@ -119,15 +126,33 @@ class VideoResolver(
     private val rule: ScoringRule = ScoringRule(),
 ) {
     suspend fun resolve(metadata: TrackMetadata): Resolution {
+        resolveLocally(metadata)?.let { return it }
+        resolveLive(metadata)?.let { return it }
+        return when (val result = search.search(buildQuery(metadata), liveOnly = false)) {
+            is FetchResult.Failure -> Resolution.Failed(result.failure)
+            is FetchResult.Success -> judge(metadata, rank(metadata, result.value), ResolutionSource.SEARCH)
+        }
+    }
+
+    /** 手順1・2: 通信せずに確定できるか（MediaSession の動画ID、端末内キャッシュ）。 */
+    private fun resolveLocally(metadata: TrackMetadata): Resolution.Confirmed? {
         metadata.videoIdHints.firstOrNull()?.let {
             cache.put(metadata.identity, it)
             return Resolution.Confirmed(it, ResolutionSource.METADATA)
         }
-        cache.get(metadata.identity)?.let { return Resolution.Confirmed(it, ResolutionSource.CACHE) }
-        return when (val result = search.search(buildQuery(metadata))) {
-            is FetchResult.Failure -> Resolution.Failed(result.failure)
-            is FetchResult.Success -> judge(metadata, rank(metadata, result.value))
-        }
+        return cache.get(metadata.identity)?.let { Resolution.Confirmed(it, ResolutionSource.CACHE) }
+    }
+
+    /**
+     * 手順3: 長さが 0／不明なら配信中とみなし、チャンネル名で配信中・プレミア公開中の動画を探してタイトル照合する。
+     *
+     * 確定しなかった場合（長さが分かっている・候補の確度不足・見つからない・通信失敗）は null を返し、手順4へ進む。
+     */
+    private suspend fun resolveLive(metadata: TrackMetadata): Resolution.Confirmed? {
+        if (metadata.durationMs > 0 || metadata.channelName.isBlank()) return null
+        val result = search.search(metadata.channelName, liveOnly = true) as? FetchResult.Success ?: return null
+        val live = result.value.filter { it.isLive }
+        return judge(metadata, rank(metadata, live), ResolutionSource.LIVE) as? Resolution.Confirmed
     }
 
     /** ユーザーが候補を選んだ・切り替えた時に呼び、以後はキャッシュで確定させる。 */
@@ -173,13 +198,14 @@ class VideoResolver(
     private fun judge(
         metadata: TrackMetadata,
         ranked: List<ScoredCandidate>,
+        source: ResolutionSource,
     ): Resolution {
         val relevant = ranked.filter { it.score > 0 }.take(rule.maxCandidates)
         val top = relevant.firstOrNull() ?: return Resolution.NotFound
         val margin = top.score - (relevant.getOrNull(1)?.score ?: 0)
         if (top.score < rule.autoConfirmThreshold || margin < rule.minMargin) return Resolution.Ambiguous(relevant)
         cache.put(metadata.identity, top.candidate.videoId)
-        return Resolution.Confirmed(top.candidate.videoId, ResolutionSource.SEARCH, relevant.drop(1))
+        return Resolution.Confirmed(top.candidate.videoId, source, relevant.drop(1))
     }
 
     private fun buildQuery(metadata: TrackMetadata): String =

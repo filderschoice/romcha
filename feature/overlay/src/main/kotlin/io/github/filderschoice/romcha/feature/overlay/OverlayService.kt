@@ -94,7 +94,13 @@ class OverlayService :
 
     private fun createCoordinator(): WatchCoordinator {
         val backend = InnerTubeBackend()
-        val resolver = VideoResolver(search = { backend.search(it) }, cache = PersistentResolutionCache(this))
+        val resolver =
+            VideoResolver(search = {
+                    query,
+                    live,
+                ->
+                backend.search(query, live)
+            }, cache = PersistentResolutionCache(this))
         val io =
             SessionIo(
                 requestedVideo = OverlayChannel.requestedVideo,
