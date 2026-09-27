@@ -4,6 +4,7 @@
     <string name="overlay_settings">表示設定</string>
     <string name="overlay_hide">ウィンドウを隠す</string>
     <string name="overlay_opacity">背景 %1$d%%</string>
+    <string name="overlay_font_scale">文字 %1$d%%</string>
     <string name="overlay_live_delay">遅延 %1$d 秒</string>
     <string name="overlay_jump_to_latest">最新へ</string>
     <string name="overlay_sticker">（スーパーステッカー）</string>

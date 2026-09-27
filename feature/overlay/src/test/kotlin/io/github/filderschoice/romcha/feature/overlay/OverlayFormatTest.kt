@@ -30,6 +30,15 @@ class OverlayFormatTest {
     }
 
     @Test
+    fun 文字サイズの倍率は範囲内に収めて10パーセント刻みに丸める() {
+        assertEquals(OverlayFormat.MIN_FONT_SCALE, OverlayFormat.clampFontScale(0.1f))
+        assertEquals(OverlayFormat.MAX_FONT_SCALE, OverlayFormat.clampFontScale(3f))
+        assertEquals(1.2f, OverlayFormat.clampFontScale(1.23f))
+        assertEquals(100, OverlayFormat.fontScalePercent(OverlayFormat.DEFAULT_FONT_SCALE))
+        assertEquals(130, OverlayFormat.fontScalePercent(1.27f))
+    }
+
+    @Test
     fun ウィンドウは画面からはみ出さず最小サイズ以上に収める() {
         val clamped = WindowBounds(x = 900, y = -50, width = 100, height = 5_000).clampTo(1_000, 2_000, 200, 200)
         assertEquals(WindowBounds(x = 800, y = 0, width = 200, height = 2_000), clamped)

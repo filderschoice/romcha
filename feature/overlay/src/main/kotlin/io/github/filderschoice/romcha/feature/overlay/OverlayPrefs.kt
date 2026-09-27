@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
 
-/** ウィンドウの位置・大きさ・不透明度の保存（端末内のみ。N-06）。 */
+/** ウィンドウの位置・大きさ・不透明度・文字サイズの保存（端末内のみ。N-06）。 */
 internal class OverlayPrefs(
     context: Context,
 ) {
@@ -13,6 +13,11 @@ internal class OverlayPrefs(
     var opacity: Float
         get() = prefs.getFloat(KEY_OPACITY, DEFAULT_OPACITY)
         set(value) = prefs.edit { putFloat(KEY_OPACITY, OverlayFormat.clampOpacity(value)) }
+
+    /** チャットの文字サイズの倍率（1.0 が中。F-VIEW-01） */
+    var fontScale: Float
+        get() = OverlayFormat.clampFontScale(prefs.getFloat(KEY_FONT_SCALE, OverlayFormat.DEFAULT_FONT_SCALE))
+        set(value) = prefs.edit { putFloat(KEY_FONT_SCALE, OverlayFormat.clampFontScale(value)) }
 
     /** ライブ・プレミア中の表示遅延（秒。F-SYNC-08） */
     var liveDelaySeconds: Int
@@ -46,6 +51,7 @@ internal class OverlayPrefs(
         private const val DEFAULT_Y = 200
         private const val NAME = "overlay"
         private const val KEY_OPACITY = "opacity"
+        private const val KEY_FONT_SCALE = "fontScale"
         private const val KEY_LIVE_DELAY = "liveDelaySeconds"
         private const val KEY_X = "x"
         private const val KEY_Y = "y"

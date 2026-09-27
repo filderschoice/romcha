@@ -56,6 +56,7 @@ class OverlayService :
     private var params: WindowManager.LayoutParams? = null
     private var bounds = WindowBounds(0, 0, 0, 0)
     private val opacity = mutableFloatStateOf(OverlayPrefs.DEFAULT_OPACITY)
+    private val fontScale = mutableFloatStateOf(OverlayFormat.DEFAULT_FONT_SCALE)
     private val liveDelaySeconds = MutableStateFlow(LiveTimeline.DEFAULT_DELAY_SECONDS)
     private var visible = true
     private val screenOn = MutableStateFlow(true)
@@ -79,6 +80,7 @@ class OverlayService :
         windowManager = getSystemService(WindowManager::class.java)
         prefs = OverlayPrefs(this)
         opacity.floatValue = prefs.opacity
+        fontScale.floatValue = prefs.fontScale
         liveDelaySeconds.value = prefs.liveDelaySeconds
         lifecycleScope.launch {
             OverlayChannel.events.collect { if (it is OverlayEvent.StopRequested) stopSelf() }
@@ -198,6 +200,7 @@ class OverlayService :
                     ChatOverlay(
                         state = state,
                         opacity = opacity.floatValue,
+                        fontScale = fontScale.floatValue,
                         liveDelaySeconds = delay,
                         actions = actions,
                     )
@@ -241,6 +244,7 @@ class OverlayService :
             override fun onGestureEnd() {
                 prefs.saveBounds(bounds)
                 prefs.opacity = opacity.floatValue
+                prefs.fontScale = fontScale.floatValue
                 prefs.liveDelaySeconds = liveDelaySeconds.value
             }
 
@@ -250,6 +254,10 @@ class OverlayService :
 
             override fun onOpacityChange(opacity: Float) {
                 this@OverlayService.opacity.floatValue = OverlayFormat.clampOpacity(opacity)
+            }
+
+            override fun onFontScaleChange(scale: Float) {
+                fontScale.floatValue = OverlayFormat.clampFontScale(scale)
             }
 
             override fun onHide() = setVisible(false)

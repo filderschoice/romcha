@@ -201,9 +201,11 @@
   - 常駐通知（チャンネル `overlay`、重要度 LOW）に「表示／非表示」「終了」の操作を付け、本文タップでアプリを開く（F-OVL-08）。
   - 常駐通知の本文は表示中の動画タイトル。`OverlayNotifications.titleChanges(OverlayChannel.state)`（タイトルの変化だけを流す）を
     購読し、変わったときだけ通知を出し直す（BL-033。状態は表示の更新ごとに発行されるため、同じタイトルでは出し直さない）。
-  - ウィンドウの位置・大きさ・不透明度は SharedPreferences `overlay` に保存し、表示時に画面内へ収める（`WindowBounds.clampTo`）。
+  - ウィンドウの位置・大きさ・不透明度・文字サイズは SharedPreferences `overlay` に保存し、表示時に画面内へ収める（`WindowBounds.clampTo`）。
     既定 280×360dp、最小 160dp。ヘッダーのドラッグで移動、右下のハンドルのドラッグでサイズ変更（F-OVL-02）。
   - 不透明度は 0.2〜1.0（既定 0.6）。ヘッダーの設定ボタンでスライダーを出す（F-OVL-03）。
+  - チャットの文字サイズは倍率 0.8〜1.5（0.1 刻み、既定 1.0＝中）。設定パネルのスライダーで変え、`fontScale` に保存する。
+    チャット欄だけ `LocalDensity` の `fontScale` に倍率を掛けて反映する（各 `Text` の sp は変えない。F-VIEW-01 の文字サイズ）。
 - 表示内容の受け渡し: プロセス内オブジェクト `OverlayChannel` の `state: StateFlow<OverlayUiState>`（タイトル・メッセージ・
   再生位置・同期状態・お知らせ文・候補）へセッション側が書き込み、ウィンドウが購読する。利用者の操作は
   `events: SharedFlow<OverlayEvent>`（候補の選択・終了）でセッション側へ返す。

@@ -56,7 +56,28 @@ object OverlayFormat {
     /** 不透明度をスライダー表示用の百分率にする。 */
     fun opacityPercent(opacity: Float): Int = (clampOpacity(opacity) * PERCENT).roundToInt()
 
+    /**
+     * チャットの文字サイズの倍率（F-VIEW-01）を 0.8〜1.5 に収め、0.1 刻みに丸める。
+     *
+     * 1.0（100%）が従来の大きさ（中）。スライダーの途中の値を保存しても刻みに揃うよう丸める。
+     */
+    fun clampFontScale(scale: Float): Float =
+        (
+            (scale.coerceIn(MIN_FONT_SCALE, MAX_FONT_SCALE) * PERCENT / FONT_SCALE_STEP_PERCENT).roundToInt() *
+                FONT_SCALE_STEP_PERCENT / PERCENT.toFloat()
+        )
+
+    /** 文字サイズの倍率をスライダー表示用の百分率にする。 */
+    fun fontScalePercent(scale: Float): Int = (clampFontScale(scale) * PERCENT).roundToInt()
+
     const val MIN_OPACITY = 0.2f
+    const val MIN_FONT_SCALE = 0.8f
+    const val MAX_FONT_SCALE = 1.5f
+    const val DEFAULT_FONT_SCALE = 1f
+
+    /** スライダーの刻みの数（両端を除く）。0.8〜1.5 を 0.1 刻みにする */
+    const val FONT_SCALE_STEPS = 6
+    private const val FONT_SCALE_STEP_PERCENT = 10
     private const val PERCENT = 100
 }
 

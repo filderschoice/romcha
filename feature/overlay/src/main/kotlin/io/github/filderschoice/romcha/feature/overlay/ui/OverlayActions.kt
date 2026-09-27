@@ -17,6 +17,9 @@ interface OverlayActions {
 
     fun onOpacityChange(opacity: Float)
 
+    /** チャットの文字サイズの倍率を変えた（F-VIEW-01） */
+    fun onFontScaleChange(scale: Float)
+
     /** ライブ・プレミア中の表示遅延（秒）を変えた（F-SYNC-08） */
     fun onLiveDelayChange(seconds: Int)
 

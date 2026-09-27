@@ -6,6 +6,29 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 14:57
+  summary: フローティングの設定パネルにチャットの文字サイズのスライダーを追加
+  details:
+    変更内容: >-
+      設定パネルに文字サイズのスライダー（80〜150%、10% 刻み、既定 100%＝従来の大きさ）を追加した。
+      チャット欄だけを LocalDensity の fontScale に倍率を掛けて拡大・縮小する（端末の文字サイズ設定に掛け合わせる）。
+      倍率は SharedPreferences overlay の fontScale に保存し、OverlayFormat.clampFontScale で範囲と刻みに揃える。単体テストを追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見た目の確認は BL-048（人手検証）で行う
+    関連ID:
+      - BL-034
 - date: 2026-09-27 14:36
   summary: 常駐通知の本文の動画タイトルが動画の切り替えに追従しない問題を修正
   details:

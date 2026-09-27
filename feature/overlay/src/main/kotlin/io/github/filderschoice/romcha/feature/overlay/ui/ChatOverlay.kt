@@ -27,6 +27,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -39,8 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
@@ -61,6 +64,7 @@ internal val SubTextColor = Color(0xFFB0BEC5)
 fun ChatOverlay(
     state: OverlayUiState,
     opacity: Float,
+    fontScale: Float,
     liveDelaySeconds: Int,
     actions: OverlayActions,
 ) {
@@ -75,12 +79,13 @@ fun ChatOverlay(
         Header(state, actions, onToggleSettings = { showSettings = !showSettings })
         if (showSettings) {
             OpacitySlider(opacity, actions)
+            FontScaleSlider(fontScale, actions)
             if (state.indicator == SyncIndicator.LIVE) LiveDelaySlider(liveDelaySeconds, actions)
         }
         state.notice?.let { Notice(it) }
         if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-            MessageList(state.messages)
+            MessageList(state.messages, fontScale)
             ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
         }
     }
@@ -149,6 +154,29 @@ private fun OpacitySlider(
     }
 }
 
+/** チャットの文字サイズ（F-VIEW-01）。100% が従来の大きさ。 */
+@Composable
+private fun FontScaleSlider(
+    scale: Float,
+    actions: OverlayActions,
+) {
+    Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(R.string.overlay_font_scale, OverlayFormat.fontScalePercent(scale)),
+            color = SubTextColor,
+            fontSize = 11.sp,
+        )
+        Slider(
+            value = OverlayFormat.clampFontScale(scale),
+            onValueChange = actions::onFontScaleChange,
+            onValueChangeFinished = actions::onGestureEnd,
+            valueRange = OverlayFormat.MIN_FONT_SCALE..OverlayFormat.MAX_FONT_SCALE,
+            steps = OverlayFormat.FONT_SCALE_STEPS,
+            modifier = Modifier.weight(1f).padding(start = 8.dp),
+        )
+    }
+}
+
 /** ライブ・プレミア中の表示遅延（F-SYNC-08）。映像より先にチャットが流れる場合に遅らせる。 */
 @Composable
 private fun LiveDelaySlider(
@@ -205,7 +233,10 @@ private fun Candidates(
 }
 
 @Composable
-private fun MessageList(messages: List<ChatMessage>) {
+private fun MessageList(
+    messages: List<ChatMessage>,
+    fontScale: Float,
+) {
     val listState = rememberLazyListState()
     val policy = remember { AutoScrollPolicy() }
     var showJump by remember { mutableStateOf(false) }
@@ -233,8 +264,12 @@ private fun MessageList(messages: List<ChatMessage>) {
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(state = listState, modifier = Modifier.fillMaxSize().padding(horizontal = 6.dp)) {
-            items(messages, key = { it.id }) { ChatItem(it) }
+        // チャット欄の sp だけを倍率で拡大・縮小する（端末の文字サイズ設定には掛け合わせる）
+        val density = LocalDensity.current
+        CompositionLocalProvider(LocalDensity provides Density(density.density, density.fontScale * fontScale)) {
+            LazyColumn(state = listState, modifier = Modifier.fillMaxSize().padding(horizontal = 6.dp)) {
+                items(messages, key = { it.id }) { ChatItem(it) }
+            }
         }
         if (showJump) {
             JumpToLatestButton(Modifier.align(Alignment.BottomCenter)) {
