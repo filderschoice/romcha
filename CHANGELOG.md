@@ -4,6 +4,8 @@
 
 ## 2026-09-27
 
+- `docs/records/managed/BACKLOG.md` の BL-027（M5 配布）を、ユーザー回答（コード整備までを範囲とし、更新確認は手動のみ）に
+  基づいて BL-054〜BL-058 へ分割した（自律ループ第1イテレーション）。
 - 実機検証 BL-053（`docs/VERIFICATION.md` の G1。フローティングからアプリ本体を開く）が OK だったため完了とし、
   BACKLOG と `docs/VERIFICATION.md` から削除した。DESIGN に確認済みを反映した。
 - `docs/records/managed/BACKLOG.md` へ、フローティングの設定メニューからアプリ本体を起動する機能（BL-052）と、その人手検証（BL-053）を
