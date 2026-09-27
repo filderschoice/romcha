@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 13:59
+  summary: 実応答から fixture を作るスクリプトと、実応答 fixture で Parser を検証する単体テストを追加
+  details:
+    変更内容: >-
+      BL-022 の fixture の作り直しに向けて、scripts/fetch-real-fixtures.py を追加した。アプリと同じ InnerTube のリクエストで
+      next・get_live_chat_replay・get_live_chat・search の応答を取得し、解析に使わない部分木と追跡用の値を削り、投稿者名・
+      投稿者のチャンネルID・画像 URL・コメント本文を仮の値へ置き換え、元の値が残っていないことを検査してから fixtures/real へ保存する。
+      --raw-dir で通信せずに置き換えだけを行える。RealResponseFixtureTest（5 件）を追加し、fixtures/real が無い場合はスキップする。
+      自律ループ内では実通信を行わず（guardrails 12.5）、既存の合成 fixture を --raw-dir の入力にして検証した。
+    変更ファイル:
+      - scripts/fetch-real-fixtures.py
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/RealResponseFixtureTest.kt
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      python scripts/fetch-real-fixtures.py --raw-dir（合成 fixture を入力）、./gradlew :core:chat:test（fixtures/real あり・なし）、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 合成 fixture の投稿者 7 人・コメント 6 件が置き換わり元の名前が残らないことを確認。fixtures/real ありで 5 件成功、
+      なしで 5 件スキップ。品質ゲートは終了コード0。実応答での実行は未実施（BL-022 の人手検証）
+    関連ID:
+      - BL-032
 - date: 2026-09-27 12:45
   summary: チャット取得が HTTP 400 で失敗し続ける問題を修正（next 応答の雛形トークンを使わない）
   details:
