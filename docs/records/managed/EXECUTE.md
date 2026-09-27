@@ -6,6 +6,31 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 23:40
+  summary: リリース署名の情報を local.properties から読むようにした
+  details:
+    変更内容: >-
+      ユーザー指示により、app/build.gradle.kts の署名情報の読み込み元を keystore.properties から local.properties（.gitignore 済み）の
+      RELEASE_STORE_FILE・RELEASE_STORE_PASSWORD・RELEASE_KEY_ALIAS・RELEASE_KEY_PASSWORD へ変えた。RELEASE_STORE_FILE が無い・空なら
+      未署名でビルドする（-unsigned）。相対パスはリポジトリのルート基準。docs/RELEASE.md（記入例、パス区切りの注意、Android Studio が
+      local.properties を書き換えた場合の確認）・README・DESIGN を合わせた。.gitignore の keystore.properties は誤コミット防止のため残した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - README.md
+      - docs/RELEASE.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      git worktree 上で ./gradlew :app:releaseDist（local.properties 無し、および使い捨ての検証用キーストアを指す仮の local.properties の2通り）、
+      apksigner verify --print-certs、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 無しでは romcha-v1.0.0-unsigned.apk、仮の設定では署名済みの romcha-v1.0.0.apk（apksigner で CN=test を確認）が出力された。
+      ユーザーの local.properties（本番の署名情報）は値を読まず、ビルドにも使っていない（guardrails 12.5。実鍵での署名は BL-058）。
+      worktree と検証用キーストアは削除した。品質ゲートは終了コード0
+    関連ID:
+      - BL-062
 - date: 2026-09-27 23:00
   summary: アプリ紹介ポートフォリオ（site/）を追加した
   details:

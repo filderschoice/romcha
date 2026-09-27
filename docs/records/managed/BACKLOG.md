@@ -6,21 +6,6 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
-- id: BL-062
-  区分: 機能追加
-  タスク内容: >-
-    リリース署名の情報の読み込み元を keystore.properties から local.properties（.gitignore 済み）へ変える。
-    キーは RELEASE_STORE_FILE・RELEASE_STORE_PASSWORD・RELEASE_KEY_ALIAS・RELEASE_KEY_PASSWORD。
-    docs/RELEASE.md・README・DESIGN の記載も合わせる
-  優先度: P1
-  状態: 未着手
-  担当: AIエージェント
-  完了条件: >-
-    local.properties に上記キーがあれば :app:releaseDist が署名済みの romcha-vX.Y.Z.apk を出力し、無ければ未署名（-unsigned）になる。
-    keystore.properties への言及がドキュメントに残らない
-  依存: []
-  根拠: >-
-    2026-09-27 ユーザー指示。ユーザーが local.properties にキーストア情報を作成済みのため。キー名は値を読まずに名前だけ確認した。
 - id: BL-061
   区分: 人手検証
   タスク内容: >-

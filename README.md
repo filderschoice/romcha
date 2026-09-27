@@ -105,8 +105,8 @@ Google Play では配布していません。更新はアプリの「更新を�
 ```
 
 リリース APK は `./gradlew :app:releaseDist` で `app/build/dist/` に `romcha-vX.Y.Z.apk` と SHA-256（`.sha256`）を出力します。
-署名にはリポジトリのルートに `keystore.properties`（`storeFile`・`storePassword`・`keyAlias`・`keyPassword`。
-`.gitignore` で除外済み）が必要で、無い場合は未署名の `romcha-vX.Y.Z-unsigned.apk` になります。
+署名にはリポジトリのルートの `local.properties`（`.gitignore` で除外済み）に `RELEASE_STORE_FILE`・`RELEASE_STORE_PASSWORD`・
+`RELEASE_KEY_ALIAS`・`RELEASE_KEY_PASSWORD` が必要で、無い場合は未署名の `romcha-vX.Y.Z-unsigned.apk` になります。
 鍵の作成から Releases での公開までの手順は [`docs/RELEASE.md`](docs/RELEASE.md) を参照してください。
 
 Windows の PowerShell では `./gradlew` を `.\gradlew.bat` と読み替えてください。

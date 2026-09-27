@@ -8,14 +8,15 @@ plugins {
     alias(libs.plugins.aboutlibraries)
 }
 
-// リリース署名の情報（PLAN 6章）。鍵とパスワードはリポジトリに含めず、ルートの keystore.properties（.gitignore 済み）から読む。
-// ファイルが無ければ release は未署名のままビルドする（配布物名に -unsigned を付けて区別する）
-val keystoreProperties =
+// リリース署名の情報（PLAN 6章）。鍵とパスワードはリポジトリに含めず、ルートの local.properties（.gitignore 済み）の
+// RELEASE_STORE_FILE・RELEASE_STORE_PASSWORD・RELEASE_KEY_ALIAS・RELEASE_KEY_PASSWORD から読む。
+// RELEASE_STORE_FILE が無ければ release は未署名のままビルドする（配布物名に -unsigned を付けて区別する）
+val localProperties =
     Properties().apply {
-        val file = rootProject.file("keystore.properties")
+        val file = rootProject.file("local.properties")
         if (file.isFile) file.inputStream().use { load(it) }
     }
-val hasReleaseSigning = keystoreProperties.getProperty("storeFile") != null
+val hasReleaseSigning = !localProperties.getProperty("RELEASE_STORE_FILE").isNullOrBlank()
 
 android {
     namespace = "io.github.filderschoice.romcha"
@@ -33,10 +34,11 @@ android {
     signingConfigs {
         if (hasReleaseSigning) {
             create("release") {
-                storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
-                storePassword = keystoreProperties.getProperty("storePassword")
-                keyAlias = keystoreProperties.getProperty("keyAlias")
-                keyPassword = keystoreProperties.getProperty("keyPassword")
+                // 相対パスはリポジトリのルートから解決する（絶対パスはそのまま）
+                storeFile = rootProject.file(localProperties.getProperty("RELEASE_STORE_FILE").trim())
+                storePassword = localProperties.getProperty("RELEASE_STORE_PASSWORD")
+                keyAlias = localProperties.getProperty("RELEASE_KEY_ALIAS")
+                keyPassword = localProperties.getProperty("RELEASE_KEY_PASSWORD")
             }
         }
     }

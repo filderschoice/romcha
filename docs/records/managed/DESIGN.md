@@ -371,9 +371,11 @@
 - テスト名は日本語で振る舞いを書く。ktlint の関数命名規則はテストソースのみ無効化する（`.editorconfig`）。
 - 静的解析: ktlint（`ktlint_official`、`@Composable` 関数は命名規則の対象外）、detekt（既定設定＋`config/detekt/detekt.yml` の差分）、
   Android lint（`warningsAsErrors = true`。依存の新版警告のみ `lint.xml` で無効化）。
-- 署名鍵（`*.jks` / `*.keystore` / `keystore.properties`）は `.gitignore` で除外する。
-- リリース署名（PLAN 6章）: `app/build.gradle.kts` がルートの `keystore.properties`（`storeFile`・`storePassword`・`keyAlias`・
-  `keyPassword`）を読み、あれば release を署名する。無ければ未署名でビルドする（鍵が無くても品質ゲート・ビルドが通るようにするため）。
+- 署名鍵（`*.jks` / `*.keystore`）と署名情報を書く `local.properties` は `.gitignore` で除外する
+  （旧方式の `keystore.properties` も誤コミット防止のため除外を残す）。
+- リリース署名（PLAN 6章）: `app/build.gradle.kts` がルートの `local.properties` の `RELEASE_STORE_FILE`（相対パスはルート基準）・
+  `RELEASE_STORE_PASSWORD`・`RELEASE_KEY_ALIAS`・`RELEASE_KEY_PASSWORD` を読み、`RELEASE_STORE_FILE` があれば release を署名する
+  （2026-09-27 ユーザー指示で `keystore.properties` から変更）。無ければ未署名でビルドする（鍵が無くても品質ゲート・ビルドが通るようにするため）。
   `:app:releaseDist` がリリース APK を `app/build/dist/romcha-vX.Y.Z.apk`（未署名なら `-unsigned` を付ける。公開事故の防止）へ置き、
   SHA-256 を `sha256sum` 形式の `.sha256` へ書き出す。アセット名の固定は GitHub 追従インストーラ（Obtainium 等）のため。
   R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。

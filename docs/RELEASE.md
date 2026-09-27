@@ -26,16 +26,20 @@ keytool -genkeypair -v -keystore <リポジトリ外のパス>/romcha-release.jk
 - パスワードはパスワードマネージャー等へ保管し、チャット・Issue・コミットへ貼らないでください。
 - キーストアとパスワードは別の場所（暗号化した外部ストレージ等）へバックアップします。
 
-次に、リポジトリのルートへ `keystore.properties` を作ります（`.gitignore` で除外済み）。
+次に、リポジトリのルートの `local.properties`（`.gitignore` で除外済み。無ければ作る）へ署名情報を追記します。
 
 ```properties
-storeFile=C:/Users/<ユーザー名>/keys/romcha-release.jks
-storePassword=<キーストアのパスワード>
-keyAlias=romcha
-keyPassword=<鍵のパスワード>
+RELEASE_STORE_FILE=C:/Users/<ユーザー名>/keys/romcha-release.jks
+RELEASE_STORE_PASSWORD=<キーストアのパスワード>
+RELEASE_KEY_ALIAS=romcha
+RELEASE_KEY_PASSWORD=<鍵のパスワード>
 ```
 
-作成後に `git status --short` で `keystore.properties` と `*.jks` が表示されない（追跡対象外）ことを確認します。
+- パスの区切りは `/` を使います（`\` は properties 形式ではエスケープ文字のため、使うなら `\\` と重ねる）。
+  相対パスはリポジトリのルートから解決します。
+- 作成後に `git status --short` で `local.properties` と `*.jks` が表示されない（追跡対象外）ことを確認します。
+- Android Studio が `sdk.dir` を書き換えることがあるため、追記した行が残っているかを署名ビルドの前に確かめます
+  （消えていると未署名の `-unsigned` になります）。
 
 ## 2. 版を決める
 
@@ -56,7 +60,7 @@ keyPassword=<鍵のパスワード>
 ```
 
 `app/build/dist/` に `romcha-vX.Y.Z.apk` と `romcha-vX.Y.Z.apk.sha256` ができます。ファイル名に `-unsigned` が
-付いている場合は `keystore.properties` を読めていません（未署名の APK は公開しないでください）。
+付いている場合は `local.properties` の `RELEASE_STORE_FILE` を読めていません（未署名の APK は公開しないでください）。
 
 署名を確かめます（`apksigner` は Android SDK の `build-tools/<版>/` にあります）。
 
