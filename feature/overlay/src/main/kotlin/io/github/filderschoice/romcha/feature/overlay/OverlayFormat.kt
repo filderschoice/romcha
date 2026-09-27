@@ -81,6 +81,21 @@ object OverlayFormat {
     private const val PERCENT = 100
 }
 
+/** 画面の向き。ウィンドウの位置・大きさを向きごとに記憶する（F-OVL-06）。 */
+enum class ScreenOrientation {
+    PORTRAIT,
+    LANDSCAPE,
+    ;
+
+    companion object {
+        /** 画面の幅と高さから向きを決める（正方形は縦とみなす）。 */
+        fun of(
+            screenWidth: Int,
+            screenHeight: Int,
+        ): ScreenOrientation = if (screenWidth > screenHeight) LANDSCAPE else PORTRAIT
+    }
+}
+
 /** 画面内でのウィンドウの位置と大きさ（px）。 */
 data class WindowBounds(
     val x: Int,

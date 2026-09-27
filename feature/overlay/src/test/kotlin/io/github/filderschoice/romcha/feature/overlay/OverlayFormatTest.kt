@@ -39,6 +39,13 @@ class OverlayFormatTest {
     }
 
     @Test
+    fun 画面の向きは幅と高さで決める() {
+        assertEquals(ScreenOrientation.LANDSCAPE, ScreenOrientation.of(2_000, 1_000))
+        assertEquals(ScreenOrientation.PORTRAIT, ScreenOrientation.of(1_000, 2_000))
+        assertEquals(ScreenOrientation.PORTRAIT, ScreenOrientation.of(1_000, 1_000))
+    }
+
+    @Test
     fun ウィンドウは画面からはみ出さず最小サイズ以上に収める() {
         val clamped = WindowBounds(x = 900, y = -50, width = 100, height = 5_000).clampTo(1_000, 2_000, 200, 200)
         assertEquals(WindowBounds(x = 800, y = 0, width = 200, height = 2_000), clamped)

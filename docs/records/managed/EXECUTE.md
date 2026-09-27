@@ -6,6 +6,28 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:03
+  summary: フローティングウィンドウの位置・大きさを画面の縦横それぞれで記憶
+  details:
+    変更内容: >-
+      OverlayPrefs の位置・大きさを画面の向き（ScreenOrientation。幅＞高さで横）ごとに保存するようにした。
+      縦は従来のキーを使い、既存の保存値を引き継ぐ。横は landscape. を前置したキーに保存する。
+      サービスの onConfigurationChanged で向きの変化を検知し、その向きの保存値へ切り替える。
+      detekt の関数数上限に達したため、ウィンドウの追加・削除・位置と大きさの管理を OverlayWindow クラスへ切り出した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、OverlayWindow への切り出しで解消）。回転時の動作は BL-048 で確認する
+    関連ID:
+      - BL-036
 - date: 2026-09-27 15:00
   summary: フローティングのヘッダーの色味をチャット欄と分け、不透明度を両方に反映
   details:

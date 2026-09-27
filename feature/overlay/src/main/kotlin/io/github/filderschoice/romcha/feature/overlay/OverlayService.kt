@@ -6,24 +6,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ServiceInfo
-import android.graphics.PixelFormat
+import android.content.res.Configuration
 import android.os.PowerManager
 import android.os.SystemClock
 import android.provider.Settings
-import android.view.Gravity
-import android.view.WindowManager
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
-import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.PlaybackMonitor
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
@@ -49,12 +44,9 @@ class OverlayService :
     private val savedStateController = SavedStateRegistryController.create(this)
     override val savedStateRegistry: SavedStateRegistry get() = savedStateController.savedStateRegistry
 
-    private lateinit var windowManager: WindowManager
     private lateinit var prefs: OverlayPrefs
+    private lateinit var window: OverlayWindow<OverlayService>
     private val notifications by lazy { OverlayNotifications(this, OverlayService::class.java) }
-    private var view: ComposeView? = null
-    private var params: WindowManager.LayoutParams? = null
-    private var bounds = WindowBounds(0, 0, 0, 0)
     private val opacity = mutableFloatStateOf(OverlayPrefs.DEFAULT_OPACITY)
     private val fontScale = mutableFloatStateOf(OverlayFormat.DEFAULT_FONT_SCALE)
     private val liveDelaySeconds = MutableStateFlow(LiveTimeline.DEFAULT_DELAY_SECONDS)
@@ -77,8 +69,8 @@ class OverlayService :
         savedStateController.performAttach()
         savedStateController.performRestore(null)
         super.onCreate()
-        windowManager = getSystemService(WindowManager::class.java)
         prefs = OverlayPrefs(this)
+        window = OverlayWindow(this, prefs)
         opacity.floatValue = prefs.opacity
         fontScale.floatValue = prefs.fontScale
         liveDelaySeconds.value = prefs.liveDelaySeconds
@@ -150,7 +142,7 @@ class OverlayService :
     }
 
     override fun onDestroy() {
-        removeWindow()
+        window.hide()
         unregisterReceiver(screenReceiver)
         monitor.stop()
         OverlayChannel.publish(OverlayUiState())
@@ -160,7 +152,7 @@ class OverlayService :
     private fun setVisible(show: Boolean) {
         if (show && !Settings.canDrawOverlays(this)) return
         visible = show
-        if (show) addWindow() else removeWindow()
+        if (show) showWindow() else window.hide()
         updateNotification()
     }
 
@@ -170,79 +162,38 @@ class OverlayService :
         ).notify(NOTIFICATION_ID, notifications.build(visible, OverlayChannel.state.value.title))
     }
 
-    private fun addWindow() {
-        if (view != null) return
-        val metrics = windowManager.currentWindowMetrics.bounds
-        val density = resources.displayMetrics.density
-        val minSize = (MIN_SIZE_DP * density).toInt()
-        val saved = prefs.bounds((DEFAULT_WIDTH_DP * density).toInt(), (DEFAULT_HEIGHT_DP * density).toInt())
-        bounds = saved.clampTo(metrics.width(), metrics.height(), minSize, minSize)
-        val layoutParams =
-            WindowManager
-                .LayoutParams(
-                    bounds.width,
-                    bounds.height,
-                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                    PixelFormat.TRANSLUCENT,
-                ).apply {
-                    gravity = Gravity.TOP or Gravity.START
-                    x = bounds.x
-                    y = bounds.y
-                }
-        val composeView =
-            ComposeView(this).apply {
-                setViewTreeLifecycleOwner(this@OverlayService)
-                setViewTreeSavedStateRegistryOwner(this@OverlayService)
-                setContent {
-                    val state by OverlayChannel.state.collectAsState()
-                    val delay by liveDelaySeconds.collectAsState()
-                    ChatOverlay(
-                        state = state,
-                        opacity = opacity.floatValue,
-                        fontScale = fontScale.floatValue,
-                        liveDelaySeconds = delay,
-                        actions = actions,
-                    )
-                }
-            }
-        windowManager.addView(composeView, layoutParams)
-        view = composeView
-        params = layoutParams
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        window.onConfigurationChanged()
     }
 
-    private fun removeWindow() {
-        view?.let { windowManager.removeView(it) }
-        view = null
-        params = null
-    }
-
-    private fun applyBounds(next: WindowBounds) {
-        val metrics = windowManager.currentWindowMetrics.bounds
-        val minSize = (MIN_SIZE_DP * resources.displayMetrics.density).toInt()
-        bounds = next.clampTo(metrics.width(), metrics.height(), minSize, minSize)
-        val layoutParams = params ?: return
-        layoutParams.x = bounds.x
-        layoutParams.y = bounds.y
-        layoutParams.width = bounds.width
-        layoutParams.height = bounds.height
-        view?.let { windowManager.updateViewLayout(it, layoutParams) }
-    }
+    private fun showWindow() =
+        window.show {
+            val state by OverlayChannel.state.collectAsState()
+            val delay by liveDelaySeconds.collectAsState()
+            ChatOverlay(
+                state = state,
+                opacity = opacity.floatValue,
+                fontScale = fontScale.floatValue,
+                liveDelaySeconds = delay,
+                actions = actions,
+            )
+        }
 
     private val actions =
         object : OverlayActions {
             override fun onMove(
                 dx: Float,
                 dy: Float,
-            ) = applyBounds(bounds.copy(x = bounds.x + dx.toInt(), y = bounds.y + dy.toInt()))
+            ) = window.moveBy(dx, dy)
 
             override fun onResize(
                 dx: Float,
                 dy: Float,
-            ) = applyBounds(bounds.copy(width = bounds.width + dx.toInt(), height = bounds.height + dy.toInt()))
+            ) = window.resizeBy(dx, dy)
 
             override fun onGestureEnd() {
-                prefs.saveBounds(bounds)
+                window.saveBounds()
                 prefs.opacity = opacity.floatValue
                 prefs.fontScale = fontScale.floatValue
                 prefs.liveDelaySeconds = liveDelaySeconds.value
@@ -271,9 +222,6 @@ class OverlayService :
         private const val NOTIFICATION_ID = OverlayNotifications.NOTIFICATION_ID
         private const val ACTION_TOGGLE = OverlayNotifications.ACTION_TOGGLE
         private const val ACTION_STOP = OverlayNotifications.ACTION_STOP
-        private const val DEFAULT_WIDTH_DP = 280
-        private const val DEFAULT_HEIGHT_DP = 360
-        private const val MIN_SIZE_DP = 160
 
         /** オーバーレイを表示する（アプリが前面にある時に呼ぶ）。オーバーレイ権限が無い場合は false。 */
         fun start(context: Context): Boolean {
