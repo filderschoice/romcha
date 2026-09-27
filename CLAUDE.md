@@ -20,23 +20,20 @@ Claude Code 固有の差分と追加規約です。全エージェント共通�
 
 全エージェント共通で使用する正本です。自律ループ実行モードでは各イテレーションで実行し、記録へ残します。
 `区分: 人手検証` のBACKLOGタスクは合否判定から除外します。
-
-<!-- 導入時の記入方法（本ファイルは常時読み込まれるため、導入完了後はこのコメントごと削除してよい）:
-- 本リポジトリの技術スタックへ合わせて下表を書き換える。表のプレースホルダを残さないこと、括弧内の例を削除する
-  ことが導入の完了条件（`docs/guidelines/ADOPTION.md`「2. クイックスタート」）。
-- 該当するゲートが無い場合も行は削除せず、コマンド欄へ `(対象外)`、合否基準欄へ理由を書く。
-  「実行コードを持たないため」のように現状の事実として書き、未確認のまま空欄にしない。
-- ローカル実行手順が未定義のゲートは「未定義（未確認）」と明記する。推測でコマンドを書かない。
--->
+Windows の PowerShell では `./gradlew` を `.\gradlew.bat` と読み替えます。
 
 | ゲート | コマンド | 合否基準 |
 | --- | --- | --- |
-| フォーマット/静的解析 | `replace-me`（例 `npm run lint` / `cargo fmt --check && cargo clippy` / `./gradlew ktlintCheck`） | 終了コード0、指摘0件 |
-| 型検査 | `replace-me`（例 `npx tsc --noEmit` / `./gradlew compileKotlin`） | 終了コード0 |
-| 単体テスト | `replace-me`（例 `npm test` / `cargo test` / `./gradlew test`） | 全件成功 |
-| 脆弱性チェック | `replace-me`（例 `npm audit` / `cargo audit`） | 新規の高危険度の指摘が0件 |
+| フォーマット/静的解析 | `./gradlew ktlintCheck detekt lintDebug` | 終了コード0、指摘0件（Android lint は `warningsAsErrors`） |
+| 型検査 | `./gradlew compileDebugKotlin` | 終了コード0 |
+| 単体テスト | `./gradlew testDebugUnitTest :core:chat:test :core:sync:test` | 全件成功 |
+| 脆弱性チェック | `(対象外)` | 導入しない判断のため（下記） |
 | Markdown の静的解析 | `npx markdownlint-cli2 "**/*.md" --config .markdownlint-cli2.yaml` | `Summary: 0 issues`、かつ出力の `Linting: N files` が `git ls-files --cached --others --exclude-standard "*.md"` の件数と一致（対象漏れの検出） |
 | 記録ファイルの検証 | `python scripts/validate-records.py`（PyYAMLが必要） | 終了コード0 |
+
+脆弱性チェックは導入しません（2026-09-27 ユーザー判断）。OWASP Dependency-Check は NVD API キー（秘密情報で
+エージェントは扱えない）が無いと脆弱性DBの取得に長時間かかり、コストに見合わないためです。
+代替手段は M5（配布）着手時に再検討します（BACKLOG の M5 タスク）。
 
 ## 記録ファイルの権限設定（MUST）
 
