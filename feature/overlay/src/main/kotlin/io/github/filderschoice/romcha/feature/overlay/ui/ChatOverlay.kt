@@ -57,7 +57,7 @@ internal val OverlayTextColor = Color(0xFFF5F5F5)
 internal val SubTextColor = Color(0xFFB0BEC5)
 
 /** ヘッダー（ドラッグで移動する領域）の背景。チャット欄の黒と見分けられる青みの灰色にする */
-private val HeaderColor = Color(0xFF37474F)
+internal val HeaderColor = Color(0xFF37474F)
 private val ChatBackgroundColor = Color.Black
 
 /** フローティングウィンドウの中身（F-OVL-01〜03/07、F-VIEW-02）。 */
@@ -67,9 +67,14 @@ fun ChatOverlay(
     opacity: Float,
     fontScale: Float,
     touchThrough: Boolean,
+    minimized: Boolean,
     liveDelaySeconds: Int,
     actions: OverlayActions,
 ) {
+    if (minimized) {
+        Bubble(state.indicator, opacity, actions)
+        return
+    }
     var showSettings by remember { mutableStateOf(false) }
     // 不透明度はヘッダーとチャット欄の両方に掛ける（F-OVL-03）。色味だけを変えてドラッグできる範囲を見分けやすくする
     val alpha = OverlayFormat.clampOpacity(opacity)
@@ -137,6 +142,9 @@ private fun Header(
         }
         IconButton(onClick = onToggleSettings, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Default.Settings, stringResource(R.string.overlay_settings), tint = SubTextColor)
+        }
+        IconButton(onClick = { actions.onMinimizeChange(true) }, modifier = Modifier.size(36.dp)) {
+            Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.overlay_minimize), tint = SubTextColor)
         }
         IconButton(onClick = actions::onHide, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Default.Close, stringResource(R.string.overlay_hide), tint = SubTextColor)

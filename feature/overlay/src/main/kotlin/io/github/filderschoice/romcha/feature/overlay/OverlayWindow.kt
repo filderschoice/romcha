@@ -11,7 +11,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 
 /**
- * フローティングウィンドウ本体（`TYPE_APPLICATION_OVERLAY`）の追加・削除と、`LayoutParams` の反映（F-OVL-01/02/05/06）。
+ * フローティングウィンドウ本体（`TYPE_APPLICATION_OVERLAY`）の追加・削除と、`LayoutParams` の反映（F-OVL-01/02/04/05/06）。
  *
  * 位置と大きさの計算・保存は [WindowPlacement] に任せる。
  */
@@ -38,6 +38,14 @@ internal class OverlayWindow<T>(
     var touchThrough: Boolean = false
         set(value) {
             field = value
+            updateLayout()
+        }
+
+    /** 最小化（バブル）と復帰（F-OVL-04） */
+    var minimized: Boolean
+        get() = placement.minimized
+        set(value) {
+            placement.minimized = value
             updateLayout()
         }
 
@@ -101,7 +109,7 @@ internal class OverlayWindow<T>(
     }
 
     private fun fill(layoutParams: WindowManager.LayoutParams) {
-        val bounds = placement.bounds
+        val bounds = placement.current
         layoutParams.x = bounds.x
         layoutParams.y = bounds.y
         layoutParams.width = bounds.width

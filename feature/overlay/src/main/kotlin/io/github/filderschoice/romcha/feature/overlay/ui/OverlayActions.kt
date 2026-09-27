@@ -26,6 +26,9 @@ interface OverlayActions {
     /** タッチ透過モードに入る（解除は常駐通知から。F-OVL-05） */
     fun onTouchThrough()
 
+    /** バブルへ最小化する／バブルから元の大きさに戻す（F-OVL-04） */
+    fun onMinimizeChange(minimized: Boolean)
+
     fun onHide()
 
     fun onCandidateSelected(videoId: String)

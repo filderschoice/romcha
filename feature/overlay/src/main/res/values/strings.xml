@@ -3,6 +3,8 @@
     <string name="overlay_title_placeholder">動画を検出していません</string>
     <string name="overlay_settings">表示設定</string>
     <string name="overlay_hide">ウィンドウを隠す</string>
+    <string name="overlay_minimize">最小化</string>
+    <string name="overlay_restore">元の大きさに戻す</string>
     <string name="overlay_opacity">背景 %1$d%%</string>
     <string name="overlay_font_scale">文字 %1$d%%</string>
     <string name="overlay_live_delay">遅延 %1$d 秒</string>

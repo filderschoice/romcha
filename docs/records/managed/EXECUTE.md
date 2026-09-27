@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:11
+  summary: フローティングウィンドウの最小化（バブル）と復帰を追加
+  details:
+    変更内容: >-
+      ヘッダーに最小化ボタンを追加した。最小化中はウィンドウを 48dp の丸いバブルにし、タップで元の大きさに戻し、ドラッグで移動する。
+      バブルは通常表示の左上の位置に出し、バブル自身の大きさで画面内へ収める（移動は通常表示の位置にも反映し、復帰時に収め直す）。
+      縁の色で同期状態を示す（同期中・ライブは緑）。背景の不透明度が低くても見失わないよう、バブルの不透明度には下限 0.7 を置く。
+      最小化状態は保存しない。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/Bubble.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での操作感は BL-048 で確認する
+    関連ID:
+      - BL-038
 - date: 2026-09-27 15:07
   summary: タッチ透過モードを追加し、解除を常駐通知から行えるようにした
   details:

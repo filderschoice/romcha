@@ -52,6 +52,7 @@ class OverlayService :
     private val fontScale = mutableFloatStateOf(OverlayFormat.DEFAULT_FONT_SCALE)
     private val liveDelaySeconds = MutableStateFlow(LiveTimeline.DEFAULT_DELAY_SECONDS)
     private val touchThrough = mutableStateOf(false)
+    private val minimized = mutableStateOf(false)
     private var visible = true
     private val screenOn = MutableStateFlow(true)
     private lateinit var monitor: PlaybackMonitor
@@ -185,6 +186,7 @@ class OverlayService :
                 opacity = opacity.floatValue,
                 fontScale = fontScale.floatValue,
                 touchThrough = touchThrough.value,
+                minimized = minimized.value,
                 liveDelaySeconds = delay,
                 actions = actions,
             )
@@ -222,6 +224,11 @@ class OverlayService :
             }
 
             override fun onTouchThrough() = setTouchThrough(true)
+
+            override fun onMinimizeChange(minimized: Boolean) {
+                this@OverlayService.minimized.value = minimized
+                window.minimized = minimized
+            }
 
             override fun onHide() = setVisible(false)
 

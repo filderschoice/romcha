@@ -28,7 +28,7 @@
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
 - F-VID-01/02: 動画の自動特定パイプライン手順1〜4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
-- F-OVL-01/02/03/05/06/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
+- F-OVL-01〜08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
 - F-SYNC-08: ライブ・プレミア中の最新追従表示と表示遅延の設定（`core:sync` の `LiveTimeline`、オーバーレイの設定パネル）
@@ -212,6 +212,9 @@
   - タッチ透過モード（F-OVL-05）: 設定パネルから入り、`FLAG_NOT_TOUCHABLE` を付けてウィンドウの `LayoutParams.alpha` を 0.8 に
     下げる（0.8 を超える他アプリのオーバーレイ越しのタッチは OS に遮断される）。透過中はウィンドウを触れないため、解除は常駐通知の
     「タッチ透過を解除」で行い、ヘッダーに「タッチ透過中」と出す。透過モードは保存しない（起動ごとに解除状態から始める）。
+  - 最小化（F-OVL-04）: ヘッダーの最小化ボタンで 48dp の丸いバブル（`ui/Bubble.kt`）にする。タップで復帰、ドラッグで移動。
+    バブルは通常表示の左上に出し、バブル自身の大きさで画面内へ収める（移動は通常表示の位置にも反映し、復帰時に収め直す）。
+    縁の色で同期状態を示し（同期中・ライブは緑）、不透明度には下限 0.7 を置く。最小化状態は保存しない。
   - 設定パネル（`ui/SettingsPanel.kt`）: 不透明度・文字サイズ・表示遅延（LIVE の時だけ）・タッチ透過。
   - チャットの文字サイズは倍率 0.8〜1.5（0.1 刻み、既定 1.0＝中）。設定パネルのスライダーで変え、`fontScale` に保存する。
     チャット欄だけ `LocalDensity` の `fontScale` に倍率を掛けて反映する（各 `Text` の sp は変えない。F-VIEW-01 の文字サイズ）。

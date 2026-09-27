@@ -14,21 +14,44 @@ internal class WindowPlacement(
     private val screen: () -> Pair<Int, Int>,
     private val density: () -> Float,
 ) {
+    /** 通常表示の位置と大きさ（最小化中も保持し、復帰時に使う） */
     var bounds = WindowBounds(0, 0, 0, 0)
         private set
     private var orientation = ScreenOrientation.PORTRAIT
 
+    /**
+     * 最小化（バブル）中か（F-OVL-04）。バブルは通常表示の左上の位置に出し、バブルの移動は通常表示の位置にも反映する。
+     * 復帰時は通常表示の大きさで画面内へ収め直す。
+     */
+    var minimized: Boolean = false
+        set(value) {
+            field = value
+            if (!value) bounds = clamp(bounds)
+        }
+
+    /** 現在ウィンドウに適用する位置と大きさ（最小化中はバブルの大きさ）。 */
+    val current: WindowBounds
+        get() = if (minimized) bounds.copy(width = dp(BUBBLE_DP), height = dp(BUBBLE_DP)) else bounds
+
     /** 現在の向きの保存値を読み込む。 */
     fun load() {
         orientation = currentOrientation()
-        bounds = clamp(saved())
+        bounds = if (minimized) saved() else clamp(saved())
     }
 
     fun moveBy(
         dx: Float,
         dy: Float,
     ) {
-        bounds = clamp(bounds.copy(x = bounds.x + dx.toInt(), y = bounds.y + dy.toInt()))
+        if (minimized) {
+            // バブルは自身の大きさで画面内へ収め、通常表示の位置だけを動かす（大きさは保持する）
+            val (width, height) = screen()
+            val bubble = current.copy(x = bounds.x + dx.toInt(), y = bounds.y + dy.toInt())
+            val moved = bubble.clampTo(width, height, bubble.width, bubble.height)
+            bounds = bounds.copy(x = moved.x, y = moved.y)
+        } else {
+            bounds = clamp(bounds.copy(x = bounds.x + dx.toInt(), y = bounds.y + dy.toInt()))
+        }
     }
 
     fun resizeBy(
@@ -66,5 +89,6 @@ internal class WindowPlacement(
         const val DEFAULT_WIDTH_DP = 280
         const val DEFAULT_HEIGHT_DP = 360
         const val MIN_SIZE_DP = 160
+        const val BUBBLE_DP = 48
     }
 }
