@@ -4,6 +4,8 @@
 
 ## 2026-09-28
 
+- リポジトリの公開（public 化）に向けた点検の指摘を `docs/records/managed/BACKLOG.md` へ登録した（BL-066〜BL-070。
+  検証端末のシリアル番号・CODEOWNERS のプレースホルダ・README の問い合わせ窓口・公開の操作・履歴に残るシリアルの扱い。自律ループ第1イテレーション）。
 - `docs/records/managed/BACKLOG.md` へ、v1.0.0 の GitHub Releases 公開をドキュメントへ反映するタスク（BL-064）と、
   Releases の公開を誰が行うかの規定の見直し（BL-065。要確認）を登録した（自律ループ第1イテレーション）。
 - v1.0.0 の GitHub Release 作成を `README.md` の状態表・DESIGN・BACKLOG（BL-058 を残りの確認へ絞った）・`site/app.json`・`docs/RELEASE.md` 6章へ反映した（BL-064）。
