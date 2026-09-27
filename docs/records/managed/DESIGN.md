@@ -18,7 +18,7 @@
 - 対象: Android アプリ（applicationId `io.github.filderschoice.romcha`、ライセンス MIT）
 - 前提環境: minSdk 34 / targetSdk 36 / compileSdk 36、JDK 17、Gradle 8.13、AGP 8.13.0、Kotlin 2.0.21
 - 動作確認端末: Pixel 8 Pro（実機確認は人手検証。手順と最新の結果は `docs/VERIFICATION.md`）。MediaSession の取得（Q-01。Premium 有り／無し）、
-  リプレイ同期（N-02）、ライブ・プレミアの最新追従は確認済み。ライブ終了後のリプレイ切り替えは未確認
+  リプレイ同期（N-02）、ライブ・プレミアの最新追従、M3・M4 と BL-034〜BL-051 の表示・操作は確認済み。ライブ終了後のリプレイ切り替えは未確認
 
 ## 実装済み機能要件
 
