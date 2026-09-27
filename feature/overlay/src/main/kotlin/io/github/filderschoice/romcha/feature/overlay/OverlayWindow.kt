@@ -65,7 +65,10 @@ internal class OverlayWindow<T>(
                     0,
                     0,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                    // 画面外へのはみ出し（BL-050）を許すため FLAG_LAYOUT_NO_LIMITS を付ける。位置は WindowPlacement が制御する
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     PixelFormat.TRANSLUCENT,
                 ).apply { gravity = Gravity.TOP or Gravity.START }
         val composeView =
@@ -102,8 +105,8 @@ internal class OverlayWindow<T>(
         updateLayout()
     }
 
-    /** 移動・サイズ変更の操作の終わり。位置を保存し、画面端を越えて押し込んで離した場合は退避する向きを返す */
-    fun endGesture(): StashSide? = placement.endGesture()
+    /** 移動・サイズ変更の操作の終わり。位置を保存し、画面の外へ十分はみ出して離した場合は退避する向きを返す（はみ出しが少なければ画面内へ戻す） */
+    fun endGesture(): StashSide? = placement.endGesture().also { updateLayout() }
 
     /** 画面の向きが変わったら、その向きで記憶していた位置と大きさへ切り替える（F-OVL-06） */
     fun onConfigurationChanged() {

@@ -22,11 +22,45 @@ sealed interface WindowMode {
 
 /** 画面端への退避と復帰の判定（BL-049。Android 非依存）。 */
 object StashRule {
+    private const val THRESHOLD_DIVISOR = 3
+
+    /**
+     * ドラッグ中の横位置。画面の左右の外へのはみ出しを許し（指に付いて動かす）、画面内に [keepVisible] だけは残す
+     * （指がヘッダーから外れて操作を失わないため）。
+     */
+    fun dragX(
+        x: Int,
+        width: Int,
+        screenWidth: Int,
+        keepVisible: Int,
+    ): Int {
+        val keep = keepVisible.coerceAtMost(width)
+        return x.coerceIn(-(width - keep), screenWidth - keep)
+    }
+
+    /** 画面の左右の外へはみ出している量（px。左が負、右が正、はみ出していなければ 0）。 */
+    fun overshoot(
+        x: Int,
+        width: Int,
+        screenWidth: Int,
+    ): Int =
+        when {
+            x < 0 -> x
+            x + width > screenWidth -> x + width - screenWidth
+            else -> 0
+        }
+
+    /** 退避とみなすはみ出し量。ウィンドウ幅の 3 分の 1 と [minPx] の大きい方。 */
+    fun threshold(
+        width: Int,
+        minPx: Int,
+    ): Int = maxOf(minPx, width / THRESHOLD_DIVISOR)
+
     /**
      * ヘッダーのドラッグを離した時に退避する向き。退避しなければ null。
      *
-     * @param overshootX ウィンドウが画面端で止まった後も押し込んだ量（px。左が負、右が正）
-     * @param thresholdPx 退避とみなす押し込み量
+     * @param overshootX 画面の左右の外へはみ出している量（px。左が負、右が正）
+     * @param thresholdPx 退避とみなすはみ出し量
      */
     fun sideFor(
         overshootX: Int,

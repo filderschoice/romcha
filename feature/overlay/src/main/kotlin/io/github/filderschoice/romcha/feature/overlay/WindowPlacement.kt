@@ -19,9 +19,6 @@ internal class WindowPlacement(
         private set
     private var orientation = ScreenOrientation.PORTRAIT
 
-    /** 移動の操作中の、画面内へ収める前の横位置（画面端を越えた押し込み量を求める。操作の終わりで null に戻す） */
-    private var rawX: Int? = null
-
     /**
      * 表示状態。
      *
@@ -62,10 +59,11 @@ internal class WindowPlacement(
     ) {
         val (width, height) = screen()
         when (mode) {
+            // 通常表示は左右の画面外へのはみ出しを許す（BL-050。離した時に退避するか画面内へ戻す）。縦は画面内に収める
             WindowMode.Normal -> {
-                val x = (rawX ?: bounds.x) + dx.toInt()
-                rawX = x
-                bounds = clamp(bounds.copy(x = x, y = bounds.y + dy.toInt()))
+                val x = StashRule.dragX(bounds.x + dx.toInt(), bounds.width, width, dp(KEEP_VISIBLE_DP))
+                val y = clamp(bounds.copy(y = bounds.y + dy.toInt())).y
+                bounds = bounds.copy(x = x, y = y)
             }
             // バブル・つまみは自身の大きさで画面内へ収め、通常表示の位置だけを動かす（大きさは保持する）
             WindowMode.Minimized -> {
@@ -87,12 +85,21 @@ internal class WindowPlacement(
         bounds = clamp(bounds.copy(width = bounds.width + dx.toInt(), height = bounds.height + dy.toInt()))
     }
 
-    /** 操作の終わりに位置を保存し、画面端を越えて押し込んで離した場合は退避する向きを返す（BL-049）。 */
+    /**
+     * 操作の終わり。通常表示が画面の左右の外へ十分はみ出していれば退避する向きを返し（BL-049/050）、
+     * そうでなければ画面内へ戻す。位置を保存する。
+     */
     fun endGesture(): StashSide? {
+        val side =
+            if (mode == WindowMode.Normal) {
+                val overshoot = StashRule.overshoot(bounds.x, bounds.width, screen().first)
+                StashRule.sideFor(overshoot, StashRule.threshold(bounds.width, dp(STASH_MIN_DP)))
+            } else {
+                null
+            }
+        if (side == null && mode == WindowMode.Normal) bounds = clamp(bounds)
         prefs.saveBounds(orientation, bounds)
-        val overshoot = rawX?.let { it - bounds.x } ?: 0
-        rawX = null
-        return if (mode == WindowMode.Normal) StashRule.sideFor(overshoot, dp(STASH_THRESHOLD_DP)) else null
+        return side
     }
 
     /** 画面の向きが変わっていれば、その向きの保存値へ切り替えて true を返す。 */
@@ -128,7 +135,10 @@ internal class WindowPlacement(
         const val TAB_WIDTH_DP = 20
         const val TAB_HEIGHT_DP = 72
 
-        /** 画面端でさらにこれだけ押し込んで離したら退避する */
-        const val STASH_THRESHOLD_DP = 48
+        /** 退避とみなすはみ出し量の下限（ウィンドウ幅の 3 分の 1 の方が大きければそちら） */
+        const val STASH_MIN_DP = 48
+
+        /** ドラッグ中も画面内に残す幅 */
+        const val KEEP_VISIBLE_DP = 48
     }
 }

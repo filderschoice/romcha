@@ -19,6 +19,28 @@ class StashRuleTest {
     }
 
     @Test
+    fun ドラッグ中は画面外へはみ出せるが画面内に一定幅を残す() {
+        // 幅 600、画面幅 1080、残す幅 144
+        assertEquals(-456, StashRule.dragX(-900, 600, 1_080, 144))
+        assertEquals(936, StashRule.dragX(2_000, 600, 1_080, 144))
+        assertEquals(-200, StashRule.dragX(-200, 600, 1_080, 144))
+        assertEquals(300, StashRule.dragX(300, 600, 1_080, 144))
+    }
+
+    @Test
+    fun はみ出し量は左が負で右が正() {
+        assertEquals(-200, StashRule.overshoot(-200, 600, 1_080))
+        assertEquals(170, StashRule.overshoot(650, 600, 1_080))
+        assertEquals(0, StashRule.overshoot(100, 600, 1_080))
+    }
+
+    @Test
+    fun 退避の閾値はウィンドウ幅の3分の1と下限の大きい方() {
+        assertEquals(200, StashRule.threshold(600, 144))
+        assertEquals(144, StashRule.threshold(300, 144))
+    }
+
+    @Test
     fun つまみを内側へスワイプしたら復帰する() {
         assertTrue(StashRule.shouldRestore(StashSide.LEFT, dragX = 80f, thresholdPx = 72f))
         assertFalse(StashRule.shouldRestore(StashSide.LEFT, dragX = -80f, thresholdPx = 72f))

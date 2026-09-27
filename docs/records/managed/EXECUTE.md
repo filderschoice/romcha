@@ -6,6 +6,31 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 18:11
+  summary: 退避のドラッグでウィンドウを画面の左右の外へも運べるようにした
+  details:
+    変更内容: >-
+      実機確認で、外へ押し出すドラッグが画面幅で止まり退避している感じがしないとの指摘を受けた。
+      ウィンドウに FLAG_LAYOUT_NO_LIMITS を付け、ヘッダーのドラッグ中は画面の左右の外へのはみ出しを許すようにした
+      （画面内に 48dp は残す。縦は従来どおり画面内に収める）。離した時に「48dp とウィンドウ幅の 3 分の 1 の大きい方」以上
+      はみ出していればその側へ退避し、そうでなければ画面内へ戻す。
+      従来の「画面端で止まった後の押し込み量」による判定（移動中の未収め位置の保持）はやめ、はみ出し量で判定する
+      （StashRule.dragX・overshoot・threshold を追加し単体テストを追加）。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowMode.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/StashRuleTest.kt
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での操作感は BL-048（F15）で確認する
+    関連ID:
+      - BL-050
 - date: 2026-09-27 17:13
   summary: フローティングウィンドウを画面の左右の外へスワイプして退避し、つまみから復帰できるようにした
   details:
