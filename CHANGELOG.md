@@ -6,6 +6,8 @@
 
 - `docs/records/managed/BACKLOG.md` へ、v1.0.0 の GitHub Releases 公開をドキュメントへ反映するタスク（BL-064）と、
   Releases の公開を誰が行うかの規定の見直し（BL-065。要確認）を登録した（自律ループ第1イテレーション）。
+- v1.0.0 の GitHub Release 作成を `README.md` の状態表・DESIGN・BACKLOG（BL-058 を残りの確認へ絞った）・`site/app.json`・`docs/RELEASE.md` 6章へ反映した（BL-064）。
+  リポジトリが非公開の間は「更新を確認」が「公開されている版はまだありません。」になること（API が 404 を返す）を記載した。
 
 ## 2026-09-27
 
