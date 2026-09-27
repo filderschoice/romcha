@@ -344,6 +344,19 @@
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
 - `feature:overlay` は画像読み込みに Coil 2.7.0（`io.coil-kt:coil-compose`）を使う。既定の `ImageLoader`（シングルトン）で足りるため設定しない。
 
+### アプリ紹介ポートフォリオ（`site/`）
+
+- 静的な 1 ページ（`index.html`・`style.css`・`assets/*.svg`）。ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
+  リンクは相対パスで、公開先を選ばない（公開方法は未定で、リポジトリ内に置くだけ。2026-09-27 ユーザー判断）。
+- 構成: ヘッダー（ページ内ナビ）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
+  仕組みの図 → 使い方の手順 → プライバシーと免責 → 入手（仕様表）→ フッター。
+- 他アプリのテンプレートを兼ねる: 差し替え箇所に `TEMPLATE:` のコメント、アプリごとの色は `style.css` の `:root` の
+  `--accent`・`--accent-strong`・`--accent-soft`（ライト・ダーク）だけ。ライト／ダークは `prefers-color-scheme`、760px 以下で 1 列。
+- 将来の repo 横断の一覧ページ向けに、概要を `site/app.json`（`schema: app-portfolio.v1`。キーは `site/README.md`）に置く。
+- 画像は SVG の図解（アイコンはランチャーアイコンと同じ意匠）。図解であることを `alt` に書く。実機のスクリーンショットは
+  第三者の情報が写るため人が撮影・選定して差し替える（BL-061）。
+- 機能・版・動作環境を変えたら、README とあわせて `index.html`・`app.json` も更新する。
+
 ## 非機能要件
 
 - PLAN.md 3章（N-01〜N-11）に従う。

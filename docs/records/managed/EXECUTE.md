@@ -6,6 +6,36 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 23:00
+  summary: アプリ紹介ポートフォリオ（site/）を追加した
+  details:
+    変更内容: >-
+      ユーザー指示により、Romcha を紹介する静的な 1 ページを site/ に追加した（HTML と CSS のみ。JavaScript・外部フォント・
+      外部 CDN を読み込まない）。機能・仕組み・使い方・プライバシーと免責・入手を載せ、画像は SVG の図解（アイコン・画面イメージ・
+      構成図）で用意した。他アプリのテンプレートを兼ね、差し替え箇所に TEMPLATE コメントを付け、アプリごとの色を CSS 変数 3 つに
+      集約した。repo 横断の一覧ページ向けに概要を site/app.json（app-portfolio.v1）に置き、使い方とキーを site/README.md に記載した。
+      README からのリンクと DESIGN の設計を追加した。公開方法は未定（リポジトリ内に置くだけ）。
+    変更ファイル:
+      - site/index.html
+      - site/style.css
+      - site/app.json
+      - site/README.md
+      - site/assets/icon.svg
+      - site/assets/screen.svg
+      - site/assets/how-it-works.svg
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      Edge のヘッドレス表示によるスクリーンショット（1280px 幅のダーク・ライト、390px 幅の iframe）、
+      python による app.json の JSON 検証、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - ライト・ダークとも表示が崩れず、390px 幅で 1 列になり横にはみ出さないことを確認した。
+      品質ゲートは終了コード0。実機のスクリーンショットへの差し替えと公開方法の決定は BL-061 で人が行う
+    関連ID:
+      - BL-060
 - date: 2026-09-27 22:05
   summary: v1.0.0 リリースの準備（版の更新、README のインストール手順、リリース手順書）
   details:
