@@ -23,6 +23,9 @@ interface OverlayActions {
     /** ライブ・プレミア中の表示遅延（秒）を変えた（F-SYNC-08） */
     fun onLiveDelayChange(seconds: Int)
 
+    /** タッチ透過モードに入る（解除は常駐通知から。F-OVL-05） */
+    fun onTouchThrough()
+
     fun onHide()
 
     fun onCandidateSelected(videoId: String)

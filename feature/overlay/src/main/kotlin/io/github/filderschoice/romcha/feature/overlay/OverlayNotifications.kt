@@ -11,7 +11,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-/** 常駐通知（F-OVL-08）。表示／非表示の切り替えと終了の操作を付け、本文のタップでアプリを開く。 */
+/**
+ * 常駐通知（F-OVL-08）。表示／非表示の切り替えと終了の操作を付け、本文のタップでアプリを開く。
+ *
+ * タッチ透過モード中（F-OVL-05）はウィンドウを操作できないため、解除の操作も付ける。
+ */
 internal class OverlayNotifications(
     private val context: Context,
     private val service: Class<out Service>,
@@ -19,6 +23,7 @@ internal class OverlayNotifications(
     fun build(
         visible: Boolean,
         title: String?,
+        touchThrough: Boolean = false,
     ): Notification {
         val manager = context.getSystemService(NotificationManager::class.java)
         if (manager.getNotificationChannel(CHANNEL_ID) == null) {
@@ -34,7 +39,10 @@ internal class OverlayNotifications(
                 .setContentText(title ?: context.getString(R.string.overlay_title_placeholder))
                 .setOngoing(true)
                 .addAction(action(context.getString(toggleLabel), ACTION_TOGGLE))
-                .addAction(action(context.getString(R.string.overlay_action_stop), ACTION_STOP))
+        if (touchThrough) {
+            builder.addAction(action(context.getString(R.string.overlay_action_release_touch), ACTION_RELEASE_TOUCH))
+        }
+        builder.addAction(action(context.getString(R.string.overlay_action_stop), ACTION_STOP))
         context.packageManager.getLaunchIntentForPackage(context.packageName)?.let {
             builder.setContentIntent(PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_IMMUTABLE))
         }
@@ -59,6 +67,7 @@ internal class OverlayNotifications(
         const val NOTIFICATION_ID = 1
         const val ACTION_TOGGLE = "io.github.filderschoice.romcha.overlay.TOGGLE"
         const val ACTION_STOP = "io.github.filderschoice.romcha.overlay.STOP"
+        const val ACTION_RELEASE_TOUCH = "io.github.filderschoice.romcha.overlay.RELEASE_TOUCH"
         private const val CHANNEL_ID = "overlay"
 
         /**

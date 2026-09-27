@@ -6,6 +6,34 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:07
+  summary: タッチ透過モードを追加し、解除を常駐通知から行えるようにした
+  details:
+    変更内容: >-
+      設定パネルに「タッチ透過にする」を追加した。透過中はウィンドウに FLAG_NOT_TOUCHABLE を付け、他アプリのオーバーレイ越しの
+      タッチが遮断されないようウィンドウの不透明度（LayoutParams.alpha）を 0.8 に下げる（PLAN 4.6）。
+      透過中はウィンドウを触れないため、常駐通知に「タッチ透過を解除」の操作を追加し、ヘッダーに「タッチ透過中」と表示する。
+      透過モードは保存せず、サービスの起動ごとに解除した状態から始める。
+      detekt の関数数上限に達したため、位置と大きさの計算を WindowPlacement へ、設定パネルの部品を ui/SettingsPanel.kt へ切り出した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayNotifications.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、切り出しで解消）。
+      下のアプリを実際に操作できるかは BL-048 で確認する
+    関連ID:
+      - BL-037
 - date: 2026-09-27 15:03
   summary: フローティングウィンドウの位置・大きさを画面の縦横それぞれで記憶
   details:

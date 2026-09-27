@@ -11,49 +11,58 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 
 /**
- * フローティングウィンドウ本体（`TYPE_APPLICATION_OVERLAY`）の追加・削除と、位置・大きさの管理（F-OVL-01/02/06）。
+ * フローティングウィンドウ本体（`TYPE_APPLICATION_OVERLAY`）の追加・削除と、`LayoutParams` の反映（F-OVL-01/02/05/06）。
  *
- * 位置と大きさは画面の向きごとに [OverlayPrefs] へ保存し、向きが変わったらその向きの値へ切り替える。
+ * 位置と大きさの計算・保存は [WindowPlacement] に任せる。
  */
 internal class OverlayWindow<T>(
     private val owner: T,
-    private val prefs: OverlayPrefs,
+    prefs: OverlayPrefs,
 ) where T : LifecycleService, T : SavedStateRegistryOwner {
     private val windowManager = owner.getSystemService(WindowManager::class.java)
-    private val density get() = owner.resources.displayMetrics.density
+    private val placement =
+        WindowPlacement(
+            prefs = prefs,
+            screen = { windowManager.currentWindowMetrics.bounds.let { it.width() to it.height() } },
+            density = { owner.resources.displayMetrics.density },
+        )
     private var view: ComposeView? = null
     private var params: WindowManager.LayoutParams? = null
-    private var bounds = WindowBounds(0, 0, 0, 0)
-    private var orientation = ScreenOrientation.PORTRAIT
 
-    val isShown: Boolean get() = view != null
+    /**
+     * タッチ透過モード（F-OVL-05）。`FLAG_NOT_TOUCHABLE` で下のアプリへタッチを通す。
+     *
+     * 他アプリのオーバーレイ越しのタッチは、ウィンドウの不透明度が [TOUCH_THROUGH_MAX_ALPHA] を超えると OS に遮断されるため、
+     * 透過モード中はウィンドウ全体の不透明度をその値に下げる（PLAN 4.6）。
+     */
+    var touchThrough: Boolean = false
+        set(value) {
+            field = value
+            updateLayout()
+        }
 
     fun show(content: @Composable () -> Unit) {
         if (view != null) return
-        orientation = currentOrientation()
-        bounds = clamp(savedBounds())
+        placement.load()
         val layoutParams =
             WindowManager
                 .LayoutParams(
-                    bounds.width,
-                    bounds.height,
+                    0,
+                    0,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                     PixelFormat.TRANSLUCENT,
-                ).apply {
-                    gravity = Gravity.TOP or Gravity.START
-                    x = bounds.x
-                    y = bounds.y
-                }
+                ).apply { gravity = Gravity.TOP or Gravity.START }
         val composeView =
             ComposeView(owner).apply {
                 setViewTreeLifecycleOwner(owner)
                 setViewTreeSavedStateRegistryOwner(owner)
                 setContent(content)
             }
+        params = layoutParams
+        fill(layoutParams)
         windowManager.addView(composeView, layoutParams)
         view = composeView
-        params = layoutParams
     }
 
     fun hide() {
@@ -65,51 +74,49 @@ internal class OverlayWindow<T>(
     fun moveBy(
         dx: Float,
         dy: Float,
-    ) = apply(bounds.copy(x = bounds.x + dx.toInt(), y = bounds.y + dy.toInt()))
+    ) {
+        placement.moveBy(dx, dy)
+        updateLayout()
+    }
 
     fun resizeBy(
         dx: Float,
         dy: Float,
-    ) = apply(bounds.copy(width = bounds.width + dx.toInt(), height = bounds.height + dy.toInt()))
+    ) {
+        placement.resizeBy(dx, dy)
+        updateLayout()
+    }
 
-    fun saveBounds() = prefs.saveBounds(orientation, bounds)
+    fun saveBounds() = placement.save()
 
     /** 画面の向きが変わったら、その向きで記憶していた位置と大きさへ切り替える（F-OVL-06） */
     fun onConfigurationChanged() {
-        if (view == null) return
-        val next = currentOrientation()
-        if (next == orientation) return
-        orientation = next
-        apply(savedBounds())
+        if (view != null && placement.onConfigurationChanged()) updateLayout()
     }
 
-    private fun currentOrientation(): ScreenOrientation {
-        val metrics = windowManager.currentWindowMetrics.bounds
-        return ScreenOrientation.of(metrics.width(), metrics.height())
-    }
-
-    private fun savedBounds(): WindowBounds =
-        prefs.bounds(orientation, (DEFAULT_WIDTH_DP * density).toInt(), (DEFAULT_HEIGHT_DP * density).toInt())
-
-    private fun clamp(next: WindowBounds): WindowBounds {
-        val metrics = windowManager.currentWindowMetrics.bounds
-        val minSize = (MIN_SIZE_DP * density).toInt()
-        return next.clampTo(metrics.width(), metrics.height(), minSize, minSize)
-    }
-
-    private fun apply(next: WindowBounds) {
-        bounds = clamp(next)
+    private fun updateLayout() {
         val layoutParams = params ?: return
+        fill(layoutParams)
+        view?.let { windowManager.updateViewLayout(it, layoutParams) }
+    }
+
+    private fun fill(layoutParams: WindowManager.LayoutParams) {
+        val bounds = placement.bounds
         layoutParams.x = bounds.x
         layoutParams.y = bounds.y
         layoutParams.width = bounds.width
         layoutParams.height = bounds.height
-        view?.let { windowManager.updateViewLayout(it, layoutParams) }
+        layoutParams.flags =
+            if (touchThrough) {
+                layoutParams.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            } else {
+                layoutParams.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
+            }
+        layoutParams.alpha = if (touchThrough) TOUCH_THROUGH_MAX_ALPHA else 1f
     }
 
-    private companion object {
-        const val DEFAULT_WIDTH_DP = 280
-        const val DEFAULT_HEIGHT_DP = 360
-        const val MIN_SIZE_DP = 160
+    companion object {
+        /** タッチを下のアプリへ通せるウィンドウの不透明度の上限（Android 12 以降の制約） */
+        const val TOUCH_THROUGH_MAX_ALPHA = 0.8f
     }
 }

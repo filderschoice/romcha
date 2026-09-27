@@ -13,6 +13,7 @@ import android.provider.Settings
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +51,7 @@ class OverlayService :
     private val opacity = mutableFloatStateOf(OverlayPrefs.DEFAULT_OPACITY)
     private val fontScale = mutableFloatStateOf(OverlayFormat.DEFAULT_FONT_SCALE)
     private val liveDelaySeconds = MutableStateFlow(LiveTimeline.DEFAULT_DELAY_SECONDS)
+    private val touchThrough = mutableStateOf(false)
     private var visible = true
     private val screenOn = MutableStateFlow(true)
     private lateinit var monitor: PlaybackMonitor
@@ -126,11 +128,12 @@ class OverlayService :
         monitor.start()
         startForeground(
             NOTIFICATION_ID,
-            notifications.build(visible, OverlayChannel.state.value.title),
+            notifications.build(visible, OverlayChannel.state.value.title, touchThrough.value),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE,
         )
         when (intent?.action) {
             ACTION_TOGGLE -> setVisible(!visible)
+            ACTION_RELEASE_TOUCH -> setTouchThrough(false)
             ACTION_STOP -> {
                 OverlayChannel.send(OverlayEvent.StopRequested)
                 stopSelf()
@@ -159,7 +162,13 @@ class OverlayService :
     private fun updateNotification() {
         getSystemService(
             NotificationManager::class.java,
-        ).notify(NOTIFICATION_ID, notifications.build(visible, OverlayChannel.state.value.title))
+        ).notify(NOTIFICATION_ID, notifications.build(visible, OverlayChannel.state.value.title, touchThrough.value))
+    }
+
+    private fun setTouchThrough(on: Boolean) {
+        touchThrough.value = on
+        window.touchThrough = on
+        updateNotification()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -175,6 +184,7 @@ class OverlayService :
                 state = state,
                 opacity = opacity.floatValue,
                 fontScale = fontScale.floatValue,
+                touchThrough = touchThrough.value,
                 liveDelaySeconds = delay,
                 actions = actions,
             )
@@ -211,6 +221,8 @@ class OverlayService :
                 fontScale.floatValue = OverlayFormat.clampFontScale(scale)
             }
 
+            override fun onTouchThrough() = setTouchThrough(true)
+
             override fun onHide() = setVisible(false)
 
             override fun onCandidateSelected(videoId: String) {
@@ -222,6 +234,7 @@ class OverlayService :
         private const val NOTIFICATION_ID = OverlayNotifications.NOTIFICATION_ID
         private const val ACTION_TOGGLE = OverlayNotifications.ACTION_TOGGLE
         private const val ACTION_STOP = OverlayNotifications.ACTION_STOP
+        private const val ACTION_RELEASE_TOUCH = OverlayNotifications.ACTION_RELEASE_TOUCH
 
         /** オーバーレイを表示する（アプリが前面にある時に呼ぶ）。オーバーレイ権限が無い場合は false。 */
         fun start(context: Context): Boolean {

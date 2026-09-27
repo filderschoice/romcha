@@ -28,7 +28,7 @@
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
 - F-VID-01/02: 動画の自動特定パイプライン手順1〜4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
-- F-OVL-01/02/03/06/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
+- F-OVL-01/02/03/05/06/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
 - F-SYNC-08: ライブ・プレミア中の最新追従表示と表示遅延の設定（`core:sync` の `LiveTimeline`、オーバーレイの設定パネル）
@@ -203,11 +203,16 @@
     購読し、変わったときだけ通知を出し直す（BL-033。状態は表示の更新ごとに発行されるため、同じタイトルでは出し直さない）。
   - ウィンドウの位置・大きさ・不透明度・文字サイズは SharedPreferences `overlay` に保存し、表示時に画面内へ収める（`WindowBounds.clampTo`）。
     既定 280×360dp、最小 160dp。ヘッダーのドラッグで移動、右下のハンドルのドラッグでサイズ変更（F-OVL-02）。
-  - ウィンドウの追加・削除と位置・大きさの管理は `OverlayWindow` に置く。位置・大きさは画面の向き（`ScreenOrientation`。
+  - ウィンドウの追加・削除と `LayoutParams` の反映は `OverlayWindow`、位置・大きさの計算と保存は `WindowPlacement` に置く。
+    位置・大きさは画面の向き（`ScreenOrientation`。
     幅＞高さで横）ごとに保存し、縦は従来のキー、横は `landscape.` を前置したキーを使う。`onConfigurationChanged` で向きの変化を
     検知したら、その向きの保存値へ切り替える（F-OVL-06）。
   - 不透明度は 0.2〜1.0（既定 0.6）。ヘッダーの設定ボタンでスライダーを出す（F-OVL-03）。
     ヘッダー（ドラッグ領域）は青みの灰色 #37474F、チャット欄は黒で塗り分け、不透明度は両方の背景に同じ値を掛ける（BL-035）。
+  - タッチ透過モード（F-OVL-05）: 設定パネルから入り、`FLAG_NOT_TOUCHABLE` を付けてウィンドウの `LayoutParams.alpha` を 0.8 に
+    下げる（0.8 を超える他アプリのオーバーレイ越しのタッチは OS に遮断される）。透過中はウィンドウを触れないため、解除は常駐通知の
+    「タッチ透過を解除」で行い、ヘッダーに「タッチ透過中」と出す。透過モードは保存しない（起動ごとに解除状態から始める）。
+  - 設定パネル（`ui/SettingsPanel.kt`）: 不透明度・文字サイズ・表示遅延（LIVE の時だけ）・タッチ透過。
   - チャットの文字サイズは倍率 0.8〜1.5（0.1 刻み、既定 1.0＝中）。設定パネルのスライダーで変え、`fontScale` に保存する。
     チャット欄だけ `LocalDensity` の `fontScale` に倍率を掛けて反映する（各 `Text` の sp は変えない。F-VIEW-01 の文字サイズ）。
 - 表示内容の受け渡し: プロセス内オブジェクト `OverlayChannel` の `state: StateFlow<OverlayUiState>`（タイトル・メッセージ・

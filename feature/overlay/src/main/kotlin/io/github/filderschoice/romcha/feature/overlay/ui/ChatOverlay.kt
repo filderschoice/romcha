@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Slider
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,14 +46,12 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
-import io.github.filderschoice.romcha.core.sync.LiveTimeline
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.R
 import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
-import kotlin.math.roundToInt
 
 internal val OverlayTextColor = Color(0xFFF5F5F5)
 internal val SubTextColor = Color(0xFFB0BEC5)
@@ -69,6 +66,7 @@ fun ChatOverlay(
     state: OverlayUiState,
     opacity: Float,
     fontScale: Float,
+    touchThrough: Boolean,
     liveDelaySeconds: Int,
     actions: OverlayActions,
 ) {
@@ -76,12 +74,20 @@ fun ChatOverlay(
     // 不透明度はヘッダーとチャット欄の両方に掛ける（F-OVL-03）。色味だけを変えてドラッグできる範囲を見分けやすくする
     val alpha = OverlayFormat.clampOpacity(opacity)
     Column(modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp))) {
-        Header(state, alpha, actions, onToggleSettings = { showSettings = !showSettings })
+        Header(state, alpha, touchThrough, actions, onToggleSettings = { showSettings = !showSettings })
         Column(modifier = Modifier.weight(1f).fillMaxWidth().background(ChatBackgroundColor.copy(alpha = alpha))) {
             if (showSettings) {
-                OpacitySlider(opacity, actions)
-                FontScaleSlider(fontScale, actions)
-                if (state.indicator == SyncIndicator.LIVE) LiveDelaySlider(liveDelaySeconds, actions)
+                SettingsPanel(
+                    live = state.indicator == SyncIndicator.LIVE,
+                    opacity = opacity,
+                    fontScale = fontScale,
+                    liveDelaySeconds = liveDelaySeconds,
+                    actions = actions,
+                    onTouchThrough = {
+                        showSettings = false
+                        actions.onTouchThrough()
+                    },
+                )
             }
             state.notice?.let { Notice(it) }
             if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
@@ -97,6 +103,7 @@ fun ChatOverlay(
 private fun Header(
     state: OverlayUiState,
     alpha: Float,
+    touchThrough: Boolean,
     actions: OverlayActions,
     onToggleSettings: () -> Unit,
 ) {
@@ -121,8 +128,9 @@ private fun Header(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+            val status = "${OverlayFormat.indicatorLabel(state.indicator)}  ${OverlayFormat.position(state.positionMs)}"
             Text(
-                text = "${OverlayFormat.indicatorLabel(state.indicator)}  ${OverlayFormat.position(state.positionMs)}",
+                text = if (touchThrough) "$status  ${stringResource(R.string.overlay_touch_through_on)}" else status,
                 color = SubTextColor,
                 fontSize = 10.sp,
             )
@@ -133,69 +141,6 @@ private fun Header(
         IconButton(onClick = actions::onHide, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Default.Close, stringResource(R.string.overlay_hide), tint = SubTextColor)
         }
-    }
-}
-
-@Composable
-private fun OpacitySlider(
-    opacity: Float,
-    actions: OverlayActions,
-) {
-    Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = stringResource(R.string.overlay_opacity, OverlayFormat.opacityPercent(opacity)),
-            color = SubTextColor,
-            fontSize = 11.sp,
-        )
-        Slider(
-            value = OverlayFormat.clampOpacity(opacity),
-            onValueChange = actions::onOpacityChange,
-            onValueChangeFinished = actions::onGestureEnd,
-            valueRange = OverlayFormat.MIN_OPACITY..1f,
-            modifier = Modifier.weight(1f).padding(start = 8.dp),
-        )
-    }
-}
-
-/** チャットの文字サイズ（F-VIEW-01）。100% が従来の大きさ。 */
-@Composable
-private fun FontScaleSlider(
-    scale: Float,
-    actions: OverlayActions,
-) {
-    Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = stringResource(R.string.overlay_font_scale, OverlayFormat.fontScalePercent(scale)),
-            color = SubTextColor,
-            fontSize = 11.sp,
-        )
-        Slider(
-            value = OverlayFormat.clampFontScale(scale),
-            onValueChange = actions::onFontScaleChange,
-            onValueChangeFinished = actions::onGestureEnd,
-            valueRange = OverlayFormat.MIN_FONT_SCALE..OverlayFormat.MAX_FONT_SCALE,
-            steps = OverlayFormat.FONT_SCALE_STEPS,
-            modifier = Modifier.weight(1f).padding(start = 8.dp),
-        )
-    }
-}
-
-/** ライブ・プレミア中の表示遅延（F-SYNC-08）。映像より先にチャットが流れる場合に遅らせる。 */
-@Composable
-private fun LiveDelaySlider(
-    seconds: Int,
-    actions: OverlayActions,
-) {
-    Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(stringResource(R.string.overlay_live_delay, seconds), color = SubTextColor, fontSize = 11.sp)
-        Slider(
-            value = seconds.toFloat(),
-            onValueChange = { actions.onLiveDelayChange(it.roundToInt()) },
-            onValueChangeFinished = actions::onGestureEnd,
-            valueRange = LiveTimeline.MIN_DELAY_SECONDS.toFloat()..LiveTimeline.MAX_DELAY_SECONDS.toFloat(),
-            steps = LiveTimeline.MAX_DELAY_SECONDS - LiveTimeline.MIN_DELAY_SECONDS - 1,
-            modifier = Modifier.weight(1f).padding(start = 8.dp),
-        )
     }
 }
 
