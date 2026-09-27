@@ -6,6 +6,27 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:40
+  summary: SyncEngine（位置推定・一時停止・シーク判定・速度追従・表示バッファ）を core:sync に実装
+  details:
+    変更内容: >-
+      F-SYNC-03/04/05 と PLAN 4.5 に基づき、PlaybackSnapshot・PositionEstimator・SeekDetector・SyncEngine を追加した。
+      SyncEngine は通信せず取得要求（FetchRequest）を返し、世代番号でシーク前の応答を破棄する。
+      開発機のメモリ不足でビルドが落ちたため gradle.properties のヒープと並列数を下げ、Kotlin コンパイラをデーモン内実行にした。
+      日本語のテスト名を許容するため、ktlint の関数命名規則をテストソースのみ無効化した。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/PlaybackSnapshot.kt
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/SeekDetector.kt
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/SyncEngine.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/SyncEngineTest.kt
+      - gradle.properties
+      - .editorconfig
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:sync の単体テスト 11 件成功
+    関連ID:
+      - BL-003
 - date: 2026-09-27 15:10
   summary: Android プロジェクトの雛形と静的解析（ktlint・detekt・Android lint）を導入
   details:

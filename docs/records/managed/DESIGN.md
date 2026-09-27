@@ -22,6 +22,7 @@
 ## 実装済み機能要件
 
 - プロジェクト雛形と品質ゲート（静的解析・型検査・単体テスト）
+- F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 
 ## 設計方針
 
@@ -38,6 +39,21 @@
 - 依存の向き: `app` → `feature:overlay` / `core:media` → `core:sync` → `core:chat`。
 - 依存バージョンは `gradle/libs.versions.toml` に集約する。
 
+### 同期エンジン（`core:sync`）
+
+- `PlaybackSnapshot`（状態・位置・位置の報告時刻・速度）を入力とし、
+  `推定位置 = position + (now - updatedAt) × speed`（再生中のみ加算）で現在位置を求める（`PositionEstimator`）。
+- `SeekDetector`: 前回推定位置＋経過時間×前回速度 を期待値とし、±2 秒を超えたらシーク。初回は false。
+- `SyncEngine<T>` はメッセージ型に依存しない（オフセットとキーの取り出し関数を受け取る）。通信はせず、
+  `tick()`（250ms 間隔）の戻り値 `SyncFrame.fetchRequest` で取得を要求し、結果を `onFetched` / `onFetchFailed` で受ける。
+  - 初回・シーク時: 表示をクリアし、`推定位置 - 30 秒` から `restart = true` で取り直す。世代番号を進め、古い世代の応答は捨てる。
+  - 先読み: 取得済み範囲の終端が `推定位置 + 60 秒` 未満なら続きを要求する。一時停止中は先読みしない（N-03）。
+    応答待ちの間は重ねて要求しない。`hasMore = false` で終端とみなし要求を止める。
+  - 表示: 未表示バッファ（オフセット昇順）から推定位置以下のものを表示へ移す。表示位置より前に遅れて届いたものは時刻順に差し込む。
+    キーで重複を除く。表示保持は既定 500 件で、超えたら古いものから捨てる（N-04）。
+  - `changed = false` の時は `visible` を空で返し、呼び出し側は前回表示を維持する（毎回のリストコピーを避ける）。
+  - スレッドセーフではない。単一のコルーチン（単一スレッド）から呼ぶ。
+
 ## 非機能要件
 
 - PLAN.md 3章（N-01〜N-11）に従う。
@@ -46,6 +62,9 @@
 
 ## 実装制約
 
+- ビルド環境のメモリ: 開発機（8GB）に合わせ `org.gradle.jvmargs=-Xmx2g`、`workers.max=2`、
+  Kotlin コンパイラは Gradle デーモン内で実行する（`kotlin.compiler.execution.strategy=in-process`）。
+- テスト名は日本語で振る舞いを書く。ktlint の関数命名規則はテストソースのみ無効化する（`.editorconfig`）。
 - 静的解析: ktlint（`ktlint_official`、`@Composable` 関数は命名規則の対象外）、detekt（既定設定＋`config/detekt/detekt.yml` の差分）、
   Android lint（`warningsAsErrors = true`。依存の新版警告のみ `lint.xml` で無効化）。
 - 署名鍵（`*.jks` / `*.keystore` / `keystore.properties`）は `.gitignore` で除外する。
