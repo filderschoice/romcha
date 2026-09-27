@@ -20,6 +20,7 @@
     <string name="url_label">YouTube の動画 URL</string>
     <string name="url_invalid">YouTube の動画 URL として読み取れません</string>
     <string name="url_open">開く</string>
+    <string name="url_paste">クリップボードから貼り付け</string>
     <string name="share_no_video">共有された内容に YouTube の動画 URL が見つかりません</string>
     <string name="diagnostics_show">診断情報を表示（公式アプリの再生情報）</string>
     <string name="diagnostics_hide">診断情報を隠す</string>

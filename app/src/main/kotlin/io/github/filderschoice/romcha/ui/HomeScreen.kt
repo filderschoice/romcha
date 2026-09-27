@@ -28,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -150,7 +151,11 @@ private fun OverlayControls(
     }
 }
 
-/** URL 手入力（F-VID-05）。自動特定できない場合の代替。 */
+/**
+ * URL 手入力（F-VID-05）。自動特定できない場合の代替。
+ *
+ * 「クリップボードから貼り付け」（F-VID-06）は押した時だけクリップボードを読む（開いただけでは読まない。プライバシーのため）。
+ */
 @Composable
 private fun UrlInput(
     enabled: Boolean,
@@ -163,6 +168,7 @@ private fun UrlInput(
         error = videoId == null
         if (videoId != null) onOpen(videoId)
     }
+    val clipboard = LocalClipboardManager.current
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.url_title), style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(
@@ -179,7 +185,17 @@ private fun UrlInput(
             keyboardActions = KeyboardActions(onGo = { submit() }),
             modifier = Modifier.fillMaxWidth(),
         )
-        Button(onClick = submit, enabled = enabled && text.isNotBlank()) { Text(stringResource(R.string.url_open)) }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = submit, enabled = enabled && text.isNotBlank()) { Text(stringResource(R.string.url_open)) }
+            OutlinedButton(onClick = {
+                clipboard.getText()?.text?.let {
+                    text = it.trim()
+                    error = VideoUrlParser.extractVideoId(text) == null
+                }
+            }) {
+                Text(stringResource(R.string.url_paste))
+            }
+        }
     }
 }
 

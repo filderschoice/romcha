@@ -6,6 +6,24 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 16:20
+  summary: URL 入力欄に「クリップボードから貼り付け」を追加（押した時だけクリップボードを読む）
+  details:
+    変更内容: >-
+      F-VID-06 の実現方法として、ユーザー回答（2026-09-27）により、アプリを開いた時の自動検出ではなく、URL 入力欄の
+      「クリップボードから貼り付け」ボタンを押した時だけクリップボードを読む方式にした（Android 12 以降の貼り付け通知が毎回出ることと、
+      無関係な内容を勝手に読まないため）。読んだ文字列を入力欄へ入れ、YouTube の動画 URL として読めなければ入力欄に誤りを表示する。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0
+    関連ID:
+      - BL-041
 - date: 2026-09-27 15:44
   summary: 表示設定に「上位のチャットのみ」を追加し、「すべてのチャット」との切り替えに対応
   details:
