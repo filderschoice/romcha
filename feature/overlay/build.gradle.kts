@@ -33,6 +33,7 @@ kotlin {
 
 dependencies {
     api(project(":core:sync"))
+    api(project(":core:media"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -44,4 +45,5 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

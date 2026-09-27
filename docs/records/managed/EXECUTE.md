@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 20:50
+  summary: 再生検出から動画特定・リプレイ取得・同期・オーバーレイ表示までをつなぐセッション統合を実装
+  details:
+    変更内容: >-
+      PLAN 4.1 と F-VID-02/03/04/05、N-03 に基づき、WatchCoordinator（再生中の動画の変化で再特定、手動指定の優先と指定中の自動特定抑止、
+      候補選択の記憶、チャット無効・ライブ中の表示、画面オフ中の取得停止）、ChatBackend、特定キャッシュを端末内に保存する
+      PersistentResolutionCache を追加し、OverlayService から PlaybackMonitor・画面オン／オフの監視とともに起動するようにした。
+      常駐通知の組み立てを OverlayNotifications に分け、core:chat の OkHttp 依存を api にした。統合の単体テスト 7 件を追加した。
+    変更ファイル:
+      - core/chat/build.gradle.kts
+      - feature/overlay/build.gradle.kts
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayNotifications.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatBackend.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinator.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/PersistentResolutionCache.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      ./gradlew :app:assembleDebug、npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、feature:overlay の単体テスト 14 件成功、デバッグ APK の生成を確認
+    関連ID:
+      - BL-012
 - date: 2026-09-27 19:55
   summary: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・診断表示）を app に実装
   details:

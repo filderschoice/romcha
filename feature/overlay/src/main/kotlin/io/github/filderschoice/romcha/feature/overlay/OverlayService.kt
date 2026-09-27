@@ -1,13 +1,14 @@
 package io.github.filderschoice.romcha.feature.overlay
 
-import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
+import android.os.PowerManager
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.Gravity
 import android.view.WindowManager
@@ -23,8 +24,16 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
+import io.github.filderschoice.romcha.core.media.PlaybackMonitor
+import io.github.filderschoice.romcha.feature.overlay.session.DeviceState
+import io.github.filderschoice.romcha.feature.overlay.session.InnerTubeBackend
+import io.github.filderschoice.romcha.feature.overlay.session.PersistentResolutionCache
+import io.github.filderschoice.romcha.feature.overlay.session.SessionIo
+import io.github.filderschoice.romcha.feature.overlay.session.WatchCoordinator
 import io.github.filderschoice.romcha.feature.overlay.ui.ChatOverlay
 import io.github.filderschoice.romcha.feature.overlay.ui.OverlayActions
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -41,11 +50,25 @@ class OverlayService :
 
     private lateinit var windowManager: WindowManager
     private lateinit var prefs: OverlayPrefs
+    private val notifications by lazy { OverlayNotifications(this, OverlayService::class.java) }
     private var view: ComposeView? = null
     private var params: WindowManager.LayoutParams? = null
     private var bounds = WindowBounds(0, 0, 0, 0)
     private val opacity = mutableFloatStateOf(OverlayPrefs.DEFAULT_OPACITY)
     private var visible = true
+    private val screenOn = MutableStateFlow(true)
+    private lateinit var monitor: PlaybackMonitor
+
+    /** 画面のオン・オフを受け、オフの間はチャットの取得を止める（N-03） */
+    private val screenReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent,
+            ) {
+                screenOn.value = intent.action == Intent.ACTION_SCREEN_ON
+            }
+        }
 
     override fun onCreate() {
         savedStateController.performAttach()
@@ -57,6 +80,32 @@ class OverlayService :
         lifecycleScope.launch {
             OverlayChannel.events.collect { if (it is OverlayEvent.StopRequested) stopSelf() }
         }
+        monitor = PlaybackMonitor(this)
+        monitor.start()
+        screenOn.value = getSystemService(PowerManager::class.java).isInteractive
+        val filter =
+            IntentFilter(Intent.ACTION_SCREEN_ON).apply { addAction(Intent.ACTION_SCREEN_OFF) }
+        ContextCompat.registerReceiver(this, screenReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+        lifecycleScope.launch { createCoordinator().run() }
+    }
+
+    private fun createCoordinator(): WatchCoordinator {
+        val backend = InnerTubeBackend()
+        val resolver = VideoResolver(search = { backend.search(it) }, cache = PersistentResolutionCache(this))
+        val io =
+            SessionIo(
+                requestedVideo = OverlayChannel.requestedVideo,
+                takeRequestedVideo = OverlayChannel::takeRequestedVideo,
+                events = OverlayChannel.events,
+                publish = OverlayChannel::publish,
+            )
+        return WatchCoordinator(
+            backend = backend,
+            resolver = resolver,
+            device = DeviceState(monitor.state, screenOn),
+            io = io,
+            clock = SystemClock::elapsedRealtime,
+        )
     }
 
     override fun onStartCommand(
@@ -65,7 +114,13 @@ class OverlayService :
         startId: Int,
     ): Int {
         super.onStartCommand(intent, flags, startId)
-        startForeground(NOTIFICATION_ID, buildNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        // 通知へのアクセスが後から許可された場合に備え、起動のたびに監視の開始を試みる（開始済みなら何もしない）
+        monitor.start()
+        startForeground(
+            NOTIFICATION_ID,
+            notifications.build(visible, OverlayChannel.state.value.title),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE,
+        )
         when (intent?.action) {
             ACTION_TOGGLE -> setVisible(!visible)
             ACTION_STOP -> {
@@ -80,6 +135,9 @@ class OverlayService :
 
     override fun onDestroy() {
         removeWindow()
+        unregisterReceiver(screenReceiver)
+        monitor.stop()
+        OverlayChannel.publish(OverlayUiState())
         super.onDestroy()
     }
 
@@ -87,7 +145,9 @@ class OverlayService :
         if (show && !Settings.canDrawOverlays(this)) return
         visible = show
         if (show) addWindow() else removeWindow()
-        getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, buildNotification())
+        getSystemService(
+            NotificationManager::class.java,
+        ).notify(NOTIFICATION_ID, notifications.build(visible, OverlayChannel.state.value.title))
     }
 
     private fun addWindow() {
@@ -170,51 +230,10 @@ class OverlayService :
             }
         }
 
-    private fun buildNotification(): Notification {
-        val manager = getSystemService(NotificationManager::class.java)
-        if (manager.getNotificationChannel(CHANNEL_ID) == null) {
-            val channel =
-                NotificationChannel(
-                    CHANNEL_ID,
-                    getString(R.string.overlay_channel_name),
-                    NotificationManager.IMPORTANCE_LOW,
-                )
-            manager.createNotificationChannel(channel)
-        }
-        val toggleLabel = if (visible) R.string.overlay_action_hide else R.string.overlay_action_show
-        val builder =
-            Notification
-                .Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_overlay_notification)
-                .setContentTitle(getString(R.string.overlay_notification_title))
-                .setContentText(OverlayChannel.state.value.title ?: getString(R.string.overlay_title_placeholder))
-                .setOngoing(true)
-                .addAction(action(getString(toggleLabel), ACTION_TOGGLE))
-                .addAction(action(getString(R.string.overlay_action_stop), ACTION_STOP))
-        packageManager.getLaunchIntentForPackage(packageName)?.let {
-            builder.setContentIntent(PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_IMMUTABLE))
-        }
-        return builder.build()
-    }
-
-    private fun action(
-        label: String,
-        action: String,
-    ): Notification.Action = Notification.Action.Builder(null, label, servicePendingIntent(action)).build()
-
-    private fun servicePendingIntent(action: String): PendingIntent =
-        PendingIntent.getService(
-            this,
-            action.hashCode(),
-            Intent(this, OverlayService::class.java).setAction(action),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
-        )
-
     companion object {
-        private const val CHANNEL_ID = "overlay"
-        private const val NOTIFICATION_ID = 1
-        private const val ACTION_TOGGLE = "io.github.filderschoice.romcha.overlay.TOGGLE"
-        private const val ACTION_STOP = "io.github.filderschoice.romcha.overlay.STOP"
+        private const val NOTIFICATION_ID = OverlayNotifications.NOTIFICATION_ID
+        private const val ACTION_TOGGLE = OverlayNotifications.ACTION_TOGGLE
+        private const val ACTION_STOP = OverlayNotifications.ACTION_STOP
         private const val DEFAULT_WIDTH_DP = 280
         private const val DEFAULT_HEIGHT_DP = 360
         private const val MIN_SIZE_DP = 160

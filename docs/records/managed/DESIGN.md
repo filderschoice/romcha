@@ -29,6 +29,7 @@
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
 - F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
+- F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session.WatchCoordinator`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
@@ -173,6 +174,31 @@
   MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
 - OSS ライセンス（F-APP-03）: AboutLibraries（Gradle プラグインがビルド時に依存一覧を生成し、`LibrariesContainer` で表示）。
 - 文言は日本語のみ（英語リソースは未対応。N-11 は SHOULD）。
+
+### セッション統合（`feature:overlay` の `session` パッケージ）
+
+- `OverlayService` が `onCreate` で `PlaybackMonitor` を開始し、`WatchCoordinator.run()` を `lifecycleScope`（メインスレッド）で動かす。
+  画面のオン・オフは `ACTION_SCREEN_ON/OFF` のレシーバー（`RECEIVER_NOT_EXPORTED`）と `PowerManager.isInteractive` で追う。
+  `onStartCommand` のたびに `PlaybackMonitor.start()` を試す（通知へのアクセスが後から許可された場合に備える）。
+  終了時はモニター・レシーバーを止め、表示内容を初期化する。
+- `WatchCoordinator(backend: ChatBackend, resolver, device: DeviceState(nowPlaying, screenOn), io: SessionIo, clock, timing)`:
+  入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに実行中の処理を取り消して
+  新しい処理を始める。
+  - 再生中の動画の変化（F-VID-03）: 識別キー（タイトル・チャンネル名・長さ）が変わったら `VideoResolver` で特定し直す。
+    再生を検出していなければ「公式アプリの再生を検出していません」。確定なら開く（他の候補は切り替え候補として表示）、
+    候補ありなら候補を表示、見つからなければ共有・URL 入力を案内、通信失敗なら失敗の説明。
+  - 手動指定（F-VID-04/05）: 最優先で開き、「指定中」とする。指定中は再生中の動画が変わるまで自動特定しない
+    （指定時に再生を検出していなければ、最初に検出した動画を指定した動画とみなす）。
+  - 候補の選択（F-VID-02）: `VideoResolver.remember` でキャッシュへ覚えてから開く。
+  - 動画を開く: `next` で情報を取り、チャット無効なら説明文（応答の文言、無ければ既定文。F-VID-07）、ライブ・プレミア中は
+    「未対応」（M2 で対応）、リプレイなら `ReplaySession` を「すべてのチャット」の continuation（無ければ上位チャット）で動かす。
+    既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を優先するため（切り替え F-CHAT-07 は M4）。
+  - 画面オフ（N-03）: `screenOn` が false の間は `ReplaySession` を止め「画面オフのため停止中」を表示、オンで作り直す。
+  - 表示: `ReplayState` から、メッセージ・位置・同期状態（再生中＝同期中、一時停止・バッファ中＝一時停止、MediaSession 無し＝未検出）・
+    お知らせ（再接続中 n 回目・失敗の説明・未検出）を `OverlayUiState` にして `io.publish` する。表示文は `SessionMessages` に集約。
+- `PersistentResolutionCache`: 特定のキャッシュを `filesDir/resolution-cache.json`（`[{identity, videoId}]`）へ `AtomicFile` で保存し、
+  起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。
+- `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
 
 ## 非機能要件
 

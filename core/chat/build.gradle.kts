@@ -10,7 +10,8 @@ kotlin {
 dependencies {
     api(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.okhttp)
+    // InnerTubeClient のコンストラクターが OkHttpClient / HttpUrl を受け取るため公開する
+    api(libs.okhttp)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
