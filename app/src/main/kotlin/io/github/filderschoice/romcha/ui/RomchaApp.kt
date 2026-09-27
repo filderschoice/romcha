@@ -38,6 +38,7 @@ private enum class Screen { HOME, DISPLAY, LICENSES }
 fun RomchaApp(
     status: PermissionStatus,
     nowPlaying: StateFlow<NowPlaying>,
+    update: UpdateUiModel,
     actions: HomeActions,
 ) {
     val context = LocalContext.current
@@ -56,6 +57,7 @@ fun RomchaApp(
                 HomeScreen(
                     status = status,
                     nowPlaying = nowPlaying,
+                    update = update,
                     actions = actions,
                     onOpenDisplaySettings = { screen = Screen.DISPLAY },
                     onOpenLicenses = { screen = Screen.LICENSES },

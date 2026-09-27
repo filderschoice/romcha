@@ -6,6 +6,40 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 21:45
+  summary: アプリ画面に更新の確認（F-APP-02）を追加した
+  details:
+    変更内容: >-
+      HOME に「アップデート」欄を追加し、「更新を確認」を押した時だけ GitHub Releases API（repos/filderschoice/romcha/releases/latest。
+      認証なし）へ問い合わせるようにした（起動時の自動確認はしない。ユーザー判断）。tag_name を SemVer（AppVersion）で読み、
+      現在の版より新しければ「ダウンロードページを開く」で固定のリリースページをブラウザーで開く（応答内の URL は開かない。
+      自動インストールはしない）。未公開（404）・HTTP エラー・通信断・形式違いはそれぞれ説明文を出す。
+      品質ゲートの単体テストに含めるため app モジュールの update パッケージに置き、app へ kotlinx-serialization-json と
+      テスト用の coroutines-test・mockwebserver を追加した。README の使い方・プライバシー（通信先）と DESIGN を更新した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/update/AppVersion.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/update/UpdateChecker.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/UpdateSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeActions.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/res/values/strings.xml
+      - app/src/test/kotlin/io/github/filderschoice/romcha/update/AppVersionTest.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/update/UpdateCheckerTest.kt
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（AppVersionTest 5 件・UpdateCheckerTest 8 件を含む。1〜2回目は detekt の
+      DestructuringDeclarationWithTooManyEntries・MagicNumber、3回目は ktlint の空行で失敗し、名前付きグループと ktlintFormat で解消）。
+      GitHub への実通信はしていない。実機での確認は BL-058 で行う
+    関連ID:
+      - BL-055
 - date: 2026-09-27 21:10
   summary: リリース署名の設定と配布物（romcha-vX.Y.Z.apk と SHA-256）の出力タスクを追加した
   details:

@@ -109,6 +109,10 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.compose.material3)
     implementation(libs.aboutlibraries.compose)
+    // 更新確認（F-APP-02）の応答の解析。OkHttp は core:chat から api 依存で受け取る
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.okhttp.mockwebserver)
 }

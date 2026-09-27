@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.StateFlow
 internal fun HomeScreen(
     status: PermissionStatus,
     nowPlaying: StateFlow<NowPlaying>,
+    update: UpdateUiModel,
     actions: HomeActions,
     onOpenDisplaySettings: () -> Unit,
     onOpenLicenses: () -> Unit,
@@ -62,6 +63,7 @@ internal fun HomeScreen(
             OverlayControls(status, actions)
             UrlInput(enabled = status.canStartOverlay, onOpen = actions::openVideo)
             OutlinedButton(onClick = onOpenDisplaySettings) { Text(stringResource(R.string.display_title)) }
+            UpdateSection(currentVersion = update.currentVersion, state = update.state, actions = actions)
             Diagnostics(nowPlaying)
             TextButton(onClick = onOpenLicenses) { Text(stringResource(R.string.licenses_title)) }
         }

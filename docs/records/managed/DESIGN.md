@@ -51,6 +51,8 @@
 - F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
 - F-VIEW-05: ライト／ダーク／システム追従のテーマ（アプリの表示設定画面。システム追従ではフローティングは従来どおり暗色）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
+- F-APP-02: 更新の確認（`app` の `update` パッケージ。「更新を確認」を押した時だけ GitHub Releases API へ問い合わせる）
+- R-08: リリース署名と配布物の出力（`:app:releaseDist`。実装制約を参照）
 
 ## 設計方針
 
@@ -280,7 +282,7 @@
 - `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
 - HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
@@ -290,6 +292,18 @@
   共有から開いた場合は画面を閉じて公式アプリへ戻る。URL が無い場合はトーストで知らせる。
 - 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
   MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
+- 更新の確認（F-APP-02。PLAN 6章）: HOME の「アップデート」欄（診断情報の上）に現在の版（`BuildConfig.VERSION_NAME`）と
+  「更新を確認」を置く。押した時だけ `UpdateChecker.check` が `GET https://api.github.com/repos/filderschoice/romcha/releases/latest`
+  （`Accept: application/vnd.github+json`・`X-GitHub-Api-Version: 2022-11-28`・`User-Agent: Romcha/<版>`。認証なし）を呼ぶ。
+  起動時の自動確認はしない（外部通信を利用者の操作に限るため。2026-09-27 ユーザー判断）。
+  - 応答の `tag_name` を `AppVersion`（SemVer。先頭 `v` 可、`+` 以降は無視、プレリリースは同番号の正式版より古い）で読み、
+    現在の版より新しければ `Available`、そうでなければ `UpToDate`。404 は `NoRelease`（未公開）、その他の HTTP エラー（回数制限の
+    403・429 を含む）は `HttpError`、通信断は `NetworkError`、形式違いは `InvalidResponse`。現在の版を読めなければ通信しない。
+  - 新しい版があれば「ダウンロードページを開く」で固定の `https://github.com/filderschoice/romcha/releases/latest` をブラウザーで開く。
+    応答内の URL（`html_url` 等）は開かない。自動インストールはしない。
+  - 画面の状態は `UpdateState`（Idle・Checking・Done(result)）を `MainActivity` が持ち、`lifecycleScope` で確認する（確認中は再押下を無視）。
+    状態は保存しない。解析は `kotlinx-serialization-json` の `JsonElement` を使い、`app` の単体テスト（MockWebServer）で検証する
+    （品質ゲートの `testDebugUnitTest` に含めるため、独立モジュールにはしない）。
 - OSS ライセンス（F-APP-03）: AboutLibraries（Gradle プラグインがビルド時に依存一覧を生成し、`LibrariesContainer` で表示）。
 - 文言は日本語のみ（英語リソースは未対応。N-11 は SHOULD）。
 
