@@ -7,7 +7,7 @@ BACKLOG の人手検証タスクのうち、未確認の項目（BL-024 の D6�
 | 項目 | 内容 |
 | --- | --- |
 | 対象端末 | Pixel 8 Pro（Android 17）。USB 接続（シリアル `39181FDJG008MY`） |
-| 対象アプリ | Romcha デバッグ版 0.1.0（`io.github.filderschoice.romcha`、versionCode 1） |
+| 対象アプリ | Romcha デバッグ版 1.0.0（`io.github.filderschoice.romcha`、versionCode 10000） |
 | 公式アプリ | YouTube 21.38.130（2026-09-27 時点の端末の版） |
 | 所要時間の目安 | BL-024（D6）: 配信の終了に合わせて最大 30 分 |
 | 最終実施日 | 2026/09/27 |

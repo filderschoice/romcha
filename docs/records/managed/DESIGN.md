@@ -364,6 +364,8 @@
   `:app:releaseDist` がリリース APK を `app/build/dist/romcha-vX.Y.Z.apk`（未署名なら `-unsigned` を付ける。公開事故の防止）へ置き、
   SHA-256 を `sha256sum` 形式の `.sha256` へ書き出す。アセット名の固定は GitHub 追従インストーラ（Obtainium 等）のため。
   R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。
+- 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.0 / 10000）。
+  鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`（人が実行する）。
 - アプリ名・アイコンに YouTube のロゴ・名称を使わない（PLAN 5.5）。
 
 ## エージェント実装指示

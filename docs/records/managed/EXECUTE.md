@@ -6,6 +6,31 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 22:05
+  summary: v1.0.0 リリースの準備（版の更新、README のインストール手順、リリース手順書）
+  details:
+    変更内容: >-
+      versionName を 1.0.0、versionCode を 10000（MAJOR × 10000 + MINOR × 100 + PATCH）へ上げた。
+      docs/RELEASE.md を追加し、キーストアの作成とバックアップ、keystore.properties、版の決め方、:app:releaseDist と apksigner による
+      署名の確認、実機での確認（デバッグ版は署名が違うためアンインストールが必要）、注釈付きタグと push、gh release create による公開、
+      公開後の確認、ロールバックを人の作業として記載した。README に状態（v1.0.0）・インストール（Releases・SHA-256・Obtainium）・
+      手順書へのリンクを追加し、VERIFICATION の対象アプリの版と DESIGN の実装制約を更新した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - docs/RELEASE.md
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew :app:releaseDist、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - romcha-v1.0.0-unsigned.apk と .sha256 が出力された（署名鍵が無い環境のため未署名）。品質ゲートは終了コード0、
+      Markdown は 26 ファイル（git 管理対象の件数と一致）で 0 件。署名ビルド・タグ・公開は BL-058 で人が行う
+    関連ID:
+      - BL-056
 - date: 2026-09-27 21:45
   summary: アプリ画面に更新の確認（F-APP-02）を追加した
   details:
