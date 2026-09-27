@@ -6,6 +6,21 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 18:19
+  summary: 画面端へ退避中のつまみの横幅を 20dp から 28dp に広げた
+  details:
+    変更内容: >-
+      実機確認での指摘を受け、退避中のつまみ（WindowPlacement.TAB_WIDTH_DP）の横幅を 20dp から 28dp に広げた。高さ 72dp は維持した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見え方は BL-048（F15）で確認する
+    関連ID:
+      - BL-051
 - date: 2026-09-27 18:11
   summary: 退避のドラッグでウィンドウを画面の左右の外へも運べるようにした
   details:

@@ -132,7 +132,7 @@ internal class WindowPlacement(
         const val DEFAULT_HEIGHT_DP = 360
         const val MIN_SIZE_DP = 160
         const val BUBBLE_DP = 48
-        const val TAB_WIDTH_DP = 20
+        const val TAB_WIDTH_DP = 28
         const val TAB_HEIGHT_DP = 72
 
         /** 退避とみなすはみ出し量の下限（ウィンドウ幅の 3 分の 1 の方が大きければそちら） */
