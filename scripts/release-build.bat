@@ -1,11 +1,11 @@
 @echo off
-rem Romcha ã®ç½²åæ¸ˆã¿ãƒªãƒªãƒ¼ã‚¹ APK ã‚’ãƒ“ãƒ«ãƒ‰ã™ã‚‹ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆBL-063ï¼‰ã€‚
-rem å®Ÿå‡¦ç†ã¯ release-build.ps1ï¼ˆPowerShellï¼‰ã«å§”è­²ã™ã‚‹ã€‚æ‰‹é †ã¯ docs/RELEASE.md ã‚’å‚ç…§ã€‚
-rem pwshï¼ˆPowerShell 7ï¼‰ãŒä½¿ãˆã‚‹å ´åˆã¯ãã¡ã‚‰ã‚’å„ªå…ˆã™ã‚‹
-rem ï¼ˆWindows PowerShell 5.1 ã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆå†…ã®æ—¥æœ¬èªžã®æ‰±ã„ã§å•é¡ŒãŒèµ·ãã‚‹ã“ã¨ãŒã‚ã‚‹ãŸã‚ï¼‰ã€‚
-rem ä¾‹: scripts\release-build.bat
-rem ä¾‹: scripts\release-build.bat -VersionName 1.0.1
-rem ä¾‹: scripts\release-build.bat -SkipChecks -AllowUnsigned
+rem Romcha ‚Ì–¼Ï‚ÝƒŠƒŠ[ƒX APK ‚ðƒrƒ‹ƒh‚·‚éƒoƒbƒ`ƒtƒ@ƒCƒ‹iBL-063jB
+rem ŽÀˆ—‚Í release-build.ps1iPowerShellj‚ÉˆÏ÷‚·‚éBŽè‡‚Í docs/RELEASE.md ‚ðŽQÆB
+rem pwshiPowerShell 7j‚ªŽg‚¦‚éê‡‚Í‚»‚¿‚ç‚ð—Dæ‚·‚é
+rem iWindows PowerShell 5.1 ‚ÍƒXƒNƒŠƒvƒg“à‚Ì“ú–{Œê‚Ìˆµ‚¢‚Å–â‘è‚ª‹N‚«‚é‚±‚Æ‚ª‚ ‚é‚½‚ßjB
+rem —á: scripts\release-build.bat
+rem —á: scripts\release-build.bat -VersionName 1.0.1
+rem —á: scripts\release-build.bat -SkipChecks -AllowUnsigned
 where pwsh >nul 2>nul
 if %errorlevel%==0 (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%~dp0release-build.ps1" %*
