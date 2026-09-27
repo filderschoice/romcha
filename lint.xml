@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 全 Android モジュール共通の Android lint 設定（親ディレクトリの lint.xml として参照される） -->
+<lint>
+    <!-- 依存の新版有無はネットワーク状態で結果が変わり、品質ゲートの再現性を損なうため無効化する。
+         依存の更新は BACKLOG で個別に扱う。 -->
+    <issue id="GradleDependency" severity="ignore" />
+    <issue id="NewerVersionAvailable" severity="ignore" />
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+</lint>

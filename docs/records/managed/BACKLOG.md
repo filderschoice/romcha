@@ -132,8 +132,7 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: README に手順と免責、通知アクセス権限の用途が記載され、Markdown の静的解析が成功する
-  依存:
-    - BL-001
+  依存: []
 - id: BL-012
   区分: 機能追加
   タスク内容: アーカイブ再生のセッション統合（PlaybackMonitor → VideoResolver → リプレイ取得 → SyncEngine → オーバーレイ）
@@ -193,8 +192,7 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: 各形式と不正入力の単体テストが成功する
-  依存:
-    - BL-001
+  依存: []
 - id: BL-006
   区分: 機能追加
   タスク内容: リプレイの先読み取得（F-CHAT-02）とシーク時の再取得（F-CHAT-03）を SyncEngine と接続する
@@ -221,8 +219,7 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: 保存済み JSON fixture を使った単体テストで解析が成功し、壊れた応答で例外を投げず失敗を返す
-  依存:
-    - BL-001
+  依存: []
 - id: BL-003
   区分: 機能追加
   タスク内容: SyncEngine（位置推定、一時停止 F-SYNC-03、シーク判定 F-SYNC-04、速度追従 F-SYNC-05、表示バッファ）を Android 非依存で実装する
@@ -230,8 +227,7 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: 位置推定・シーク判定・表示対象抽出の単体テストが成功する
-  依存:
-    - BL-001
+  依存: []
 - id: BL-002
   区分: 品質ゲート
   タスク内容: CLAUDE.md の品質ゲート定義の replace-me を Gradle のコマンドへ置き換える
@@ -239,19 +235,9 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: 置き換えたコマンドがすべて成功し、脆弱性チェックの扱い（未導入の理由）が明記されている
-  依存:
-    - BL-001
+  依存: []
   根拠: >-
     2026-09-27 にユーザーが置き換えを承認済み。OWASP Dependency-Check はコストに見合わないため導入しない（ユーザー回答）。
-- id: BL-001
-  区分: 品質ゲート
-  タスク内容: >-
-    Android プロジェクトの雛形（Gradle Wrapper、バージョンカタログ、app / core:media / core:chat / core:sync / feature:overlay、.gitignore、LICENSE MIT）と ktlint・detekt・Android lint を導入する
-  優先度: P1
-  状態: 未着手
-  担当: AIエージェント
-  完了条件: ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest が成功する
-  依存: []
 ```
 
 <!-- COPILOT_RECORDS:END -->

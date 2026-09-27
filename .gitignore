@@ -1,0 +1,22 @@
+# Gradle / Android Studio
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+captures/
+.cxx/
+
+# 署名鍵・秘密情報（PLAN 6章。リポジトリに含めない）
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node（markdownlint-cli2 を npx で使う場合の生成物）
+node_modules/

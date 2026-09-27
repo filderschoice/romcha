@@ -1,0 +1,23 @@
+# detekt の既定設定からの差分のみを記載する（buildUponDefaultConfig = true）
+naming:
+  FunctionNaming:
+    ignoreAnnotated:
+      - Composable
+complexity:
+  LongParameterList:
+    ignoreAnnotated:
+      - Composable
+  LongMethod:
+    ignoreAnnotated:
+      - Composable
+style:
+  MagicNumber:
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotated:
+      - Composable
+    excludes:
+      - "**/test/**"
+  UnusedPrivateMember:
+    ignoreAnnotated:
+      - Preview
