@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 720" role="img" aria-labelledby="t d">
+  <title id="t">画面イメージ</title>
+  <desc id="d">動画アプリの上に、半透明のチャットウィンドウが重なって表示されている様子の図解。実際の画面ではありません。</desc>
+  <!-- 図解（実機のスクリーンショットではない）。差し替えは BL-061 -->
+  <rect x="4" y="4" width="352" height="712" rx="40" fill="#0f1417" stroke="#37474F" stroke-width="4"/>
+  <rect x="20" y="24" width="320" height="672" rx="26" fill="#1c2327"/>
+  <!-- 動画の再生領域 -->
+  <rect x="20" y="92" width="320" height="180" fill="#2b353b"/>
+  <path d="M168 160 l32 22 -32 22z" fill="#90a4ae"/>
+  <rect x="36" y="252" width="200" height="4" rx="2" fill="#26a69a"/>
+  <rect x="36" y="252" width="288" height="4" rx="2" fill="#90a4ae" opacity=".3"/>
+  <!-- 動画の情報（ぼかした行） -->
+  <rect x="36" y="292" width="240" height="14" rx="7" fill="#37474f"/>
+  <rect x="36" y="316" width="160" height="10" rx="5" fill="#37474f" opacity=".7"/>
+  <rect x="36" y="360" width="288" height="60" rx="12" fill="#263238"/>
+  <rect x="36" y="432" width="288" height="60" rx="12" fill="#263238"/>
+  <rect x="36" y="504" width="288" height="60" rx="12" fill="#263238"/>
+  <!-- フローティングのチャットウィンドウ -->
+  <g transform="translate(150 330)">
+    <rect width="176" height="250" rx="12" fill="#000" opacity=".62"/>
+    <rect width="176" height="30" rx="12" fill="#37474F" opacity=".9"/>
+    <rect y="18" width="176" height="12" fill="#37474F" opacity=".9"/>
+    <circle cx="14" cy="15" r="5" fill="#26a69a"/>
+    <rect x="26" y="11" width="70" height="8" rx="4" fill="#cfd8dc"/>
+    <rect x="130" y="10" width="10" height="10" rx="2" fill="#cfd8dc" opacity=".8"/>
+    <rect x="150" y="10" width="10" height="10" rx="2" fill="#cfd8dc" opacity=".8"/>
+    <g fill="#eceff1">
+      <rect x="10" y="44" width="36" height="7" rx="3.5" fill="#81c784"/><rect x="52" y="44" width="100" height="7" rx="3.5"/>
+      <rect x="10" y="62" width="30" height="7" rx="3.5" fill="#90caf9"/><rect x="46" y="62" width="80" height="7" rx="3.5"/>
+      <rect x="10" y="80" width="40" height="7" rx="3.5" fill="#b0bec5"/><rect x="56" y="80" width="104" height="7" rx="3.5"/>
+      <rect x="10" y="98" width="34" height="7" rx="3.5" fill="#b0bec5"/><rect x="50" y="98" width="70" height="7" rx="3.5"/>
+    </g>
+    <rect x="8" y="116" width="160" height="44" rx="6" fill="#1e88e5"/>
+    <rect x="16" y="124" width="60" height="7" rx="3.5" fill="#fff"/>
+    <rect x="120" y="124" width="40" height="7" rx="3.5" fill="#fff"/>
+    <rect x="16" y="142" width="110" height="7" rx="3.5" fill="#e3f2fd"/>
+    <g fill="#eceff1">
+      <rect x="10" y="174" width="30" height="7" rx="3.5" fill="#fff176"/><rect x="46" y="174" width="96" height="7" rx="3.5"/>
+      <rect x="10" y="192" width="38" height="7" rx="3.5" fill="#b0bec5"/><rect x="54" y="192" width="72" height="7" rx="3.5"/>
+      <rect x="10" y="210" width="32" height="7" rx="3.5" fill="#b0bec5"/><rect x="48" y="210" width="110" height="7" rx="3.5"/>
+    </g>
+    <path d="M164 238 l8 0 0 -8z" fill="#cfd8dc" opacity=".7"/>
+  </g>
+</svg>

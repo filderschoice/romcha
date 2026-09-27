@@ -4,6 +4,16 @@
 
 ## 2026-09-27
 
+- `docs/records/managed/BACKLOG.md` へ、リリースビルドを簡易化するスクリプトの作成（BL-063。ユーザー指示）を登録した
+  （自律ループ第1イテレーション）。
+- `docs/records/managed/BACKLOG.md` へ、リリース署名の情報を `local.properties` から読むよう変える修正（BL-062。ユーザー指示）を
+  登録した（自律ループ第1イテレーション）。
+- `docs/records/managed/BACKLOG.md` へ、ユーザー指示のアプリ紹介ポートフォリオ（BL-060）と、その実機画像の差し替え・公開方法の
+  決定（人手検証 BL-061）を登録した（自律ループ第1イテレーション）。
+- 脆弱性チェックの代替手段を GitHub の Dependabot アラートとした（ユーザー判断）。`CLAUDE.md`「本リポジトリの品質ゲート定義」の
+  説明と PLAN 9章を更新し、BL-057 を閉じて、リポジトリ設定での有効化と検出範囲の確認を人手検証 BL-059 として登録した。
+- `docs/records/managed/BACKLOG.md` の BL-027（M5 配布）を、ユーザー回答（コード整備までを範囲とし、更新確認は手動のみ）に
+  基づいて BL-054〜BL-058 へ分割した（自律ループ第1イテレーション）。
 - 実機検証 BL-053（`docs/VERIFICATION.md` の G1。フローティングからアプリ本体を開く）が OK だったため完了とし、
   BACKLOG と `docs/VERIFICATION.md` から削除した。DESIGN に確認済みを反映した。
 - `docs/records/managed/BACKLOG.md` へ、フローティングの設定メニューからアプリ本体を起動する機能（BL-052）と、その人手検証（BL-053）を

@@ -27,13 +27,14 @@ Windows の PowerShell では `./gradlew` を `.\gradlew.bat` と読み替えま
 | フォーマット/静的解析 | `./gradlew ktlintCheck detekt lintDebug` | 終了コード0、指摘0件（Android lint は `warningsAsErrors`） |
 | 型検査 | `./gradlew compileDebugKotlin` | 終了コード0 |
 | 単体テスト | `./gradlew testDebugUnitTest :core:chat:test :core:sync:test` | 全件成功 |
-| 脆弱性チェック | `(対象外)` | 導入しない判断のため（下記） |
+| 脆弱性チェック | `(対象外)` | ローカルのゲートには導入しない判断のため（下記） |
 | Markdown の静的解析 | `npx markdownlint-cli2 "**/*.md" --config .markdownlint-cli2.yaml` | `Summary: 0 issues`、かつ出力の `Linting: N files` が `git ls-files --cached --others --exclude-standard "*.md"` の件数と一致（対象漏れの検出） |
 | 記録ファイルの検証 | `python scripts/validate-records.py`（PyYAMLが必要） | 終了コード0 |
 
-脆弱性チェックは導入しません（2026-09-27 ユーザー判断）。OWASP Dependency-Check は NVD API キー（秘密情報で
+脆弱性チェックはローカルの品質ゲートに導入しません（2026-09-27 ユーザー判断）。OWASP Dependency-Check は NVD API キー（秘密情報で
 エージェントは扱えない）が無いと脆弱性DBの取得に長時間かかり、コストに見合わないためです。
-代替手段は M5（配布）着手時に再検討します（BACKLOG の M5 タスク）。
+代替として GitHub の Dependabot アラートを使います（2026-09-27 ユーザー判断。リポジトリ設定での有効化は人が行い、
+Gradle の依存が検出されるかは BACKLOG の人手検証で確かめます）。
 
 ## 記録ファイルの権限設定（MUST）
 

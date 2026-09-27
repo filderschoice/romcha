@@ -51,6 +51,8 @@
 - F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
 - F-VIEW-05: ライト／ダーク／システム追従のテーマ（アプリの表示設定画面。システム追従ではフローティングは従来どおり暗色）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
+- F-APP-02: 更新の確認（`app` の `update` パッケージ。「更新を確認」を押した時だけ GitHub Releases API へ問い合わせる）
+- R-08: リリース署名と配布物の出力（`:app:releaseDist`。実装制約を参照）
 
 ## 設計方針
 
@@ -280,7 +282,7 @@
 - `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
 - HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
@@ -290,6 +292,18 @@
   共有から開いた場合は画面を閉じて公式アプリへ戻る。URL が無い場合はトーストで知らせる。
 - 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
   MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
+- 更新の確認（F-APP-02。PLAN 6章）: HOME の「アップデート」欄（診断情報の上）に現在の版（`BuildConfig.VERSION_NAME`）と
+  「更新を確認」を置く。押した時だけ `UpdateChecker.check` が `GET https://api.github.com/repos/filderschoice/romcha/releases/latest`
+  （`Accept: application/vnd.github+json`・`X-GitHub-Api-Version: 2022-11-28`・`User-Agent: Romcha/<版>`。認証なし）を呼ぶ。
+  起動時の自動確認はしない（外部通信を利用者の操作に限るため。2026-09-27 ユーザー判断）。
+  - 応答の `tag_name` を `AppVersion`（SemVer。先頭 `v` 可、`+` 以降は無視、プレリリースは同番号の正式版より古い）で読み、
+    現在の版より新しければ `Available`、そうでなければ `UpToDate`。404 は `NoRelease`（未公開）、その他の HTTP エラー（回数制限の
+    403・429 を含む）は `HttpError`、通信断は `NetworkError`、形式違いは `InvalidResponse`。現在の版を読めなければ通信しない。
+  - 新しい版があれば「ダウンロードページを開く」で固定の `https://github.com/filderschoice/romcha/releases/latest` をブラウザーで開く。
+    応答内の URL（`html_url` 等）は開かない。自動インストールはしない。
+  - 画面の状態は `UpdateState`（Idle・Checking・Done(result)）を `MainActivity` が持ち、`lifecycleScope` で確認する（確認中は再押下を無視）。
+    状態は保存しない。解析は `kotlinx-serialization-json` の `JsonElement` を使い、`app` の単体テスト（MockWebServer）で検証する
+    （品質ゲートの `testDebugUnitTest` に含めるため、独立モジュールにはしない）。
 - OSS ライセンス（F-APP-03）: AboutLibraries（Gradle プラグインがビルド時に依存一覧を生成し、`LibrariesContainer` で表示）。
 - 文言は日本語のみ（英語リソースは未対応。N-11 は SHOULD）。
 
@@ -330,6 +344,19 @@
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
 - `feature:overlay` は画像読み込みに Coil 2.7.0（`io.coil-kt:coil-compose`）を使う。既定の `ImageLoader`（シングルトン）で足りるため設定しない。
 
+### アプリ紹介ポートフォリオ（`site/`）
+
+- 静的な 1 ページ（`index.html`・`style.css`・`assets/*.svg`）。ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
+  リンクは相対パスで、公開先を選ばない（公開方法は未定で、リポジトリ内に置くだけ。2026-09-27 ユーザー判断）。
+- 構成: ヘッダー（ページ内ナビ）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
+  仕組みの図 → 使い方の手順 → プライバシーと免責 → 入手（仕様表）→ フッター。
+- 他アプリのテンプレートを兼ねる: 差し替え箇所に `TEMPLATE:` のコメント、アプリごとの色は `style.css` の `:root` の
+  `--accent`・`--accent-strong`・`--accent-soft`（ライト・ダーク）だけ。ライト／ダークは `prefers-color-scheme`、760px 以下で 1 列。
+- 将来の repo 横断の一覧ページ向けに、概要を `site/app.json`（`schema: app-portfolio.v1`。キーは `site/README.md`）に置く。
+- 画像は SVG の図解（アイコンはランチャーアイコンと同じ意匠）。図解であることを `alt` に書く。実機のスクリーンショットは
+  第三者の情報が写るため人が撮影・選定して差し替える（BL-061）。
+- 機能・版・動作環境を変えたら、README とあわせて `index.html`・`app.json` も更新する。
+
 ## 非機能要件
 
 - PLAN.md 3章（N-01〜N-11）に従う。
@@ -344,7 +371,22 @@
 - テスト名は日本語で振る舞いを書く。ktlint の関数命名規則はテストソースのみ無効化する（`.editorconfig`）。
 - 静的解析: ktlint（`ktlint_official`、`@Composable` 関数は命名規則の対象外）、detekt（既定設定＋`config/detekt/detekt.yml` の差分）、
   Android lint（`warningsAsErrors = true`。依存の新版警告のみ `lint.xml` で無効化）。
-- 署名鍵（`*.jks` / `*.keystore` / `keystore.properties`）は `.gitignore` で除外する。
+- 署名鍵（`*.jks` / `*.keystore`）と署名情報を書く `local.properties` は `.gitignore` で除外する
+  （旧方式の `keystore.properties` も誤コミット防止のため除外を残す）。
+- リリース署名（PLAN 6章）: `app/build.gradle.kts` がルートの `local.properties` の `RELEASE_STORE_FILE`（相対パスはルート基準）・
+  `RELEASE_STORE_PASSWORD`・`RELEASE_KEY_ALIAS`・`RELEASE_KEY_PASSWORD` を読み、`RELEASE_STORE_FILE` があれば release を署名する
+  （2026-09-27 ユーザー指示で `keystore.properties` から変更）。無ければ未署名でビルドする（鍵が無くても品質ゲート・ビルドが通るようにするため）。
+  `:app:releaseDist` がリリース APK を `app/build/dist/romcha-vX.Y.Z.apk`（未署名なら `-unsigned` を付ける。公開事故の防止）へ置き、
+  SHA-256 を `sha256sum` 形式の `.sha256` へ書き出す。アセット名の固定は GitHub 追従インストーラ（Obtainium 等）のため。
+  R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。
+- 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.0 / 10000）。
+  鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`（人が実行する）。
+- リリースビルドのスクリプト（BL-063）: `scripts/release-build.bat` が `scripts/release-build.ps1`（UTF-8 BOM 付き・CRLF。
+  Windows PowerShell 5.1 でも日本語を読めるように）を pwsh 優先で呼ぶ。署名情報の事前確認（値は表示しない。ドライブ文字の `:` の
+  エスケープは lint の判定に任せ、スクリプトでは確かめない）→ `-VersionName` 指定時の版の書き換え（失敗時は戻す）
+  → 品質ゲートの Gradle 分（`:app:lintAnalyzeDebug --rerun` を含む。`local.properties` は lint の解析の入力に含まれず、ビルド
+  キャッシュの古い結果が使われることがあるため）→ `:app:releaseDist` → `apksigner` の検証 → 次の手順の表示。版は
+  `app/build.gradle.kts` を唯一の正本とし、参考にした sesami-wear の `version.properties` 方式は採らない。push・タグ・公開はしない。
 - アプリ名・アイコンに YouTube のロゴ・名称を使わない（PLAN 5.5）。
 
 ## エージェント実装指示

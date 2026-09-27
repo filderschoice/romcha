@@ -6,6 +6,176 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-28 00:40
+  summary: リリースビルドを 1 コマンドで行うスクリプト（scripts/release-build.bat・.ps1）を追加した
+  details:
+    変更内容: >-
+      ユーザー指示により、sesami-wear の release-build.bat / .ps1 を参考に、Romcha のリリースビルド用スクリプトを追加した。
+      .bat は pwsh を優先して .ps1 を呼ぶ。.ps1 は local.properties の署名情報とキーストアの事前確認（値は表示しない）、-VersionName 指定時の versionName と versionCode（MAJOR × 10000 + MINOR × 100 + PATCH）の
+      書き換え（失敗時は元に戻す）、品質ゲートの Gradle 分、:app:releaseDist、apksigner による署名の確認、タグ・公開のコマンド例の
+      表示を行う。push・タグ・公開は行わない。検証中に、local.properties を書き換えても lint の解析結果がビルドキャッシュから
+      復元されて古い PropertyEscape の判定が残ることが分かったため、スクリプトでは :app:lintAnalyzeDebug を --rerun で実行する。
+      PropertyEscape は大文字の C:/ を指摘し、小文字の c:/ は指摘しなかったため、ドライブ文字のエスケープはスクリプトでは確かめず lint に任せる。
+      docs/RELEASE.md の記入例のドライブ文字を C\: にエスケープし、3.1 にスクリプトの使い方を追加した。README・DESIGN を更新した。
+      参考の version.properties 方式は、版の正本を app/build.gradle.kts の 1 か所に保つため採らなかった。
+    変更ファイル:
+      - scripts/release-build.bat
+      - scripts/release-build.ps1
+      - docs/RELEASE.md
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      git worktree 上で scripts\release-build.bat を次の条件で実行（使い捨ての検証用キーストアと仮の local.properties。
+      ユーザーの local.properties と実鍵は使っていない）。署名情報なし、版の形式違い（1.0）、-SkipChecks -AllowUnsigned、
+      誤ったパスワードで -VersionName 1.0.2、エスケープ済みのパスで -VersionName 1.0.1（品質ゲート込み）、
+      Windows PowerShell 5.1 での -SkipChecks。PowerShell の構文解析（pwsh・5.1）。
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 署名情報なし・形式違いは説明付きで終了コード1。未署名は romcha-v1.0.0-unsigned.apk を出力。誤ったパスワードでは
+      Gradle が失敗し、版の書き換えが元に戻ることを確認。エスケープ済みのパスでは品質ゲートを通って署名済みの romcha-v1.0.1.apk を出力し、
+      versionCode 10001・apksigner の証明書表示・次の手順の表示を確認。5.1 でも同じく成功。worktree と検証用キーストアは削除した
+    関連ID:
+      - BL-063
+- date: 2026-09-27 23:40
+  summary: リリース署名の情報を local.properties から読むようにした
+  details:
+    変更内容: >-
+      ユーザー指示により、app/build.gradle.kts の署名情報の読み込み元を keystore.properties から local.properties（.gitignore 済み）の
+      RELEASE_STORE_FILE・RELEASE_STORE_PASSWORD・RELEASE_KEY_ALIAS・RELEASE_KEY_PASSWORD へ変えた。RELEASE_STORE_FILE が無い・空なら
+      未署名でビルドする（-unsigned）。相対パスはリポジトリのルート基準。docs/RELEASE.md（記入例、パス区切りの注意、Android Studio が
+      local.properties を書き換えた場合の確認）・README・DESIGN を合わせた。.gitignore の keystore.properties は誤コミット防止のため残した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - README.md
+      - docs/RELEASE.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      git worktree 上で ./gradlew :app:releaseDist（local.properties 無し、および使い捨ての検証用キーストアを指す仮の local.properties の2通り）、
+      apksigner verify --print-certs、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 無しでは romcha-v1.0.0-unsigned.apk、仮の設定では署名済みの romcha-v1.0.0.apk（apksigner で CN=test を確認）が出力された。
+      ユーザーの local.properties（本番の署名情報）は値を読まず、ビルドにも使っていない（guardrails 12.5。実鍵での署名は BL-058）。
+      worktree と検証用キーストアは削除した。品質ゲートは終了コード0
+    関連ID:
+      - BL-062
+- date: 2026-09-27 23:00
+  summary: アプリ紹介ポートフォリオ（site/）を追加した
+  details:
+    変更内容: >-
+      ユーザー指示により、Romcha を紹介する静的な 1 ページを site/ に追加した（HTML と CSS のみ。JavaScript・外部フォント・
+      外部 CDN を読み込まない）。機能・仕組み・使い方・プライバシーと免責・入手を載せ、画像は SVG の図解（アイコン・画面イメージ・
+      構成図）で用意した。他アプリのテンプレートを兼ね、差し替え箇所に TEMPLATE コメントを付け、アプリごとの色を CSS 変数 3 つに
+      集約した。repo 横断の一覧ページ向けに概要を site/app.json（app-portfolio.v1）に置き、使い方とキーを site/README.md に記載した。
+      README からのリンクと DESIGN の設計を追加した。公開方法は未定（リポジトリ内に置くだけ）。
+    変更ファイル:
+      - site/index.html
+      - site/style.css
+      - site/app.json
+      - site/README.md
+      - site/assets/icon.svg
+      - site/assets/screen.svg
+      - site/assets/how-it-works.svg
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      Edge のヘッドレス表示によるスクリーンショット（1280px 幅のダーク・ライト、390px 幅の iframe）、
+      python による app.json の JSON 検証、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - ライト・ダークとも表示が崩れず、390px 幅で 1 列になり横にはみ出さないことを確認した。
+      品質ゲートは終了コード0。実機のスクリーンショットへの差し替えと公開方法の決定は BL-061 で人が行う
+    関連ID:
+      - BL-060
+- date: 2026-09-27 22:05
+  summary: v1.0.0 リリースの準備（版の更新、README のインストール手順、リリース手順書）
+  details:
+    変更内容: >-
+      versionName を 1.0.0、versionCode を 10000（MAJOR × 10000 + MINOR × 100 + PATCH）へ上げた。
+      docs/RELEASE.md を追加し、キーストアの作成とバックアップ、keystore.properties、版の決め方、:app:releaseDist と apksigner による
+      署名の確認、実機での確認（デバッグ版は署名が違うためアンインストールが必要）、注釈付きタグと push、gh release create による公開、
+      公開後の確認、ロールバックを人の作業として記載した。README に状態（v1.0.0）・インストール（Releases・SHA-256・Obtainium）・
+      手順書へのリンクを追加し、VERIFICATION の対象アプリの版と DESIGN の実装制約を更新した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - docs/RELEASE.md
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew :app:releaseDist、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - romcha-v1.0.0-unsigned.apk と .sha256 が出力された（署名鍵が無い環境のため未署名）。品質ゲートは終了コード0、
+      Markdown は 26 ファイル（git 管理対象の件数と一致）で 0 件。署名ビルド・タグ・公開は BL-058 で人が行う
+    関連ID:
+      - BL-056
+- date: 2026-09-27 21:45
+  summary: アプリ画面に更新の確認（F-APP-02）を追加した
+  details:
+    変更内容: >-
+      HOME に「アップデート」欄を追加し、「更新を確認」を押した時だけ GitHub Releases API（repos/filderschoice/romcha/releases/latest。
+      認証なし）へ問い合わせるようにした（起動時の自動確認はしない。ユーザー判断）。tag_name を SemVer（AppVersion）で読み、
+      現在の版より新しければ「ダウンロードページを開く」で固定のリリースページをブラウザーで開く（応答内の URL は開かない。
+      自動インストールはしない）。未公開（404）・HTTP エラー・通信断・形式違いはそれぞれ説明文を出す。
+      品質ゲートの単体テストに含めるため app モジュールの update パッケージに置き、app へ kotlinx-serialization-json と
+      テスト用の coroutines-test・mockwebserver を追加した。README の使い方・プライバシー（通信先）と DESIGN を更新した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/update/AppVersion.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/update/UpdateChecker.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/UpdateSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeActions.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/res/values/strings.xml
+      - app/src/test/kotlin/io/github/filderschoice/romcha/update/AppVersionTest.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/update/UpdateCheckerTest.kt
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（AppVersionTest 5 件・UpdateCheckerTest 8 件を含む。1〜2回目は detekt の
+      DestructuringDeclarationWithTooManyEntries・MagicNumber、3回目は ktlint の空行で失敗し、名前付きグループと ktlintFormat で解消）。
+      GitHub への実通信はしていない。実機での確認は BL-058 で行う
+    関連ID:
+      - BL-055
+- date: 2026-09-27 21:10
+  summary: リリース署名の設定と配布物（romcha-vX.Y.Z.apk と SHA-256）の出力タスクを追加した
+  details:
+    変更内容: >-
+      PLAN 6章（R-08）の配布方針に合わせ、app/build.gradle.kts がルートの keystore.properties（.gitignore 済み）を読んで
+      release を署名するようにした。ファイルが無ければ未署名でビルドする。:app:releaseDist を追加し、リリース APK を
+      app/build/dist/romcha-vX.Y.Z.apk（未署名なら -unsigned を付ける）へ置き、SHA-256 を sha256sum 形式の .sha256 へ書き出す。
+      README の開発手順と DESIGN の実装制約へ追記した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew :app:releaseDist（keystore.properties 無し、および使い捨ての検証用キーストアを置いた状態の2通り）、
+      apksigner verify --print-certs、sha256sum、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 未署名時は romcha-v0.1.0-unsigned.apk、署名時は romcha-v0.1.0.apk が出力され、署名時は apksigner で署名を確認した。
+      .sha256 の値は sha256sum と一致した。検証用キーストアと keystore.properties は検証後に削除し、git の追跡対象外であることを確認した。
+      品質ゲートは終了コード0
+    関連ID:
+      - BL-054
 - date: 2026-09-27 20:38
   summary: フローティングの設定メニューからアプリ本体を開けるようにした
   details:

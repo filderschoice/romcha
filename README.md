@@ -13,7 +13,7 @@ YouTube 公式アプリと同期する、見るだけのフローティングチ
 
 ## 状態
 
-開発中（v0.1.0、M4 相当）。計画と要件は [`docs/PLAN.md`](docs/PLAN.md) を参照してください。
+v1.0.0（M5 配布）。計画と要件は [`docs/PLAN.md`](docs/PLAN.md) を参照してください。
 
 | 機能 | 状態 |
 | --- | --- |
@@ -24,6 +24,16 @@ YouTube 公式アプリと同期する、見るだけのフローティングチ
 | ライブ配信・プレミア公開中（待機中を含む）のチャット追従、表示遅延の設定、終了後のリプレイへの切り替え | 実装済み（終了後の切り替えは実機確認待ち） |
 | タッチ透過・最小化・画面端への退避・縦横別の位置記憶・同期の手動補正・手動タイマー | 実装済み |
 | 文字サイズ・投稿者名／アイコン／時刻の表示・絞り込み（NG ワード等）・表示件数・上位チャット・テーマ・絵文字画像 | 実装済み |
+| 更新の確認（手動）・署名済み APK の配布 | 実装済み（GitHub Releases での公開は実機確認待ち） |
+
+## インストール
+
+1. [GitHub Releases](https://github.com/filderschoice/romcha/releases/latest) から `romcha-vX.Y.Z.apk` をダウンロードします。
+2. 必要なら、同じページの `romcha-vX.Y.Z.apk.sha256` の値とダウンロードしたファイルの SHA-256 が一致することを確かめます。
+3. 端末で APK を開いてインストールします（ブラウザー等に「不明なアプリのインストール」の許可が必要です）。
+
+Google Play では配布していません。更新はアプリの「更新を確認」で確かめ、新しい版を同じ手順で上書きインストールします
+（設定は引き継がれます）。Obtainium 等の GitHub のリリースを追従するインストーラも使えます。
 
 ## 使い方
 
@@ -53,6 +63,8 @@ YouTube 公式アプリと同期する、見るだけのフローティングチ
 7. アプリの「表示設定」では、投稿者名・アイコン・時刻の表示、テーマ、「上位のチャットのみ」、絞り込み（スーパーチャットのみ・
    メンバーのみ・モデレーター／配信者のみ・NG ワード）、表示する件数の上限を変えられます。変更は表示中のウィンドウへすぐ反映します。
 8. 「URL で開く」の「クリップボードから貼り付け」は、押した時だけクリップボードを読みます。
+9. アプリの「更新を確認」を押すと、GitHub で公開されている最新版の番号を確かめます。新しい版があれば
+   「ダウンロードページを開く」からリリースのページを開けます（自動では確認・インストールしません）。
 
 画面がオフの間、公式アプリが一時停止している間はチャットの取得を止めます。
 
@@ -92,6 +104,12 @@ YouTube 公式アプリと同期する、見るだけのフローティングチ
 ./gradlew testDebugUnitTest :core:chat:test :core:sync:test
 ```
 
+リリース APK は `scripts\release-build.bat`（Windows。署名情報の確認・品質ゲート・署名の確認までをまとめて行う）
+または `./gradlew :app:releaseDist` で `app/build/dist/` に `romcha-vX.Y.Z.apk` と SHA-256（`.sha256`）を出力します。
+署名にはリポジトリのルートの `local.properties`（`.gitignore` で除外済み）に `RELEASE_STORE_FILE`・`RELEASE_STORE_PASSWORD`・
+`RELEASE_KEY_ALIAS`・`RELEASE_KEY_PASSWORD` が必要で、無い場合は未署名の `romcha-vX.Y.Z-unsigned.apk` になります。
+鍵の作成から Releases での公開までの手順は [`docs/RELEASE.md`](docs/RELEASE.md) を参照してください。
+
 Windows の PowerShell では `./gradlew` を `.\gradlew.bat` と読み替えてください。
 品質ゲートの正本は [`CLAUDE.md`](CLAUDE.md)「本リポジトリの品質ゲート定義」です。
 ktlint の指摘は `./gradlew ktlintFormat` で自動修正できます。
@@ -115,6 +133,7 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 | `feature:overlay` | フローティングウィンドウ、セッション統合 |
 
 設計の詳細は [`docs/records/managed/DESIGN.md`](docs/records/managed/DESIGN.md) を参照してください。
+アプリを紹介するポートフォリオ（静的な 1 ページ。他アプリのテンプレートを兼ねる）は [`site/`](site/README.md) にあります。
 
 ### テストについて
 
@@ -132,7 +151,8 @@ MockWebServer で行い、YouTube へは通信しません。実際の応答か�
 
 - ログイン機能はありません。解析・広告の SDK を含みません。
 - 通信先は YouTube（`www.youtube.com`）と、カスタム絵文字・スタンプなどの画像を配信する YouTube の画像配信元
-  （`*.ggpht.com`・`*.ytimg.com`・`*.googleusercontent.com`。HTTPS のみ）だけです。
+  （`*.ggpht.com`・`*.ytimg.com`・`*.googleusercontent.com`。HTTPS のみ）と、「更新を確認」を押した時の
+  GitHub API（`api.github.com`。最新リリースの版番号を読むだけで、認証情報は送りません）だけです。
 - 動画の特定結果のキャッシュとウィンドウの設定は端末内にのみ保存し、バックアップの対象外にしています。
 
 ## ライセンス

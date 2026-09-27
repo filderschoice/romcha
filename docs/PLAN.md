@@ -391,7 +391,7 @@ romcha/
 | フォーマット/静的解析 | `./gradlew ktlintCheck detekt lintDebug` |
 | 型検査 | `./gradlew compileDebugKotlin` |
 | 単体テスト | `./gradlew testDebugUnitTest` |
-| 脆弱性チェック | OWASP Dependency-Check の Gradle プラグイン（`./gradlew dependencyCheckAnalyze`） |
+| 脆弱性チェック | ~~OWASP Dependency-Check の Gradle プラグイン~~（NVD API キーが必要なため不採用）。GitHub の Dependabot アラートで代替する（2026-09-27 ユーザー判断。ローカルのゲート外） |
 
 実機での同期確認（公式アプリとの連携）は自動化できないため、人手検証項目として扱う。
 

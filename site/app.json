@@ -1,0 +1,19 @@
+{
+  "schema": "app-portfolio.v1",
+  "id": "romcha",
+  "name": "Romcha",
+  "nameJa": "ロムチャ",
+  "tagline": "YouTube 公式アプリと同期する、見るだけのフローティングチャットビューワー",
+  "platforms": ["Android"],
+  "status": "released",
+  "version": "1.0.0",
+  "license": "MIT",
+  "tags": ["Android", "Kotlin", "Jetpack Compose", "YouTube", "Chat"],
+  "icon": "assets/icon.svg",
+  "page": "index.html",
+  "links": {
+    "repository": "https://github.com/filderschoice/romcha",
+    "download": "https://github.com/filderschoice/romcha/releases/latest"
+  },
+  "updated": "2026-09-27"
+}

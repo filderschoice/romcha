@@ -13,4 +13,10 @@ interface HomeActions {
     fun stopOverlay()
 
     fun openVideo(videoId: String)
+
+    /** 更新を確認する（F-APP-02。押した時だけ通信する） */
+    fun checkForUpdate()
+
+    /** 最新リリースのダウンロードページを開く */
+    fun openReleasePage()
 }
