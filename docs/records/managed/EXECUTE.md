@@ -6,6 +6,22 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:00
+  summary: フローティングのヘッダーの色味をチャット欄と分け、不透明度を両方に反映
+  details:
+    変更内容: >-
+      ヘッダー（ドラッグで移動する領域）の背景を青みの灰色（#37474F）、チャット欄を黒にし、ドラッグできる範囲を見分けやすくした。
+      不透明度はウィンドウ全体ではなくヘッダーとチャット欄それぞれの背景に掛け、スライダーが両方に効くようにした。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見え方の確認は BL-048（人手検証）で行う
+    関連ID:
+      - BL-035
 - date: 2026-09-27 14:57
   summary: フローティングの設定パネルにチャットの文字サイズのスライダーを追加
   details:

@@ -59,6 +59,10 @@ import kotlin.math.roundToInt
 internal val OverlayTextColor = Color(0xFFF5F5F5)
 internal val SubTextColor = Color(0xFFB0BEC5)
 
+/** ヘッダー（ドラッグで移動する領域）の背景。チャット欄の黒と見分けられる青みの灰色にする */
+private val HeaderColor = Color(0xFF37474F)
+private val ChatBackgroundColor = Color.Black
+
 /** フローティングウィンドウの中身（F-OVL-01〜03/07、F-VIEW-02）。 */
 @Composable
 fun ChatOverlay(
@@ -69,24 +73,22 @@ fun ChatOverlay(
     actions: OverlayActions,
 ) {
     var showSettings by remember { mutableStateOf(false) }
-    Column(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.Black.copy(alpha = OverlayFormat.clampOpacity(opacity))),
-    ) {
-        Header(state, actions, onToggleSettings = { showSettings = !showSettings })
-        if (showSettings) {
-            OpacitySlider(opacity, actions)
-            FontScaleSlider(fontScale, actions)
-            if (state.indicator == SyncIndicator.LIVE) LiveDelaySlider(liveDelaySeconds, actions)
-        }
-        state.notice?.let { Notice(it) }
-        if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
-        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-            MessageList(state.messages, fontScale)
-            ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
+    // 不透明度はヘッダーとチャット欄の両方に掛ける（F-OVL-03）。色味だけを変えてドラッグできる範囲を見分けやすくする
+    val alpha = OverlayFormat.clampOpacity(opacity)
+    Column(modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp))) {
+        Header(state, alpha, actions, onToggleSettings = { showSettings = !showSettings })
+        Column(modifier = Modifier.weight(1f).fillMaxWidth().background(ChatBackgroundColor.copy(alpha = alpha))) {
+            if (showSettings) {
+                OpacitySlider(opacity, actions)
+                FontScaleSlider(fontScale, actions)
+                if (state.indicator == SyncIndicator.LIVE) LiveDelaySlider(liveDelaySeconds, actions)
+            }
+            state.notice?.let { Notice(it) }
+            if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
+            Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                MessageList(state.messages, fontScale)
+                ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
+            }
         }
     }
 }
@@ -94,6 +96,7 @@ fun ChatOverlay(
 @Composable
 private fun Header(
     state: OverlayUiState,
+    alpha: Float,
     actions: OverlayActions,
     onToggleSettings: () -> Unit,
 ) {
@@ -101,7 +104,7 @@ private fun Header(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .background(Color.White.copy(alpha = 0.08f))
+                .background(HeaderColor.copy(alpha = alpha))
                 .pointerInput(Unit) {
                     detectDragGestures(onDragEnd = actions::onGestureEnd) { change, drag ->
                         change.consume()
