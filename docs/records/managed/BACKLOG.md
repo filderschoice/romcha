@@ -6,14 +6,21 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
-- id: BL-057
-  区分: 品質ゲート
-  タスク内容: 脆弱性チェック手段の再検討（CLAUDE.md で M5 着手時に再検討するとした事項）
+- id: BL-059
+  区分: 人手検証
+  タスク内容: >-
+    GitHub のリポジトリ設定（Settings の Advanced Security / Code security）で Dependency graph と Dependabot alerts を有効にし、
+    Insights の Dependency graph に Gradle の依存（gradle/libs.versions.toml の OkHttp・Compose 等）が表示されるかを確かめる
   優先度: P3
   状態: 未着手
-  担当: AIエージェント
-  完了条件: 候補と比較を整理し、採否をユーザーが判断できる状態にする（導入は CI・ルール変更を伴うため人の判断）
+  担当: ユーザー
+  完了条件: >-
+    Dependabot alerts が有効で、Gradle の依存が検出されている。検出されない場合は、dependency submission（GitHub Actions の追加。
+    CI 定義の変更のため人が判断）を検討するタスクを起票する
   依存: []
+  根拠: >-
+    2026-09-27 ユーザー判断で、脆弱性チェックの代替手段は Dependabot アラートとした（BL-057 を閉じて切り出し）。
+    ローカルの品質ゲートには入れない。Gradle の version catalog がどこまで静的に検出されるかは未確認のため、有効化後に確かめる。
 - id: BL-058
   区分: 人手検証
   タスク内容: >-
