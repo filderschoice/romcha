@@ -41,9 +41,15 @@ YouTube 公式アプリと同期する、見るだけのフローティングチ
 
 画面がオフの間、公式アプリが一時停止している間はチャットの取得を止めます。
 
+### 既知の制約
+
+- **広告の再生中は同期がずれることがあります**（YouTube Premium に加入していない場合）。公式アプリは広告中も動画のタイトル・
+  長さをそのまま公開し、再生位置だけが広告自体の位置（0 秒から）になるため、本アプリからは広告と本編を区別できません。
+  広告の間は動画の冒頭付近のチャットが表示されることがあり、広告が終わると再生位置に合わせて表示し直します。
+
 ## 動作環境
 
-- Android 14（API 34）以上。動作確認端末は Pixel 8 Pro（予定）。
+- Android 14（API 34）以上。動作確認端末は Pixel 8 Pro（Android 17、YouTube 21.38.130、Premium 有り／無し）。
 - YouTube 公式アプリ（`com.google.android.youtube`）。
 
 ## 開発
@@ -98,7 +104,9 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ### テストについて
 
 チャット取得の単体テストは、既知の応答構造に基づく合成データ（`core/chat/src/test/resources/fixtures/`）と
-MockWebServer で行い、YouTube へは通信しません。実際の応答との一致は実機・実通信での確認が必要です。
+MockWebServer で行い、YouTube へは通信しません。実際の応答から作ったデータ（`fixtures/real/`、投稿者の情報は置き換え済み）
+でも解析を確かめています。このデータは `python scripts/fetch-real-fixtures.py --replay <動画ID>` で作り直せます
+（YouTube へ通信します）。
 
 ### 診断情報
 
