@@ -6,6 +6,32 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 12:45
+  summary: チャット取得が HTTP 400 で失敗し続ける問題を修正（next 応答の雛形トークンを使わない）
+  details:
+    変更内容: >-
+      WatchInfoParser が next 応答の見出しの切り替えメニュー（上位／すべてのチャット）の continuation を優先していたが、
+      このトークンは動画IDを含まない雛形で、get_live_chat_replay・get_live_chat とも HTTP 400 を返していた（実機と PC からの再現で確認）。
+      チャット欄本体の reloadContinuationData（上位チャット）を topChatToken として使い、VideoChatInfo から allChatToken を削除した。
+      ChatResponseParser が取得応答の見出しから「すべてのチャット」の continuation（allChatToken）を読み、
+      ChatPlayer は表示の開始時に topChatToken で 1 回取得して allChatToken へ切り替える（画面オン中のみ取得。N-03）。
+      ReplaySwitcher は topChatToken を返す。単体テストの期待値を更新し、見出しの読み取りのテストとフィクスチャを追加した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/ChatResponseParser.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/WatchInfoParser.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/ChatResponseParserTest.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/InnerTubeClientTest.kt
+      - core/chat/src/test/resources/fixtures/replay_chunk.json
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/ReplaySwitcher.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/ReplaySwitcherTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py、実機（Pixel 8 Pro）でアーカイブ再生中にフローティング表示を確認
+    検証結果: 成功 - 終了コード0、実機で HTTP 400 が解消し、公式アプリの再生位置に同期したリプレイチャットの表示を確認
+    関連ID:
+      - BL-029
 - date: 2026-09-27 12:34
   summary: MediaMetadata の読み取りで Bundle の型不一致警告が logcat へ大量出力される問題を修正
   details:

@@ -2,6 +2,26 @@
   "responseContext": {},
   "continuationContents": {
     "liveChatContinuation": {
+      "header": {
+        "liveChatHeaderRenderer": {
+          "viewSelector": {
+            "sortFilterSubMenuRenderer": {
+              "subMenuItems": [
+                {
+                  "title": "上位のチャットのリプレイ",
+                  "selected": true,
+                  "continuation": { "reloadContinuationData": { "continuation": "REPLAY_TOP_TOKEN" } }
+                },
+                {
+                  "title": "チャットのリプレイ",
+                  "selected": false,
+                  "continuation": { "reloadContinuationData": { "continuation": "REPLAY_ALL_TOKEN" } }
+                }
+              ]
+            }
+          }
+        }
+      },
       "continuations": [
         {
           "liveChatReplayContinuationData": {

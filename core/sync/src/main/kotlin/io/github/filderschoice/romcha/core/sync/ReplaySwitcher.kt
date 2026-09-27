@@ -48,7 +48,7 @@ class ReplaySwitcher(
             // Unavailable は準備中の可能性もあるため、通信失敗と同様に次の確認まで待つ
             val result = source.fetch(videoId) as? FetchResult.Success
             val info = result?.value as? VideoChatInfo.Available ?: return@forEachIndexed
-            val token = info.allChatToken ?: info.topChatToken
+            val token = info.topChatToken
             return if (info.isReplay) ReplaySwitch.Ready(token) else ReplaySwitch.StillLive(token)
         }
         return ReplaySwitch.Unavailable

@@ -55,7 +55,6 @@ class WatchCoordinatorTest {
                     channelName = "チャンネル",
                     isReplay = true,
                     topChatToken = "TOP_$id",
-                    allChatToken = "ALL_$id",
                 )
         }
 
@@ -70,7 +69,6 @@ class WatchCoordinatorTest {
                     channelName = "チャンネル",
                     isReplay = false,
                     topChatToken = "LIVE_TOP",
-                    allChatToken = null,
                 )
         }
 
@@ -92,6 +90,7 @@ class WatchCoordinatorTest {
                     listOf(message),
                     ChatContinuation("NEXT_$id", ContinuationKind.REPLAY, null),
                     0,
+                    allChatToken = "ALL_$id".takeIf { continuation.startsWith("TOP_") },
                 ),
             )
         }
@@ -101,6 +100,11 @@ class WatchCoordinatorTest {
             listener: RetryListener,
         ): FetchResult<ChatParseResult.Success> {
             liveCalls += continuation
+            if (continuation == "LIVE_TOP") {
+                // 「すべてのチャット」への切り替え用の取得。応答の見出しだけを使うため、liveChunks は消費しない
+                val next = ChatContinuation("LIVE_NEXT", ContinuationKind.TIMED, 1_000)
+                return FetchResult.Success(ChatParseResult.Success(emptyList(), next, 0, allChatToken = "LIVE_ALL"))
+            }
             val ids = liveChunks.removeFirstOrNull()
             val messages = ids.orEmpty().map { message(it, offsetMs = null) }
             val next = ids?.let { ChatContinuation("LIVE_NEXT", ContinuationKind.TIMED, 1_000) }
@@ -199,8 +203,8 @@ class WatchCoordinatorTest {
             assertEquals("配信A", h.published.title)
             assertEquals(SyncIndicator.SYNCING, h.published.indicator)
             assertEquals(listOf("m_video000001"), h.published.messages.map { it.id })
-            // 既定は「すべてのチャット」
-            assertEquals("ALL_video000001", h.backend.replayCalls.first())
+            // 既定は「すべてのチャット」。「上位チャット」で 1 回取得し、応答の見出しから切り替える
+            assertEquals(listOf("TOP_video000001", "ALL_video000001"), h.backend.replayCalls.take(2))
         }
 
     @Test
@@ -290,7 +294,7 @@ class WatchCoordinatorTest {
 
             // 1 秒ごとに受信（0・1・2 秒）。3 秒時点では受信から 2 秒経った l1・l2 だけを表示する
             advanceTimeBy(2_600)
-            assertEquals("LIVE_TOP", h.backend.liveCalls.first())
+            assertEquals(listOf("LIVE_TOP", "LIVE_ALL"), h.backend.liveCalls.take(2))
             assertEquals(listOf("l1", "l2"), h.published.messages.map { it.id })
         }
 
@@ -311,7 +315,7 @@ class WatchCoordinatorTest {
             h.backend.replayVideo("premiere001", "プレミア")
             advanceTimeBy(1_500)
 
-            assertEquals("ALL_premiere001", h.backend.replayCalls.first())
+            assertEquals(listOf("TOP_premiere001", "ALL_premiere001"), h.backend.replayCalls.take(2))
             assertEquals(SyncIndicator.SYNCING, h.published.indicator)
         }
 
@@ -344,7 +348,7 @@ class WatchCoordinatorTest {
 
             h.screenOn.value = true
             advanceTimeBy(500)
-            assertEquals(listOf("ALL_video000001"), h.backend.replayCalls.take(1))
+            assertEquals(listOf("TOP_video000001", "ALL_video000001"), h.backend.replayCalls.take(2))
         }
 
     @Test

@@ -54,8 +54,8 @@ class InnerTubeClientTest {
             assertTrue(info.isReplay)
             assertEquals("アーカイブ配信のタイトル", info.title)
             assertEquals("テストチャンネル", info.channelName)
-            assertEquals("TOP_TOKEN", info.topChatToken)
-            assertEquals("ALL_TOKEN", info.allChatToken)
+            // 見出しの表示切り替え（TOP_TOKEN / ALL_TOKEN）は動画IDを含まない雛形で使えないため、チャット欄本体の continuation を使う
+            assertEquals("RELOAD_TOKEN", info.topChatToken)
 
             val recorded = server.takeRequest()
             assertEquals("/youtubei/v1/next?prettyPrint=false", recorded.path)

@@ -20,8 +20,8 @@ sealed interface VideoChatInfo {
      * チャットを取得できる。
      *
      * @property isReplay true ならアーカイブのリプレイ、false ならライブ・プレミア（公開中・待機中）
-     * @property topChatToken 「上位チャット」の continuation（F-CHAT-07）
-     * @property allChatToken 「すべてのチャット」の continuation。無い場合は [topChatToken] を使う
+     * @property topChatToken チャット欄の continuation（「上位チャット」の表示）。「すべてのチャット」の continuation は
+     *   `next` 応答からは得られないため、この continuation での最初の取得応答から読む（`ChatParseResult.Success.allChatToken`）
      */
     data class Available(
         override val videoId: String,
@@ -29,7 +29,6 @@ sealed interface VideoChatInfo {
         override val channelName: String,
         val isReplay: Boolean,
         val topChatToken: String,
-        val allChatToken: String?,
     ) : VideoChatInfo
 
     /**
@@ -83,33 +82,13 @@ object WatchInfoParser {
             title = title,
             channelName = channel,
             isReplay = chat.bool("isReplay") ?: false,
-            topChatToken = subMenuToken(chat, TOP_CHAT_INDEX) ?: topToken,
-            allChatToken = subMenuToken(chat, ALL_CHAT_INDEX),
+            topChatToken = topToken,
         )
     }
 
     private fun reloadToken(node: JsonElement?): String? =
         node.arr("continuations")?.firstNotNullOfOrNull { it.obj("reloadContinuationData").str("continuation") }
 
-    /** チャット欄の見出しにある表示切り替え（0 = 上位チャット、1 = すべてのチャット）の continuation。 */
-    private fun subMenuToken(
-        chat: JsonObject,
-        index: Int,
-    ): String? =
-        chat
-            .obj("header")
-            .obj("liveChatHeaderRenderer")
-            .obj("viewSelector")
-            .obj("sortFilterSubMenuRenderer")
-            .arr("subMenuItems")
-            ?.getOrNull(index)
-            .obj("continuation")
-            .obj("reloadContinuationData")
-            .str("continuation")
-
     private fun unavailableMessage(node: JsonObject?): String? =
         node.obj("availabilityMessage").obj("messageRenderer").text("text")
-
-    private const val TOP_CHAT_INDEX = 0
-    private const val ALL_CHAT_INDEX = 1
 }

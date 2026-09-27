@@ -1,6 +1,8 @@
 package io.github.filderschoice.romcha.feature.overlay.session
 
+import io.github.filderschoice.romcha.core.chat.ChatParseResult
 import io.github.filderschoice.romcha.core.chat.FetchResult
+import io.github.filderschoice.romcha.core.chat.RetryListener
 import io.github.filderschoice.romcha.core.chat.VideoChatInfo
 import io.github.filderschoice.romcha.core.sync.LiveChatSession
 import io.github.filderschoice.romcha.core.sync.LiveState
@@ -66,23 +68,23 @@ internal class ChatPlayer(
                 )
             is VideoChatInfo.Available -> {
                 publisher.reset(OverlayUiState(title = title, candidates = alternatives))
-                // 既定は「すべてのチャット」。閲覧専用ビューワーとして取りこぼしの無い表示を優先する（切り替え F-CHAT-07 は M4）
-                val token = info.allChatToken ?: info.topChatToken
-                if (info.isReplay) playReplay(token) else playLive(videoId, token)
+                if (info.isReplay) playReplay(info.topChatToken) else playLive(videoId, info.topChatToken)
             }
         }
     }
 
-    private suspend fun playReplay(continuation: String) {
-        whileScreenOn { replayLoop(continuation) }
+    private suspend fun playReplay(topChatToken: String) {
+        whileScreenOn {
+            replayLoop(allChatToken(topChatToken) { token, listener -> backend.replay(token, 0L, listener) })
+        }
     }
 
     /** ライブを最新追従で表示し、終わったらリプレイの準備を待って切り替える（F-CHAT-06）。 */
     private suspend fun playLive(
         videoId: String,
-        continuation: String,
+        topChatToken: String,
     ) {
-        whileScreenOn { liveLoop(continuation) }
+        whileScreenOn { liveLoop(allChatToken(topChatToken) { token, listener -> backend.live(token, listener) }) }
         val switcher = ReplaySwitcher(VideoInfoSource { backend.videoInfo(it) }, timing.replayWaitsMs)
         val switch =
             switcher.await(videoId) { attempt, _ ->
@@ -96,6 +98,21 @@ internal class ChatPlayer(
                     publisher.base.copy(notice = SessionMessages.REPLAY_NOT_PROVIDED),
                 )
         }
+    }
+
+    /**
+     * 「上位チャット」の continuation で 1 回取得し、応答の見出しから「すべてのチャット」の continuation を得る。
+     *
+     * 既定は「すべてのチャット」。閲覧専用ビューワーとして取りこぼしの無い表示を優先する（切り替え F-CHAT-07 は M4）。
+     * 取得に失敗した・見出しが無い場合は「上位チャット」のまま続ける（失敗の表示と再試行は各セッションに任せる）。
+     * 画面オンのたびに取り直す（前回の失敗で「上位チャット」になっていても、次の画面オンで切り替えられる）。
+     */
+    private suspend fun allChatToken(
+        topChatToken: String,
+        fetch: suspend (String, RetryListener) -> FetchResult<ChatParseResult.Success>,
+    ): String {
+        val result = fetch(topChatToken) { _, _, _ -> }
+        return (result as? FetchResult.Success)?.value?.allChatToken ?: topChatToken
     }
 
     /** 画面が点いている間だけ [block] を動かし、消えたら止めて、点いたらやり直す（N-03）。[block] が戻ったら終わる。 */

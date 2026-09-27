@@ -96,6 +96,13 @@ class ChatResponseParserTest {
     }
 
     @Test
+    fun 見出しの表示切り替えからすべてのチャットの継続トークンを読む() {
+        assertEquals("REPLAY_ALL_TOKEN", parseSuccess("replay_chunk.json").allChatToken)
+        // 見出しの無い応答（2 回目以降の取得）では null
+        assertNull(parseSuccess("live_chunk.json").allChatToken)
+    }
+
+    @Test
     fun ライブ応答は推奨間隔付きの継続トークンを返しオフセットを持たない() {
         val result = parseSuccess("live_chunk.json")
 

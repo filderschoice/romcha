@@ -41,11 +41,13 @@ sealed interface ChatParseResult {
     /**
      * @property continuation 次の取得に使うトークン。null ならチャットの続きが無い（リプレイ終端・ライブ終了。F-CHAT-06）
      * @property skipped 未知・表示対象外の種別として読み飛ばした件数（N-08）
+     * @property allChatToken チャット欄の見出しにある「すべてのチャット」の continuation。見出しが無い応答では null
      */
     data class Success(
         val messages: List<ChatMessage>,
         val continuation: ChatContinuation?,
         val skipped: Int,
+        val allChatToken: String? = null,
     ) : ChatParseResult
 
     /** 応答の構造が想定と異なり解析できなかった（N-08。落とさずに画面へ表示する）。 */
@@ -93,8 +95,26 @@ object ChatResponseParser {
                 collect(chatItemOf(action), null)
             }
         }
-        return ChatParseResult.Success(messages, parseNextContinuation(node), skipped)
+        return ChatParseResult.Success(messages, parseNextContinuation(node), skipped, parseAllChatToken(node))
     }
+
+    /**
+     * 見出しの表示切り替え（0 = 上位チャット、1 = すべてのチャット）から「すべてのチャット」の continuation を読む。
+     *
+     * `next` 応答の同じ位置にあるトークンは動画IDを含まない雛形で、送ると HTTP 400 になる（2026-09-27 実機検証）。
+     * チャット取得の応答側のトークンは動画IDを含み、そのまま使える。
+     */
+    private fun parseAllChatToken(node: JsonObject): String? =
+        node
+            .obj("header")
+            .obj("liveChatHeaderRenderer")
+            .obj("viewSelector")
+            .obj("sortFilterSubMenuRenderer")
+            .arr("subMenuItems")
+            ?.getOrNull(ALL_CHAT_INDEX)
+            .obj("continuation")
+            .obj("reloadContinuationData")
+            .str("continuation")
 
     /** チャット項目の追加（`addChatItemAction`）の項目。ティッカー・バナー等の他のアクションは null。 */
     private fun chatItemOf(action: JsonElement): JsonObject? = action.obj("addChatItemAction").obj("item")
@@ -192,6 +212,7 @@ object ChatResponseParser {
     }
 
     private const val MAX_REASON_LENGTH = 120
+    private const val ALL_CHAT_INDEX = 1
 
     private val KIND_BY_RENDERER =
         mapOf(

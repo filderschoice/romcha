@@ -14,7 +14,7 @@ class ReplaySwitcherTest {
         token: String,
     ): FetchResult<VideoChatInfo> =
         FetchResult.Success(
-            VideoChatInfo.Available("v", "t", "c", isReplay, topChatToken = "TOP_$token", allChatToken = token),
+            VideoChatInfo.Available("v", "t", "c", isReplay, topChatToken = token),
         )
 
     private val unavailable: FetchResult<VideoChatInfo> =

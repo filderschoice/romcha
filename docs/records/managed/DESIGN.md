@@ -66,6 +66,9 @@
   - それ以外の renderer と id の無い項目は読み飛ばして `skipped` に数える。チャット項目以外のアクション（ティッカー等）は数えない。
 - 継続トークン: `continuations` から `liveChatReplayContinuationData` → `timedContinuationData` → `invalidationContinuationData`
   → `reloadContinuationData` の順で最初に見つかったもの。`timeoutMs` を推奨間隔として持つ。無ければ終端・終了。
+- すべてのチャットの continuation（`allChatToken`）: 見出し `header.liveChatHeaderRenderer.viewSelector.sortFilterSubMenuRenderer`
+  の `subMenuItems[1]`（0 = 上位チャット、1 = すべてのチャット）の `reloadContinuationData`。見出しは最初の取得応答にだけ含まれ、
+  2 回目以降は null。
 - JSON は `kotlinx.serialization` の `JsonElement` を必要箇所だけ辿る（`internal/JsonNav.kt`）。型不一致・欠落は null とし、
   `liveChatContinuation` が無い・JSON でない場合は `ChatParseResult.Failure` を返す（例外を投げない）。
 - `InnerTubeClient`（通信先は `https://www.youtube.com/` のみ。Cookie を保持しない）:
@@ -73,7 +76,9 @@
     `clientVersion` の既定値は定数で持ち、実応答での有効性は人手検証で確認する。
   - `fetchVideoChatInfo(videoId)`: `next` 応答の `twoColumnWatchNextResults` から、タイトル（`videoPrimaryInfoRenderer.title`）、
     チャンネル名（`videoSecondaryInfoRenderer.owner.videoOwnerRenderer.title`）、`conversationBar.liveChatRenderer` の
-    `isReplay` と continuation（見出しの切り替えメニュー 0 = 上位チャット、1 = すべてのチャット。無ければ `reloadContinuationData`）を読む。
+    `isReplay` と、チャット欄本体の `continuations` の `reloadContinuationData`（上位チャットの表示。`topChatToken`）を読む。
+    `next` 応答の見出しの切り替えメニューのトークンは動画IDを含まない雛形で、送ると HTTP 400 になるため使わない
+    （2026-09-27 実機検証。アーカイブ・ライブとも同じ）。
     `liveChatRenderer` が無ければ `VideoChatInfo.Unavailable`（`conversationBarRenderer.availabilityMessage` の説明文付き）。
   - `fetchReplay(continuation, playerOffsetMs)`: `live_chat/get_live_chat_replay`。初回・シーク後のみ
     `currentPlayerState.playerOffsetMs`（文字列）を付ける。`fetchLive(continuation)`: `live_chat/get_live_chat`。
@@ -125,7 +130,7 @@
 - `LiveChatSession` が終了（継続トークン無し）したら、`ReplaySwitcher.await(videoId)` で動画の情報を取り直し、
   リプレイが使えるようになるのを待つ（終了直後はリプレイが準備されていないことがあるため）。
 - 確認の間隔は 30 秒・1 分・2 分・5 分・10 分（合計約 18 分）。各待ちの前に `onWaiting(回数, 待ち時間)` で UI へ知らせる。
-- 結果: リプレイになっていれば `Ready(continuation)`（すべてのチャット優先）、まだライブなら `StillLive(continuation)`
+- 結果: リプレイになっていれば `Ready(continuation)`（`topChatToken`。すべてのチャットへの切り替えは `ChatPlayer` が行う）、まだライブなら `StillLive(continuation)`
   （終了判定が早すぎた場合。ライブの取得へ戻る）、最後まで準備されなければ `Unavailable`。
   チャット無効（`Unavailable`）と通信失敗は準備中の可能性があるため、諦めずに次の確認まで待つ。
 
@@ -230,9 +235,9 @@
     （指定時に再生を検出していなければ、最初に検出した動画を指定した動画とみなす）。
   - 候補の選択（F-VID-02）: `VideoResolver.remember` でキャッシュへ覚えてから開く。
 - `ChatPlayer.open(videoId, alternatives)`: `next` で情報を取り、チャット無効なら説明文（応答の文言、無ければ既定文。F-VID-07）。
-  チャットがあれば「すべてのチャット」の continuation（無ければ上位チャット）で、アーカイブならリプレイ、ライブ・プレミア中
-  （待機中を含む）ならライブを表示する。既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を
-  優先するため（切り替え F-CHAT-07 は M4）。
+  チャットがあれば、アーカイブならリプレイ、ライブ・プレミア中（待機中を含む）ならライブを表示する。表示の開始時（画面オンのたび）に
+  `topChatToken` で 1 回取得し、応答の `allChatToken` があれば「すべてのチャット」へ切り替える（取得失敗・見出し無しなら上位チャットのまま）。
+  既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を優先するため（切り替え F-CHAT-07 は M4）。
   - リプレイ: `ReplaySession` の状態から、メッセージ・位置・同期状態（再生中＝同期中、一時停止・バッファ中＝一時停止、
     MediaSession 無し＝未検出）・お知らせ（再接続中 n 回目・失敗の説明・未検出）を表示する。
   - ライブ（F-CHAT-04/05、F-SYNC-08）: `LiveChatSession` を動かし、250ms ごとに `LiveTimeline.visible`（表示遅延は
