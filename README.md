@@ -81,6 +81,8 @@ ktlint の指摘は `./gradlew ktlintFormat` で自動修正できます。
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
+実機での検証手順は [`docs/VERIFICATION.md`](docs/VERIFICATION.md) を参照してください。
+
 ### 構成
 
 | モジュール | 内容 |
