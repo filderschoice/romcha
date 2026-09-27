@@ -4,6 +4,8 @@
 
 ## 2026-09-27
 
+- `docs/records/managed/BACKLOG.md` へ、実機確認での指摘（退避中のつまみの横幅を広げる）を BL-051 として登録した
+  （自律ループ第1イテレーション）。
 - `docs/records/managed/BACKLOG.md` へ、実機確認での指摘（退避のドラッグが画面幅で止まる）を BL-050 として登録した
   （自律ループ第1イテレーション）。
 - `docs/records/managed/BACKLOG.md` へ、ユーザー指示のフローティングウィンドウの画面端への退避と復帰（BL-049）を登録し、
