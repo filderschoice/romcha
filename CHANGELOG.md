@@ -4,6 +4,7 @@
 
 ## 2026-09-28
 
+- `README.md` に「問題の報告」節（GitHub Issues の窓口、報告に書く情報、個人情報を書かないお願い）を追加した（BL-068）。
 - `.github/CODEOWNERS` の配布テンプレートのプレースホルダ（`@your-org/...`）を、リポジトリ所有者（`@filderschoice`）へ置き換えた（BL-067）。
 - `docs/VERIFICATION.md` から検証端末のシリアル番号を除き、`<シリアル>`（`adb devices -l` で確認する値）へ置き換えた（BL-066）。
 - リポジトリの公開（public 化）に向けた点検の指摘を `docs/records/managed/BACKLOG.md` へ登録した（BL-066〜BL-070。
