@@ -1,4 +1,4 @@
-* @your-org/ai-platform
+* @filderschoice
 
-rules/guardrails-unified.v1.md @your-org/security-team @your-org/privacy-team @your-org/governance-team
-rules/guardrails-app.v1.md @your-org/security-team @your-org/privacy-team @your-org/governance-team
+rules/guardrails-unified.v1.md @filderschoice
+rules/guardrails-app.v1.md @filderschoice
