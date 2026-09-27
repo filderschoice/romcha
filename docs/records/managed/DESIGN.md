@@ -24,6 +24,7 @@
 - プロジェクト雛形と品質ゲート（静的解析・型検査・単体テスト）
 - F-CHAT-01/08、N-08: メッセージモデルとチャット応答の解析（`core:chat` の `ChatResponseParser`）
 - F-CHAT-10、F-VID-07: InnerTube クライアント（`next` からの continuation 取得・チャット無効の判定、リプレイ／ライブ取得、指数バックオフ）
+- F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
@@ -71,6 +72,9 @@
   - 結果は `FetchResult`（成功／`FetchFailure.Network`・`Http(code)`・`Parse(reason)`）。
   - 再試行（F-CHAT-10）: 通信断・429・5xx のみ。待ち時間 1 秒から倍々で最大 30 秒、既定 5 回。`RetryListener` で UI へ通知する。
     解析失敗と 4xx（429 以外）は再試行しない。
+- `VideoUrlParser.extractVideoId(text)`: 文中の最初の YouTube 動画 URL から 11 桁の動画IDを取り出す。
+  受理するのは `youtu.be/ID`、`(www.|m.)youtube.com/watch?v=ID`、`/live/ID`、`/shorts/ID`（http/https・スキーム省略可）。
+  ホストは完全一致で判定し、ID は `[A-Za-z0-9_-]{11}` のみ受理する。ID 単体の入力は受理しない。
 - テストの fixture（`core/chat/src/test/resources/fixtures/`）は既知の応答構造に基づく合成データ。実応答との照合は人手検証。
 
 ### 同期エンジン（`core:sync`）

@@ -6,6 +6,21 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 17:30
+  summary: YouTube URL から動画IDを取り出す VideoUrlParser を core:chat に実装
+  details:
+    変更内容: >-
+      F-VID-04/05 に基づき、youtu.be / watch?v= / live/ / shorts/ 形式（www. / m. 付き、スキーム省略可）から動画IDを取り出す
+      VideoUrlParser を追加した。共有テキスト中の URL にも対応し、ホストの完全一致と ID 形式で不正入力を除外する。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/VideoUrlParser.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/VideoUrlParserTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:chat の単体テスト 23 件成功
+    関連ID:
+      - BL-007
 - date: 2026-09-27 17:15
   summary: リプレイの先読み取得とシーク時の再取得を行う ReplaySession を core:sync に実装
   details:
