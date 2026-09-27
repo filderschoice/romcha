@@ -1,5 +1,6 @@
 package io.github.filderschoice.romcha.core.media
 
+import android.media.MediaMetadata
 import android.media.session.PlaybackState
 import io.github.filderschoice.romcha.core.chat.VideoUrlParser
 import io.github.filderschoice.romcha.core.chat.resolve.TrackMetadata
@@ -88,6 +89,79 @@ object MediaMapping {
         val idLikeKey = key.substringAfterLast('.').contains("id", ignoreCase = true)
         return value.takeIf { idLikeKey && BARE_VIDEO_ID.matches(it) }
     }
+
+    /**
+     * MediaMetadata のキーの値の型（`MediaMetadata` の型別の取得メソッドを選ぶために使う）。
+     *
+     * 型の違う取得メソッドで読むと、Android の Bundle が ClassCastException のスタックトレースを警告として
+     * logcat へ出す（値は null / 0 が返るだけで落ちない）。再生状態の変化ごとに全キーを読むため大量に出る。
+     */
+    enum class MetadataValueType {
+        TEXT,
+        LONG,
+
+        /** 画像（Bitmap）・評価（Rating）。文字列化しない */
+        OTHER,
+
+        /** 標準外のキー。型が分からないため文字列 → 数値の順に試す */
+        UNKNOWN,
+    }
+
+    /**
+     * MediaMetadata のキーの型。`MediaMetadata.Builder` が標準キーに型を強制するため、標準キーは型が確定する。
+     * 公式アプリ独自のキーは実機で型を確かめたものだけを登録する。
+     */
+    fun metadataValueType(key: String): MetadataValueType =
+        when (key) {
+            in LONG_METADATA_KEYS -> MetadataValueType.LONG
+            in OTHER_METADATA_KEYS -> MetadataValueType.OTHER
+            in TEXT_METADATA_KEYS -> MetadataValueType.TEXT
+            else -> MetadataValueType.UNKNOWN
+        }
+
+    private val LONG_METADATA_KEYS =
+        setOf(
+            MediaMetadata.METADATA_KEY_DURATION,
+            MediaMetadata.METADATA_KEY_YEAR,
+            MediaMetadata.METADATA_KEY_TRACK_NUMBER,
+            MediaMetadata.METADATA_KEY_NUM_TRACKS,
+            MediaMetadata.METADATA_KEY_DISC_NUMBER,
+            MediaMetadata.METADATA_KEY_BT_FOLDER_TYPE,
+            // 公式アプリ独自のキー（2026-09-27 実機確認。YouTube 21.38.130）
+            "com.google.android.youtube.MEDIA_METADATA_VIDEO_HEIGHT_PX",
+            "com.google.android.youtube.MEDIA_METADATA_VIDEO_WIDTH_PX",
+        )
+
+    private val OTHER_METADATA_KEYS =
+        setOf(
+            MediaMetadata.METADATA_KEY_ART,
+            MediaMetadata.METADATA_KEY_ALBUM_ART,
+            MediaMetadata.METADATA_KEY_DISPLAY_ICON,
+            MediaMetadata.METADATA_KEY_RATING,
+            MediaMetadata.METADATA_KEY_USER_RATING,
+        )
+
+    private val TEXT_METADATA_KEYS =
+        setOf(
+            MediaMetadata.METADATA_KEY_TITLE,
+            MediaMetadata.METADATA_KEY_ARTIST,
+            MediaMetadata.METADATA_KEY_AUTHOR,
+            MediaMetadata.METADATA_KEY_WRITER,
+            MediaMetadata.METADATA_KEY_COMPOSER,
+            MediaMetadata.METADATA_KEY_COMPILATION,
+            MediaMetadata.METADATA_KEY_DATE,
+            MediaMetadata.METADATA_KEY_GENRE,
+            MediaMetadata.METADATA_KEY_ALBUM,
+            MediaMetadata.METADATA_KEY_ALBUM_ARTIST,
+            MediaMetadata.METADATA_KEY_ART_URI,
+            MediaMetadata.METADATA_KEY_ALBUM_ART_URI,
+            MediaMetadata.METADATA_KEY_DISPLAY_TITLE,
+            MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE,
+            MediaMetadata.METADATA_KEY_DISPLAY_DESCRIPTION,
+            MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI,
+            MediaMetadata.METADATA_KEY_MEDIA_ID,
+            MediaMetadata.METADATA_KEY_MEDIA_URI,
+        )
 
     /** デバッグ画面（M0 の Q-02 確認用）に出す「キー = 値」の一覧。キー順に並べる。 */
     fun debugLines(entries: Map<String, String>): List<String> =

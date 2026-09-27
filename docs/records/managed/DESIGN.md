@@ -137,6 +137,9 @@
   パッケージ `com.google.android.youtube` の `MediaController` を追跡し、`MediaController.Callback` で状態・メタデータの変化を
   `state: StateFlow<NowPlaying>`（スナップショット・`TrackMetadata`・セッション有無・デバッグ用の全キー一覧）へ反映する。
   コールバックはメインスレッド。許可が無い・`SecurityException` の場合は開始しない。
+  MediaMetadata の各キーは `MediaMapping.metadataValueType` の型表（標準キーと実機で確かめた公式アプリ独自キー）に従い、
+  型に合った取得メソッドだけで読む（型違いの取得は Bundle が警告のスタックトレースを logcat へ出すため）。画像・評価は文字列化しない。
+  型表に無いキーは文字列 → 数値の順に試し、読めた型を覚えて次回からはその型だけで読む。
 - `MediaMapping`（純粋関数。JVM テスト可能）:
   - 状態: PLAYING / FAST_FORWARDING / REWINDING → PLAYING、PAUSED → PAUSED、BUFFERING / CONNECTING / SKIPPING_* → BUFFERING、
     STOPPED / ERROR → STOPPED、その他 → NONE。速度が 0 以下なら 1.0 とみなす。負の位置は 0。

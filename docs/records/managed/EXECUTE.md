@@ -6,6 +6,26 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 12:34
+  summary: MediaMetadata の読み取りで Bundle の型不一致警告が logcat へ大量出力される問題を修正
+  details:
+    変更内容: >-
+      PlaybackMonitor が MediaMetadata の全キーへ getText と getLong を順に試していたため、画像（Bitmap）・数値のキーで
+      Android の Bundle が ClassCastException のスタックトレースを警告として再生状態の変化ごとに出力していた。
+      MediaMapping に標準キーと公式アプリ独自キー（MEDIA_METADATA_VIDEO_WIDTH_PX / HEIGHT_PX）の型表を追加し、
+      型に合った取得メソッドだけで読むようにした。画像・評価のキーは従来どおり文字列化しない。
+      型の分からないキーは文字列、数値の順に試し、読めた型を覚えて次回からはその型だけで読む。キーの型判定の単体テストを追加した。
+    変更ファイル:
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/MediaMapping.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/PlaybackMonitor.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/MediaMappingTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py、実機（Pixel 8 Pro）で公式アプリの再生と一時停止を 5 回切り替えて
+      adb logcat のアプリのプロセスの Bundle 警告の件数を数える
+    検証結果: 成功 - 終了コード0、実機の Bundle 警告は修正前の 66 行から 0 行になった
+    関連ID:
+      - BL-028
 - date: 2026-09-27 23:40
   summary: ライブ・プレミアのセッション統合（状態判定、最新追従表示、終了時のリプレイ切り替え）を実装
   details:

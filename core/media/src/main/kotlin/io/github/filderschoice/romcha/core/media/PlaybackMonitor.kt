@@ -11,6 +11,11 @@ import android.os.Handler
 import android.os.Looper
 import androidx.core.app.NotificationManagerCompat
 import io.github.filderschoice.romcha.core.chat.resolve.TrackMetadata
+import io.github.filderschoice.romcha.core.media.MediaMapping.MetadataValueType
+import io.github.filderschoice.romcha.core.media.MediaMapping.MetadataValueType.LONG
+import io.github.filderschoice.romcha.core.media.MediaMapping.MetadataValueType.OTHER
+import io.github.filderschoice.romcha.core.media.MediaMapping.MetadataValueType.TEXT
+import io.github.filderschoice.romcha.core.media.MediaMapping.MetadataValueType.UNKNOWN
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,6 +52,9 @@ class PlaybackMonitor(
 
     private var controller: MediaController? = null
     private var started = false
+
+    /** 型の分からない MediaMetadata のキーについて、読めた型（メインスレッドでのみ読み書きする） */
+    private val learnedTypes = mutableMapOf<String, MetadataValueType>()
 
     private val sessionsListener =
         MediaSessionManager.OnActiveSessionsChangedListener { controllers -> attach(controllers.orEmpty()) }
@@ -143,7 +151,7 @@ class PlaybackMonitor(
     ): Map<String, String> {
         val entries = linkedMapOf<String, String>()
         metadata?.keySet()?.forEach { key ->
-            val value = metadata.getText(key)?.toString() ?: metadata.getLong(key).takeIf { it != 0L }?.toString()
+            val value = metadataValue(metadata, key)
             if (value != null) entries["metadata.$key"] = value
         }
         metadata?.description?.let { description ->
@@ -158,6 +166,28 @@ class PlaybackMonitor(
             item.description.mediaUri?.let { entries["queue[$index].mediaUri"] = it.toString() }
         }
         return entries
+    }
+
+    /**
+     * キーの型に合った取得メソッドだけで読む（型違いの取得は Bundle の警告を logcat へ出すため。BL-028）。
+     *
+     * 型の分からないキーは文字列 → 数値の順に試し、読めた型を [learnedTypes] に覚えて次回からはその型だけで読む
+     * （警告はキーごとに初回だけになる）。
+     */
+    private fun metadataValue(
+        metadata: MediaMetadata,
+        key: String,
+    ): String? {
+        val text = { metadata.getText(key)?.toString() }
+        val long = { metadata.getLong(key).takeIf { it != 0L }?.toString() }
+        val type = MediaMapping.metadataValueType(key).takeUnless { it == UNKNOWN } ?: learnedTypes[key] ?: UNKNOWN
+        return when (type) {
+            TEXT -> text()
+            LONG -> long()
+            OTHER -> null
+            UNKNOWN ->
+                text()?.also { learnedTypes[key] = TEXT } ?: long()?.also { learnedTypes[key] = LONG }
+        }
     }
 
     private fun putBundle(

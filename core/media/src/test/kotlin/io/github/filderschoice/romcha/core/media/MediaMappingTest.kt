@@ -1,6 +1,8 @@
 package io.github.filderschoice.romcha.core.media
 
+import android.media.MediaMetadata
 import android.media.session.PlaybackState
+import io.github.filderschoice.romcha.core.media.MediaMapping.MetadataValueType
 import io.github.filderschoice.romcha.core.sync.PlaybackStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -65,5 +67,21 @@ class MediaMappingTest {
     @Test
     fun デバッグ表示はキー順に並べる() {
         assertEquals(listOf("a = 1", "b = 2"), MediaMapping.debugLines(mapOf("b" to "2", "a" to "1")))
+    }
+
+    @Test
+    fun メタデータの標準キーは型に合った取得方法を選び標準外のキーは不明とする() {
+        assertEquals(MetadataValueType.TEXT, MediaMapping.metadataValueType(MediaMetadata.METADATA_KEY_TITLE))
+        assertEquals(MetadataValueType.LONG, MediaMapping.metadataValueType(MediaMetadata.METADATA_KEY_DURATION))
+        // 画像・評価は文字列化しない（型違いで読むと Bundle の警告が出る。BL-028）
+        assertEquals(MetadataValueType.OTHER, MediaMapping.metadataValueType(MediaMetadata.METADATA_KEY_ART))
+        assertEquals(MetadataValueType.OTHER, MediaMapping.metadataValueType(MediaMetadata.METADATA_KEY_DISPLAY_ICON))
+        assertEquals(MetadataValueType.OTHER, MediaMapping.metadataValueType(MediaMetadata.METADATA_KEY_RATING))
+        // 公式アプリ独自のキーは実機で確かめた型
+        assertEquals(
+            MetadataValueType.LONG,
+            MediaMapping.metadataValueType("com.google.android.youtube.MEDIA_METADATA_VIDEO_WIDTH_PX"),
+        )
+        assertEquals(MetadataValueType.UNKNOWN, MediaMapping.metadataValueType("com.google.android.youtube.custom"))
     }
 }
