@@ -28,6 +28,7 @@
 - F-VID-01/02: 動画の自動特定パイプライン手順1・2・4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
 - F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
+- F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
@@ -154,6 +155,24 @@
 - 表示: 通常メッセージは投稿者名（所有者＝黄・モデレーター＝青・メンバー＝緑）と本文（絵文字は代替テキスト）。
   スーパーチャット・スーパーステッカーは見出し帯（投稿者名・金額）と本文帯を応答の色で塗り、輝度で黒／白文字を選ぶ（F-VIEW-02）。
   メンバー加入・ギフトは緑の帯。お知らせ文（チャット無効 F-VID-07・通信失敗など）は赤帯で表示する。
+
+### アプリ画面（`app`）
+
+- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME` と `LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
+  テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
+- HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
+  URL 入力（F-VID-05）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+- 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
+  それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
+  または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
+  フローティング表示の開始にはオーバーレイ権限だけを必須とする。
+- 動画の指定（F-VID-04/05）: 共有（`ACTION_SEND` / `text/plain`）の本文・件名、または URL 入力欄から `VideoUrlParser` で ID を取り出し、
+  `OverlayChannel.requestVideo(id)` で保持してから `OverlayService.start` する（セッション開始前でも失われないよう StateFlow で保持）。
+  共有から開いた場合は画面を閉じて公式アプリへ戻る。URL が無い場合はトーストで知らせる。
+- 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
+  MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
+- OSS ライセンス（F-APP-03）: AboutLibraries（Gradle プラグインがビルド時に依存一覧を生成し、`LibrariesContainer` で表示）。
+- 文言は日本語のみ（英語リソースは未対応。N-11 は SHOULD）。
 
 ## 非機能要件
 

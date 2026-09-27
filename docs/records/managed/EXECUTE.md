@@ -6,6 +6,31 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 19:55
+  summary: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・診断表示）を app に実装
+  details:
+    変更内容: >-
+      F-APP-01/03/04 と F-VID-04/05 に基づき、権限を順に案内する画面、公式アプリの共有（ACTION_SEND）からの動画指定、URL 入力、
+      免責表示、AboutLibraries による OSS ライセンス一覧、M0 確認用の MediaSession 診断表示を追加した。
+      指定された動画はセッション開始前でも失われないよう OverlayChannel の StateFlow で保持する。INTERNET 権限を宣言した。
+      権限の案内順と共有テキストからの ID 抽出の単体テスト 3 件を追加し、デバッグ APK のビルドを確認した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/res/values/strings.xml
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/PermissionStatus.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeActions.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/PermissionStatusTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      ./gradlew :app:assembleDebug、npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、app の単体テスト 3 件成功、デバッグ APK の生成を確認
+    関連ID:
+      - BL-011
 - date: 2026-09-27 19:20
   summary: フローティングウィンドウ（フォアグラウンドサービスと Compose の表示）を feature:overlay に実装
   details:

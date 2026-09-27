@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 
 /** 同期状態の表示（F-OVL-09）。 */
 enum class SyncIndicator {
@@ -45,7 +46,7 @@ data class OverlayUiState(
     val candidates: List<OverlayCandidate> = emptyList(),
 )
 
-/** フローティングウィンドウでの利用者の操作。 */
+/** 利用者の操作（フローティングウィンドウ・常駐通知・アプリ画面から、セッションへ伝える）。 */
 sealed interface OverlayEvent {
     data class CandidateSelected(
         val videoId: String,
@@ -75,9 +76,26 @@ object OverlayChannel {
         mutableState.value = transform(mutableState.value)
     }
 
+    /** 購読者が居ない時に送った操作は捨てられる（ウィンドウ表示中の操作にだけ使う）。 */
     fun send(event: OverlayEvent) {
         mutableEvents.tryEmit(event)
     }
+
+    private val mutableRequestedVideo = MutableStateFlow<String?>(null)
+
+    /**
+     * 共有・URL 入力で指定された動画ID（F-VID-04/05。自動特定より優先する）。
+     *
+     * セッションの開始前に指定されても失われないよう、取り出されるまで保持する。
+     */
+    val requestedVideo: StateFlow<String?> = mutableRequestedVideo.asStateFlow()
+
+    fun requestVideo(videoId: String) {
+        mutableRequestedVideo.value = videoId
+    }
+
+    /** 指定された動画IDを取り出し、保持をやめる。 */
+    fun takeRequestedVideo(): String? = mutableRequestedVideo.getAndUpdate { null }
 
     private const val EVENT_BUFFER = 8
 }
