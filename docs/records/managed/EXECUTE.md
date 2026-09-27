@@ -6,6 +6,22 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 21:55
+  summary: ライブ・プレミア終了後にリプレイの準備を待って切り替える ReplaySwitcher を core:sync に実装
+  details:
+    変更内容: >-
+      F-CHAT-06 に基づき、ライブの終了（継続トークン無し。LiveChatSession.ended で通知）後、30 秒〜10 分の間隔で動画の情報を取り直し、
+      リプレイが使えるようになったら continuation を返す ReplaySwitcher を追加した。まだ配信中ならライブへ戻り、
+      合計約 18 分待っても準備されなければ諦める。仮想時間を使う単体テスト 4 件を追加した。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/ReplaySwitcher.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/ReplaySwitcherTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:sync の単体テスト 28 件成功
+    関連ID:
+      - BL-015
 - date: 2026-09-27 21:30
   summary: ライブ・プレミアのチャットをポーリングで追従する LiveChatSession を core:sync に実装
   details:

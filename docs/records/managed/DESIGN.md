@@ -30,6 +30,7 @@
 - F-OVL-01/02/03/07/08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
+- F-CHAT-06: ライブ・プレミア終了の検知とリプレイへの切り替え待ち（`core:sync` の `LiveChatSession.ended` と `ReplaySwitcher`）
 - F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session.WatchCoordinator`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
@@ -106,6 +107,15 @@
 - 公式アプリが一時停止（`PAUSED`）の間は取得せず、1 秒ごとに再開を確かめる（N-03）。プレミアの待機中は公式アプリが再生状態に
   ならないため、一時停止以外の状態（再生中・未検出・停止・バッファ中）では取得を続ける（F-CHAT-05）。
 - 失敗（クライアントの再試行後）は `FetchStatus.Failed` とし、10 秒後に同じトークンで取り直す。
+
+### ライブ終了後のリプレイへの切り替え（`core:sync` の `ReplaySwitcher`）
+
+- `LiveChatSession` が終了（継続トークン無し）したら、`ReplaySwitcher.await(videoId)` で動画の情報を取り直し、
+  リプレイが使えるようになるのを待つ（終了直後はリプレイが準備されていないことがあるため）。
+- 確認の間隔は 30 秒・1 分・2 分・5 分・10 分（合計約 18 分）。各待ちの前に `onWaiting(回数, 待ち時間)` で UI へ知らせる。
+- 結果: リプレイになっていれば `Ready(continuation)`（すべてのチャット優先）、まだライブなら `StillLive(continuation)`
+  （終了判定が早すぎた場合。ライブの取得へ戻る）、最後まで準備されなければ `Unavailable`。
+  チャット無効（`Unavailable`）と通信失敗は準備中の可能性があるため、諦めずに次の確認まで待つ。
 
 ### 再生状態の取得（`core:media`）
 
