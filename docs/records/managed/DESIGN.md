@@ -17,8 +17,8 @@
 
 - 対象: Android アプリ（applicationId `io.github.filderschoice.romcha`、ライセンス MIT）
 - 前提環境: minSdk 34 / targetSdk 36 / compileSdk 36、JDK 17、Gradle 8.13、AGP 8.13.0、Kotlin 2.0.21
-- 動作確認端末: Pixel 8 Pro（実機確認は人手検証。手順と最新の結果は `docs/VERIFICATION.md`）。MediaSession の取得（Q-01。Premium 有り）、
-  リプレイ同期（N-02）、ライブ・プレミアの最新追従は確認済み。Premium 無しの環境、ライブ終了後のリプレイ切り替え、広告中の扱いは未確認
+- 動作確認端末: Pixel 8 Pro（実機確認は人手検証。手順と最新の結果は `docs/VERIFICATION.md`）。MediaSession の取得（Q-01。Premium 有り／無し）、
+  リプレイ同期（N-02）、ライブ・プレミアの最新追従は確認済み。ライブ終了後のリプレイ切り替えと広告中の扱いは未確認
 
 ## 実装済み機能要件
 
@@ -160,8 +160,8 @@
   - `videoIdHints`（PLAN 4.3 手順1）: MediaMetadata の全キー、MediaDescription の mediaId / mediaUri / extras、controller と
     PlaybackState の extras、キューの mediaId / mediaUri を集め、値に YouTube URL があればその ID、キー名の末尾要素に `id` を含み
     値が 11 桁 ID 形式ならその値を候補にする。実機（YouTube 21.38.130）では候補は常に空（Q-02）。
-  - 広告再生中もタイトル・チャンネル名・長さは本編の値のままと記録されている（Premium 有りの環境。PLAN K-05）。
-    Premium 無しの環境での確認と、広告中の位置・他の手掛かりは BL-031 で確認する。
+  - 広告再生中もタイトル・チャンネル名・長さは本編の値のままで、メタデータでは広告を区別できない（PLAN K-05。
+    広告中の位置と他の手掛かりは BL-031 で確認する）。
   - デバッグ一覧（Q-02 の実機確認用）は画面表示のみで、ログへ出さない（N-07）。
 
 ### 同期エンジン（`core:sync`）
