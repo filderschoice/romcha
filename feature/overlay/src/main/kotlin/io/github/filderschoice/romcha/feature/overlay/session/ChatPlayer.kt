@@ -5,6 +5,7 @@ import io.github.filderschoice.romcha.core.chat.FetchResult
 import io.github.filderschoice.romcha.core.chat.RetryListener
 import io.github.filderschoice.romcha.core.chat.VideoChatInfo
 import io.github.filderschoice.romcha.core.sync.LiveChatSession
+import io.github.filderschoice.romcha.core.sync.LivePolling
 import io.github.filderschoice.romcha.core.sync.LiveState
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
@@ -14,6 +15,7 @@ import io.github.filderschoice.romcha.core.sync.ReplaySession
 import io.github.filderschoice.romcha.core.sync.ReplaySwitch
 import io.github.filderschoice.romcha.core.sync.ReplaySwitcher
 import io.github.filderschoice.romcha.core.sync.SessionTiming
+import io.github.filderschoice.romcha.core.sync.SyncConfig
 import io.github.filderschoice.romcha.core.sync.SyncOffset
 import io.github.filderschoice.romcha.core.sync.VideoInfoSource
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
@@ -137,8 +139,9 @@ internal class ChatPlayer(
             ReplaySession(
                 source = { token, offset, listener -> backend.replay(token, offset, listener) },
                 initialContinuation = continuation,
-                playback = { SyncOffset.apply(replayPlayback(), env.syncOffsetMs.value) },
+                playback = { SyncOffset.apply(replayPlayback(), env.settings.syncOffsetMs.value) },
                 clock = env.clock,
+                config = SyncConfig(maxVisible = env.settings.maxVisible.value),
                 timing = timing,
             )
         coroutineScope {
@@ -180,6 +183,7 @@ internal class ChatPlayer(
                     initialContinuation = continuation,
                     playback = { env.nowPlaying.value.snapshot },
                     clock = env.clock,
+                    polling = LivePolling(maxMessages = env.settings.maxVisible.value),
                 )
             val runner = launch { session.run() }
             val ticker =
@@ -198,10 +202,10 @@ internal class ChatPlayer(
     private fun publishLive(state: LiveState) {
         val now = env.clock()
         val snapshot = env.nowPlaying.value.snapshot
-        val delayMs = LiveTimeline.delayMs(env.liveDelaySeconds.value)
+        val delayMs = LiveTimeline.delayMs(env.settings.liveDelaySeconds.value)
         publisher.frame(
             publisher.base.copy(
-                messages = LiveTimeline.visible(state.received, now, delayMs),
+                messages = LiveTimeline.visible(state.received, now, delayMs, env.settings.maxVisible.value),
                 positionMs = PositionEstimator.estimate(snapshot, now),
                 indicator = if (snapshot.status == PlaybackStatus.PAUSED) SyncIndicator.PAUSED else SyncIndicator.LIVE,
                 notice = SessionMessages.describe(state.fetchStatus),

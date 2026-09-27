@@ -59,6 +59,15 @@ class ChatFilterTest {
         assertEquals(ChatFilter.MAX_NG_WORD_LENGTH, ChatFilter.parseNgWords("x".repeat(80)).single().length)
     }
 
+    @Test
+    fun 表示保持件数は範囲内に収めて100件刻みに丸める() {
+        assertEquals(DisplaySettings.MIN_VISIBLE, DisplaySettings.clampVisible(0))
+        assertEquals(DisplaySettings.MAX_VISIBLE, DisplaySettings.clampVisible(5_000))
+        assertEquals(300, DisplaySettings.clampVisible(349))
+        assertEquals(400, DisplaySettings.clampVisible(350))
+        assertEquals(500, DisplaySettings().maxVisible)
+    }
+
     private fun ids(settings: DisplaySettings) = ChatFilter.apply(all, settings).map { it.id }
 
     private fun message(

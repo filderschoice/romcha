@@ -46,6 +46,7 @@
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 - F-VIEW-01: 文字サイズ（フローティングの設定パネル）と、投稿者名・アイコン・時刻の表示有無（アプリの表示設定画面）
 - F-VIEW-03: NG ワードと種別（スパチャ・メンバー・モデレーター／配信者）の絞り込み（`feature:overlay` の `ChatFilter`）
+- F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
 
 ## 設計方針
@@ -249,6 +250,9 @@
   （MEMBER の役割、またはメンバー加入・ギフト）・「モデレーター・配信者のみ」（MODERATOR / OWNER）はオンにしたもののいずれかに
   当てはまれば出す（すべてオフなら絞らない）。NG ワードを本文（`plainText`）に含むものは大文字・小文字を区別せず常に除く。
   NG ワードは表示設定画面で 1 行 1 語で入力し「保存」で取り込む（`parseNgWords`。空行・重複を除き最大 100 語・1 語 50 字）。
+- 表示保持件数（F-VIEW-04、N-04）: `DisplaySettings.maxVisible` をセッションの開始時にリプレイの `SyncConfig.maxVisible`・
+  ライブの `LivePolling.maxMessages` と `LiveTimeline.visible` へ渡す。上限を下げた時はウィンドウの表示直前でも `takeLast` で
+  切り詰めてすぐ反映する（増やした分は次に動画を開いた時から）。
 - 画像（F-CHAT-09）: Coil（`coil-compose`）で読み込む。本文は `MessageText` で描き、カスタム絵文字・メンバースタンプを
   `InlineTextContent`（1.4em）で文中に差し込む。URL が無い・許可外・読み込み失敗なら代替テキスト、Unicode の絵文字は文字のまま。
   スーパーステッカーは 56dp の画像（失敗時は「（スーパーステッカー）」）。応答の URL は `ImagePolicy` で HTTPS かつ
@@ -279,7 +283,8 @@
   `onStartCommand` のたびに `PlaybackMonitor.start()` を試す（通知へのアクセスが後から許可された場合に備える）。
   終了時はモニター・レシーバーを止め、表示内容を初期化する。
 - 構成: `WatchCoordinator`（入力の命令化・動画の特定）、`ChatPlayer`（1 本の動画の取得・同期・表示）、`OverlayPublisher`
-  （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, liveDelaySeconds, clock)`、
+  （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, settings, clock, manualTimer)`
+  （`settings` は `SessionSettings(liveDelaySeconds, syncOffsetMs, maxVisible)`）、
   `SessionIo(requestedVideo, takeRequestedVideo, events, publish)`、`ChatBackend`（videoInfo・replay・live・search）。
 - `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに
   実行中の処理を取り消して新しい処理を始める。

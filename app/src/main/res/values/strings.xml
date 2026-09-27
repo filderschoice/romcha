@@ -39,5 +39,7 @@
     <string name="display_ng_words">NG ワード（1 行に 1 語）</string>
     <string name="display_ng_words_hint">含むチャットを表示しません。大文字・小文字は区別しません（最大 %1$d 語）</string>
     <string name="display_ng_words_save">NG ワードを保存</string>
+    <string name="display_max_visible">表示する件数の上限: %1$d 件</string>
+    <string name="display_max_visible_hint">増やすと遡れる量が増えますが、メモリを多く使います。増やした分は次に動画を開いた時から反映します。</string>
     <string name="display_font_hint">文字サイズ・背景の透過度は、フローティングウィンドウの設定ボタンから変えられます。</string>
 </resources>

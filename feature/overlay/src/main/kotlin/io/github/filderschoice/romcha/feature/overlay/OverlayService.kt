@@ -26,6 +26,7 @@ import io.github.filderschoice.romcha.feature.overlay.session.InnerTubeBackend
 import io.github.filderschoice.romcha.feature.overlay.session.PersistentResolutionCache
 import io.github.filderschoice.romcha.feature.overlay.session.SessionEnvironment
 import io.github.filderschoice.romcha.feature.overlay.session.SessionIo
+import io.github.filderschoice.romcha.feature.overlay.session.SessionSettings
 import io.github.filderschoice.romcha.feature.overlay.session.WatchCoordinator
 import io.github.filderschoice.romcha.feature.overlay.ui.ChatOverlay
 import io.github.filderschoice.romcha.feature.overlay.ui.ManualCommand
@@ -115,9 +116,13 @@ class OverlayService :
             SessionEnvironment(
                 nowPlaying = monitor.state,
                 screenOn = screenOn,
-                liveDelaySeconds = settings.part { it.liveDelaySeconds },
+                settings =
+                    SessionSettings(
+                        liveDelaySeconds = settings.part { it.liveDelaySeconds },
+                        syncOffsetMs = settings.part { it.syncOffsetMs },
+                        maxVisible = DisplaySettingsStore.state.part { it.maxVisible },
+                    ),
                 clock = SystemClock::elapsedRealtime,
-                syncOffsetMs = settings.part { it.syncOffsetMs },
                 manualTimer = manualTimer,
             )
         return WatchCoordinator(backend = backend, resolver = resolver, env = env, io = io)
@@ -198,8 +203,8 @@ class OverlayService :
             )
         }
 
-    /** 設定の一部だけを流す（セッションへ渡す表示遅延・同期の補正） */
-    private fun <R> StateFlow<OverlaySettings>.part(select: (OverlaySettings) -> R): StateFlow<R> =
+    /** 設定の一部だけを流す（セッションへ渡す表示遅延・同期の補正・表示保持件数） */
+    private fun <T, R> StateFlow<T>.part(select: (T) -> R): StateFlow<R> =
         map(select).stateIn(lifecycleScope, SharingStarted.Eagerly, select(value))
 
     private val actions =

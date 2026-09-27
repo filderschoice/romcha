@@ -18,6 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -33,7 +34,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.feature.overlay.ChatFilter
+import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettingsStore
+import kotlin.math.roundToInt
 
 /** チャットの表示設定（F-VIEW-01）。変更は表示中のフローティングウィンドウへすぐ反映する。 */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,6 +82,7 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
                 DisplaySettingsStore.update { it.copy(onlyModerators = on) }
             }
             NgWordsInput(settings.ngWords)
+            MaxVisibleSlider(settings.maxVisible)
             Text(stringResource(R.string.display_font_hint), style = MaterialTheme.typography.bodySmall)
         }
     }
@@ -103,6 +107,21 @@ private fun NgWordsInput(saved: List<String>) {
         ) {
             Text(stringResource(R.string.display_ng_words_save))
         }
+    }
+}
+
+/** 表示保持件数の上限（F-VIEW-04）。多くすると遡れる量が増える代わりにメモリを使う（N-04）。 */
+@Composable
+private fun MaxVisibleSlider(count: Int) {
+    Column {
+        Text(stringResource(R.string.display_max_visible, count), style = MaterialTheme.typography.titleMedium)
+        Slider(
+            value = count.toFloat(),
+            onValueChange = { value -> DisplaySettingsStore.update { it.copy(maxVisible = value.roundToInt()) } },
+            valueRange = DisplaySettings.MIN_VISIBLE.toFloat()..DisplaySettings.MAX_VISIBLE.toFloat(),
+            steps = (DisplaySettings.MAX_VISIBLE - DisplaySettings.MIN_VISIBLE) / DisplaySettings.VISIBLE_STEP - 1,
+        )
+        Text(stringResource(R.string.display_max_visible_hint), style = MaterialTheme.typography.bodySmall)
     }
 }
 

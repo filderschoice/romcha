@@ -6,6 +6,32 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:40
+  summary: 表示保持件数の上限を表示設定で変えられるようにした
+  details:
+    変更内容: >-
+      DisplaySettings に表示保持件数の上限 maxVisible（100〜1000、100 刻み、既定 500。N-04）を追加し、表示設定画面にスライダーを置いた。
+      上限はセッションの開始時にリプレイの SyncConfig.maxVisible・ライブの LivePolling.maxMessages と LiveTimeline.visible へ渡し、
+      上限を下げた時はウィンドウの表示直前でも切り詰めてすぐ反映する（増やした分は次に動画を開いた時から）。
+      detekt の引数数上限に達したため、SessionEnvironment の設定値（表示遅延・同期の補正・表示保持件数）を SessionSettings にまとめた。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilterTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0（1回目は detekt LongParameterList で失敗し、SessionSettings への統合で解消）
+    関連ID:
+      - BL-045
 - date: 2026-09-27 15:36
   summary: 表示設定に NG ワードと「スパチャのみ」「メンバーのみ」「モデレーター・配信者のみ」の絞り込みを追加
   details:

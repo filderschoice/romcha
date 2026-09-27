@@ -99,7 +99,11 @@ fun ChatOverlay(
             state.notice?.let { Notice(it) }
             if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                val shown = remember(state.messages, display) { ChatFilter.apply(state.messages, display) }
+                // 上限を下げた時は取得側の次の開始を待たず、表示の直前でも切り詰める（F-VIEW-04）
+                val shown =
+                    remember(state.messages, display) {
+                        ChatFilter.apply(state.messages, display).takeLast(display.maxVisible)
+                    }
                 MessageList(shown, settings.fontScale, display)
                 ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
             }

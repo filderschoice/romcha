@@ -157,7 +157,7 @@ class WatchCoordinatorTest {
                         SessionEnvironment(
                             nowPlaying,
                             screenOn,
-                            liveDelaySeconds,
+                            SessionSettings(liveDelaySeconds = liveDelaySeconds),
                             clock = { scope.testScheduler.currentTime },
                             manualTimer = manualTimer,
                         ),
