@@ -12,30 +12,66 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
+import io.github.filderschoice.romcha.core.sync.SyncOffset
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
+import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
 import io.github.filderschoice.romcha.feature.overlay.R
+import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
-/** ヘッダーの設定ボタンで開く設定パネル（不透明度・文字サイズ・表示遅延・タッチ透過）。 */
+/**
+ * ヘッダーの設定ボタンで開く設定パネル（不透明度・文字サイズ・同期の補正または表示遅延・タッチ透過）。
+ *
+ * ライブ・プレミア中は表示遅延（F-SYNC-08）、それ以外（リプレイ）は同期オフセットの補正（F-SYNC-06）を出す。
+ */
 @Composable
 internal fun SettingsPanel(
-    live: Boolean,
-    opacity: Float,
-    fontScale: Float,
-    liveDelaySeconds: Int,
+    indicator: SyncIndicator,
+    settings: OverlaySettings,
     actions: OverlayActions,
     onTouchThrough: () -> Unit,
 ) {
-    OpacitySlider(opacity, actions)
-    FontScaleSlider(fontScale, actions)
-    if (live) LiveDelaySlider(liveDelaySeconds, actions)
+    val change = { next: OverlaySettings -> actions.onSettingsChange(next) }
+    OpacitySlider(settings.opacity, actions) { change(settings.copy(opacity = it)) }
+    FontScaleSlider(settings.fontScale, actions) { change(settings.copy(fontScale = it)) }
+    if (indicator == SyncIndicator.LIVE) {
+        LiveDelaySlider(settings.liveDelaySeconds, actions) { change(settings.copy(liveDelaySeconds = it)) }
+    } else {
+        SyncOffsetSlider(settings.syncOffsetMs, actions) { change(settings.copy(syncOffsetMs = it)) }
+    }
     TouchThroughButton(onTouchThrough)
+}
+
+/** リプレイの同期オフセットの補正（F-SYNC-06）。＋でチャットを早く、－で遅く表示する。 */
+@Composable
+private fun SyncOffsetSlider(
+    offsetMs: Long,
+    actions: OverlayActions,
+    onChange: (Long) -> Unit,
+) {
+    Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(R.string.overlay_sync_offset, OverlayFormat.offsetSeconds(offsetMs)),
+            color = SubTextColor,
+            fontSize = 11.sp,
+        )
+        Slider(
+            value = offsetMs.toFloat(),
+            onValueChange = { onChange(it.roundToLong()) },
+            onValueChangeFinished = actions::onGestureEnd,
+            valueRange = SyncOffset.MIN_MS.toFloat()..SyncOffset.MAX_MS.toFloat(),
+            steps = ((SyncOffset.MAX_MS - SyncOffset.MIN_MS) / SyncOffset.STEP_MS - 1).toInt(),
+            modifier = Modifier.weight(1f).padding(start = 8.dp),
+        )
+    }
 }
 
 @Composable
 private fun OpacitySlider(
     opacity: Float,
     actions: OverlayActions,
+    onChange: (Float) -> Unit,
 ) {
     Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
@@ -45,7 +81,7 @@ private fun OpacitySlider(
         )
         Slider(
             value = OverlayFormat.clampOpacity(opacity),
-            onValueChange = actions::onOpacityChange,
+            onValueChange = onChange,
             onValueChangeFinished = actions::onGestureEnd,
             valueRange = OverlayFormat.MIN_OPACITY..1f,
             modifier = Modifier.weight(1f).padding(start = 8.dp),
@@ -58,6 +94,7 @@ private fun OpacitySlider(
 private fun FontScaleSlider(
     scale: Float,
     actions: OverlayActions,
+    onChange: (Float) -> Unit,
 ) {
     Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
@@ -67,7 +104,7 @@ private fun FontScaleSlider(
         )
         Slider(
             value = OverlayFormat.clampFontScale(scale),
-            onValueChange = actions::onFontScaleChange,
+            onValueChange = onChange,
             onValueChangeFinished = actions::onGestureEnd,
             valueRange = OverlayFormat.MIN_FONT_SCALE..OverlayFormat.MAX_FONT_SCALE,
             steps = OverlayFormat.FONT_SCALE_STEPS,
@@ -89,12 +126,13 @@ private fun TouchThroughButton(onClick: () -> Unit) {
 private fun LiveDelaySlider(
     seconds: Int,
     actions: OverlayActions,
+    onChange: (Int) -> Unit,
 ) {
     Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(stringResource(R.string.overlay_live_delay, seconds), color = SubTextColor, fontSize = 11.sp)
         Slider(
             value = seconds.toFloat(),
-            onValueChange = { actions.onLiveDelayChange(it.roundToInt()) },
+            onValueChange = { onChange(it.roundToInt()) },
             onValueChangeFinished = actions::onGestureEnd,
             valueRange = LiveTimeline.MIN_DELAY_SECONDS.toFloat()..LiveTimeline.MAX_DELAY_SECONDS.toFloat(),
             steps = LiveTimeline.MAX_DELAY_SECONDS - LiveTimeline.MIN_DELAY_SECONDS - 1,

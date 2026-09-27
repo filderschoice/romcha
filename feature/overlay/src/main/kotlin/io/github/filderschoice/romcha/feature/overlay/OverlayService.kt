@@ -12,7 +12,6 @@ import android.os.SystemClock
 import android.provider.Settings
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
@@ -22,7 +21,6 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.PlaybackMonitor
-import io.github.filderschoice.romcha.core.sync.LiveTimeline
 import io.github.filderschoice.romcha.feature.overlay.session.InnerTubeBackend
 import io.github.filderschoice.romcha.feature.overlay.session.PersistentResolutionCache
 import io.github.filderschoice.romcha.feature.overlay.session.SessionEnvironment
@@ -31,6 +29,10 @@ import io.github.filderschoice.romcha.feature.overlay.session.WatchCoordinator
 import io.github.filderschoice.romcha.feature.overlay.ui.ChatOverlay
 import io.github.filderschoice.romcha.feature.overlay.ui.OverlayActions
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
@@ -48,9 +50,7 @@ class OverlayService :
     private lateinit var prefs: OverlayPrefs
     private lateinit var window: OverlayWindow<OverlayService>
     private val notifications by lazy { OverlayNotifications(this, OverlayService::class.java) }
-    private val opacity = mutableFloatStateOf(OverlayPrefs.DEFAULT_OPACITY)
-    private val fontScale = mutableFloatStateOf(OverlayFormat.DEFAULT_FONT_SCALE)
-    private val liveDelaySeconds = MutableStateFlow(LiveTimeline.DEFAULT_DELAY_SECONDS)
+    private val settings = MutableStateFlow(OverlaySettings())
     private val touchThrough = mutableStateOf(false)
     private val minimized = mutableStateOf(false)
     private var visible = true
@@ -74,9 +74,7 @@ class OverlayService :
         super.onCreate()
         prefs = OverlayPrefs(this)
         window = OverlayWindow(this, prefs)
-        opacity.floatValue = prefs.opacity
-        fontScale.floatValue = prefs.fontScale
-        liveDelaySeconds.value = prefs.liveDelaySeconds
+        settings.value = prefs.settings
         lifecycleScope.launch {
             OverlayChannel.events.collect { if (it is OverlayEvent.StopRequested) stopSelf() }
         }
@@ -113,8 +111,9 @@ class OverlayService :
             SessionEnvironment(
                 nowPlaying = monitor.state,
                 screenOn = screenOn,
-                liveDelaySeconds = liveDelaySeconds,
+                liveDelaySeconds = settings.part { it.liveDelaySeconds },
                 clock = SystemClock::elapsedRealtime,
+                syncOffsetMs = settings.part { it.syncOffsetMs },
             )
         return WatchCoordinator(backend = backend, resolver = resolver, env = env, io = io)
     }
@@ -180,17 +179,19 @@ class OverlayService :
     private fun showWindow() =
         window.show {
             val state by OverlayChannel.state.collectAsState()
-            val delay by liveDelaySeconds.collectAsState()
+            val current by settings.collectAsState()
             ChatOverlay(
                 state = state,
-                opacity = opacity.floatValue,
-                fontScale = fontScale.floatValue,
+                settings = current,
                 touchThrough = touchThrough.value,
                 minimized = minimized.value,
-                liveDelaySeconds = delay,
                 actions = actions,
             )
         }
+
+    /** 設定の一部だけを流す（セッションへ渡す表示遅延・同期の補正） */
+    private fun <R> StateFlow<OverlaySettings>.part(select: (OverlaySettings) -> R): StateFlow<R> =
+        map(select).stateIn(lifecycleScope, SharingStarted.Eagerly, select(value))
 
     private val actions =
         object : OverlayActions {
@@ -206,21 +207,11 @@ class OverlayService :
 
             override fun onGestureEnd() {
                 window.saveBounds()
-                prefs.opacity = opacity.floatValue
-                prefs.fontScale = fontScale.floatValue
-                prefs.liveDelaySeconds = liveDelaySeconds.value
+                prefs.settings = settings.value
             }
 
-            override fun onLiveDelayChange(seconds: Int) {
-                liveDelaySeconds.value = seconds
-            }
-
-            override fun onOpacityChange(opacity: Float) {
-                this@OverlayService.opacity.floatValue = OverlayFormat.clampOpacity(opacity)
-            }
-
-            override fun onFontScaleChange(scale: Float) {
-                fontScale.floatValue = OverlayFormat.clampFontScale(scale)
+            override fun onSettingsChange(settings: OverlaySettings) {
+                this@OverlayService.settings.value = settings.normalized()
             }
 
             override fun onTouchThrough() = setTouchThrough(true)

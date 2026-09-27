@@ -1,10 +1,12 @@
 package io.github.filderschoice.romcha.feature.overlay.session
 
 import io.github.filderschoice.romcha.core.media.NowPlaying
+import io.github.filderschoice.romcha.core.sync.SyncOffset
 import io.github.filderschoice.romcha.feature.overlay.OverlayEvent
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -28,6 +30,7 @@ class SessionIo(
  * @property nowPlaying 公式アプリの再生状態
  * @property screenOn 画面が点いているか（N-03）
  * @property liveDelaySeconds ライブ・プレミア中の表示遅延（秒。F-SYNC-08）
+ * @property syncOffsetMs リプレイの同期オフセットの手動補正（ミリ秒。F-SYNC-06）
  * @property clock 経過時間（本番は `SystemClock.elapsedRealtime`。PlaybackState の位置の報告時刻と同じ時計）
  */
 class SessionEnvironment(
@@ -35,6 +38,7 @@ class SessionEnvironment(
     val screenOn: StateFlow<Boolean>,
     val liveDelaySeconds: StateFlow<Int>,
     val clock: () -> Long,
+    val syncOffsetMs: StateFlow<Long> = MutableStateFlow(SyncOffset.DEFAULT_MS),
 )
 
 /** オーバーレイへ出す表示内容の土台（タイトル・候補）を保持し、表示を更新する。 */

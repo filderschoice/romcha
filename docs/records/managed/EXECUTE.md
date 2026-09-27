@@ -6,6 +6,41 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:16
+  summary: リプレイの同期オフセットの手動補正を追加し、設定パネルの値を OverlaySettings にまとめた
+  details:
+    変更内容: >-
+      core:sync に SyncOffset（±10 秒・0.5 秒刻み。PLAN 4.5 の「推定位置 + 手動補正」で、正の値でチャットを早く表示）を追加し、
+      ChatPlayer がリプレイの同期に使う再生状態へ補正を足すようにした。補正値は SessionEnvironment.syncOffsetMs で渡す（既定 0）。
+      設定パネルでは、ライブ・プレミア中は従来の表示遅延、それ以外は補正のスライダー（「補正 +1.5 秒」）を出す。
+      補正は SharedPreferences overlay の syncOffsetMs に保存し、次回も引き継ぐ（端末の遅れは動画によらず一定のことが多いため）。
+      detekt の関数数上限に達したため、設定パネルの値（不透明度・文字サイズ・表示遅延・補正）を OverlaySettings データクラスへまとめ、
+      OverlayActions の個別の変更通知を onSettingsChange の1つに統合した。保存キーは従来のまま。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/SyncOffset.kt
+      - core/sync/src/test/kotlin/io/github/filderschoice/romcha/core/sync/SyncOffsetTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayPrefs.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlaySettingsTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、OverlaySettings への統合で解消）。
+      実機での補正の効き方は BL-048 で確認する
+    関連ID:
+      - BL-039
 - date: 2026-09-27 15:11
   summary: フローティングウィンドウの最小化（バブル）と復帰を追加
   details:

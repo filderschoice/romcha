@@ -35,6 +35,9 @@
 - F-CHAT-06: ライブ・プレミア終了の検知とリプレイへの切り替え待ち（`core:sync` の `LiveChatSession.ended` と `ReplaySwitcher`）
 - F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ／ライブ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session` パッケージ）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
+- F-SYNC-06: 同期オフセットの手動補正（`core:sync` の `SyncOffset`。±10 秒・0.5 秒刻み。正の値でチャットを早く表示）。
+  `ChatPlayer` がリプレイの同期に使う再生状態の位置へ補正を足す（PLAN 4.5 の「推定位置 + 手動補正」）。
+  補正は SharedPreferences `overlay` の `syncOffsetMs` に保存して引き継ぐ。ライブ・プレミアには効かない（表示遅延を使う）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
 ## 設計方針
@@ -215,7 +218,9 @@
   - 最小化（F-OVL-04）: ヘッダーの最小化ボタンで 48dp の丸いバブル（`ui/Bubble.kt`）にする。タップで復帰、ドラッグで移動。
     バブルは通常表示の左上に出し、バブル自身の大きさで画面内へ収める（移動は通常表示の位置にも反映し、復帰時に収め直す）。
     縁の色で同期状態を示し（同期中・ライブは緑）、不透明度には下限 0.7 を置く。最小化状態は保存しない。
-  - 設定パネル（`ui/SettingsPanel.kt`）: 不透明度・文字サイズ・表示遅延（LIVE の時だけ）・タッチ透過。
+  - 設定パネル（`ui/SettingsPanel.kt`）: 不透明度・文字サイズ・表示遅延（LIVE の時）または同期の補正（それ以外）・タッチ透過。
+    値は `OverlaySettings`（不透明度・文字サイズ・表示遅延・補正）にまとめ、`OverlayActions.onSettingsChange` で受け取り、
+    操作の終わり（`onGestureEnd`）に `OverlayPrefs.settings` へ保存する。セッションへは表示遅延と補正を `StateFlow` で渡す。
   - チャットの文字サイズは倍率 0.8〜1.5（0.1 刻み、既定 1.0＝中）。設定パネルのスライダーで変え、`fontScale` に保存する。
     チャット欄だけ `LocalDensity` の `fontScale` に倍率を掛けて反映する（各 `Text` の sp は変えない。F-VIEW-01 の文字サイズ）。
 - 表示内容の受け渡し: プロセス内オブジェクト `OverlayChannel` の `state: StateFlow<OverlayUiState>`（タイトル・メッセージ・

@@ -49,9 +49,9 @@ import io.github.filderschoice.romcha.core.chat.ChatMessage
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
+import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.R
-import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
 
 internal val OverlayTextColor = Color(0xFFF5F5F5)
 internal val SubTextColor = Color(0xFFB0BEC5)
@@ -64,29 +64,25 @@ private val ChatBackgroundColor = Color.Black
 @Composable
 fun ChatOverlay(
     state: OverlayUiState,
-    opacity: Float,
-    fontScale: Float,
+    settings: OverlaySettings,
     touchThrough: Boolean,
     minimized: Boolean,
-    liveDelaySeconds: Int,
     actions: OverlayActions,
 ) {
     if (minimized) {
-        Bubble(state.indicator, opacity, actions)
+        Bubble(state.indicator, settings.opacity, actions)
         return
     }
     var showSettings by remember { mutableStateOf(false) }
     // 不透明度はヘッダーとチャット欄の両方に掛ける（F-OVL-03）。色味だけを変えてドラッグできる範囲を見分けやすくする
-    val alpha = OverlayFormat.clampOpacity(opacity)
+    val alpha = OverlayFormat.clampOpacity(settings.opacity)
     Column(modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp))) {
         Header(state, alpha, touchThrough, actions, onToggleSettings = { showSettings = !showSettings })
         Column(modifier = Modifier.weight(1f).fillMaxWidth().background(ChatBackgroundColor.copy(alpha = alpha))) {
             if (showSettings) {
                 SettingsPanel(
-                    live = state.indicator == SyncIndicator.LIVE,
-                    opacity = opacity,
-                    fontScale = fontScale,
-                    liveDelaySeconds = liveDelaySeconds,
+                    indicator = state.indicator,
+                    settings = settings,
                     actions = actions,
                     onTouchThrough = {
                         showSettings = false
@@ -97,7 +93,7 @@ fun ChatOverlay(
             state.notice?.let { Notice(it) }
             if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                MessageList(state.messages, fontScale)
+                MessageList(state.messages, settings.fontScale)
                 ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
             }
         }

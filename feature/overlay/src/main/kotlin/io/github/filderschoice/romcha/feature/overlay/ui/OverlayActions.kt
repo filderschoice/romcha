@@ -1,5 +1,7 @@
 package io.github.filderschoice.romcha.feature.overlay.ui
 
+import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
+
 /** ウィンドウの操作（ドラッグ量は px）。 */
 interface OverlayActions {
     fun onMove(
@@ -12,16 +14,11 @@ interface OverlayActions {
         dy: Float,
     )
 
-    /** 移動・サイズ変更の操作が終わった（位置と大きさを保存する契機） */
+    /** 移動・サイズ変更・スライダーの操作が終わった（位置・大きさ・設定を保存する契機） */
     fun onGestureEnd()
 
-    fun onOpacityChange(opacity: Float)
-
-    /** チャットの文字サイズの倍率を変えた（F-VIEW-01） */
-    fun onFontScaleChange(scale: Float)
-
-    /** ライブ・プレミア中の表示遅延（秒）を変えた（F-SYNC-08） */
-    fun onLiveDelayChange(seconds: Int)
+    /** 設定パネルの値を変えた（保存は [onGestureEnd] で行う） */
+    fun onSettingsChange(settings: OverlaySettings)
 
     /** タッチ透過モードに入る（解除は常駐通知から。F-OVL-05） */
     fun onTouchThrough()

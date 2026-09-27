@@ -39,6 +39,14 @@ class OverlayFormatTest {
     }
 
     @Test
+    fun 同期オフセットは符号付きの秒で表す() {
+        assertEquals("+1.5", OverlayFormat.offsetSeconds(1_500))
+        assertEquals("-0.5", OverlayFormat.offsetSeconds(-500))
+        assertEquals("0.0", OverlayFormat.offsetSeconds(0))
+        assertEquals("-10.0", OverlayFormat.offsetSeconds(-10_000))
+    }
+
+    @Test
     fun 画面の向きは幅と高さで決める() {
         assertEquals(ScreenOrientation.LANDSCAPE, ScreenOrientation.of(2_000, 1_000))
         assertEquals(ScreenOrientation.PORTRAIT, ScreenOrientation.of(1_000, 2_000))

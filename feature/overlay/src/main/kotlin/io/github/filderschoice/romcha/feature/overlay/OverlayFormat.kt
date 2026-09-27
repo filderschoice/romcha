@@ -5,6 +5,7 @@ import kotlin.math.roundToInt
 /** 表示用の値の計算（Android 非依存の純粋関数。単体テストで検証する）。 */
 object OverlayFormat {
     private const val MILLIS_PER_SECOND = 1_000L
+    private const val TENTH_MS = 100L
     private const val SECONDS_PER_MINUTE = 60L
     private const val MINUTES_PER_HOUR = 60L
     private const val CHANNEL_MAX = 255.0
@@ -66,6 +67,18 @@ object OverlayFormat {
             (scale.coerceIn(MIN_FONT_SCALE, MAX_FONT_SCALE) * PERCENT / FONT_SCALE_STEP_PERCENT).roundToInt() *
                 FONT_SCALE_STEP_PERCENT / PERCENT.toFloat()
         )
+
+    /** 同期オフセットの補正（ミリ秒）を符号付きの秒の表示にする（例 `+1.5`・`-0.5`・`0.0`。F-SYNC-06）。 */
+    fun offsetSeconds(offsetMs: Long): String {
+        val sign =
+            when {
+                offsetMs > 0 -> "+"
+                offsetMs < 0 -> "-"
+                else -> ""
+            }
+        val abs = kotlin.math.abs(offsetMs)
+        return "%s%d.%d".format(sign, abs / MILLIS_PER_SECOND, abs % MILLIS_PER_SECOND / TENTH_MS)
+    }
 
     /** 文字サイズの倍率をスライダー表示用の百分率にする。 */
     fun fontScalePercent(scale: Float): Int = (clampFontScale(scale) * PERCENT).roundToInt()

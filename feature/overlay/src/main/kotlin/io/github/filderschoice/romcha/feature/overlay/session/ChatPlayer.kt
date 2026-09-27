@@ -13,6 +13,7 @@ import io.github.filderschoice.romcha.core.sync.ReplaySession
 import io.github.filderschoice.romcha.core.sync.ReplaySwitch
 import io.github.filderschoice.romcha.core.sync.ReplaySwitcher
 import io.github.filderschoice.romcha.core.sync.SessionTiming
+import io.github.filderschoice.romcha.core.sync.SyncOffset
 import io.github.filderschoice.romcha.core.sync.VideoInfoSource
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
@@ -135,7 +136,7 @@ internal class ChatPlayer(
             ReplaySession(
                 source = { token, offset, listener -> backend.replay(token, offset, listener) },
                 initialContinuation = continuation,
-                playback = { env.nowPlaying.value.snapshot },
+                playback = { SyncOffset.apply(env.nowPlaying.value.snapshot, env.syncOffsetMs.value) },
                 clock = env.clock,
                 timing = timing,
             )
