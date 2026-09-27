@@ -4,6 +4,8 @@
 
 ## 2026-09-27
 
+- 実機検証 BL-053（`docs/VERIFICATION.md` の G1。フローティングからアプリ本体を開く）が OK だったため完了とし、
+  BACKLOG と `docs/VERIFICATION.md` から削除した。DESIGN に確認済みを反映した。
 - `docs/records/managed/BACKLOG.md` へ、フローティングの設定メニューからアプリ本体を起動する機能（BL-052）と、その人手検証（BL-053）を
   登録した（自律ループ第1イテレーション）。
 - 実機検証 BL-048（`docs/VERIFICATION.md` の F1〜F15。M3・M4 と BL-034〜BL-051 の表示・操作）がすべて OK だったため完了とし、
