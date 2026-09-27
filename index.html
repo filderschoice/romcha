@@ -1,0 +1,185 @@
+<!doctype html>
+<!--
+  アプリ紹介ポートフォリオ（テンプレート兼 Romcha 版）。使い方は site/README.md。
+  他アプリへ流用するときは「TEMPLATE:」の付いた箇所を差し替え、不要なセクションは丸ごと削除する。
+  外部フォント・外部スクリプトは読み込まない（閲覧者の情報を第三者へ送らないため）。
+-->
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- TEMPLATE: タイトル・説明・テーマ色 -->
+  <title>Romcha（ロムチャ）— 見るだけのフローティングチャットビューワー</title>
+  <meta name="description" content="YouTube 公式アプリと同期して、アーカイブやライブのチャットをフローティングウィンドウで表示する Android アプリ。">
+  <meta name="theme-color" content="#263238">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Romcha（ロムチャ）">
+  <meta property="og:description" content="YouTube 公式アプリと同期する、見るだけのフローティングチャットビューワー（Android）">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#top">
+        <img src="assets/icon.svg" alt="" width="32" height="32">
+        <span>Romcha</span>
+      </a>
+      <nav class="nav" aria-label="ページ内の移動">
+        <a href="#features">機能</a>
+        <a href="#how">仕組み</a>
+        <a href="#usage">使い方</a>
+        <a href="#privacy">プライバシー</a>
+        <a href="#download">入手</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ================= ヒーロー ================= -->
+    <section class="hero">
+      <div class="container">
+        <div>
+          <!-- TEMPLATE: 分類・アプリ名・一言説明・ボタン -->
+          <span class="eyebrow">Android アプリ</span>
+          <h1>Romcha<br>見るだけの<br>チャットビューワー</h1>
+          <p class="lead">
+            YouTube 公式アプリで動画を見ながら、そのチャットを小さなウィンドウで。
+            再生位置を自動で読み取り、アーカイブのチャットを当時のタイミングで流します。
+          </p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/filderschoice/romcha/releases/latest">APK をダウンロード</a>
+            <a class="button" href="https://github.com/filderschoice/romcha">ソースコード</a>
+          </div>
+          <p class="meta">v1.0.0 ・ Android 14 以上 ・ MIT License ・ 無料・広告なし</p>
+        </div>
+        <div class="hero-visual">
+          <img src="assets/screen.svg" alt="動画アプリの上に半透明のチャットウィンドウが重なる画面の図解" width="360" height="720">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 機能 ================= -->
+    <section id="features">
+      <div class="container">
+        <h2>機能</h2>
+        <p class="section-lead">コメントの投稿などの書き込み機能は持たない、閲覧専用のアプリです（ROM＝Read Only Member）。</p>
+        <!-- TEMPLATE: 機能カード（1 枚 = 1 つの li） -->
+        <ul class="features">
+          <li class="card">
+            <span class="tag">同期</span>
+            <h3>再生位置に合わせて流れる</h3>
+            <p>公式アプリの再生・一時停止・シーク・再生速度に追従し、アーカイブのチャットを当時のタイミングで表示します。</p>
+          </li>
+          <li class="card">
+            <span class="tag">自動特定</span>
+            <h3>見ている動画を自動で特定</h3>
+            <p>再生中の動画をタイトル・チャンネル名・長さから特定します。公式アプリの「共有」や URL の入力でも指定できます。</p>
+          </li>
+          <li class="card">
+            <span class="tag">ライブ</span>
+            <h3>ライブ・プレミアにも対応</h3>
+            <p>配信中・待機中は最新のチャットを追従し、表示の遅延も設定できます。終了後はリプレイの同期表示へ切り替えます。</p>
+          </li>
+          <li class="card">
+            <span class="tag">ウィンドウ</span>
+            <h3>邪魔にならない小窓</h3>
+            <p>移動・サイズ変更・透過度・最小化・画面端への退避、タッチ透過で下の公式アプリも操作できます。</p>
+          </li>
+          <li class="card">
+            <span class="tag">表示</span>
+            <h3>読みやすさを調整</h3>
+            <p>文字サイズ、投稿者名・アイコン・時刻、NG ワードや種別での絞り込み、ライト／ダークのテーマ、絵文字画像の表示。</p>
+          </li>
+          <li class="card">
+            <span class="tag">補正</span>
+            <h3>ずれたら手で直せる</h3>
+            <p>表示タイミングの手動補正（±10 秒）と、再生位置が取れない時の手動タイマーを備えています。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= 仕組み ================= -->
+    <section id="how">
+      <div class="container">
+        <h2>仕組み</h2>
+        <p class="section-lead">再生位置は端末の中で読み取り、YouTube へはチャットの取得だけを行います。</p>
+        <!-- TEMPLATE: 構成図 -->
+        <figure class="figure">
+          <img src="assets/how-it-works.svg" alt="公式アプリの再生位置を Romcha が読み取り、YouTube から取得したチャットを位置に合わせてフローティング表示する流れ" width="720" height="220">
+          <figcaption>
+            Android の MediaSession から公式アプリの再生状態を読み取り、動画内の位置に合わせてチャットを表示します。
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= 使い方 ================= -->
+    <section id="usage">
+      <div class="container">
+        <h2>使い方</h2>
+        <p class="section-lead">初回だけ権限を許可すれば、あとは公式アプリで動画を再生するだけです。</p>
+        <!-- TEMPLATE: 手順（1 行 = 1 つの li） -->
+        <ol class="steps">
+          <li>アプリを開き、案内に従って「他のアプリの上に重ねて表示」「通知へのアクセス」「通知の表示」を許可します。</li>
+          <li>「フローティング表示を開始」を押し、YouTube 公式アプリでアーカイブやライブを再生します。</li>
+          <li>チャットが小窓に流れます。ヘッダーをドラッグで移動、右下のつまみで大きさを変えられます。</li>
+          <li>特定できないときは、公式アプリの「共有」で Romcha を選ぶか、URL を入力して開きます。</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= プライバシーと注意 ================= -->
+    <section id="privacy">
+      <div class="container">
+        <h2>プライバシーと注意</h2>
+        <p class="section-lead">ログイン機能、解析・広告の SDK はありません。</p>
+        <!-- TEMPLATE: プライバシー（箇条書き）と免責（notice） -->
+        <ul class="plain-list">
+          <li>「通知へのアクセス」は再生位置を読むための Android の仕組み上の権限で、通知の内容は読みません。</li>
+          <li>通信先は YouTube（チャットの取得・画像）と、「更新を確認」を押した時の GitHub API だけです。</li>
+          <li>設定と動画の特定結果は端末内にのみ保存し、バックアップの対象外にしています。</li>
+        </ul>
+        <div class="notice spaced">
+          <p>
+            本アプリは非公式のアプリで、YouTube および Google とは関係ありません。チャットの取得には公開されていない方法
+            （YouTube の Web 版が内部で使う通信）を使っているため、仕様の変更により予告なく動かなくなることがあります。
+            自己の判断と責任で利用してください。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 入手 ================= -->
+    <section id="download">
+      <div class="container">
+        <h2>入手</h2>
+        <p class="section-lead">GitHub Releases で署名済みの APK を配布しています（Google Play では配布していません）。</p>
+        <!-- TEMPLATE: 仕様表とボタン -->
+        <table class="spec">
+          <tbody>
+            <tr><th scope="row">動作環境</th><td>Android 14（API 34）以上、YouTube 公式アプリ</td></tr>
+            <tr><th scope="row">確認端末</th><td>Pixel 8 Pro（Android 17）</td></tr>
+            <tr><th scope="row">料金</th><td>無料（広告なし）</td></tr>
+            <tr><th scope="row">ライセンス</th><td>MIT License</td></tr>
+            <tr><th scope="row">更新</th><td>アプリの「更新を確認」で最新版を確かめ、同じ手順で上書きインストール</td></tr>
+          </tbody>
+        </table>
+        <div class="actions spaced">
+          <a class="button primary" href="https://github.com/filderschoice/romcha/releases/latest">最新版を見る</a>
+          <a class="button" href="https://github.com/filderschoice/romcha#readme">README</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <!-- TEMPLATE: 著作権表記・リンク -->
+      <span>© 2026 filderschoice ・ MIT License</span>
+      <span>YouTube は Google LLC の商標です。本アプリは Google とは関係ありません。</span>
+    </div>
+  </footer>
+</body>
+</html>
