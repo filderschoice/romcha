@@ -6,6 +6,25 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 18:30
+  summary: 動画の自動特定パイプライン（MediaSession の ID、端末内キャッシュ、検索照合と採点）を core:chat に実装
+  details:
+    変更内容: >-
+      F-VID-01/02 と PLAN 4.3 手順1・2・4 に基づき、VideoResolver・InMemoryResolutionCache・SearchResultParser を追加し、
+      InnerTubeClient に search を追加した。検索結果をタイトル・チャンネル名・長さで採点し、閾値と上位2件の差で自動確定か候補提示かを判定する。
+      タイトル比較は NFKC 正規化・小文字化・空白除去で表記揺れを吸収する。単体テスト 11 件と検索応答の合成 fixture を追加した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/InnerTubeClient.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/SearchResultParser.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolver.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolverTest.kt
+      - core/chat/src/test/resources/fixtures/search_results.json
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、core:chat の単体テスト 34 件成功
+    関連ID:
+      - BL-009
 - date: 2026-09-27 17:55
   summary: 公式アプリの MediaSession から再生状態を取得する PlaybackMonitor を core:media に実装
   details:

@@ -1,5 +1,7 @@
 package io.github.filderschoice.romcha.core.chat
 
+import io.github.filderschoice.romcha.core.chat.resolve.SearchCandidate
+import io.github.filderschoice.romcha.core.chat.resolve.SearchResultParser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -123,6 +125,18 @@ class InnerTubeClient(
     ): FetchResult<ChatParseResult.Success> {
         val body = buildJsonObject { put("continuation", continuation) }
         return post("youtubei/v1/live_chat/get_live_chat", body, listener, ::toChatResult)
+    }
+
+    /** 動画を検索する（PLAN 4.3 手順4）。 */
+    suspend fun search(
+        query: String,
+        listener: RetryListener? = null,
+    ): FetchResult<List<SearchCandidate>> {
+        val body = buildJsonObject { put("query", query) }
+        return post("youtubei/v1/search", body, listener) { response ->
+            SearchResultParser.parse(response)?.let { FetchResult.Success(it) }
+                ?: FetchResult.Failure(FetchFailure.Parse("search 応答に検索結果の構造が無い"))
+        }
     }
 
     private fun toChatResult(response: String): FetchResult<ChatParseResult.Success> =

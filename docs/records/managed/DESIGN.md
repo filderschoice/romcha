@@ -25,6 +25,7 @@
 - F-CHAT-01/08、N-08: メッセージモデルとチャット応答の解析（`core:chat` の `ChatResponseParser`）
 - F-CHAT-10、F-VID-07: InnerTube クライアント（`next` からの continuation 取得・チャット無効の判定、リプレイ／ライブ取得、指数バックオフ）
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
+- F-VID-01/02: 動画の自動特定パイプライン手順1・2・4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
@@ -76,6 +77,19 @@
 - `VideoUrlParser.extractVideoId(text)`: 文中の最初の YouTube 動画 URL から 11 桁の動画IDを取り出す。
   受理するのは `youtu.be/ID`、`(www.|m.)youtube.com/watch?v=ID`、`/live/ID`、`/shorts/ID`（http/https・スキーム省略可）。
   ホストは完全一致で判定し、ID は `[A-Za-z0-9_-]{11}` のみ受理する。ID 単体の入力は受理しない。
+- `resolve.VideoResolver.resolve(TrackMetadata)`（PLAN 4.3）: 次の順に試し、確定した時点で打ち切る。
+  1. `videoIdHints` の先頭 → `Confirmed(METADATA)`（キャッシュにも登録）
+  2. `ResolutionCache`（キーは `TrackMetadata.identity`）→ `Confirmed(CACHE)`
+  3. （手順3 のライブ・プレミア照合は M2 で追加）
+  4. `InnerTubeClient.search("タイトル チャンネル名")` の結果を採点。タイトル完全一致 50・部分一致 25、チャンネル名一致 30、
+     長さ ±2 秒一致 20。比較は NFKC 正規化・小文字化・空白除去後。1 位が 80 点以上かつ 2 位との差 10 点以上なら
+     `Confirmed(SEARCH, alternatives=他の候補)`、それ以外で 1 点以上の候補があれば `Ambiguous`（上位 5 件）、無ければ `NotFound`。
+     通信失敗は `Failed`。
+  - ユーザーが候補を選んだら `remember()` でキャッシュへ登録する（`ResolutionSource.USER`）。
+  - `InMemoryResolutionCache`: 最大 200 件の LRU。`snapshot()` で永続化用に取り出せる（端末内にのみ保存。N-06）。
+- `resolve.SearchResultParser`: `twoColumnSearchResultsRenderer…sectionListRenderer.contents[].itemSectionRenderer.contents[].videoRenderer`
+  から videoId・タイトル・チャンネル名（`ownerText` → `longBylineText` → `shortBylineText`）・長さ（`lengthText` の `h:mm:ss`）・
+  ライブ表示（`BADGE_STYLE_TYPE_LIVE_NOW`）を読む。
 - テストの fixture（`core/chat/src/test/resources/fixtures/`）は既知の応答構造に基づく合成データ。実応答との照合は人手検証。
 
 ### 再生状態の取得（`core:media`）
