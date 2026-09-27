@@ -31,5 +31,13 @@
     <string name="display_author_name">投稿者名</string>
     <string name="display_author_icon">投稿者のアイコン</string>
     <string name="display_time">時刻（リプレイは動画内の位置、ライブは投稿時刻）</string>
+    <string name="display_filter">絞り込み</string>
+    <string name="display_filter_hint">オンにした種類のいずれかに当てはまるチャットだけを表示します（すべてオフなら絞り込みません）。</string>
+    <string name="display_only_paid">スーパーチャットのみ</string>
+    <string name="display_only_members">メンバーのみ（加入・ギフトを含む）</string>
+    <string name="display_only_moderators">モデレーター・配信者のみ</string>
+    <string name="display_ng_words">NG ワード（1 行に 1 語）</string>
+    <string name="display_ng_words_hint">含むチャットを表示しません。大文字・小文字は区別しません（最大 %1$d 語）</string>
+    <string name="display_ng_words_save">NG ワードを保存</string>
     <string name="display_font_hint">文字サイズ・背景の透過度は、フローティングウィンドウの設定ボタンから変えられます。</string>
 </resources>

@@ -11,10 +11,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -22,11 +24,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.R
+import io.github.filderschoice.romcha.feature.overlay.ChatFilter
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettingsStore
 
 /** チャットの表示設定（F-VIEW-01）。変更は表示中のフローティングウィンドウへすぐ反映する。 */
@@ -61,7 +67,41 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             SwitchRow(R.string.display_time, settings.showTime) { on ->
                 DisplaySettingsStore.update { it.copy(showTime = on) }
             }
+            Text(stringResource(R.string.display_filter), style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.display_filter_hint), style = MaterialTheme.typography.bodySmall)
+            SwitchRow(R.string.display_only_paid, settings.onlyPaid) { on ->
+                DisplaySettingsStore.update { it.copy(onlyPaid = on) }
+            }
+            SwitchRow(R.string.display_only_members, settings.onlyMembers) { on ->
+                DisplaySettingsStore.update { it.copy(onlyMembers = on) }
+            }
+            SwitchRow(R.string.display_only_moderators, settings.onlyModerators) { on ->
+                DisplaySettingsStore.update { it.copy(onlyModerators = on) }
+            }
+            NgWordsInput(settings.ngWords)
             Text(stringResource(R.string.display_font_hint), style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
+
+/** NG ワードの入力（1 行 1 語）。「保存」で取り込み、空行・重複を除いて上限に収める（F-VIEW-03）。 */
+@Composable
+private fun NgWordsInput(saved: List<String>) {
+    var text by rememberSaveable(saved) { mutableStateOf(saved.joinToString("\n")) }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text(stringResource(R.string.display_ng_words)) },
+            supportingText = { Text(stringResource(R.string.display_ng_words_hint, ChatFilter.MAX_NG_WORDS)) },
+            minLines = 3,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Button(
+            onClick = { DisplaySettingsStore.update { it.copy(ngWords = ChatFilter.parseNgWords(text)) } },
+            enabled = ChatFilter.parseNgWords(text) != saved,
+        ) {
+            Text(stringResource(R.string.display_ng_words_save))
         }
     }
 }

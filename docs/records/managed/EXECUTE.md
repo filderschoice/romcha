@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:36
+  summary: 表示設定に NG ワードと「スパチャのみ」「メンバーのみ」「モデレーター・配信者のみ」の絞り込みを追加
+  details:
+    変更内容: >-
+      ChatFilter（Android 非依存）を追加した。3 つの「のみ」はオンにしたもののいずれかに当てはまるメッセージだけを出し
+      （どれもオフなら絞り込まない）、NG ワードを本文に含むメッセージは大文字・小文字を区別せず除く。
+      メンバーはメンバーの投稿とメンバー加入・ギフト、モデレーター・配信者は MODERATOR / OWNER の役割で判定する。
+      NG ワードは 1 行 1 語で入力し「保存」で取り込む（空行・重複を除き、最大 100 語・1 語 50 字）。
+      DisplaySettings に項目を追加して display に保存し、フローティングウィンドウは表示直前に絞り込む。単体テストを追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilter.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilterTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0
+    関連ID:
+      - BL-044
 - date: 2026-09-27 15:32
   summary: アプリ画面に表示設定を追加し、投稿者名・アイコン・時刻の表示有無を切り替えられるようにした
   details:

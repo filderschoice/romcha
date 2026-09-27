@@ -45,6 +45,7 @@
   ウィンドウの `FLAG_NOT_FOCUSABLE` を外し（`OverlayWindow.focusable`）、確定・取消で戻す。手動タイマーの状態は保存しない
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 - F-VIEW-01: 文字サイズ（フローティングの設定パネル）と、投稿者名・アイコン・時刻の表示有無（アプリの表示設定画面）
+- F-VIEW-03: NG ワードと種別（スパチャ・メンバー・モデレーター／配信者）の絞り込み（`feature:overlay` の `ChatFilter`）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
 
 ## 設計方針
@@ -244,6 +245,10 @@
   アプリ画面の「表示設定」（`DisplaySettingsScreen`）で変え、表示中のウィンドウへすぐ反映する。時刻はリプレイなら動画内の位置、
   ライブ・プレミアなら投稿時刻 `H:mm`（`OverlayFormat.messageTime`）。アイコンは `ImagePolicy` を通した URL だけ 18dp の丸で出す。
   スーパーチャットの帯の投稿者名は設定によらず出す。
+- 絞り込み（F-VIEW-03）: `ChatFilter.apply` でウィンドウの表示直前に絞る。「スパチャのみ」（`paid` あり）・「メンバーのみ」
+  （MEMBER の役割、またはメンバー加入・ギフト）・「モデレーター・配信者のみ」（MODERATOR / OWNER）はオンにしたもののいずれかに
+  当てはまれば出す（すべてオフなら絞らない）。NG ワードを本文（`plainText`）に含むものは大文字・小文字を区別せず常に除く。
+  NG ワードは表示設定画面で 1 行 1 語で入力し「保存」で取り込む（`parseNgWords`。空行・重複を除き最大 100 語・1 語 50 字）。
 - 画像（F-CHAT-09）: Coil（`coil-compose`）で読み込む。本文は `MessageText` で描き、カスタム絵文字・メンバースタンプを
   `InlineTextContent`（1.4em）で文中に差し込む。URL が無い・許可外・読み込み失敗なら代替テキスト、Unicode の絵文字は文字のまま。
   スーパーステッカーは 56dp の画像（失敗時は「（スーパーステッカー）」）。応答の URL は `ImagePolicy` で HTTPS かつ

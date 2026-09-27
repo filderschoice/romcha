@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
+import io.github.filderschoice.romcha.feature.overlay.ChatFilter
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
@@ -98,7 +99,8 @@ fun ChatOverlay(
             state.notice?.let { Notice(it) }
             if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                MessageList(state.messages, settings.fontScale, display)
+                val shown = remember(state.messages, display) { ChatFilter.apply(state.messages, display) }
+                MessageList(shown, settings.fontScale, display)
                 ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
             }
         }

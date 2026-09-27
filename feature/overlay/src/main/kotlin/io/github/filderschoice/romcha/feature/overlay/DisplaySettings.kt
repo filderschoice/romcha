@@ -15,11 +15,19 @@ import kotlinx.coroutines.flow.asStateFlow
  * @property showAuthorName 投稿者名を出す
  * @property showAuthorIcon 投稿者のアイコンを出す
  * @property showTime 時刻を出す（リプレイは動画内の位置、ライブ・プレミアは投稿時刻）
+ * @property onlyPaid スーパーチャット・スーパーステッカーだけを出す（F-VIEW-03。以下 3 つはいずれかに当てはまれば出す）
+ * @property onlyMembers メンバーの投稿とメンバー加入・ギフトだけを出す
+ * @property onlyModerators モデレーター・配信者の投稿だけを出す
+ * @property ngWords 本文に含むと出さない語（[ChatFilter]）
  */
 data class DisplaySettings(
     val showAuthorName: Boolean = true,
     val showAuthorIcon: Boolean = false,
     val showTime: Boolean = false,
+    val onlyPaid: Boolean = false,
+    val onlyMembers: Boolean = false,
+    val onlyModerators: Boolean = false,
+    val ngWords: List<String> = emptyList(),
 )
 
 /**
@@ -32,6 +40,10 @@ object DisplaySettingsStore {
     private const val KEY_AUTHOR_NAME = "showAuthorName"
     private const val KEY_AUTHOR_ICON = "showAuthorIcon"
     private const val KEY_TIME = "showTime"
+    private const val KEY_ONLY_PAID = "onlyPaid"
+    private const val KEY_ONLY_MEMBERS = "onlyMembers"
+    private const val KEY_ONLY_MODERATORS = "onlyModerators"
+    private const val KEY_NG_WORDS = "ngWords"
 
     private var prefs: SharedPreferences? = null
     private val mutableState = MutableStateFlow(DisplaySettings())
@@ -49,6 +61,10 @@ object DisplaySettingsStore {
                 showAuthorName = loaded.getBoolean(KEY_AUTHOR_NAME, defaults.showAuthorName),
                 showAuthorIcon = loaded.getBoolean(KEY_AUTHOR_ICON, defaults.showAuthorIcon),
                 showTime = loaded.getBoolean(KEY_TIME, defaults.showTime),
+                onlyPaid = loaded.getBoolean(KEY_ONLY_PAID, defaults.onlyPaid),
+                onlyMembers = loaded.getBoolean(KEY_ONLY_MEMBERS, defaults.onlyMembers),
+                onlyModerators = loaded.getBoolean(KEY_ONLY_MODERATORS, defaults.onlyModerators),
+                ngWords = ChatFilter.parseNgWords(loaded.getString(KEY_NG_WORDS, null).orEmpty()),
             )
     }
 
@@ -60,6 +76,11 @@ object DisplaySettingsStore {
             putBoolean(KEY_AUTHOR_NAME, next.showAuthorName)
             putBoolean(KEY_AUTHOR_ICON, next.showAuthorIcon)
             putBoolean(KEY_TIME, next.showTime)
+            putBoolean(KEY_ONLY_PAID, next.onlyPaid)
+            putBoolean(KEY_ONLY_MEMBERS, next.onlyMembers)
+            putBoolean(KEY_ONLY_MODERATORS, next.onlyModerators)
+            // NG ワードは 1 行 1 語で保存する（入力時に改行を含まない語へ分けている）
+            putString(KEY_NG_WORDS, next.ngWords.joinToString("\n"))
         }
     }
 }
