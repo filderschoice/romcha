@@ -4,6 +4,8 @@
 
 ## 2026-09-27
 
+- `docs/records/managed/BACKLOG.md` へ、リリースビルドを簡易化するスクリプトの作成（BL-063。ユーザー指示）を登録した
+  （自律ループ第1イテレーション）。
 - `docs/records/managed/BACKLOG.md` へ、リリース署名の情報を `local.properties` から読むよう変える修正（BL-062。ユーザー指示）を
   登録した（自律ループ第1イテレーション）。
 - `docs/records/managed/BACKLOG.md` へ、ユーザー指示のアプリ紹介ポートフォリオ（BL-060）と、その実機画像の差し替え・公開方法の
