@@ -27,9 +27,9 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.PlaybackMonitor
 import io.github.filderschoice.romcha.core.sync.LiveTimeline
-import io.github.filderschoice.romcha.feature.overlay.session.DeviceState
 import io.github.filderschoice.romcha.feature.overlay.session.InnerTubeBackend
 import io.github.filderschoice.romcha.feature.overlay.session.PersistentResolutionCache
+import io.github.filderschoice.romcha.feature.overlay.session.SessionEnvironment
 import io.github.filderschoice.romcha.feature.overlay.session.SessionIo
 import io.github.filderschoice.romcha.feature.overlay.session.WatchCoordinator
 import io.github.filderschoice.romcha.feature.overlay.ui.ChatOverlay
@@ -108,13 +108,14 @@ class OverlayService :
                 events = OverlayChannel.events,
                 publish = OverlayChannel::publish,
             )
-        return WatchCoordinator(
-            backend = backend,
-            resolver = resolver,
-            device = DeviceState(monitor.state, screenOn),
-            io = io,
-            clock = SystemClock::elapsedRealtime,
-        )
+        val env =
+            SessionEnvironment(
+                nowPlaying = monitor.state,
+                screenOn = screenOn,
+                liveDelaySeconds = liveDelaySeconds,
+                clock = SystemClock::elapsedRealtime,
+            )
+        return WatchCoordinator(backend = backend, resolver = resolver, env = env, io = io)
     }
 
     override fun onStartCommand(

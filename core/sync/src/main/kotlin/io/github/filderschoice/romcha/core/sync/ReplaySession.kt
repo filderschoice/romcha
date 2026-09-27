@@ -60,11 +60,13 @@ data class ReplayState(
  * @property tickIntervalMs 表示の更新間隔（PLAN 4.2）
  * @property failureCooldownMs 再試行しても失敗した後、次に取得するまでの待ち時間
  * @property minFetchIntervalMs 続きの取得の最小間隔（K-04。シーク後の取り直しは対象外）
+ * @property replayWaitsMs ライブ終了後、リプレイの準備を確かめる間隔（F-CHAT-06。[ReplaySwitcher]）
  */
 data class SessionTiming(
     val tickIntervalMs: Long = 250,
     val failureCooldownMs: Long = 10_000,
     val minFetchIntervalMs: Long = 1_000,
+    val replayWaitsMs: List<Long> = ReplaySwitcher.DEFAULT_WAITS_MS,
 )
 
 /**

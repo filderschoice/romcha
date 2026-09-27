@@ -6,6 +6,29 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 23:40
+  summary: ライブ・プレミアのセッション統合（状態判定、最新追従表示、終了時のリプレイ切り替え）を実装
+  details:
+    変更内容: >-
+      F-CHAT-04〜06 と F-SYNC-08 に基づき、動画の状態に応じてリプレイ／ライブの取得経路を選ぶ ChatPlayer を追加し、
+      WatchCoordinator から動画の再生処理を分離した。ライブは LiveChatSession と LiveTimeline（表示遅延の設定を反映）で最新追従表示し、
+      終了後は ReplaySwitcher でリプレイの準備を待って切り替える。セッションの入出力と端末側の状態を SessionIo・SessionEnvironment にまとめ、
+      ChatBackend に live を追加し、SessionTiming にリプレイ準備の確認間隔を追加した。統合の単体テストを 3 件追加した。
+    変更ファイル:
+      - core/sync/src/main/kotlin/io/github/filderschoice/romcha/core/sync/ReplaySession.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatBackend.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinator.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      ./gradlew :app:assembleDebug、npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0、feature:overlay の単体テスト 17 件成功、デバッグ APK の生成を確認
+    関連ID:
+      - BL-018
 - date: 2026-09-27 22:45
   summary: 動画特定パイプラインの手順3（配信中・プレミア公開中の動画とのタイトル照合）を実装
   details:

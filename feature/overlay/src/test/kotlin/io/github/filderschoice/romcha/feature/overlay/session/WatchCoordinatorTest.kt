@@ -17,6 +17,7 @@ import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
 import io.github.filderschoice.romcha.core.media.NowPlaying
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.core.sync.PlaybackStatus
+import io.github.filderschoice.romcha.core.sync.SessionTiming
 import io.github.filderschoice.romcha.feature.overlay.OverlayEvent
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
@@ -39,6 +40,10 @@ class WatchCoordinatorTest {
         val replayCalls = mutableListOf<String>()
         val searchQueries = mutableListOf<String>()
 
+        /** ライブの応答（呼び出しごとに先頭から返す。空になったら終了の応答） */
+        val liveChunks = ArrayDeque<List<String>>()
+        val liveCalls = mutableListOf<String>()
+
         fun replayVideo(
             id: String,
             title: String,
@@ -54,6 +59,21 @@ class WatchCoordinatorTest {
                 )
         }
 
+        fun liveVideo(
+            id: String,
+            title: String,
+        ) {
+            infos[id] =
+                VideoChatInfo.Available(
+                    videoId = id,
+                    title = title,
+                    channelName = "チャンネル",
+                    isReplay = false,
+                    topChatToken = "LIVE_TOP",
+                    allChatToken = null,
+                )
+        }
+
         override suspend fun videoInfo(videoId: String): FetchResult<VideoChatInfo> =
             FetchResult.Success(
                 infos.getValue(videoId),
@@ -66,15 +86,7 @@ class WatchCoordinatorTest {
         ): FetchResult<ChatParseResult.Success> {
             replayCalls += continuation
             val id = continuation.substringAfter('_')
-            val message =
-                ChatMessage(
-                    id = "m_$id",
-                    kind = ChatMessageKind.TEXT,
-                    author = ChatAuthor("視聴者", null, null, emptySet()),
-                    runs = listOf(MessageRun.Text("$id のチャット")),
-                    timestampUsec = 0,
-                    videoOffsetMs = 1_000,
-                )
+            val message = message("m_$id", offsetMs = 1_000)
             return FetchResult.Success(
                 ChatParseResult.Success(
                     listOf(message),
@@ -82,6 +94,17 @@ class WatchCoordinatorTest {
                     0,
                 ),
             )
+        }
+
+        override suspend fun live(
+            continuation: String,
+            listener: RetryListener,
+        ): FetchResult<ChatParseResult.Success> {
+            liveCalls += continuation
+            val ids = liveChunks.removeFirstOrNull()
+            val messages = ids.orEmpty().map { message(it, offsetMs = null) }
+            val next = ids?.let { ChatContinuation("LIVE_NEXT", ContinuationKind.TIMED, 1_000) }
+            return FetchResult.Success(ChatParseResult.Success(messages, next, 0))
         }
 
         override suspend fun search(
@@ -93,6 +116,20 @@ class WatchCoordinatorTest {
         }
     }
 
+    private companion object {
+        fun message(
+            id: String,
+            offsetMs: Long?,
+        ) = ChatMessage(
+            id = id,
+            kind = ChatMessageKind.TEXT,
+            author = ChatAuthor("視聴者", null, null, emptySet()),
+            runs = listOf(MessageRun.Text(id)),
+            timestampUsec = 0,
+            videoOffsetMs = offsetMs,
+        )
+    }
+
     private class Harness(
         scope: TestScope,
     ) {
@@ -100,6 +137,7 @@ class WatchCoordinatorTest {
         val cache = InMemoryResolutionCache()
         val nowPlaying = MutableStateFlow(NowPlaying())
         val screenOn = MutableStateFlow(true)
+        val liveDelaySeconds = MutableStateFlow(0)
         val requested = MutableStateFlow<String?>(null)
         val events = MutableSharedFlow<OverlayEvent>(extraBufferCapacity = 8)
         var published = OverlayUiState()
@@ -109,7 +147,13 @@ class WatchCoordinatorTest {
                 WatchCoordinator(
                     backend = backend,
                     resolver = VideoResolver(search = { query, live -> backend.search(query, live) }, cache = cache),
-                    device = DeviceState(nowPlaying, screenOn),
+                    env =
+                        SessionEnvironment(
+                            nowPlaying,
+                            screenOn,
+                            liveDelaySeconds,
+                            clock = { scope.testScheduler.currentTime },
+                        ),
                     io =
                         SessionIo(
                             requestedVideo = requested,
@@ -117,7 +161,7 @@ class WatchCoordinatorTest {
                             events = events,
                             publish = { published = it },
                         ),
-                    clock = { scope.testScheduler.currentTime },
+                    timing = SessionTiming(replayWaitsMs = listOf(1_000, 1_000)),
                 )
             scope.backgroundScope.launch { coordinator.run() }
         }
@@ -217,20 +261,72 @@ class WatchCoordinatorTest {
         }
 
     @Test
-    fun チャットが無効な動画とライブ中の動画は説明を表示する() =
+    fun チャットが無効な動画は説明を表示する() =
         runTest {
             val h = Harness(this)
             h.backend.infos["disabled001"] = VideoChatInfo.Unavailable("disabled001", "無効", "チャンネル", message = null)
-            h.backend.infos["live0000001"] =
-                VideoChatInfo.Available("live0000001", "ライブ", "チャンネル", false, topChatToken = "T", allChatToken = null)
 
             h.requested.value = "disabled001"
             advanceTimeBy(500)
+
             assertEquals(SessionMessages.CHAT_UNAVAILABLE, h.published.notice)
+        }
+
+    @Test
+    fun ライブ中の動画は最新追従で表示し表示遅延を反映する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.liveVideo("live0000001", "ライブ")
+            h.backend.liveChunks += listOf("l1")
+            h.backend.liveChunks += listOf("l2")
+            h.backend.liveChunks += listOf("l3")
+            repeat(3) { h.backend.liveChunks += emptyList<String>() }
+            h.liveDelaySeconds.value = 2
 
             h.requested.value = "live0000001"
             advanceTimeBy(500)
-            assertEquals(SessionMessages.LIVE_NOT_SUPPORTED, h.published.notice)
+            assertEquals(SyncIndicator.LIVE, h.published.indicator)
+            assertTrue(h.published.messages.isEmpty())
+
+            // 1 秒ごとに受信（0・1・2 秒）。3 秒時点では受信から 2 秒経った l1・l2 だけを表示する
+            advanceTimeBy(2_600)
+            assertEquals("LIVE_TOP", h.backend.liveCalls.first())
+            assertEquals(listOf("l1", "l2"), h.published.messages.map { it.id })
+        }
+
+    @Test
+    fun ライブが終わったらリプレイの準備を待って切り替える() =
+        runTest {
+            val h = Harness(this)
+            h.backend.liveVideo("premiere001", "プレミア")
+            h.backend.liveChunks += listOf("p1")
+
+            h.requested.value = "premiere001"
+            advanceTimeBy(100)
+            h.play("プレミア")
+            advanceTimeBy(1_400)
+            // 2 回目の取得で終了の応答（継続トークン無し）を受け、リプレイの準備待ちに入る
+            assertEquals(SessionMessages.liveEnded(1), h.published.notice)
+
+            h.backend.replayVideo("premiere001", "プレミア")
+            advanceTimeBy(1_500)
+
+            assertEquals("ALL_premiere001", h.backend.replayCalls.first())
+            assertEquals(SyncIndicator.SYNCING, h.published.indicator)
+        }
+
+    @Test
+    fun リプレイが用意されなければその旨を表示する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.liveVideo("live0000002", "ライブ")
+
+            h.requested.value = "live0000002"
+            advanceTimeBy(500)
+            h.backend.infos["live0000002"] = VideoChatInfo.Unavailable("live0000002", "ライブ", "チャンネル", message = null)
+            advanceTimeBy(5_000)
+
+            assertEquals(SessionMessages.REPLAY_NOT_PROVIDED, h.published.notice)
         }
 
     @Test

@@ -32,7 +32,7 @@
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
 - F-SYNC-08: ライブ・プレミア中の最新追従表示と表示遅延の設定（`core:sync` の `LiveTimeline`、オーバーレイの設定パネル）
 - F-CHAT-06: ライブ・プレミア終了の検知とリプレイへの切り替え待ち（`core:sync` の `LiveChatSession.ended` と `ReplaySwitcher`）
-- F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session.WatchCoordinator`）
+- F-VID-03、N-03: セッション統合（再生検出 → 動画特定 → リプレイ／ライブ取得 → 同期 → オーバーレイ表示。`feature:overlay` の `session` パッケージ）
 - F-SYNC-03/04/05: 位置推定・一時停止・シーク判定・速度追従（`core:sync` の `SyncEngine`）
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
 
@@ -215,21 +215,29 @@
   画面のオン・オフは `ACTION_SCREEN_ON/OFF` のレシーバー（`RECEIVER_NOT_EXPORTED`）と `PowerManager.isInteractive` で追う。
   `onStartCommand` のたびに `PlaybackMonitor.start()` を試す（通知へのアクセスが後から許可された場合に備える）。
   終了時はモニター・レシーバーを止め、表示内容を初期化する。
-- `WatchCoordinator(backend: ChatBackend, resolver, device: DeviceState(nowPlaying, screenOn), io: SessionIo, clock, timing)`:
-  入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに実行中の処理を取り消して
-  新しい処理を始める。
+- 構成: `WatchCoordinator`（入力の命令化・動画の特定）、`ChatPlayer`（1 本の動画の取得・同期・表示）、`OverlayPublisher`
+  （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, liveDelaySeconds, clock)`、
+  `SessionIo(requestedVideo, takeRequestedVideo, events, publish)`、`ChatBackend`（videoInfo・replay・live・search）。
+- `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに
+  実行中の処理を取り消して新しい処理を始める。
   - 再生中の動画の変化（F-VID-03）: 識別キー（タイトル・チャンネル名・長さ）が変わったら `VideoResolver` で特定し直す。
     再生を検出していなければ「公式アプリの再生を検出していません」。確定なら開く（他の候補は切り替え候補として表示）、
     候補ありなら候補を表示、見つからなければ共有・URL 入力を案内、通信失敗なら失敗の説明。
   - 手動指定（F-VID-04/05）: 最優先で開き、「指定中」とする。指定中は再生中の動画が変わるまで自動特定しない
     （指定時に再生を検出していなければ、最初に検出した動画を指定した動画とみなす）。
   - 候補の選択（F-VID-02）: `VideoResolver.remember` でキャッシュへ覚えてから開く。
-  - 動画を開く: `next` で情報を取り、チャット無効なら説明文（応答の文言、無ければ既定文。F-VID-07）、ライブ・プレミア中は
-    「未対応」（M2 で対応）、リプレイなら `ReplaySession` を「すべてのチャット」の continuation（無ければ上位チャット）で動かす。
-    既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を優先するため（切り替え F-CHAT-07 は M4）。
-  - 画面オフ（N-03）: `screenOn` が false の間は `ReplaySession` を止め「画面オフのため停止中」を表示、オンで作り直す。
-  - 表示: `ReplayState` から、メッセージ・位置・同期状態（再生中＝同期中、一時停止・バッファ中＝一時停止、MediaSession 無し＝未検出）・
-    お知らせ（再接続中 n 回目・失敗の説明・未検出）を `OverlayUiState` にして `io.publish` する。表示文は `SessionMessages` に集約。
+- `ChatPlayer.open(videoId, alternatives)`: `next` で情報を取り、チャット無効なら説明文（応答の文言、無ければ既定文。F-VID-07）。
+  チャットがあれば「すべてのチャット」の continuation（無ければ上位チャット）で、アーカイブならリプレイ、ライブ・プレミア中
+  （待機中を含む）ならライブを表示する。既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を
+  優先するため（切り替え F-CHAT-07 は M4）。
+  - リプレイ: `ReplaySession` の状態から、メッセージ・位置・同期状態（再生中＝同期中、一時停止・バッファ中＝一時停止、
+    MediaSession 無し＝未検出）・お知らせ（再接続中 n 回目・失敗の説明・未検出）を表示する。
+  - ライブ（F-CHAT-04/05、F-SYNC-08）: `LiveChatSession` を動かし、250ms ごとに `LiveTimeline.visible`（表示遅延は
+    `liveDelaySeconds`）で表示を更新する。同期状態は LIVE（公式アプリが一時停止なら一時停止）。
+  - ライブの終了（F-CHAT-06）: `ReplaySwitcher` でリプレイの準備を待ち（待機中は「配信は終了しました。リプレイの準備を待っています
+    （n 回目）」）、準備できればリプレイへ、まだ配信中ならライブへ戻り、準備されなければ「リプレイは利用できません」。
+  - 画面オフ（N-03）: 画面が消えたら取得を止めて「画面オフのため停止中」を表示し、点いたら取得をやり直す（`transformLatest`）。
+  - 表示文は `SessionMessages` に集約する（日本語のみ）。
 - `PersistentResolutionCache`: 特定のキャッシュを `filesDir/resolution-cache.json`（`[{identity, videoId}]`）へ `AtomicFile` で保存し、
   起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。

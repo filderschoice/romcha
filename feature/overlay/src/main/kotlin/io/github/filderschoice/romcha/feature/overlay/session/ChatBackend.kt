@@ -17,6 +17,11 @@ interface ChatBackend {
         listener: RetryListener,
     ): FetchResult<ChatParseResult.Success>
 
+    suspend fun live(
+        continuation: String,
+        listener: RetryListener,
+    ): FetchResult<ChatParseResult.Success>
+
     suspend fun search(
         query: String,
         liveOnly: Boolean,
@@ -33,6 +38,11 @@ class InnerTubeBackend(
         playerOffsetMs: Long?,
         listener: RetryListener,
     ) = client.fetchReplay(continuation, playerOffsetMs, listener)
+
+    override suspend fun live(
+        continuation: String,
+        listener: RetryListener,
+    ) = client.fetchLive(continuation, listener)
 
     override suspend fun search(
         query: String,
