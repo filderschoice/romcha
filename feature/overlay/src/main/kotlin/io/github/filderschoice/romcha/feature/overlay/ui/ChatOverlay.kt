@@ -103,9 +103,9 @@ private fun Window(
                     settings = settings,
                     manualTimer = manualTimer,
                     actions = actions,
-                    onTouchThrough = {
+                    onCommand = { command ->
                         showSettings = false
-                        actions.onTouchThrough()
+                        actions.onCommand(command)
                     },
                 )
             }
@@ -166,7 +166,7 @@ private fun Header(
         IconButton(onClick = { actions.onWindowModeChange(WindowMode.Minimized) }, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.overlay_minimize), tint = SubTextColor)
         }
-        IconButton(onClick = actions::onHide, modifier = Modifier.size(36.dp)) {
+        IconButton(onClick = { actions.onCommand(OverlayCommand.HIDE) }, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Default.Close, stringResource(R.string.overlay_hide), tint = SubTextColor)
         }
     }

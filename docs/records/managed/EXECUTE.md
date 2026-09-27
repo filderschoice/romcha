@@ -6,6 +6,33 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 20:38
+  summary: フローティングの設定メニューからアプリ本体を開けるようにした
+  details:
+    変更内容: >-
+      設定パネルの下部に「アプリを開く」を追加し、押すとアプリ本体の起動用インテント（FLAG_ACTIVITY_NEW_TASK）でアプリの画面を
+      前面に出すようにした。フローティングウィンドウは表示したまま残す。オーバーレイを表示中のサービスからの起動のため、
+      バックグラウンドからのアクティビティ起動制限の例外に当たる。配置はヘッダーではなく設定メニューを選んだ（BACKLOG の根拠に記録）。
+      detekt の関数数上限のため、OverlayActions の onTouchThrough・onHide と新しい操作を onCommand(OverlayCommand) に統合し、
+      起動処理はサービスの操作オブジェクト内に置いた。README の使い方と docs/VERIFICATION.md（G1）を更新した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/SettingsPanel.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt TooManyFunctions で失敗し、起動処理を操作オブジェクト内へ移して解消）。
+      実機での起動は BL-053 で確認する
+    関連ID:
+      - BL-052
 - date: 2026-09-27 18:19
   summary: 画面端へ退避中のつまみの横幅を 20dp から 28dp に広げた
   details:

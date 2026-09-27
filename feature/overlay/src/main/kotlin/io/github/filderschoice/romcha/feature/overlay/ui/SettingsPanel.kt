@@ -26,7 +26,7 @@ import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 /**
- * ヘッダーの設定ボタンで開く設定パネル（不透明度・文字サイズ・同期の補正または表示遅延・タッチ透過）。
+ * ヘッダーの設定ボタンで開く設定パネル（不透明度・文字サイズ・同期の補正または表示遅延・アプリを開く・タッチ透過）。
  *
  * ライブ・プレミア中は表示遅延（F-SYNC-08）、それ以外（リプレイ）は同期オフセットの補正（F-SYNC-06）と
  * 手動タイマーモード（F-SYNC-07）の操作を出す。
@@ -37,7 +37,7 @@ internal fun SettingsPanel(
     settings: OverlaySettings,
     manualTimer: PlaybackSnapshot?,
     actions: OverlayActions,
-    onTouchThrough: () -> Unit,
+    onCommand: (OverlayCommand) -> Unit,
 ) {
     val change = { next: OverlaySettings -> actions.onSettingsChange(next) }
     // 項目が増えてもチャット欄が潰れないよう、高さに上限を設けてスクロールさせる
@@ -50,7 +50,10 @@ internal fun SettingsPanel(
             SyncOffsetSlider(settings.syncOffsetMs, actions) { change(settings.copy(syncOffsetMs = it)) }
             ManualPanel(manualTimer, actions)
         }
-        TouchThroughButton(onTouchThrough)
+        Row {
+            PanelTextButton(R.string.overlay_open_app) { onCommand(OverlayCommand.OPEN_APP) }
+            PanelTextButton(R.string.overlay_touch_through) { onCommand(OverlayCommand.TOUCH_THROUGH) }
+        }
     }
 }
 
@@ -126,11 +129,14 @@ private fun FontScaleSlider(
     }
 }
 
-/** タッチ透過モードへ入るボタン（F-OVL-05）。透過中はウィンドウを触れないため、解除は常駐通知から行う。 */
+/** 設定パネルの下部のボタン（アプリを開く BL-052・タッチ透過 F-OVL-05。透過の解除は常駐通知から行う）。 */
 @Composable
-private fun TouchThroughButton(onClick: () -> Unit) {
+private fun PanelTextButton(
+    label: Int,
+    onClick: () -> Unit,
+) {
     TextButton(onClick = onClick, modifier = Modifier.padding(horizontal = 4.dp)) {
-        Text(stringResource(R.string.overlay_touch_through), color = OverlayTextColor, fontSize = 11.sp)
+        Text(stringResource(label), color = OverlayTextColor, fontSize = 11.sp)
     }
 }
 

@@ -26,6 +26,7 @@
     <string name="overlay_action_hide">非表示</string>
     <string name="overlay_action_stop">終了</string>
     <string name="overlay_action_release_touch">タッチ透過を解除</string>
+    <string name="overlay_open_app">アプリを開く</string>
     <string name="overlay_touch_through">タッチ透過にする（解除は通知から）</string>
     <string name="overlay_touch_through_on">タッチ透過中</string>
 </resources>

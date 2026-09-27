@@ -31,6 +31,7 @@ import io.github.filderschoice.romcha.feature.overlay.session.WatchCoordinator
 import io.github.filderschoice.romcha.feature.overlay.ui.ChatOverlay
 import io.github.filderschoice.romcha.feature.overlay.ui.ManualCommand
 import io.github.filderschoice.romcha.feature.overlay.ui.OverlayActions
+import io.github.filderschoice.romcha.feature.overlay.ui.OverlayCommand
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -230,14 +231,22 @@ class OverlayService :
                 this@OverlayService.settings.value = settings.normalized()
             }
 
-            override fun onTouchThrough() = setTouchThrough(true)
-
             override fun onWindowModeChange(mode: WindowMode) {
                 windowMode.value = mode
                 window.mode = mode
             }
 
-            override fun onHide() = setVisible(false)
+            override fun onCommand(command: OverlayCommand) =
+                when (command) {
+                    OverlayCommand.TOUCH_THROUGH -> setTouchThrough(true)
+                    OverlayCommand.HIDE -> setVisible(false)
+                    // アプリ本体の画面を開く（BL-052）。オーバーレイを表示中のため、サービスからのアクティビティ起動が
+                    // 認められる（バックグラウンドからの起動制限の例外）。起動用インテントが無い場合は何もしない
+                    OverlayCommand.OPEN_APP ->
+                        packageManager.getLaunchIntentForPackage(packageName)?.let {
+                            startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                        } ?: Unit
+                }
 
             override fun onCandidateSelected(videoId: String) {
                 OverlayChannel.send(OverlayEvent.CandidateSelected(videoId))

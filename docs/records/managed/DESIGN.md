@@ -238,7 +238,10 @@
     表示状態は `WindowMode`（Normal・Minimized・Stashed(side)）で表し、`OverlayActions.onWindowModeChange` で切り替える。
     退避の向きは左右のみ、状態は保存しない。
   - 設定パネル（`ui/SettingsPanel.kt`。高さ 200dp を上限にスクロール）: 不透明度・文字サイズ・表示遅延（LIVE の時）または
-    同期の補正と手動タイマー（それ以外）・タッチ透過。
+    同期の補正と手動タイマー（それ以外）・アプリを開く・タッチ透過。
+  - アプリを開く（BL-052）: 設定パネルの「アプリを開く」で、サービスがアプリの起動用インテント（`FLAG_ACTIVITY_NEW_TASK`）を
+    `startActivity` する。ウィンドウは表示したまま。オーバーレイを表示中のため、バックグラウンドからの起動制限の例外に当たる。
+    ウィンドウからの単発の操作（タッチ透過・隠す・アプリを開く）は `OverlayActions.onCommand(OverlayCommand)` で受け取る。
     値は `OverlaySettings`（不透明度・文字サイズ・表示遅延・補正）にまとめ、`OverlayActions.onSettingsChange` で受け取り、
     操作の終わり（`onGestureEnd`）に `OverlayPrefs.settings` へ保存する。セッションへは表示遅延と補正を `StateFlow` で渡す。
   - チャットの文字サイズは倍率 0.8〜1.5（0.1 刻み、既定 1.0＝中）。設定パネルのスライダーで変え、`fontScale` に保存する。
