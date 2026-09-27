@@ -199,6 +199,8 @@
   `ComposeView` にはサービス自身を `ViewTreeLifecycleOwner` / `ViewTreeSavedStateRegistryOwner` として設定する。
   - 起動は `OverlayService.start(context)`（オーバーレイ権限が無ければ false）。前面のアクティビティから呼ぶ。
   - 常駐通知（チャンネル `overlay`、重要度 LOW）に「表示／非表示」「終了」の操作を付け、本文タップでアプリを開く（F-OVL-08）。
+  - 常駐通知の本文は表示中の動画タイトル。`OverlayNotifications.titleChanges(OverlayChannel.state)`（タイトルの変化だけを流す）を
+    購読し、変わったときだけ通知を出し直す（BL-033。状態は表示の更新ごとに発行されるため、同じタイトルでは出し直さない）。
   - ウィンドウの位置・大きさ・不透明度は SharedPreferences `overlay` に保存し、表示時に画面内へ収める（`WindowBounds.clampTo`）。
     既定 280×360dp、最小 160dp。ヘッダーのドラッグで移動、右下のハンドルのドラッグでサイズ変更（F-OVL-02）。
   - 不透明度は 0.2〜1.0（既定 0.6）。ヘッダーの設定ボタンでスライダーを出す（F-OVL-03）。

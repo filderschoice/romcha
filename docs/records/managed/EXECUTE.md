@@ -6,6 +6,28 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 14:36
+  summary: 常駐通知の本文の動画タイトルが動画の切り替えに追従しない問題を修正
+  details:
+    変更内容: >-
+      OverlayService は常駐通知を onStartCommand と setVisible でしか作り直しておらず、動画を切り替えても通知の本文が
+      最初の動画のタイトルのままだった。OverlayNotifications.titleChanges（OverlayUiState の title の変化だけを流す）を追加し、
+      OverlayService が OverlayChannel.state から購読して、タイトルが変わったときだけ通知を出し直すようにした。
+      通知の出し直しを updateNotification にまとめた。単体テスト OverlayNotificationsTest を追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayNotifications.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayNotificationsTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      ./gradlew :app:installDebug、npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0、実機へのインストールを確認。実機で動画を切り替えたときの通知の追従は未確認
+      （フローティング表示の開始を自動操作で行えなかったため、人手で確認する）
+    関連ID:
+      - BL-033
 - date: 2026-09-27 14:14
   summary: 実応答由来の fixture を追加し、fixture 作成スクリプトの IP アドレス混入を修正
   details:

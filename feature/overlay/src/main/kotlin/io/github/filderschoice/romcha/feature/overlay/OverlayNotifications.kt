@@ -7,6 +7,9 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 /** 常駐通知（F-OVL-08）。表示／非表示の切り替えと終了の操作を付け、本文のタップでアプリを開く。 */
 internal class OverlayNotifications(
@@ -57,5 +60,11 @@ internal class OverlayNotifications(
         const val ACTION_TOGGLE = "io.github.filderschoice.romcha.overlay.TOGGLE"
         const val ACTION_STOP = "io.github.filderschoice.romcha.overlay.STOP"
         private const val CHANNEL_ID = "overlay"
+
+        /**
+         * 通知の本文に出すタイトルの変化（BL-033）。状態は表示の更新ごとに発行されるため、同じタイトルの間は流さない
+         * （通知の出し直しを動画の切り替え時に限る）。
+         */
+        fun titleChanges(states: Flow<OverlayUiState>): Flow<String?> = states.map { it.title }.distinctUntilChanged()
     }
 }

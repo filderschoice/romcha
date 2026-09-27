@@ -83,6 +83,10 @@ class OverlayService :
         lifecycleScope.launch {
             OverlayChannel.events.collect { if (it is OverlayEvent.StopRequested) stopSelf() }
         }
+        // 表示中の動画が変わったら常駐通知の本文も更新する（BL-033）
+        lifecycleScope.launch {
+            OverlayNotifications.titleChanges(OverlayChannel.state).collect { updateNotification() }
+        }
         monitor = PlaybackMonitor(this)
         monitor.start()
         screenOn.value = getSystemService(PowerManager::class.java).isInteractive
@@ -155,6 +159,10 @@ class OverlayService :
         if (show && !Settings.canDrawOverlays(this)) return
         visible = show
         if (show) addWindow() else removeWindow()
+        updateNotification()
+    }
+
+    private fun updateNotification() {
         getSystemService(
             NotificationManager::class.java,
         ).notify(NOTIFICATION_ID, notifications.build(visible, OverlayChannel.state.value.title))
