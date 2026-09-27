@@ -29,13 +29,15 @@ keytool -genkeypair -v -keystore <リポジトリ外のパス>/romcha-release.jk
 次に、リポジトリのルートの `local.properties`（`.gitignore` で除外済み。無ければ作る）へ署名情報を追記します。
 
 ```properties
-RELEASE_STORE_FILE=C:/Users/<ユーザー名>/keys/romcha-release.jks
+RELEASE_STORE_FILE=C\:/Users/<ユーザー名>/keys/romcha-release.jks
 RELEASE_STORE_PASSWORD=<キーストアのパスワード>
 RELEASE_KEY_ALIAS=romcha
 RELEASE_KEY_PASSWORD=<鍵のパスワード>
 ```
 
 - パスの区切りは `/` を使います（`\` は properties 形式ではエスケープ文字のため、使うなら `\\` と重ねる）。
+  ドライブ文字の `:` は `C\:` とエスケープします（`C:/` のように書くと Android lint の PropertyEscape がエラーにし、
+  品質ゲートの `lintDebug` が通りません。小文字の `c:/` は指摘されないことを確認していますが、エスケープしておけば確実です）。
   相対パスはリポジトリのルートから解決します。
 - 作成後に `git status --short` で `local.properties` と `*.jks` が表示されない（追跡対象外）ことを確認します。
 - Android Studio が `sdk.dir` を書き換えることがあるため、追記した行が残っているかを署名ビルドの前に確かめます
@@ -53,6 +55,35 @@ RELEASE_KEY_PASSWORD=<鍵のパスワード>
 コミットに打ちます。
 
 ## 3. 署名済み APK を作る
+
+### 3.1 スクリプトで作る（推奨）
+
+2章の版の更新から、この章の署名の確認までを 1 コマンドで行います（Windows）。
+
+```bat
+rem 現在の版（app/build.gradle.kts）でビルドする
+scripts\release-build.bat
+
+rem 版を上げてビルドする（versionName と versionCode を書き換える。成功したら変更をコミットする）
+scripts\release-build.bat -VersionName 1.0.1
+```
+
+| 順 | スクリプトが行うこと | 止まる条件 |
+| --- | --- | --- |
+| 1 | `local.properties` の署名情報 4 つとキーストアのファイルを確認する（値は表示しない） | 不足・ファイルが無い |
+| 2 | `-VersionName` の指定時だけ、`versionName` と `versionCode`（2章の式）を書き換える | 形式違い（`MAJOR.MINOR.PATCH`、MINOR・PATCH は 0〜99） |
+| 3 | 品質ゲートの Gradle 分（静的解析・型検査・単体テスト）を実行する | 失敗（版の書き換えは元に戻す） |
+| 4 | `:app:releaseDist` で APK と `.sha256` を出力する | 失敗（版の書き換えは元に戻す） |
+| 5 | `apksigner` で署名を確かめ、証明書の DN と SHA-256 を表示する | 検証の失敗 |
+| 6 | 実機への導入・タグ・公開のコマンド例を表示する（実行はしない） | － |
+
+- 既存の最新タグ以下の版を指定した場合や、コミットしていない変更がある場合は警告を出します（止めません）。
+- オプション: `-SkipChecks`（品質ゲートを省略）、`-AllowUnsigned`（署名情報が無くても未署名でビルドする。動作確認用で、公開しない）。
+- `local.properties` を書き換えた後も lint の結果がビルドキャッシュから復元されて古いままになることがあるため、
+  スクリプトは app の lint の解析（`:app:lintAnalyzeDebug`）を毎回やり直します。
+- 実体は `scripts/release-build.ps1` で、`.bat` は pwsh（PowerShell 7）があればそれで、無ければ Windows PowerShell で実行します。
+
+### 3.2 手動で作る
 
 ```sh
 # 品質ゲート（CLAUDE.md「本リポジトリの品質ゲート定義」）を通してから

@@ -6,6 +6,38 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-28 00:40
+  summary: リリースビルドを 1 コマンドで行うスクリプト（scripts/release-build.bat・.ps1）を追加した
+  details:
+    変更内容: >-
+      ユーザー指示により、sesami-wear の release-build.bat / .ps1 を参考に、Romcha のリリースビルド用スクリプトを追加した。
+      .bat は pwsh を優先して .ps1 を呼ぶ。.ps1 は local.properties の署名情報とキーストアの事前確認（値は表示しない）、-VersionName 指定時の versionName と versionCode（MAJOR × 10000 + MINOR × 100 + PATCH）の
+      書き換え（失敗時は元に戻す）、品質ゲートの Gradle 分、:app:releaseDist、apksigner による署名の確認、タグ・公開のコマンド例の
+      表示を行う。push・タグ・公開は行わない。検証中に、local.properties を書き換えても lint の解析結果がビルドキャッシュから
+      復元されて古い PropertyEscape の判定が残ることが分かったため、スクリプトでは :app:lintAnalyzeDebug を --rerun で実行する。
+      PropertyEscape は大文字の C:/ を指摘し、小文字の c:/ は指摘しなかったため、ドライブ文字のエスケープはスクリプトでは確かめず lint に任せる。
+      docs/RELEASE.md の記入例のドライブ文字を C\: にエスケープし、3.1 にスクリプトの使い方を追加した。README・DESIGN を更新した。
+      参考の version.properties 方式は、版の正本を app/build.gradle.kts の 1 か所に保つため採らなかった。
+    変更ファイル:
+      - scripts/release-build.bat
+      - scripts/release-build.ps1
+      - docs/RELEASE.md
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      git worktree 上で scripts\release-build.bat を次の条件で実行（使い捨ての検証用キーストアと仮の local.properties。
+      ユーザーの local.properties と実鍵は使っていない）。署名情報なし、版の形式違い（1.0）、-SkipChecks -AllowUnsigned、
+      誤ったパスワードで -VersionName 1.0.2、エスケープ済みのパスで -VersionName 1.0.1（品質ゲート込み）、
+      Windows PowerShell 5.1 での -SkipChecks。PowerShell の構文解析（pwsh・5.1）。
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 署名情報なし・形式違いは説明付きで終了コード1。未署名は romcha-v1.0.0-unsigned.apk を出力。誤ったパスワードでは
+      Gradle が失敗し、版の書き換えが元に戻ることを確認。エスケープ済みのパスでは品質ゲートを通って署名済みの romcha-v1.0.1.apk を出力し、
+      versionCode 10001・apksigner の証明書表示・次の手順の表示を確認。5.1 でも同じく成功。worktree と検証用キーストアは削除した
+    関連ID:
+      - BL-063
 - date: 2026-09-27 23:40
   summary: リリース署名の情報を local.properties から読むようにした
   details:

@@ -104,7 +104,8 @@ Google Play では配布していません。更新はアプリの「更新を�
 ./gradlew testDebugUnitTest :core:chat:test :core:sync:test
 ```
 
-リリース APK は `./gradlew :app:releaseDist` で `app/build/dist/` に `romcha-vX.Y.Z.apk` と SHA-256（`.sha256`）を出力します。
+リリース APK は `scripts\release-build.bat`（Windows。署名情報の確認・品質ゲート・署名の確認までをまとめて行う）
+または `./gradlew :app:releaseDist` で `app/build/dist/` に `romcha-vX.Y.Z.apk` と SHA-256（`.sha256`）を出力します。
 署名にはリポジトリのルートの `local.properties`（`.gitignore` で除外済み）に `RELEASE_STORE_FILE`・`RELEASE_STORE_PASSWORD`・
 `RELEASE_KEY_ALIAS`・`RELEASE_KEY_PASSWORD` が必要で、無い場合は未署名の `romcha-vX.Y.Z-unsigned.apk` になります。
 鍵の作成から Releases での公開までの手順は [`docs/RELEASE.md`](docs/RELEASE.md) を参照してください。

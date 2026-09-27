@@ -6,22 +6,6 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
-- id: BL-063
-  区分: 機能追加
-  タスク内容: >-
-    リリースビルドを 1 コマンドで行うスクリプト（scripts/release-build.bat と scripts/release-build.ps1）を作る。
-    sesami-wear の同名スクリプトを参考に、署名情報（local.properties）の事前確認、版の指定（-VersionName で versionName と
-    versionCode を更新）、品質ゲート、:app:releaseDist、apksigner による署名の確認、次の手順（タグ・公開）の表示までを行う
-  優先度: P1
-  状態: 未着手
-  担当: AIエージェント
-  完了条件: >-
-    スクリプトで署名済みの romcha-vX.Y.Z.apk と SHA-256 が出力され、署名情報が無い・版の形式が違う・ビルド失敗の各場合に
-    分かる説明で止まる（ビルド失敗時は版の変更を戻す）。docs/RELEASE.md と README に使い方を記載する
-  依存: []
-  根拠: >-
-    2026-09-27 ユーザー指示。参考の version.properties 方式は採らず、versionCode は RELEASE.md 2章の算出式で versionName から
-    求める（版の正本を app/build.gradle.kts の 1 か所に保つため）。スクリプトは署名情報の値を表示しない。
 - id: BL-061
   区分: 人手検証
   タスク内容: >-

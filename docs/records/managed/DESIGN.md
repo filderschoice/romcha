@@ -381,6 +381,12 @@
   R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。
 - 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.0 / 10000）。
   鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`（人が実行する）。
+- リリースビルドのスクリプト（BL-063）: `scripts/release-build.bat` が `scripts/release-build.ps1`（UTF-8 BOM 付き・CRLF。
+  Windows PowerShell 5.1 でも日本語を読めるように）を pwsh 優先で呼ぶ。署名情報の事前確認（値は表示しない。ドライブ文字の `:` の
+  エスケープは lint の判定に任せ、スクリプトでは確かめない）→ `-VersionName` 指定時の版の書き換え（失敗時は戻す）
+  → 品質ゲートの Gradle 分（`:app:lintAnalyzeDebug --rerun` を含む。`local.properties` は lint の解析の入力に含まれず、ビルド
+  キャッシュの古い結果が使われることがあるため）→ `:app:releaseDist` → `apksigner` の検証 → 次の手順の表示。版は
+  `app/build.gradle.kts` を唯一の正本とし、参考にした sesami-wear の `version.properties` 方式は採らない。push・タグ・公開はしない。
 - アプリ名・アイコンに YouTube のロゴ・名称を使わない（PLAN 5.5）。
 
 ## エージェント実装指示
