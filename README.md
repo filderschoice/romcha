@@ -1,0 +1,112 @@
+# Romcha（ロムチャ）
+
+YouTube 公式アプリと同期する、見るだけのフローティングチャットビューワー（Android）。
+
+公式アプリで動画を視聴しながら、その動画のチャット（チャットリプレイ）をフローティングウィンドウで表示します。
+公式アプリの再生位置を自動で読み取り、チャットの投稿時刻（動画内の位置）に合わせて流します。
+コメントの投稿など、書き込みの機能は持ちません（名前は ROM＝Read Only Member ＋チャット から）。
+
+> [!IMPORTANT]
+> 本アプリは非公式のアプリで、YouTube および Google とは関係ありません。チャットの取得には公開されていない方法
+> （YouTube の Web 版が内部で使う通信）を使っているため、YouTube の仕様変更により予告なく動かなくなることがあります。
+> YouTube の利用規約上の位置付けも公式 API とは異なります。自己の判断と責任で利用してください。
+
+## 状態
+
+開発中（v0.1.0、M1 相当）。計画と要件は [`docs/PLAN.md`](docs/PLAN.md) を参照してください。
+
+| 機能 | 状態 |
+| --- | --- |
+| アーカイブ（ライブ配信・プレミア公開の終了後）のチャットリプレイの同期表示 | 実装済み（実機確認待ち） |
+| 公式アプリで再生中の動画の自動特定（MediaSession・端末内キャッシュ・検索照合） | 実装済み（実機確認待ち） |
+| 公式アプリの「共有」・URL 入力による動画の指定 | 実装済み |
+| フローティングウィンドウ（移動・サイズ変更・背景の透過度・自動スクロール・常駐通知） | 実装済み |
+| ライブ配信・プレミア公開中のチャット追従 | 未実装（M2） |
+| タッチ透過・最小化・手動補正・表示のカスタマイズ・フィルタ | 未実装（M3・M4） |
+
+## 使い方
+
+1. アプリを起動し、画面の案内に従って次の権限を許可します。
+   - **他のアプリの上に重ねて表示**: チャットのウィンドウを公式アプリの上に表示するため（必須）。
+   - **通知へのアクセス**: 公式アプリの再生位置（再生中の動画・位置・速度）を読み取るため。
+     Android の仕組み上この名前の権限ですが、本アプリは**通知の内容を読みません**
+     （`MediaSessionManager.getActiveSessions` を呼ぶ条件としてのみ使います）。
+   - **通知の表示**: 表示中であることを示す常駐通知と、そこからの表示切り替え・終了のため。
+2. 「フローティング表示を開始」を押し、公式アプリでアーカイブ動画を再生します。
+3. 再生中の動画を自動で特定してチャットを表示します。特定できない場合は候補から選ぶか、
+   公式アプリの「共有」で Romcha を選ぶ、またはアプリの「URL で開く」に動画の URL を入力してください。
+
+画面がオフの間、公式アプリが一時停止している間はチャットの取得を止めます。
+
+## 動作環境
+
+- Android 14（API 34）以上。動作確認端末は Pixel 8 Pro（予定）。
+- YouTube 公式アプリ（`com.google.android.youtube`）。
+
+## 開発
+
+### 必要なもの
+
+- JDK 17
+- Android SDK（compileSdk 36。`ANDROID_HOME` または `local.properties` の `sdk.dir` で指定）
+- Node.js（Markdown の静的解析 `markdownlint-cli2` を `npx` で実行する場合）
+- Python 3 と PyYAML（記録ファイルの検証 `scripts/validate-records.py`）
+
+### ビルドと品質ゲート
+
+```sh
+# デバッグ APK（app/build/outputs/apk/debug/app-debug.apk）
+./gradlew :app:assembleDebug
+
+# 静的解析（ktlint・detekt・Android lint）
+./gradlew ktlintCheck detekt lintDebug
+
+# 型検査
+./gradlew compileDebugKotlin
+
+# 単体テスト
+./gradlew testDebugUnitTest :core:chat:test :core:sync:test
+```
+
+Windows の PowerShell では `./gradlew` を `.\gradlew.bat` と読み替えてください。
+品質ゲートの正本は [`CLAUDE.md`](CLAUDE.md)「本リポジトリの品質ゲート定義」です。
+ktlint の指摘は `./gradlew ktlintFormat` で自動修正できます。
+
+### 実機へのインストール
+
+```sh
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+### 構成
+
+| モジュール | 内容 |
+| --- | --- |
+| `app` | 起動画面（権限案内・URL 入力・共有の受信・免責・OSS ライセンス・診断情報） |
+| `core:chat` | InnerTube クライアント、チャット応答の解析、動画の自動特定（Kotlin/JVM） |
+| `core:sync` | 再生位置とチャットの同期（Kotlin/JVM） |
+| `core:media` | 公式アプリの MediaSession の監視 |
+| `feature:overlay` | フローティングウィンドウ、セッション統合 |
+
+設計の詳細は [`docs/records/managed/DESIGN.md`](docs/records/managed/DESIGN.md) を参照してください。
+
+### テストについて
+
+チャット取得の単体テストは、既知の応答構造に基づく合成データ（`core/chat/src/test/resources/fixtures/`）と
+MockWebServer で行い、YouTube へは通信しません。実際の応答との一致は実機・実通信での確認が必要です。
+
+### 診断情報
+
+アプリの「診断情報を表示」で、公式アプリの MediaSession が公開している値（状態・位置・速度・メタデータの全キー）を
+確認できます。表示は端末の画面内のみで、外部へは送信しません。
+
+## プライバシー
+
+- ログイン機能はありません。解析・広告の SDK を含みません。
+- 通信先は YouTube（`www.youtube.com`）のみです（画像の表示に対応した時点で YouTube の画像配信元が加わります）。
+- 動画の特定結果のキャッシュとウィンドウの設定は端末内にのみ保存し、バックアップの対象外にしています。
+
+## ライセンス
+
+[MIT License](LICENSE)。参考にした外部実装の記録は [`docs/REFERENCES.md`](docs/REFERENCES.md)、
+依存ライブラリのライセンスはアプリ内の「オープンソースライセンス」画面で確認できます。
