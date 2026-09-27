@@ -29,7 +29,7 @@ import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.core.media.NowPlaying
 import kotlinx.coroutines.flow.StateFlow
 
-private enum class Screen { HOME, LICENSES }
+private enum class Screen { HOME, DISPLAY, LICENSES }
 
 @Composable
 fun RomchaApp(
@@ -42,7 +42,15 @@ fun RomchaApp(
     var screen by rememberSaveable { mutableStateOf(Screen.HOME) }
     MaterialTheme(colorScheme = colors) {
         when (screen) {
-            Screen.HOME -> HomeScreen(status, nowPlaying, actions, onOpenLicenses = { screen = Screen.LICENSES })
+            Screen.HOME ->
+                HomeScreen(
+                    status = status,
+                    nowPlaying = nowPlaying,
+                    actions = actions,
+                    onOpenDisplaySettings = { screen = Screen.DISPLAY },
+                    onOpenLicenses = { screen = Screen.LICENSES },
+                )
+            Screen.DISPLAY -> DisplaySettingsScreen(onBack = { screen = Screen.HOME })
             Screen.LICENSES -> LicensesScreen(onBack = { screen = Screen.HOME })
         }
     }

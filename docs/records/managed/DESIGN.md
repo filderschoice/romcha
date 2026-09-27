@@ -44,6 +44,7 @@
   ライブ・プレミアは対象外。位置入力（`OverlayFormat.parsePosition`。`h:mm:ss`・`m:ss`・秒数、全角コロン可）の間だけ
   ウィンドウの `FLAG_NOT_FOCUSABLE` を外し（`OverlayWindow.focusable`）、確定・取消で戻す。手動タイマーの状態は保存しない
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
+- F-VIEW-01: 文字サイズ（フローティングの設定パネル）と、投稿者名・アイコン・時刻の表示有無（アプリの表示設定画面）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
 
 ## 設計方針
@@ -238,6 +239,11 @@
 - 表示: 通常メッセージは投稿者名（所有者＝黄・モデレーター＝青・メンバー＝緑）と本文。
   スーパーチャット・スーパーステッカーは見出し帯（投稿者名・金額）と本文帯を応答の色で塗り、輝度で黒／白文字を選ぶ（F-VIEW-02）。
   メンバー加入・ギフトは緑の帯。お知らせ文（チャット無効 F-VID-07・通信失敗など）は赤帯で表示する。
+- 表示設定（F-VIEW-01）: `DisplaySettings`（投稿者名・アイコン・時刻の表示有無。既定は名前のみで従来と同じ）を
+  `DisplaySettingsStore`（SharedPreferences `display`。`init(context)` 後に `state: StateFlow` を購読、`update` で保存）で共有する。
+  アプリ画面の「表示設定」（`DisplaySettingsScreen`）で変え、表示中のウィンドウへすぐ反映する。時刻はリプレイなら動画内の位置、
+  ライブ・プレミアなら投稿時刻 `H:mm`（`OverlayFormat.messageTime`）。アイコンは `ImagePolicy` を通した URL だけ 18dp の丸で出す。
+  スーパーチャットの帯の投稿者名は設定によらず出す。
 - 画像（F-CHAT-09）: Coil（`coil-compose`）で読み込む。本文は `MessageText` で描き、カスタム絵文字・メンバースタンプを
   `InlineTextContent`（1.4em）で文中に差し込む。URL が無い・許可外・読み込み失敗なら代替テキスト、Unicode の絵文字は文字のまま。
   スーパーステッカーは 56dp の画像（失敗時は「（スーパーステッカー）」）。応答の URL は `ImagePolicy` で HTTPS かつ
@@ -245,10 +251,10 @@
 
 ### アプリ画面（`app`）
 
-- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME` と `LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
+- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
 - HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+  URL 入力（F-VID-05）、表示設定へのボタン、診断情報（折りたたみ）、OSS ライセンスへのリンク。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。

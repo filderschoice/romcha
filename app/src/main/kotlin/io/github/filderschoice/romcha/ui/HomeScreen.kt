@@ -46,6 +46,7 @@ internal fun HomeScreen(
     status: PermissionStatus,
     nowPlaying: StateFlow<NowPlaying>,
     actions: HomeActions,
+    onOpenDisplaySettings: () -> Unit,
     onOpenLicenses: () -> Unit,
 ) {
     Scaffold { padding ->
@@ -59,6 +60,7 @@ internal fun HomeScreen(
             Permissions(status, actions)
             OverlayControls(status, actions)
             UrlInput(enabled = status.canStartOverlay, onOpen = actions::openVideo)
+            OutlinedButton(onClick = onOpenDisplaySettings) { Text(stringResource(R.string.display_title)) }
             Diagnostics(nowPlaying)
             TextButton(onClick = onOpenLicenses) { Text(stringResource(R.string.licenses_title)) }
         }

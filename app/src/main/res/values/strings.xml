@@ -26,4 +26,10 @@
     <string name="diagnostics_no_session">公式アプリの再生を検出していません（通知へのアクセスの許可と、公式アプリでの再生を確認してください）</string>
     <string name="licenses_title">オープンソースライセンス</string>
     <string name="back">戻る</string>
+    <string name="display_title">表示設定</string>
+    <string name="display_items">表示する項目</string>
+    <string name="display_author_name">投稿者名</string>
+    <string name="display_author_icon">投稿者のアイコン</string>
+    <string name="display_time">時刻（リプレイは動画内の位置、ライブは投稿時刻）</string>
+    <string name="display_font_hint">文字サイズ・背景の透過度は、フローティングウィンドウの設定ボタンから変えられます。</string>
 </resources>

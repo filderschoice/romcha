@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import io.github.filderschoice.romcha.core.media.MediaListenerService
 import io.github.filderschoice.romcha.core.media.PlaybackMonitor
+import io.github.filderschoice.romcha.feature.overlay.DisplaySettingsStore
 import io.github.filderschoice.romcha.feature.overlay.OverlayChannel
 import io.github.filderschoice.romcha.feature.overlay.OverlayEvent
 import io.github.filderschoice.romcha.feature.overlay.OverlayService
@@ -38,6 +39,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         monitor = PlaybackMonitor(this)
+        DisplaySettingsStore.init(this)
         refreshStatus()
         setContent { RomchaApp(status = status.value, nowPlaying = monitor.state, actions = actions) }
         if (savedInstanceState == null) handleShare(intent)

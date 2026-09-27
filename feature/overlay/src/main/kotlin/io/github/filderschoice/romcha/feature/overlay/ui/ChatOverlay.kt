@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
+import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
@@ -66,6 +67,7 @@ private val ChatBackgroundColor = Color.Black
 fun ChatOverlay(
     state: OverlayUiState,
     settings: OverlaySettings,
+    display: DisplaySettings,
     touchThrough: Boolean,
     minimized: Boolean,
     manualTimer: PlaybackSnapshot?,
@@ -96,7 +98,7 @@ fun ChatOverlay(
             state.notice?.let { Notice(it) }
             if (state.candidates.isNotEmpty()) Candidates(state.candidates, actions)
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                MessageList(state.messages, settings.fontScale)
+                MessageList(state.messages, settings.fontScale, display)
                 ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
             }
         }
@@ -191,6 +193,7 @@ private fun Candidates(
 private fun MessageList(
     messages: List<ChatMessage>,
     fontScale: Float,
+    display: DisplaySettings,
 ) {
     val listState = rememberLazyListState()
     val policy = remember { AutoScrollPolicy() }
@@ -223,7 +226,7 @@ private fun MessageList(
         val density = LocalDensity.current
         CompositionLocalProvider(LocalDensity provides Density(density.density, density.fontScale * fontScale)) {
             LazyColumn(state = listState, modifier = Modifier.fillMaxSize().padding(horizontal = 6.dp)) {
-                items(messages, key = { it.id }) { ChatItem(it) }
+                items(messages, key = { it.id }) { ChatItem(it, display) }
             }
         }
         if (showJump) {

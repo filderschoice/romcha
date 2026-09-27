@@ -6,6 +6,35 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:32
+  summary: アプリ画面に表示設定を追加し、投稿者名・アイコン・時刻の表示有無を切り替えられるようにした
+  details:
+    変更内容: >-
+      feature:overlay に DisplaySettings（投稿者名・アイコン・時刻の表示有無）と DisplaySettingsStore（SharedPreferences display に保存し、
+      同一プロセスのアプリ画面とフローティングウィンドウが同じ StateFlow を購読する）を追加した。既定値は従来の表示（名前のみ）。
+      アプリのホームに「表示設定」ボタンと DisplaySettingsScreen（スイッチ）を追加し、変更は表示中のウィンドウへすぐ反映する。
+      時刻はリプレイなら動画内の位置、ライブ・プレミアなら投稿時刻（H:mm）を出す（OverlayFormat.messageTime）。
+      アイコンは ImagePolicy を通した URL だけ 18dp の丸で表示する。スーパーチャットの帯の投稿者名は設定によらず出す。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatItems.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。実機での見た目は BL-048 で確認する
+    関連ID:
+      - BL-043
 - date: 2026-09-27 15:28
   summary: カスタム絵文字・メンバースタンプ・スーパーステッカーを画像で表示（Coil を導入）
   details:

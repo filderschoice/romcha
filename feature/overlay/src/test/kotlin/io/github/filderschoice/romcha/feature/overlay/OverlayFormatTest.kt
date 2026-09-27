@@ -58,6 +58,27 @@ class OverlayFormatTest {
     }
 
     @Test
+    fun メッセージの時刻はリプレイなら動画内の位置でライブなら投稿時刻() {
+        val replay = chatMessage(videoOffsetMs = 83_000, timestampUsec = 0)
+        assertEquals("1:23", OverlayFormat.messageTime(replay))
+        // 2026-09-27 12:34:56 UTC
+        val live = chatMessage(videoOffsetMs = null, timestampUsec = 1_790_512_496_000_000)
+        assertEquals("21:34", OverlayFormat.messageTime(live, java.time.ZoneId.of("Asia/Tokyo")))
+    }
+
+    private fun chatMessage(
+        videoOffsetMs: Long?,
+        timestampUsec: Long,
+    ) = io.github.filderschoice.romcha.core.chat.ChatMessage(
+        id = "m",
+        kind = io.github.filderschoice.romcha.core.chat.ChatMessageKind.TEXT,
+        author = io.github.filderschoice.romcha.core.chat.ChatAuthor("a", null, null, emptySet()),
+        runs = emptyList(),
+        timestampUsec = timestampUsec,
+        videoOffsetMs = videoOffsetMs,
+    )
+
+    @Test
     fun 画面の向きは幅と高さで決める() {
         assertEquals(ScreenOrientation.LANDSCAPE, ScreenOrientation.of(2_000, 1_000))
         assertEquals(ScreenOrientation.PORTRAIT, ScreenOrientation.of(1_000, 2_000))

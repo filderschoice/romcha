@@ -1,10 +1,14 @@
 package io.github.filderschoice.romcha.feature.overlay
 
+import io.github.filderschoice.romcha.core.chat.ChatMessage
+import java.time.Instant
+import java.time.ZoneId
 import kotlin.math.roundToInt
 
 /** 表示用の値の計算（Android 非依存の純粋関数。単体テストで検証する）。 */
 object OverlayFormat {
     private const val MILLIS_PER_SECOND = 1_000L
+    private const val MICROS_PER_MILLI = 1_000L
     private const val TENTH_MS = 100L
     private const val MAX_POSITION_PARTS = 3
     private const val SECONDS_PER_MINUTE = 60L
@@ -29,6 +33,18 @@ object OverlayFormat {
         } else {
             "%d:%02d".format(minutes, seconds)
         }
+    }
+
+    /**
+     * メッセージの時刻の表示（F-VIEW-01）。リプレイは動画内の位置（[position] と同じ形式）、ライブ・プレミアは投稿時刻の `H:mm`。
+     */
+    fun messageTime(
+        message: ChatMessage,
+        zone: ZoneId = ZoneId.systemDefault(),
+    ): String {
+        message.videoOffsetMs?.let { return position(it) }
+        val time = Instant.ofEpochMilli(message.timestampUsec / MICROS_PER_MILLI).atZone(zone)
+        return "%d:%02d".format(time.hour, time.minute)
     }
 
     /** 同期状態の表示文（F-OVL-09）。 */

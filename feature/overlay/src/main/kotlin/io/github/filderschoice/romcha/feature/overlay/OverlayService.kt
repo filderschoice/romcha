@@ -76,6 +76,7 @@ class OverlayService :
         savedStateController.performRestore(null)
         super.onCreate()
         prefs = OverlayPrefs(this)
+        DisplaySettingsStore.init(this)
         window = OverlayWindow(this, prefs)
         settings.value = prefs.settings
         lifecycleScope.launch {
@@ -185,9 +186,11 @@ class OverlayService :
             val state by OverlayChannel.state.collectAsState()
             val current by settings.collectAsState()
             val timer by manualTimer.collectAsState()
+            val display by DisplaySettingsStore.state.collectAsState()
             ChatOverlay(
                 state = state,
                 settings = current,
+                display = display,
                 touchThrough = touchThrough.value,
                 minimized = minimized.value,
                 manualTimer = timer,
