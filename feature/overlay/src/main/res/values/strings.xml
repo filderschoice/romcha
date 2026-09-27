@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="overlay_title_placeholder">動画を検出していません</string>
+    <string name="overlay_settings">表示設定</string>
+    <string name="overlay_hide">ウィンドウを隠す</string>
+    <string name="overlay_opacity">背景 %1$d%%</string>
+    <string name="overlay_live_delay">遅延 %1$d 秒</string>
+    <string name="overlay_jump_to_latest">最新へ</string>
+    <string name="overlay_sticker">（スーパーステッカー）</string>
+    <string name="overlay_channel_name">フローティング表示</string>
+    <string name="overlay_notification_title">Romcha を表示中</string>
+    <string name="overlay_action_show">表示</string>
+    <string name="overlay_action_hide">非表示</string>
+    <string name="overlay_action_stop">終了</string>
+</resources>

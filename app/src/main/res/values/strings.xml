@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Romcha</string>
+    <string name="app_subtitle">公式アプリと同期する、見るだけのフローティングチャットビューワー</string>
+    <string name="disclaimer">本アプリは非公式のアプリで、YouTube および Google とは関係ありません。チャットの取得には公開されていない方法（YouTube の Web 版が内部で使う通信）を使っているため、仕様の変更により予告なく動かなくなることがあります。コメントの投稿など、書き込みの機能はありません。</string>
+    <string name="permissions_title">必要な権限</string>
+    <string name="permission_overlay">他のアプリの上に重ねて表示</string>
+    <string name="permission_overlay_description">公式アプリの上にチャットのウィンドウを表示するために使います。</string>
+    <string name="permission_notification_access">通知へのアクセス</string>
+    <string name="permission_notification_access_description">公式アプリの再生位置（再生中の動画・位置・速度）を読み取るために必要です。Android の仕組み上この名前の権限ですが、本アプリは通知の内容を読みません。</string>
+    <string name="permission_post_notifications">通知の表示</string>
+    <string name="permission_post_notifications_description">表示中であることを示す常駐通知と、そこからの表示切り替え・終了に使います。</string>
+    <string name="permission_granted">許可済み</string>
+    <string name="permission_not_granted">未許可</string>
+    <string name="permission_open_settings">設定を開く</string>
+    <string name="overlay_start">フローティング表示を開始</string>
+    <string name="overlay_stop">終了</string>
+    <string name="overlay_permission_required">「他のアプリの上に重ねて表示」を許可してください</string>
+    <string name="url_title">URL で開く</string>
+    <string name="url_label">YouTube の動画 URL</string>
+    <string name="url_invalid">YouTube の動画 URL として読み取れません</string>
+    <string name="url_open">開く</string>
+    <string name="share_no_video">共有された内容に YouTube の動画 URL が見つかりません</string>
+    <string name="diagnostics_show">診断情報を表示（公式アプリの再生情報）</string>
+    <string name="diagnostics_hide">診断情報を隠す</string>
+    <string name="diagnostics_no_session">公式アプリの再生を検出していません（通知へのアクセスの許可と、公式アプリでの再生を確認してください）</string>
+    <string name="licenses_title">オープンソースライセンス</string>
+    <string name="back">戻る</string>
+</resources>

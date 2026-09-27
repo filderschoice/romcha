@@ -1,0 +1,274 @@
+{
+  "contents": {
+    "twoColumnWatchNextResults": {
+      "results": {
+        "results": {
+          "contents": [
+            {
+              "videoPrimaryInfoRenderer": {
+                "title": {
+                  "runs": [
+                    {
+                      "text": "【SILENT HILL f】 DAY07｜1周目最終回！世界線どうなってんのぉ！？【"
+                    },
+                    {
+                      "text": "#ヴイアラ",
+                      "navigationEndpoint": {
+                        "commandMetadata": {
+                          "webCommandMetadata": {
+                            "url": "/hashtag/%E3%83%B4%E3%82%A4%E3%82%A2%E3%83%A9",
+                            "webPageType": "WEB_PAGE_TYPE_BROWSE",
+                            "rootVe": 6827,
+                            "apiUrl": "/youtubei/v1/browse"
+                          }
+                        },
+                        "browseEndpoint": {
+                          "browseId": "FEhashtag",
+                          "params": "6gUQCgzjg7TjgqTjgqLjg6kYAQ%3D%3D"
+                        }
+                      }
+                    },
+                    {
+                      "text": " / レトラ】※ネタバレあり"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "videoSecondaryInfoRenderer": {
+                "owner": {
+                  "videoOwnerRenderer": {
+                    "title": {
+                      "runs": [
+                        {
+                          "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
+                          "navigationEndpoint": {
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
+                              "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "conversationBar": {
+        "liveChatRenderer": {
+          "continuations": [
+            {
+              "reloadContinuationData": {
+                "continuation": "op2w0wRyGl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEQAFyDAgEGAIgACgAMAA4AHgB"
+              }
+            }
+          ],
+          "header": {
+            "liveChatHeaderRenderer": {
+              "overflowMenu": {
+                "menuRenderer": {
+                  "items": [
+                    {
+                      "clientSideToggleMenuItemRenderer": {
+                        "defaultText": {
+                          "runs": [
+                            {
+                              "text": "タイムスタンプ"
+                            }
+                          ]
+                        },
+                        "defaultIcon": {
+                          "iconType": "ACCESS_TIME"
+                        },
+                        "toggledText": {
+                          "runs": [
+                            {
+                              "text": "タイムスタンプ"
+                            }
+                          ]
+                        },
+                        "toggledIcon": {
+                          "iconType": "ACCESS_TIME"
+                        },
+                        "menuItemIdentifier": "timestamp_toggle",
+                        "command": {
+                          "toggleLiveChatTimestampsEndpoint": {
+                            "hack": true
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "menuNavigationItemRenderer": {
+                        "text": {
+                          "runs": [
+                            {
+                              "text": "フィードバックを送信"
+                            }
+                          ]
+                        },
+                        "icon": {
+                          "iconType": "FEEDBACK"
+                        },
+                        "navigationEndpoint": {
+                          "commandMetadata": {
+                            "webCommandMetadata": {
+                              "ignoreNavigation": true
+                            }
+                          },
+                          "userFeedbackEndpoint": {
+                            "hack": true,
+                            "bucketIdentifier": "live_chat"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "その他のオプション"
+                    }
+                  }
+                }
+              },
+              "collapseButton": {
+                "buttonRenderer": {
+                  "style": "STYLE_DEFAULT",
+                  "size": "SIZE_DEFAULT",
+                  "isDisabled": false,
+                  "icon": {
+                    "iconType": "CLOSE"
+                  },
+                  "accessibility": {
+                    "label": "閉じる"
+                  },
+                  "command": {
+                    "commandMetadata": {
+                      "webCommandMetadata": {
+                        "sendPost": true
+                      }
+                    },
+                    "signalServiceEndpoint": {
+                      "signal": "CLIENT_SIGNAL",
+                      "actions": [
+                        {
+                          "signalAction": {
+                            "signal": "HIDE_LIVE_CHAT"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "viewSelector": {
+                "sortFilterSubMenuRenderer": {
+                  "subMenuItems": [
+                    {
+                      "title": "上位のチャットのリプレイ",
+                      "selected": true,
+                      "continuation": {
+                        "reloadContinuationData": {
+                          "continuation": "op2w0wQSGgBAAXIMCAQYACAAKAEwADgA"
+                        }
+                      },
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "上位のチャットのリプレイ"
+                        }
+                      },
+                      "subtitle": "一部のメッセージ（不適切な可能性があるものなど）を非表示にします"
+                    },
+                    {
+                      "title": "チャットのリプレイ",
+                      "selected": false,
+                      "continuation": {
+                        "reloadContinuationData": {
+                          "continuation": "op2w0wQSGgBAAXIMCAEYACAAKAEwADgA"
+                        }
+                      },
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "チャットのリプレイ"
+                        }
+                      },
+                      "subtitle": "すべてのメッセージが表示されます"
+                    }
+                  ],
+                  "accessibility": {
+                    "accessibilityData": {
+                      "label": "チャットのモードの選択"
+                    }
+                  },
+                  "targetId": "live-chat-view-selector-sub-menu"
+                }
+              }
+            }
+          },
+          "clientMessages": {
+            "reconnectMessage": {
+              "runs": [
+                {
+                  "text": "チャットが切断されました。再接続するまでしばらくお待ちください。"
+                }
+              ]
+            },
+            "unableToReconnectMessage": {
+              "runs": [
+                {
+                  "text": "チャットに接続できません。しばらくしてからもう一度お試しください。"
+                }
+              ]
+            },
+            "fatalError": {
+              "runs": [
+                {
+                  "text": "チャットに接続できません。しばらくしてからもう一度お試しください。"
+                }
+              ]
+            },
+            "reconnectedMessage": {
+              "runs": [
+                {
+                  "text": "接続しました。"
+                }
+              ]
+            },
+            "genericError": {
+              "runs": [
+                {
+                  "text": "エラーが発生しました。もう一度お試しください。"
+                }
+              ]
+            }
+          },
+          "isReplay": true,
+          "initialDisplayState": "LIVE_CHAT_DISPLAY_STATE_EXPANDED",
+          "showButton": {
+            "buttonRenderer": {
+              "style": "STYLE_DEFAULT",
+              "size": "SIZE_DEFAULT",
+              "isDisabled": false,
+              "text": {
+                "simpleText": "チャットのリプレイを表示"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

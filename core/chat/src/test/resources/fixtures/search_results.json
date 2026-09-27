@@ -1,0 +1,99 @@
+{
+  "contents": {
+    "twoColumnSearchResultsRenderer": {
+      "primaryContents": {
+        "sectionListRenderer": {
+          "contents": [
+            {
+              "itemSectionRenderer": {
+                "contents": [
+                  {
+                    "shelfRenderer": {
+                      "title": {
+                        "simpleText": "関連"
+                      }
+                    }
+                  },
+                  {
+                    "videoRenderer": {
+                      "videoId": "aaaaaaaaaaa",
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【歌枠】夜の配信"
+                          }
+                        ]
+                      },
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "テストチャンネル"
+                          }
+                        ]
+                      },
+                      "lengthText": {
+                        "simpleText": "1:02:03"
+                      }
+                    }
+                  },
+                  {
+                    "videoRenderer": {
+                      "videoId": "bbbbbbbbbbb",
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【歌枠】夜の配信 切り抜き"
+                          }
+                        ]
+                      },
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "切り抜きチャンネル"
+                          }
+                        ]
+                      },
+                      "lengthText": {
+                        "simpleText": "12:34"
+                      }
+                    }
+                  },
+                  {
+                    "videoRenderer": {
+                      "videoId": "ccccccccccc",
+                      "title": {
+                        "runs": [
+                          {
+                            "text": "【雑談】ライブ中"
+                          }
+                        ]
+                      },
+                      "ownerText": {
+                        "runs": [
+                          {
+                            "text": "テストチャンネル"
+                          }
+                        ]
+                      },
+                      "badges": [
+                        {
+                          "metadataBadgeRenderer": {
+                            "style": "BADGE_STYLE_TYPE_LIVE_NOW",
+                            "label": "ライブ"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "continuationItemRenderer": {}
+            }
+          ]
+        }
+      }
+    }
+  }
+}

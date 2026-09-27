@@ -1,0 +1,50 @@
+{
+  "continuationContents": {
+    "liveChatContinuation": {
+      "continuations": [
+        {
+          "timedContinuationData": {
+            "timeoutMs": 5000,
+            "continuation": "LIVE_NEXT_TOKEN"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "addChatItemAction": {
+            "item": {
+              "liveChatTextMessageRenderer": {
+                "id": "live1",
+                "message": {
+                  "runs": [
+                    {
+                      "text": "ライブ中"
+                    }
+                  ]
+                },
+                "authorName": {
+                  "simpleText": "視聴者G"
+                },
+                "authorPhoto": {
+                  "thumbnails": [
+                    {
+                      "url": "https://yt4.ggpht.com/a/small=s32",
+                      "width": 32
+                    },
+                    {
+                      "url": "https://yt4.ggpht.com/a/large=s64",
+                      "width": 64
+                    }
+                  ]
+                },
+                "authorExternalChannelId": "UCtestlive1",
+                "timestampUsec": "1700000000000000"
+              }
+            },
+            "clientId": "c"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# detekt の既定設定からの差分のみを記載する（buildUponDefaultConfig = true）
+naming:
+  FunctionNaming:
+    ignoreAnnotated:
+      - Composable
+complexity:
+  LongParameterList:
+    ignoreAnnotated:
+      - Composable
+  LongMethod:
+    ignoreAnnotated:
+      - Composable
+style:
+  MagicNumber:
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotated:
+      - Composable
+    excludes:
+      - "**/test/**"
+  # JSON を必要箇所だけ辿る解析コードは `?: return null` のガード節が多くなるため、ガード節を数えず上限も緩める
+  ReturnCount:
+    max: 3
+    excludeGuardClauses: true
+  UnusedPrivateMember:
+    ignoreAnnotated:
+      - Preview
