@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 21:10
+  summary: リリース署名の設定と配布物（romcha-vX.Y.Z.apk と SHA-256）の出力タスクを追加した
+  details:
+    変更内容: >-
+      PLAN 6章（R-08）の配布方針に合わせ、app/build.gradle.kts がルートの keystore.properties（.gitignore 済み）を読んで
+      release を署名するようにした。ファイルが無ければ未署名でビルドする。:app:releaseDist を追加し、リリース APK を
+      app/build/dist/romcha-vX.Y.Z.apk（未署名なら -unsigned を付ける）へ置き、SHA-256 を sha256sum 形式の .sha256 へ書き出す。
+      README の開発手順と DESIGN の実装制約へ追記した。
+    変更ファイル:
+      - app/build.gradle.kts
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew :app:releaseDist（keystore.properties 無し、および使い捨ての検証用キーストアを置いた状態の2通り）、
+      apksigner verify --print-certs、sha256sum、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 未署名時は romcha-v0.1.0-unsigned.apk、署名時は romcha-v0.1.0.apk が出力され、署名時は apksigner で署名を確認した。
+      .sha256 の値は sha256sum と一致した。検証用キーストアと keystore.properties は検証後に削除し、git の追跡対象外であることを確認した。
+      品質ゲートは終了コード0
+    関連ID:
+      - BL-054
 - date: 2026-09-27 20:38
   summary: フローティングの設定メニューからアプリ本体を開けるようにした
   details:

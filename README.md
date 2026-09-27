@@ -92,6 +92,10 @@ YouTube 公式アプリと同期する、見るだけのフローティングチ
 ./gradlew testDebugUnitTest :core:chat:test :core:sync:test
 ```
 
+リリース APK は `./gradlew :app:releaseDist` で `app/build/dist/` に `romcha-vX.Y.Z.apk` と SHA-256（`.sha256`）を出力します。
+署名にはリポジトリのルートに `keystore.properties`（`storeFile`・`storePassword`・`keyAlias`・`keyPassword`。
+`.gitignore` で除外済み）が必要で、無い場合は未署名の `romcha-vX.Y.Z-unsigned.apk` になります。
+
 Windows の PowerShell では `./gradlew` を `.\gradlew.bat` と読み替えてください。
 品質ゲートの正本は [`CLAUDE.md`](CLAUDE.md)「本リポジトリの品質ゲート定義」です。
 ktlint の指摘は `./gradlew ktlintFormat` で自動修正できます。
