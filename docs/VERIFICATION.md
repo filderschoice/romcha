@@ -6,7 +6,7 @@ BACKLOG の人手検証タスクのうち、未確認の項目（BL-024 の D6�
 
 | 項目 | 内容 |
 | --- | --- |
-| 対象端末 | Pixel 8 Pro（Android 17）。USB 接続（シリアル `39181FDJG008MY`） |
+| 対象端末 | Pixel 8 Pro（Android 17）。USB 接続（以下の `<シリアル>` は `adb devices -l` で表示される端末のシリアル番号に置き換える） |
 | 対象アプリ | Romcha デバッグ版 1.0.0（`io.github.filderschoice.romcha`、versionCode 10000） |
 | 公式アプリ | YouTube 21.38.130（2026-09-27 時点の端末の版） |
 | 所要時間の目安 | BL-024（D6）: 配信の終了に合わせて最大 30 分 |
@@ -33,9 +33,9 @@ BACKLOG の人手検証タスクのうち、未確認の項目（BL-024 の D6�
 # 端末が複数見える場合（USB と Wi-Fi の二重表示を含む）はシリアルを必ず指定する
 adb devices -l
 # PowerShell
-$env:ANDROID_SERIAL = "39181FDJG008MY"; .\gradlew.bat :app:installDebug
+$env:ANDROID_SERIAL = "<シリアル>"; .\gradlew.bat :app:installDebug
 # 確認: lastUpdateTime がインストールした時刻になっていること
-adb -s 39181FDJG008MY shell dumpsys package io.github.filderschoice.romcha | findstr "versionName lastUpdateTime"
+adb -s <シリアル> shell dumpsys package io.github.filderschoice.romcha | findstr "versionName lastUpdateTime"
 ```
 
 ### 0.2 権限の許可（許可済みの場合は不要）
@@ -53,15 +53,15 @@ adb -s 39181FDJG008MY shell dumpsys package io.github.filderschoice.romcha | fin
 
 ```sh
 # 通知へのアクセス: 出力に io.github.filderschoice.romcha/...MediaListenerService が含まれれば許可済み
-adb -s 39181FDJG008MY shell settings get secure enabled_notification_listeners
+adb -s <シリアル> shell settings get secure enabled_notification_listeners
 # オーバーレイ: SYSTEM_ALERT_WINDOW: allow なら許可済み
-adb -s 39181FDJG008MY shell appops get io.github.filderschoice.romcha SYSTEM_ALERT_WINDOW
+adb -s <シリアル> shell appops get io.github.filderschoice.romcha SYSTEM_ALERT_WINDOW
 ```
 
 ### 0.3 記録の取り方
 
-- 画面の記録: `adb -s 39181FDJG008MY shell screencap -p /sdcard/shot.png` の後に
-  `adb -s 39181FDJG008MY pull /sdcard/shot.png shot-<番号>.png`（手元の端末でスクリーンショットでもよい。
+- 画面の記録: `adb -s <シリアル> shell screencap -p /sdcard/shot.png` の後に
+  `adb -s <シリアル> pull /sdcard/shot.png shot-<番号>.png`（手元の端末でスクリーンショットでもよい。
   PowerShell で `exec-out ... >` とリダイレクトすると版によって画像が壊れるため使わない）
 - 診断情報: Romcha の「診断情報を表示」の文字列は長押しで選択・コピーできる。メモアプリ等に貼って保存する。
 - 動画のタイトル・チャンネル名・URL は、検証に使った動画を後から特定できるように控える。
@@ -93,7 +93,7 @@ adb -s 39181FDJG008MY shell appops get io.github.filderschoice.romcha SYSTEM_ALE
 
 ```sh
 # 直前のクラッシュ（アプリが落ちた場合）
-adb -s 39181FDJG008MY logcat -d -b crash | findstr /i romcha
+adb -s <シリアル> logcat -d -b crash | findstr /i romcha
 # オーバーレイ・通知アクセスの状態
-adb -s 39181FDJG008MY shell dumpsys activity services io.github.filderschoice.romcha | findstr /i "ServiceRecord isForeground"
+adb -s <シリアル> shell dumpsys activity services io.github.filderschoice.romcha | findstr /i "ServiceRecord isForeground"
 ```
