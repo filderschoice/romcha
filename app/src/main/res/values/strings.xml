@@ -31,6 +31,9 @@
     <string name="display_author_name">投稿者名</string>
     <string name="display_author_icon">投稿者のアイコン</string>
     <string name="display_time">時刻（リプレイは動画内の位置、ライブは投稿時刻）</string>
+    <string name="display_chat_kind">チャットの種類</string>
+    <string name="display_top_chat_only">上位のチャットのみ</string>
+    <string name="display_top_chat_hint">オフ（既定）では「すべてのチャット」を表示します。オンにすると YouTube が選んだ「上位のチャット」だけを取得します。切り替えると取得をやり直します。</string>
     <string name="display_filter">絞り込み</string>
     <string name="display_filter_hint">オンにした種類のいずれかに当てはまるチャットだけを表示します（すべてオフなら絞り込みません）。</string>
     <string name="display_only_paid">スーパーチャットのみ</string>

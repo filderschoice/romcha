@@ -50,11 +50,13 @@ class SessionEnvironment(
  * @property liveDelaySeconds ライブ・プレミア中の表示遅延（秒。F-SYNC-08）
  * @property syncOffsetMs リプレイの同期オフセットの手動補正（ミリ秒。F-SYNC-06）
  * @property maxVisible 表示保持件数の上限（F-VIEW-04）。取得・同期の開始時の値を使う
+ * @property topChatOnly 「上位チャット」だけを取得する（F-CHAT-07。既定は「すべてのチャット」）。変わったら取得をやり直す
  */
 class SessionSettings(
     val liveDelaySeconds: StateFlow<Int> = MutableStateFlow(LiveTimeline.DEFAULT_DELAY_SECONDS),
     val syncOffsetMs: StateFlow<Long> = MutableStateFlow(SyncOffset.DEFAULT_MS),
     val maxVisible: StateFlow<Int> = MutableStateFlow(SyncConfig().maxVisible),
+    val topChatOnly: StateFlow<Boolean> = MutableStateFlow(false),
 )
 
 /** オーバーレイへ出す表示内容の土台（タイトル・候補）を保持し、表示を更新する。 */

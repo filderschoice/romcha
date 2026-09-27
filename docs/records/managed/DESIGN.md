@@ -44,6 +44,7 @@
   ライブ・プレミアは対象外。位置入力（`OverlayFormat.parsePosition`。`h:mm:ss`・`m:ss`・秒数、全角コロン可）の間だけ
   ウィンドウの `FLAG_NOT_FOCUSABLE` を外し（`OverlayWindow.focusable`）、確定・取消で戻す。手動タイマーの状態は保存しない
 - F-CHAT-02/03: リプレイの先読み取得とシーク時の再取得（`core:sync` の `ReplaySession`）
+- F-CHAT-07: 「上位のチャットのみ」と「すべてのチャット」（既定）の切り替え（アプリの表示設定画面。切り替えると取得をやり直す）
 - F-VIEW-01: 文字サイズ（フローティングの設定パネル）と、投稿者名・アイコン・時刻の表示有無（アプリの表示設定画面）
 - F-VIEW-03: NG ワードと種別（スパチャ・メンバー・モデレーター／配信者）の絞り込み（`feature:overlay` の `ChatFilter`）
 - F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
@@ -284,7 +285,7 @@
   終了時はモニター・レシーバーを止め、表示内容を初期化する。
 - 構成: `WatchCoordinator`（入力の命令化・動画の特定）、`ChatPlayer`（1 本の動画の取得・同期・表示）、`OverlayPublisher`
   （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, settings, clock, manualTimer)`
-  （`settings` は `SessionSettings(liveDelaySeconds, syncOffsetMs, maxVisible)`）、
+  （`settings` は `SessionSettings(liveDelaySeconds, syncOffsetMs, maxVisible, topChatOnly)`）、
   `SessionIo(requestedVideo, takeRequestedVideo, events, publish)`、`ChatBackend`（videoInfo・replay・live・search）。
 - `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに
   実行中の処理を取り消して新しい処理を始める。
@@ -297,7 +298,9 @@
 - `ChatPlayer.open(videoId, alternatives)`: `next` で情報を取り、チャット無効なら説明文（応答の文言、無ければ既定文。F-VID-07）。
   チャットがあれば、アーカイブならリプレイ、ライブ・プレミア中（待機中を含む）ならライブを表示する。表示の開始時（画面オンのたび）に
   `topChatToken` で 1 回取得し、応答の `allChatToken` があれば「すべてのチャット」へ切り替える（取得失敗・見出し無しなら上位チャットのまま）。
-  既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を優先するため（切り替え F-CHAT-07 は M4）。
+  既定を「すべてのチャット」にしたのは、閲覧専用ビューワーとして取りこぼしの無い表示を優先するため。表示設定の「上位のチャットのみ」
+  （`SessionSettings.topChatOnly`。F-CHAT-07）がオンなら切り替えの取得をせず `topChatToken` のまま使う。`whileScreenOn` は
+  画面のオン・オフと同設定の組で `transformLatest` し、どちらが変わっても取得をやり直す。
   - リプレイ: `ReplaySession` の状態から、メッセージ・位置・同期状態（再生中＝同期中、一時停止・バッファ中＝一時停止、
     MediaSession 無し＝未検出）・お知らせ（再接続中 n 回目・失敗の説明・未検出）を表示する。
   - ライブ（F-CHAT-04/05、F-SYNC-08）: `LiveChatSession` を動かし、250ms ごとに `LiveTimeline.visible`（表示遅延は

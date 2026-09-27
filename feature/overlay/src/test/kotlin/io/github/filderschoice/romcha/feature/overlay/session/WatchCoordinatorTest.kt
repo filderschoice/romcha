@@ -144,6 +144,7 @@ class WatchCoordinatorTest {
         val screenOn = MutableStateFlow(true)
         val liveDelaySeconds = MutableStateFlow(0)
         val manualTimer = MutableStateFlow<PlaybackSnapshot?>(null)
+        val topChatOnly = MutableStateFlow(false)
         val requested = MutableStateFlow<String?>(null)
         val events = MutableSharedFlow<OverlayEvent>(extraBufferCapacity = 8)
         var published = OverlayUiState()
@@ -157,7 +158,7 @@ class WatchCoordinatorTest {
                         SessionEnvironment(
                             nowPlaying,
                             screenOn,
-                            SessionSettings(liveDelaySeconds = liveDelaySeconds),
+                            SessionSettings(liveDelaySeconds = liveDelaySeconds, topChatOnly = topChatOnly),
                             clock = { scope.testScheduler.currentTime },
                             manualTimer = manualTimer,
                         ),
@@ -281,6 +282,26 @@ class WatchCoordinatorTest {
             assertEquals(null, h.published.notice)
             assertEquals(listOf("m_manual00001"), h.published.messages.map { it.id })
             assertEquals(2_000L, h.published.positionMs)
+        }
+
+    @Test
+    fun 上位チャットのみにすると上位チャットで取り直す() =
+        runTest {
+            val h = Harness(this)
+            h.backend.replayVideo("video000001", "配信A")
+            // 表示の確認に再生位置が要るため、手動タイマーで位置を与える
+            h.manualTimer.value = ManualTimer.paused(2_000, nowElapsedMs = 0)
+            h.requested.value = "video000001"
+            advanceTimeBy(1_000)
+            assertEquals(listOf("TOP_video000001", "ALL_video000001"), h.backend.replayCalls.take(2))
+
+            h.backend.replayCalls.clear()
+            h.topChatOnly.value = true
+            advanceTimeBy(1_000)
+
+            assertEquals("TOP_video000001", h.backend.replayCalls.first())
+            assertTrue(h.backend.replayCalls.none { it.startsWith("ALL_") })
+            assertEquals(listOf("m_video000001"), h.published.messages.map { it.id })
         }
 
     @Test

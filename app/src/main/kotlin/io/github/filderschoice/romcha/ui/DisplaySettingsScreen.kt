@@ -70,6 +70,11 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             SwitchRow(R.string.display_time, settings.showTime) { on ->
                 DisplaySettingsStore.update { it.copy(showTime = on) }
             }
+            Text(stringResource(R.string.display_chat_kind), style = MaterialTheme.typography.titleMedium)
+            SwitchRow(R.string.display_top_chat_only, settings.topChatOnly) { on ->
+                DisplaySettingsStore.update { it.copy(topChatOnly = on) }
+            }
+            Text(stringResource(R.string.display_top_chat_hint), style = MaterialTheme.typography.bodySmall)
             Text(stringResource(R.string.display_filter), style = MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.display_filter_hint), style = MaterialTheme.typography.bodySmall)
             SwitchRow(R.string.display_only_paid, settings.onlyPaid) { on ->

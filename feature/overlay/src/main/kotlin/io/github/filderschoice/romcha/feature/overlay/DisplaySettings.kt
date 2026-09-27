@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * @property onlyMembers メンバーの投稿とメンバー加入・ギフトだけを出す
  * @property onlyModerators モデレーター・配信者の投稿だけを出す
  * @property ngWords 本文に含むと出さない語（[ChatFilter]）
+ * @property topChatOnly YouTube の「上位のチャット」だけを取得する（F-CHAT-07。既定は「すべてのチャット」）
  * @property maxVisible 表示保持件数の上限（F-VIEW-04。[MIN_VISIBLE]〜[MAX_VISIBLE]、[VISIBLE_STEP] 刻み。N-04）
  */
 data class DisplaySettings(
@@ -30,6 +31,7 @@ data class DisplaySettings(
     val onlyModerators: Boolean = false,
     val ngWords: List<String> = emptyList(),
     val maxVisible: Int = DEFAULT_VISIBLE,
+    val topChatOnly: Boolean = false,
 ) {
     companion object {
         const val DEFAULT_VISIBLE = 500
@@ -58,6 +60,7 @@ object DisplaySettingsStore {
     private const val KEY_ONLY_MODERATORS = "onlyModerators"
     private const val KEY_NG_WORDS = "ngWords"
     private const val KEY_MAX_VISIBLE = "maxVisible"
+    private const val KEY_TOP_CHAT_ONLY = "topChatOnly"
 
     private var prefs: SharedPreferences? = null
     private val mutableState = MutableStateFlow(DisplaySettings())
@@ -80,6 +83,7 @@ object DisplaySettingsStore {
                 onlyModerators = loaded.getBoolean(KEY_ONLY_MODERATORS, defaults.onlyModerators),
                 ngWords = ChatFilter.parseNgWords(loaded.getString(KEY_NG_WORDS, null).orEmpty()),
                 maxVisible = DisplaySettings.clampVisible(loaded.getInt(KEY_MAX_VISIBLE, defaults.maxVisible)),
+                topChatOnly = loaded.getBoolean(KEY_TOP_CHAT_ONLY, defaults.topChatOnly),
             )
     }
 
@@ -100,6 +104,7 @@ object DisplaySettingsStore {
             // NG ワードは 1 行 1 語で保存する（入力時に改行を含まない語へ分けている）
             putString(KEY_NG_WORDS, next.ngWords.joinToString("\n"))
             putInt(KEY_MAX_VISIBLE, next.maxVisible)
+            putBoolean(KEY_TOP_CHAT_ONLY, next.topChatOnly)
         }
     }
 }

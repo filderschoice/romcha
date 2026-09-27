@@ -121,6 +121,7 @@ class OverlayService :
                         liveDelaySeconds = settings.part { it.liveDelaySeconds },
                         syncOffsetMs = settings.part { it.syncOffsetMs },
                         maxVisible = DisplaySettingsStore.state.part { it.maxVisible },
+                        topChatOnly = DisplaySettingsStore.state.part { it.topChatOnly },
                     ),
                 clock = SystemClock::elapsedRealtime,
                 manualTimer = manualTimer,

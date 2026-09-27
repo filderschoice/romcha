@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 15:44
+  summary: 表示設定に「上位のチャットのみ」を追加し、「すべてのチャット」との切り替えに対応
+  details:
+    変更内容: >-
+      DisplaySettings に topChatOnly（既定オフ＝従来どおり「すべてのチャット」）を追加し、表示設定画面にスイッチを置いた。
+      オンの時は動画情報の「上位チャット」の continuation をそのまま使い、「すべてのチャット」への切り替え用の取得を行わない。
+      ChatPlayer の whileScreenOn を画面のオン・オフと設定の組で transformLatest するように変え、設定が変わったら取得をやり直す。
+      SessionSettings に topChatOnly を追加した。切り替えの単体テストを追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionEnvironment.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0（1回目は追加したテストの前提不足で失敗し、テストに再生位置を与えて解消）
+    関連ID:
+      - BL-046
 - date: 2026-09-27 15:40
   summary: 表示保持件数の上限を表示設定で変えられるようにした
   details:
