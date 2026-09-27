@@ -1,6 +1,7 @@
 package io.github.filderschoice.romcha.feature.overlay.ui
 
 import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
+import io.github.filderschoice.romcha.feature.overlay.WindowMode
 
 /** ウィンドウの操作（ドラッグ量は px）。 */
 interface OverlayActions {
@@ -23,8 +24,8 @@ interface OverlayActions {
     /** タッチ透過モードに入る（解除は常駐通知から。F-OVL-05） */
     fun onTouchThrough()
 
-    /** バブルへ最小化する／バブルから元の大きさに戻す（F-OVL-04） */
-    fun onMinimizeChange(minimized: Boolean)
+    /** 表示状態を変える（バブルへの最小化 F-OVL-04、画面端への退避 BL-049、それらからの復帰） */
+    fun onWindowModeChange(mode: WindowMode)
 
     fun onHide()
 

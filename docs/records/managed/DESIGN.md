@@ -28,7 +28,7 @@
 - F-VID-04/05: YouTube URL からの動画ID抽出（`core:chat` の `VideoUrlParser`）
 - F-VID-01/02: 動画の自動特定パイプライン手順1〜4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
-- F-OVL-01〜08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`）
+- F-OVL-01〜08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`。画面端への退避 BL-049 を含む）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
 - F-SYNC-08: ライブ・プレミア中の最新追従表示と表示遅延の設定（`core:sync` の `LiveTimeline`、オーバーレイの設定パネル）
@@ -230,6 +230,12 @@
   - 最小化（F-OVL-04）: ヘッダーの最小化ボタンで 48dp の丸いバブル（`ui/Bubble.kt`）にする。タップで復帰、ドラッグで移動。
     バブルは通常表示の左上に出し、バブル自身の大きさで画面内へ収める（移動は通常表示の位置にも反映し、復帰時に収め直す）。
     縁の色で同期状態を示し（同期中・ライブは緑）、不透明度には下限 0.7 を置く。最小化状態は保存しない。
+  - 画面端への退避（BL-049。YouTube 公式アプリの PiP と同じ操作）: ヘッダーのドラッグでウィンドウを画面の左右の端でさらに
+    48dp 以上押し込んで離すと、その側の端へ退避して 20×72dp のつまみ（`ui/StashTab.kt`）だけを残す。つまみを内側へ 24dp 以上
+    スワイプするかタップすると、退避した側の端に寄せた通常表示で復帰する。つまみは上下にドラッグで動かせる。
+    表示状態は `WindowMode`（Normal・Minimized・Stashed(side)）で表し、`OverlayActions.onWindowModeChange` で切り替える。
+    判定は `StashRule`（押し込み量 `sideFor`・復帰 `shouldRestore`・つまみの位置 `tabBounds`）。`WindowPlacement` は移動中の
+    画面内へ収める前の横位置を保持し、`endGesture` で押し込み量から退避の向きを返す。退避の向きは左右のみ、状態は保存しない。
   - 設定パネル（`ui/SettingsPanel.kt`。高さ 200dp を上限にスクロール）: 不透明度・文字サイズ・表示遅延（LIVE の時）または
     同期の補正と手動タイマー（それ以外）・タッチ透過。
     値は `OverlaySettings`（不透明度・文字サイズ・表示遅延・補正）にまとめ、`OverlayActions.onSettingsChange` で受け取り、

@@ -55,6 +55,7 @@ import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.R
+import io.github.filderschoice.romcha.feature.overlay.WindowMode
 
 /** フローティングウィンドウの中身（F-OVL-01〜03/07、F-VIEW-02/05）。配色はテーマ設定に従う。 */
 @Composable
@@ -63,15 +64,15 @@ fun ChatOverlay(
     settings: OverlaySettings,
     display: DisplaySettings,
     touchThrough: Boolean,
-    minimized: Boolean,
+    mode: WindowMode,
     manualTimer: PlaybackSnapshot?,
     actions: OverlayActions,
 ) {
     CompositionLocalProvider(LocalOverlayColors provides OverlayColors.of(display.theme)) {
-        if (minimized) {
-            Bubble(state.indicator, settings.opacity, actions)
-        } else {
-            Window(state, settings, display, touchThrough, manualTimer, actions)
+        when (mode) {
+            WindowMode.Normal -> Window(state, settings, display, touchThrough, manualTimer, actions)
+            WindowMode.Minimized -> Bubble(state.indicator, settings.opacity, actions)
+            is WindowMode.Stashed -> StashTab(mode.side, settings.opacity, actions)
         }
     }
 }
@@ -162,7 +163,7 @@ private fun Header(
         IconButton(onClick = onToggleSettings, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Default.Settings, stringResource(R.string.overlay_settings), tint = SubTextColor)
         }
-        IconButton(onClick = { actions.onMinimizeChange(true) }, modifier = Modifier.size(36.dp)) {
+        IconButton(onClick = { actions.onWindowModeChange(WindowMode.Minimized) }, modifier = Modifier.size(36.dp)) {
             Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.overlay_minimize), tint = SubTextColor)
         }
         IconButton(onClick = actions::onHide, modifier = Modifier.size(36.dp)) {

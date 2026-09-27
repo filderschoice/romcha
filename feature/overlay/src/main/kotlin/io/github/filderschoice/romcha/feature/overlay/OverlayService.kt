@@ -55,7 +55,7 @@ class OverlayService :
     private val notifications by lazy { OverlayNotifications(this, OverlayService::class.java) }
     private val settings = MutableStateFlow(OverlaySettings())
     private val touchThrough = mutableStateOf(false)
-    private val minimized = mutableStateOf(false)
+    private val windowMode = mutableStateOf<WindowMode>(WindowMode.Normal)
     private val manualTimer = MutableStateFlow<PlaybackSnapshot?>(null)
     private var visible = true
     private val screenOn = MutableStateFlow(true)
@@ -198,7 +198,7 @@ class OverlayService :
                 settings = current,
                 display = display,
                 touchThrough = touchThrough.value,
-                minimized = minimized.value,
+                mode = windowMode.value,
                 manualTimer = timer,
                 actions = actions,
             )
@@ -221,7 +221,8 @@ class OverlayService :
             ) = window.resizeBy(dx, dy)
 
             override fun onGestureEnd() {
-                window.saveBounds()
+                // 画面端を越えて押し込んで離したら退避する（BL-049）
+                window.endGesture()?.let { onWindowModeChange(WindowMode.Stashed(it)) }
                 prefs.settings = settings.value
             }
 
@@ -231,9 +232,9 @@ class OverlayService :
 
             override fun onTouchThrough() = setTouchThrough(true)
 
-            override fun onMinimizeChange(minimized: Boolean) {
-                this@OverlayService.minimized.value = minimized
-                window.minimized = minimized
+            override fun onWindowModeChange(mode: WindowMode) {
+                windowMode.value = mode
+                window.mode = mode
             }
 
             override fun onHide() = setVisible(false)

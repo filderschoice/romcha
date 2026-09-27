@@ -11,7 +11,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 
 /**
- * フローティングウィンドウ本体（`TYPE_APPLICATION_OVERLAY`）の追加・削除と、`LayoutParams` の反映（F-OVL-01/02/04/05/06）。
+ * フローティングウィンドウ本体（`TYPE_APPLICATION_OVERLAY`）の追加・削除と、`LayoutParams` の反映（F-OVL-01/02/04/05/06、BL-049）。
  *
  * 位置と大きさの計算・保存は [WindowPlacement] に任せる。
  */
@@ -41,11 +41,11 @@ internal class OverlayWindow<T>(
             updateLayout()
         }
 
-    /** 最小化（バブル）と復帰（F-OVL-04） */
-    var minimized: Boolean
-        get() = placement.minimized
+    /** 表示状態（通常・最小化 F-OVL-04・画面端への退避 BL-049） */
+    var mode: WindowMode
+        get() = placement.mode
         set(value) {
-            placement.minimized = value
+            placement.mode = value
             updateLayout()
         }
 
@@ -102,7 +102,8 @@ internal class OverlayWindow<T>(
         updateLayout()
     }
 
-    fun saveBounds() = placement.save()
+    /** 移動・サイズ変更の操作の終わり。位置を保存し、画面端を越えて押し込んで離した場合は退避する向きを返す */
+    fun endGesture(): StashSide? = placement.endGesture()
 
     /** 画面の向きが変わったら、その向きで記憶していた位置と大きさへ切り替える（F-OVL-06） */
     fun onConfigurationChanged() {

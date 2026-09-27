@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.R
 import io.github.filderschoice.romcha.feature.overlay.SyncIndicator
+import io.github.filderschoice.romcha.feature.overlay.WindowMode
 
 /**
  * 最小化中のバブル（F-OVL-04）。タップで元の大きさに戻し、ドラッグで移動する。
@@ -46,7 +47,7 @@ internal fun Bubble(
                         change.consume()
                         actions.onMove(drag.x, drag.y)
                     }
-                }.pointerInput(Unit) { detectTapGestures { actions.onMinimizeChange(false) } },
+                }.pointerInput(Unit) { detectTapGestures { actions.onWindowModeChange(WindowMode.Normal) } },
     ) {
         Box(
             contentAlignment = Alignment.Center,

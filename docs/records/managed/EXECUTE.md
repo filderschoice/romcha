@@ -6,6 +6,41 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 17:13
+  summary: フローティングウィンドウを画面の左右の外へスワイプして退避し、つまみから復帰できるようにした
+  details:
+    変更内容: >-
+      YouTube 公式アプリの PiP と同様に、ヘッダーのドラッグでウィンドウを画面の左右の端でさらに 48dp 以上押し込んで離すと、
+      その側の画面端へ退避し、20×72dp のつまみだけを残すようにした。つまみを画面の内側へ 24dp 以上スワイプするか、タップすると、
+      退避した側の画面端に寄せた通常表示で復帰する。つまみは上下にドラッグして動かせる。
+      表示状態（通常・最小化・退避）を WindowMode にまとめ、OverlayActions の onMinimizeChange を onWindowModeChange に置き換えた
+      （detekt の関数数上限のため）。退避の判定（押し込み量・復帰のスワイプ量・つまみの位置）は StashRule（Android 非依存）に置き、
+      単体テストを追加した。WindowPlacement は移動中の画面内へ収める前の横位置を保持して押し込み量を求める。
+      退避の向きは左右のみ、退避状態は保存しない（BACKLOG の根拠に記録した既定値）。
+      README の使い方と docs/VERIFICATION.md（F15）を更新した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowMode.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/WindowPlacement.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/StashTab.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/Bubble.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/StashRuleTest.kt
+      - README.md
+      - docs/VERIFICATION.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 終了コード0（1回目は detekt LongParameterList と MaxLineLength で失敗し修正）。
+      実機での操作感は BL-048（F15）で確認する
+    関連ID:
+      - BL-049
 - date: 2026-09-27 16:24
   summary: ライト／ダーク／システム追従のテーマを追加し、アプリ画面とフローティングウィンドウへ反映
   details:

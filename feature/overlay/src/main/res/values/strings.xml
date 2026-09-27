@@ -5,6 +5,7 @@
     <string name="overlay_hide">ウィンドウを隠す</string>
     <string name="overlay_minimize">最小化</string>
     <string name="overlay_restore">元の大きさに戻す</string>
+    <string name="overlay_unstash">画面内に戻す</string>
     <string name="overlay_opacity">背景 %1$d%%</string>
     <string name="overlay_font_scale">文字 %1$d%%</string>
     <string name="overlay_sync_offset">補正 %1$s 秒</string>
