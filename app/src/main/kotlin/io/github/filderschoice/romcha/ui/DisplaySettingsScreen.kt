@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
@@ -36,6 +37,7 @@ import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.feature.overlay.ChatFilter
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettingsStore
+import io.github.filderschoice.romcha.feature.overlay.ThemeMode
 import kotlin.math.roundToInt
 
 /** チャットの表示設定（F-VIEW-01）。変更は表示中のフローティングウィンドウへすぐ反映する。 */
@@ -70,6 +72,7 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             SwitchRow(R.string.display_time, settings.showTime) { on ->
                 DisplaySettingsStore.update { it.copy(showTime = on) }
             }
+            ThemeSelector(settings.theme)
             Text(stringResource(R.string.display_chat_kind), style = MaterialTheme.typography.titleMedium)
             SwitchRow(R.string.display_top_chat_only, settings.topChatOnly) { on ->
                 DisplaySettingsStore.update { it.copy(topChatOnly = on) }
@@ -114,6 +117,30 @@ private fun NgWordsInput(saved: List<String>) {
         }
     }
 }
+
+/** テーマ（F-VIEW-05）。システム追従ではフローティングウィンドウは従来どおり暗色。 */
+@Composable
+private fun ThemeSelector(theme: ThemeMode) {
+    Column {
+        Text(stringResource(R.string.display_theme), style = MaterialTheme.typography.titleMedium)
+        ThemeMode.entries.forEach { mode ->
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                RadioButton(
+                    selected = theme == mode,
+                    onClick = { DisplaySettingsStore.update { it.copy(theme = mode) } },
+                )
+                Text(stringResource(themeLabel(mode)))
+            }
+        }
+    }
+}
+
+private fun themeLabel(mode: ThemeMode): Int =
+    when (mode) {
+        ThemeMode.SYSTEM -> R.string.display_theme_system
+        ThemeMode.LIGHT -> R.string.display_theme_light
+        ThemeMode.DARK -> R.string.display_theme_dark
+    }
 
 /** 表示保持件数の上限（F-VIEW-04）。多くすると遡れる量が増える代わりにメモリを使う（N-04）。 */
 @Composable

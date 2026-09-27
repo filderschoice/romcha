@@ -68,6 +68,11 @@ class ChatFilterTest {
         assertEquals(500, DisplaySettings().maxVisible)
     }
 
+    @Test
+    fun テーマの既定はシステム追従() {
+        assertEquals(ThemeMode.SYSTEM, DisplaySettings().theme)
+    }
+
     private fun ids(settings: DisplaySettings) = ChatFilter.apply(all, settings).map { it.id }
 
     private fun message(

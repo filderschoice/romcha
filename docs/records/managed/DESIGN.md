@@ -49,6 +49,7 @@
 - F-VIEW-01: 文字サイズ（フローティングの設定パネル）と、投稿者名・アイコン・時刻の表示有無（アプリの表示設定画面）
 - F-VIEW-03: NG ワードと種別（スパチャ・メンバー・モデレーター／配信者）の絞り込み（`feature:overlay` の `ChatFilter`）
 - F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
+- F-VIEW-05: ライト／ダーク／システム追従のテーマ（アプリの表示設定画面。システム追従ではフローティングは従来どおり暗色）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
 
 ## 設計方針
@@ -222,7 +223,7 @@
     幅＞高さで横）ごとに保存し、縦は従来のキー、横は `landscape.` を前置したキーを使う。`onConfigurationChanged` で向きの変化を
     検知したら、その向きの保存値へ切り替える（F-OVL-06）。
   - 不透明度は 0.2〜1.0（既定 0.6）。ヘッダーの設定ボタンでスライダーを出す（F-OVL-03）。
-    ヘッダー（ドラッグ領域）は青みの灰色 #37474F、チャット欄は黒で塗り分け、不透明度は両方の背景に同じ値を掛ける（BL-035）。
+    ヘッダー（ドラッグ領域）は青みの灰色 #37474F、チャット欄は黒（暗色の配色の場合）で塗り分け、不透明度は両方の背景に同じ値を掛ける（BL-035）。
   - タッチ透過モード（F-OVL-05）: 設定パネルから入り、`FLAG_NOT_TOUCHABLE` を付けてウィンドウの `LayoutParams.alpha` を 0.8 に
     下げる（0.8 を超える他アプリのオーバーレイ越しのタッチは OS に遮断される）。透過中はウィンドウを触れないため、解除は常駐通知の
     「タッチ透過を解除」で行い、ヘッダーに「タッチ透過中」と出す。透過モードは保存しない（起動ごとに解除状態から始める）。
@@ -255,6 +256,10 @@
 - 表示保持件数（F-VIEW-04、N-04）: `DisplaySettings.maxVisible` をセッションの開始時にリプレイの `SyncConfig.maxVisible`・
   ライブの `LivePolling.maxMessages` と `LiveTimeline.visible` へ渡す。上限を下げた時はウィンドウの表示直前でも `takeLast` で
   切り詰めてすぐ反映する（増やした分は次に動画を開いた時から）。
+- テーマ（F-VIEW-05）: `DisplaySettings.theme`（`ThemeMode`。既定 SYSTEM＝従来の見た目）。アプリ画面は SYSTEM ならシステムの設定、
+  LIGHT / DARK なら固定（`RomchaApp` の動的配色）。フローティングは `OverlayColors`（Dark / Light）を `LocalOverlayColors` で渡し、
+  SYSTEM・DARK は暗色、LIGHT は明るい配色（文字 #212121、ヘッダー #B0BEC5、背景 白、役割の色も読める濃さに変える）。
+  `OverlayTextColor`・`SubTextColor`・`HeaderColor` は `LocalOverlayColors` を読む `@Composable` プロパティ。
 - 画像（F-CHAT-09）: Coil（`coil-compose`）で読み込む。本文は `MessageText` で描き、カスタム絵文字・メンバースタンプを
   `InlineTextContent`（1.4em）で文中に差し込む。URL が無い・許可外・読み込み失敗なら代替テキスト、Unicode の絵文字は文字のまま。
   スーパーステッカーは 56dp の画像（失敗時は「（スーパーステッカー）」）。応答の URL は `ImagePolicy` で HTTPS かつ

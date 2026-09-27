@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,9 +30,6 @@ import io.github.filderschoice.romcha.feature.overlay.ImagePolicy
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.R
 
-private val OwnerColor = Color(0xFFFFD600)
-private val ModeratorColor = Color(0xFF5E84F1)
-private val MemberColor = Color(0xFF2BA640)
 private val MembershipColor = Color(0xFF0F9D58)
 
 /** チャット1件の表示。種別ごとに強調を変える（F-CHAT-08、F-VIEW-02）。 */
@@ -180,13 +178,17 @@ private fun Sticker(
     }
 }
 
-private fun authorColor(roles: Set<AuthorRole>): Color =
-    when {
-        AuthorRole.OWNER in roles -> OwnerColor
-        AuthorRole.MODERATOR in roles -> ModeratorColor
-        AuthorRole.MEMBER in roles -> MemberColor
-        else -> SubTextColor
+@Composable
+@ReadOnlyComposable
+private fun authorColor(roles: Set<AuthorRole>): Color {
+    val colors = LocalOverlayColors.current
+    return when {
+        AuthorRole.OWNER in roles -> colors.owner
+        AuthorRole.MODERATOR in roles -> colors.moderator
+        AuthorRole.MEMBER in roles -> colors.member
+        else -> colors.subText
     }
+}
 
 private const val AUTHOR_WEIGHT = 0.4f
 private val STICKER_SIZE = 56.dp

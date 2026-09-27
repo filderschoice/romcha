@@ -6,6 +6,33 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-09-27 16:24
+  summary: ライト／ダーク／システム追従のテーマを追加し、アプリ画面とフローティングウィンドウへ反映
+  details:
+    変更内容: >-
+      DisplaySettings に theme（ThemeMode。SYSTEM・LIGHT・DARK、既定 SYSTEM）を追加し、表示設定画面にラジオボタンを置いた。
+      ユーザー回答（2026-09-27）により、既定は現状維持とした。アプリ画面は SYSTEM ならシステムの設定に合わせ（従来どおり）、
+      フローティングウィンドウは SYSTEM・DARK なら従来の暗色、LIGHT なら明るい配色にする。
+      フローティングの配色を OverlayColors（Dark / Light）と CompositionLocal にまとめ、既存の OverlayTextColor などは
+      CompositionLocal を読むプロパティに置き換えた（呼び出し側は変更なし）。投稿者の役割の色も配色ごとに持つ。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColors.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatItems.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ChatFilterTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColorsTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: 成功 - 終了コード0。ライト配色の見え方は BL-048 で確認する
+    関連ID:
+      - BL-047
 - date: 2026-09-27 16:20
   summary: URL 入力欄に「クリップボードから貼り付け」を追加（押した時だけクリップボードを読む）
   details:

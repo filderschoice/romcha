@@ -56,14 +56,7 @@ import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.R
 
-internal val OverlayTextColor = Color(0xFFF5F5F5)
-internal val SubTextColor = Color(0xFFB0BEC5)
-
-/** ヘッダー（ドラッグで移動する領域）の背景。チャット欄の黒と見分けられる青みの灰色にする */
-internal val HeaderColor = Color(0xFF37474F)
-private val ChatBackgroundColor = Color.Black
-
-/** フローティングウィンドウの中身（F-OVL-01〜03/07、F-VIEW-02）。 */
+/** フローティングウィンドウの中身（F-OVL-01〜03/07、F-VIEW-02/05）。配色はテーマ設定に従う。 */
 @Composable
 fun ChatOverlay(
     state: OverlayUiState,
@@ -74,16 +67,35 @@ fun ChatOverlay(
     manualTimer: PlaybackSnapshot?,
     actions: OverlayActions,
 ) {
-    if (minimized) {
-        Bubble(state.indicator, settings.opacity, actions)
-        return
+    CompositionLocalProvider(LocalOverlayColors provides OverlayColors.of(display.theme)) {
+        if (minimized) {
+            Bubble(state.indicator, settings.opacity, actions)
+        } else {
+            Window(state, settings, display, touchThrough, manualTimer, actions)
+        }
     }
+}
+
+@Composable
+private fun Window(
+    state: OverlayUiState,
+    settings: OverlaySettings,
+    display: DisplaySettings,
+    touchThrough: Boolean,
+    manualTimer: PlaybackSnapshot?,
+    actions: OverlayActions,
+) {
     var showSettings by remember { mutableStateOf(false) }
     // 不透明度はヘッダーとチャット欄の両方に掛ける（F-OVL-03）。色味だけを変えてドラッグできる範囲を見分けやすくする
     val alpha = OverlayFormat.clampOpacity(settings.opacity)
     Column(modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp))) {
         Header(state, alpha, touchThrough, actions, onToggleSettings = { showSettings = !showSettings })
-        Column(modifier = Modifier.weight(1f).fillMaxWidth().background(ChatBackgroundColor.copy(alpha = alpha))) {
+        Column(
+            modifier =
+                Modifier.weight(
+                    1f,
+                ).fillMaxWidth().background(LocalOverlayColors.current.background.copy(alpha = alpha)),
+        ) {
             if (showSettings) {
                 SettingsPanel(
                     indicator = state.indicator,
@@ -276,6 +288,6 @@ private fun ResizeHandle(
                         actions.onResize(drag.x, drag.y)
                     }
                 }.padding(6.dp)
-                .background(Color.White.copy(alpha = 0.4f), RoundedCornerShape(2.dp)),
+                .background(LocalOverlayColors.current.handle, RoundedCornerShape(2.dp)),
     )
 }

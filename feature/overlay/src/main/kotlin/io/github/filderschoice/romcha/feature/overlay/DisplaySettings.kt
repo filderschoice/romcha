@@ -7,6 +7,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/** テーマ（F-VIEW-05）。 */
+enum class ThemeMode {
+    /** アプリ画面はシステムの設定に合わせ、フローティングウィンドウは従来どおり暗色 */
+    SYSTEM,
+    LIGHT,
+    DARK,
+}
+
 /**
  * チャットの表示設定（F-VIEW-01）。アプリ画面の「表示設定」で変え、フローティングウィンドウの表示に反映する。
  *
@@ -20,6 +28,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * @property onlyModerators モデレーター・配信者の投稿だけを出す
  * @property ngWords 本文に含むと出さない語（[ChatFilter]）
  * @property topChatOnly YouTube の「上位のチャット」だけを取得する（F-CHAT-07。既定は「すべてのチャット」）
+ * @property theme テーマ（F-VIEW-05。既定はシステム追従で、従来の見た目と同じ）
  * @property maxVisible 表示保持件数の上限（F-VIEW-04。[MIN_VISIBLE]〜[MAX_VISIBLE]、[VISIBLE_STEP] 刻み。N-04）
  */
 data class DisplaySettings(
@@ -32,6 +41,7 @@ data class DisplaySettings(
     val ngWords: List<String> = emptyList(),
     val maxVisible: Int = DEFAULT_VISIBLE,
     val topChatOnly: Boolean = false,
+    val theme: ThemeMode = ThemeMode.SYSTEM,
 ) {
     companion object {
         const val DEFAULT_VISIBLE = 500
@@ -61,6 +71,7 @@ object DisplaySettingsStore {
     private const val KEY_NG_WORDS = "ngWords"
     private const val KEY_MAX_VISIBLE = "maxVisible"
     private const val KEY_TOP_CHAT_ONLY = "topChatOnly"
+    private const val KEY_THEME = "theme"
 
     private var prefs: SharedPreferences? = null
     private val mutableState = MutableStateFlow(DisplaySettings())
@@ -84,6 +95,7 @@ object DisplaySettingsStore {
                 ngWords = ChatFilter.parseNgWords(loaded.getString(KEY_NG_WORDS, null).orEmpty()),
                 maxVisible = DisplaySettings.clampVisible(loaded.getInt(KEY_MAX_VISIBLE, defaults.maxVisible)),
                 topChatOnly = loaded.getBoolean(KEY_TOP_CHAT_ONLY, defaults.topChatOnly),
+                theme = ThemeMode.entries.find { it.name == loaded.getString(KEY_THEME, null) } ?: defaults.theme,
             )
     }
 
@@ -105,6 +117,7 @@ object DisplaySettingsStore {
             putString(KEY_NG_WORDS, next.ngWords.joinToString("\n"))
             putInt(KEY_MAX_VISIBLE, next.maxVisible)
             putBoolean(KEY_TOP_CHAT_ONLY, next.topChatOnly)
+            putString(KEY_THEME, next.theme.name)
         }
     }
 }
