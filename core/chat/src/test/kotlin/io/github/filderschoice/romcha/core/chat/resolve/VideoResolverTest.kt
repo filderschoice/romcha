@@ -69,6 +69,20 @@ class VideoResolverTest {
         }
 
     @Test
+    fun キャッシュを消すと以後は検索して特定し直す() =
+        runTest {
+            val candidates = listOf(candidate("fresh000000", metadata.title))
+            val search = FakeSearch(FetchResult.Success(candidates))
+            val cache = InMemoryResolutionCache().apply { put(metadata.identity, "stale000000") }
+            val resolver = VideoResolver(search, cache)
+
+            cache.clear()
+            val result = resolver.resolve(metadata)
+
+            assertEquals(Resolution.Confirmed("fresh000000", ResolutionSource.SEARCH), result)
+        }
+
+    @Test
     fun 長さが不明なライブ中はキャッシュを使わず同名の過去配信へ誤ヒットしない() =
         runTest {
             val live = metadata.copy(durationMs = 0)

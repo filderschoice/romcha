@@ -63,6 +63,7 @@ internal fun HomeScreen(
             OverlayControls(status, actions)
             UrlInput(enabled = status.canStartOverlay, onOpen = actions::openVideo)
             OutlinedButton(onClick = onOpenDisplaySettings) { Text(stringResource(R.string.display_title)) }
+            CacheSection(actions)
             UpdateSection(currentVersion = update.currentVersion, state = update.state, actions = actions)
             Diagnostics(nowPlaying)
             TextButton(onClick = onOpenLicenses) { Text(stringResource(R.string.licenses_title)) }
@@ -198,6 +199,16 @@ private fun UrlInput(
                 Text(stringResource(R.string.url_paste))
             }
         }
+    }
+}
+
+/** 動画特定のキャッシュの消去。誤った動画のチャットが出続ける時に、ユーザーが自分で実行する。 */
+@Composable
+private fun CacheSection(actions: HomeActions) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(stringResource(R.string.cache_title), style = MaterialTheme.typography.titleMedium)
+        OutlinedButton(onClick = actions::clearResolutionCache) { Text(stringResource(R.string.cache_clear)) }
+        Text(stringResource(R.string.cache_hint), style = MaterialTheme.typography.bodySmall)
     }
 }
 

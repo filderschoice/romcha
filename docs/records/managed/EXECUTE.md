@@ -6,6 +6,34 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-02 13:00
+  summary: HOME 画面に動画特定のキャッシュを消すボタンを追加した
+  details:
+    変更内容: >-
+      ユーザー指示により、誤特定が固定された時にユーザー自身がキャッシュを消せる契機を設けた。ResolutionCache に clear() を追加し
+      （InMemoryResolutionCache はメモリを消す。PersistentResolutionCache はメモリとファイルを消す）、PersistentResolutionCache を
+      プロセス内で共有する shared(context) 経由に変えて OverlayService と HOME 画面が同じメモリ上の内容を扱うようにした
+      （ファイルだけ消しても動作中のサービスのメモリに残るため）。HOME 画面に「キャッシュを消す」ボタンと説明を追加し、
+      押すと Toast で結果と「表示中の動画を直すにはオーバーレイを停止して開始し直す」ことを案内する。
+      表示中の動画の自動やり直しは、既定値として行わない（識別キーが変わった時だけ特定する既存の仕様を維持）。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolver.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolverTest.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/PersistentResolutionCache.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeActions.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - キャッシュを消すと以後は検索して特定し直すテストを含め全件成功。実機での確認は BL-073 として人手検証へ登録した
+    関連ID:
+      - BL-073
 - date: 2026-10-02 12:00
   summary: 長さが不明な（ライブ・プレミア中の）動画は特定のキャッシュを読み書きしないようにした
   details:

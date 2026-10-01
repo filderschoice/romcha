@@ -15,7 +15,7 @@ import java.io.IOException
  *
  * 書き込みは一時ファイルからの置き換え（AtomicFile）で行い、壊れたファイルは読み飛ばして空から始める。
  */
-class PersistentResolutionCache(
+class PersistentResolutionCache private constructor(
     context: Context,
 ) : ResolutionCache {
     private val file = AtomicFile(File(context.filesDir, FILE_NAME))
@@ -25,8 +25,10 @@ class PersistentResolutionCache(
         load()
     }
 
+    @Synchronized
     override fun get(identity: String): String? = memory.get(identity)
 
+    @Synchronized
     override fun put(
         identity: String,
         videoId: String,
@@ -34,6 +36,13 @@ class PersistentResolutionCache(
         if (memory.get(identity) == videoId) return
         memory.put(identity, videoId)
         save()
+    }
+
+    /** メモリとファイルの両方を消す。 */
+    @Synchronized
+    override fun clear() {
+        memory.clear()
+        file.delete()
     }
 
     private fun load() {
@@ -73,9 +82,21 @@ class PersistentResolutionCache(
         }
     }
 
-    private companion object {
-        const val FILE_NAME = "resolution-cache.json"
-        const val KEY_IDENTITY = "identity"
-        const val KEY_VIDEO_ID = "videoId"
+    companion object {
+        private const val FILE_NAME = "resolution-cache.json"
+        private const val KEY_IDENTITY = "identity"
+        private const val KEY_VIDEO_ID = "videoId"
+
+        @Volatile
+        private var instance: PersistentResolutionCache? = null
+
+        /**
+         * プロセス内で 1 つを共有する。オーバーレイ（OverlayService）が使っているメモリ上の内容を、
+         * アプリ画面からの消去（[clear]）で同時に消すため。
+         */
+        fun shared(context: Context): PersistentResolutionCache =
+            instance ?: synchronized(this) {
+                instance ?: PersistentResolutionCache(context.applicationContext).also { instance = it }
+            }
     }
 }

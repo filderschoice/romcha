@@ -105,7 +105,7 @@ class OverlayService :
                     live,
                 ->
                 backend.search(query, live)
-            }, cache = PersistentResolutionCache(this))
+            }, cache = PersistentResolutionCache.shared(this))
         val io =
             SessionIo(
                 requestedVideo = OverlayChannel.requestedVideo,

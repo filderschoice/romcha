@@ -26,6 +26,9 @@ interface ResolutionCache {
         identity: String,
         videoId: String,
     )
+
+    /** 保存している対応をすべて消す（誤特定が固定された時にユーザーが実行する。F-VID-02）。 */
+    fun clear()
 }
 
 /** 最大件数を超えたら古いものから捨てるメモリ上のキャッシュ。 */
@@ -44,6 +47,11 @@ class InMemoryResolutionCache(
     ) {
         entries[identity] = videoId
         while (entries.size > maxEntries) entries.remove(entries.keys.first())
+    }
+
+    @Synchronized
+    override fun clear() {
+        entries.clear()
     }
 
     /** 永続化用に中身を取り出す（古い順）。 */
