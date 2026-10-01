@@ -50,6 +50,10 @@
     <string name="display_max_visible">表示する件数の上限: %1$d 件</string>
     <string name="display_max_visible_hint">増やすと遡れる量が増えますが、メモリを多く使います。増やした分は次に動画を開いた時から反映します。</string>
     <string name="display_font_hint">文字サイズ・背景の透過度は、フローティングウィンドウの設定ボタンから変えられます。</string>
+    <string name="cache_title">動画特定のキャッシュ</string>
+    <string name="cache_clear">キャッシュを消す</string>
+    <string name="cache_cleared">動画特定のキャッシュを消しました。オーバーレイを表示中なら、見ている動画を特定し直します。</string>
+    <string name="cache_hint">別の動画のチャットが表示される時に押してください。過去に特定した「動画 → 動画ID」の対応を端末内から消し、見ている動画は特定し直します。</string>
     <string name="update_title">アップデート</string>
     <string name="update_current">現在の版: %1$s</string>
     <string name="update_check">更新を確認</string>

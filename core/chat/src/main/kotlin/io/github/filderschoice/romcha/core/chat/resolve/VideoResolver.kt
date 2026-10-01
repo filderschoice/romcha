@@ -26,6 +26,9 @@ interface ResolutionCache {
         identity: String,
         videoId: String,
     )
+
+    /** 保存している対応をすべて消す（誤特定が固定された時にユーザーが実行する。F-VID-02）。 */
+    fun clear()
 }
 
 /** 最大件数を超えたら古いものから捨てるメモリ上のキャッシュ。 */
@@ -44,6 +47,11 @@ class InMemoryResolutionCache(
     ) {
         entries[identity] = videoId
         while (entries.size > maxEntries) entries.remove(entries.keys.first())
+    }
+
+    @Synchronized
+    override fun clear() {
+        entries.clear()
     }
 
     /** 永続化用に中身を取り出す（古い順）。 */
@@ -117,7 +125,7 @@ data class ScoringRule(
 /**
  * 再生中の動画を自動特定するパイプライン（F-VID-01/02、PLAN 4.3）。
  *
- * 手順1（MediaSession の ID）→ 手順2（端末内キャッシュ）→ 手順3（長さが不明なら配信中・プレミア公開中の動画と照合）
+ * 手順1（MediaSession の ID）→ 手順2（端末内キャッシュ。長さが不明な動画は対象外）→ 手順3（長さが不明なら配信中・プレミア公開中の動画と照合）
  * → 手順4（検索照合）の順に試し、確定した時点で打ち切る。
  */
 class VideoResolver(
@@ -137,10 +145,26 @@ class VideoResolver(
     /** 手順1・2: 通信せずに確定できるか（MediaSession の動画ID、端末内キャッシュ）。 */
     private fun resolveLocally(metadata: TrackMetadata): Resolution.Confirmed? {
         metadata.videoIdHints.firstOrNull()?.let {
-            cache.put(metadata.identity, it)
+            store(metadata, it)
             return Resolution.Confirmed(it, ResolutionSource.METADATA)
         }
+        if (!cacheable(metadata)) return null
         return cache.get(metadata.identity)?.let { Resolution.Confirmed(it, ResolutionSource.CACHE) }
+    }
+
+    /**
+     * キャッシュのキー（[TrackMetadata.identity]）が動画を一意に表すか。
+     *
+     * 長さが 0 以下（ライブ・プレミア中）はキーが「タイトル＋チャンネル名」だけになり、同名の過去・次回の配信と衝突して
+     * 別の動画のチャットを取得してしまうため、キャッシュの読み書きをしない。
+     */
+    private fun cacheable(metadata: TrackMetadata): Boolean = metadata.durationMs > 0
+
+    private fun store(
+        metadata: TrackMetadata,
+        videoId: String,
+    ) {
+        if (cacheable(metadata)) cache.put(metadata.identity, videoId)
     }
 
     /**
@@ -160,7 +184,7 @@ class VideoResolver(
         metadata: TrackMetadata,
         videoId: String,
     ) {
-        cache.put(metadata.identity, videoId)
+        store(metadata, videoId)
     }
 
     internal fun rank(
@@ -204,7 +228,7 @@ class VideoResolver(
         val top = relevant.firstOrNull() ?: return Resolution.NotFound
         val margin = top.score - (relevant.getOrNull(1)?.score ?: 0)
         if (top.score < rule.autoConfirmThreshold || margin < rule.minMargin) return Resolution.Ambiguous(relevant)
-        cache.put(metadata.identity, top.candidate.videoId)
+        store(metadata, top.candidate.videoId)
         return Resolution.Confirmed(top.candidate.videoId, source, relevant.drop(1))
     }
 

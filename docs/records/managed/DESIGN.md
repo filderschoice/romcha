@@ -113,7 +113,8 @@
 - `resolve.VideoResolver.resolve(TrackMetadata)`（PLAN 4.3）: 次の順に試し、確定した時点で打ち切る。
   1. `videoIdHints` の先頭 → `Confirmed(METADATA)`（キャッシュにも登録）。公式アプリは動画IDを公開しないため（Q-02）、
      現状は常に手順2以降で特定する。公式アプリの変化に備えて残す
-  2. `ResolutionCache`（キーは `TrackMetadata.identity`）→ `Confirmed(CACHE)`
+  2. `ResolutionCache`（キーは `TrackMetadata.identity`）→ `Confirmed(CACHE)`。長さが 0 以下（ライブ・プレミア中）はキーが同名の
+     別配信と衝突するため、キャッシュの読み出しも保存（自動確定・`remember`・動画 ID 由来）もしない
   3. 長さが 0 以下（ライブ・プレミア中）でチャンネル名があれば、`search(チャンネル名, liveOnly = true)`（検索の絞り込み
      「ライブ」`params`）の結果のうちライブ表示のあるものを同じ規則で採点し、確定すれば `Confirmed(LIVE)`。
      確定しなければ（確度不足・0 件・通信失敗）手順4へ進む。
@@ -286,7 +287,8 @@
 - `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
 - HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、動画特定のキャッシュを消すボタン（誤った動画のチャットが出る時の対処。押すと端末内の対応を消し、
+  `OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定をやり直させる）、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
@@ -321,7 +323,7 @@
   （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, settings, clock, manualTimer)`
   （`settings` は `SessionSettings(liveDelaySeconds, syncOffsetMs, maxVisible, topChatOnly)`）、
   `SessionIo(requestedVideo, takeRequestedVideo, events, publish)`、`ChatBackend`（videoInfo・replay・live・search）。
-- `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに
+- `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択、キャッシュの消去 `ResolutionCacheCleared`）を命令のキューへ入れ、命令ごとに
   実行中の処理を取り消して新しい処理を始める。
   - 再生中の動画の変化（F-VID-03）: 識別キー（タイトル・チャンネル名・長さ）が変わったら `VideoResolver` で特定し直す。
     再生を検出していなければ「公式アプリの再生を検出していません」。確定なら開く（他の候補は切り替え候補として表示）、
@@ -344,7 +346,8 @@
   - 画面オフ（N-03）: 画面が消えたら取得を止めて「画面オフのため停止中」を表示し、点いたら取得をやり直す（`transformLatest`）。
   - 表示文は `SessionMessages` に集約する（日本語のみ）。
 - `PersistentResolutionCache`: 特定のキャッシュを `filesDir/resolution-cache.json`（`[{identity, videoId}]`）へ `AtomicFile` で保存し、
-  起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。
+  起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。`shared(context)` でプロセス内の 1 インスタンスを共有し、
+  `OverlayService` と HOME 画面が同じものを使う。`ResolutionCache.clear()` はメモリとファイルの両方を消す。
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
 - `feature:overlay` は画像読み込みに Coil 2.7.0（`io.coil-kt:coil-compose`）を使う。既定の `ImageLoader`（シングルトン）で足りるため設定しない。
 

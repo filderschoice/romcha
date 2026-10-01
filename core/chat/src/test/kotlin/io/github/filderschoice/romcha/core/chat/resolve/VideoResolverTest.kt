@@ -38,6 +38,9 @@ class VideoResolverTest {
         durationMs: Long? = 3_723_000,
     ) = SearchCandidate(id, title, channel, durationMs, isLive = false)
 
+    private fun liveCandidate(live: TrackMetadata) =
+        SearchCandidate("live0000000", live.title, live.channelName, durationMs = null, isLive = true)
+
     private fun fixture(name: String): String = requireNotNull(javaClass.getResource("/fixtures/$name")).readText()
 
     @Test
@@ -63,6 +66,55 @@ class VideoResolverTest {
 
             assertEquals(Resolution.Confirmed("cached00000", ResolutionSource.CACHE), result)
             assertTrue(search.queries.isEmpty())
+        }
+
+    @Test
+    fun キャッシュを消すと以後は検索して特定し直す() =
+        runTest {
+            val candidates = listOf(candidate("fresh000000", metadata.title))
+            val search = FakeSearch(FetchResult.Success(candidates))
+            val cache = InMemoryResolutionCache().apply { put(metadata.identity, "stale000000") }
+            val resolver = VideoResolver(search, cache)
+
+            cache.clear()
+            val result = resolver.resolve(metadata)
+
+            assertEquals(Resolution.Confirmed("fresh000000", ResolutionSource.SEARCH), result)
+        }
+
+    @Test
+    fun 長さが不明なライブ中はキャッシュを使わず同名の過去配信へ誤ヒットしない() =
+        runTest {
+            val live = metadata.copy(durationMs = 0)
+            val search =
+                FakeSearch(
+                    result = FetchResult.Success(emptyList()),
+                    liveResult = FetchResult.Success(listOf(liveCandidate(live))),
+                )
+            val cache = InMemoryResolutionCache().apply { put(live.identity, "oldstream00") }
+
+            val result = VideoResolver(search, cache).resolve(live)
+
+            assertEquals(Resolution.Confirmed("live0000000", ResolutionSource.LIVE), result)
+            assertEquals("oldstream00", cache.get(live.identity))
+        }
+
+    @Test
+    fun 長さが不明な動画は確定してもユーザー選択でもキャッシュへ保存しない() =
+        runTest {
+            val live = metadata.copy(durationMs = 0)
+            val search =
+                FakeSearch(
+                    result = FetchResult.Success(emptyList()),
+                    liveResult = FetchResult.Success(listOf(liveCandidate(live))),
+                )
+            val cache = InMemoryResolutionCache()
+            val resolver = VideoResolver(search, cache)
+
+            resolver.resolve(live)
+            resolver.remember(live, "chosen00000")
+
+            assertNull(cache.get(live.identity))
         }
 
     @Test

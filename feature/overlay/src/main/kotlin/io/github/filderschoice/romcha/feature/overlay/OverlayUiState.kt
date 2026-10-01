@@ -57,6 +57,9 @@ sealed interface OverlayEvent {
 
     /** 常駐通知またはウィンドウから終了が選ばれた */
     data object StopRequested : OverlayEvent
+
+    /** 動画特定のキャッシュが消された（アプリ画面から）。見ている動画の特定をやり直す */
+    data object ResolutionCacheCleared : OverlayEvent
 }
 
 /**
