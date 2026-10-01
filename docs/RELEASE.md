@@ -48,7 +48,7 @@ RELEASE_KEY_PASSWORD=<鍵のパスワード>
 `app/build.gradle.kts` の `defaultConfig` を更新します。
 
 - `versionName`: SemVer（`MAJOR.MINOR.PATCH`）。タグ `vX.Y.Z` と一致させる。
-- `versionCode`: `MAJOR × 10000 + MINOR × 100 + PATCH`（v1.0.0 は `10000`）。単調増加でなければ上書き
+- `versionCode`: `MAJOR × 10000 + MINOR × 100 + PATCH`（v1.0.0 は `10000`、v1.0.1 は `10001`）。単調増加でなければ上書き
   インストールできないため、公開済みの版より必ず大きくする。MINOR・PATCH は 0〜99 の範囲で運用する。
 
 版の変更は通常の作業ブランチでコミットし、Pull Request でマージします。タグは規定ブランチへマージした後の

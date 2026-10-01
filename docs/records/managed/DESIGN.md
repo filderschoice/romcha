@@ -19,7 +19,9 @@
 - 前提環境: minSdk 34 / targetSdk 36 / compileSdk 36、JDK 17、Gradle 8.13、AGP 8.13.0、Kotlin 2.0.21
 - 動作確認端末: Pixel 8 Pro（実機確認は人手検証。手順と最新の結果は `docs/VERIFICATION.md`）。MediaSession の取得（Q-01。Premium 有り／無し）、
   リプレイ同期（N-02）、ライブ・プレミアの最新追従、M3・M4 と BL-034〜BL-052 の表示・操作は確認済み。ライブ終了後のリプレイ切り替えは未確認
-- 配布: v1.0.0（versionCode 10000）の GitHub Release を 2026-09-28 に作成済み（タグ `v1.0.0`、署名済み `romcha-v1.0.0.apk` と `.sha256`）。
+- 配布: v1.0.1（versionCode 10001。ライブ中の誤特定の修正とキャッシュを消す操作）の GitHub Release を 2026-10-02 に作成済み
+  （タグ `v1.0.1` は `main` の 8fa99f3、署名済み `romcha-v1.0.1.apk` と `.sha256`。公開した APK の SHA-256 の一致を確認済み）。
+  初版は v1.0.0（2026-09-28）。
   リポジトリが非公開（private）の間は、認証なしの `releases/latest` が 404 を返すため「更新を確認」は `NoRelease`
   （「公開されている版はまだありません。」）になり、一般の利用者は Releases も開けない（2026-09-28 実機・API で確認）。
   公開後に「更新を確認」が最新と判定するかは未確認（BL-058）
@@ -386,7 +388,7 @@
   `:app:releaseDist` がリリース APK を `app/build/dist/romcha-vX.Y.Z.apk`（未署名なら `-unsigned` を付ける。公開事故の防止）へ置き、
   SHA-256 を `sha256sum` 形式の `.sha256` へ書き出す。アセット名の固定は GitHub 追従インストーラ（Obtainium 等）のため。
   R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。
-- 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.0 / 10000）。
+- 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.1 / 10001）。
   鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`（人が実行する）。
 - リリースビルドのスクリプト（BL-063）: `scripts/release-build.bat` が `scripts/release-build.ps1`（UTF-8 BOM 付き・CRLF。
   Windows PowerShell 5.1 でも日本語を読めるように）を pwsh 優先で呼ぶ。署名情報の事前確認（値は表示しない。ドライブ文字の `:` の
