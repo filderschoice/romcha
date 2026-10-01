@@ -2,6 +2,12 @@
 
 このリポジトリの主要な変更は本ファイルに記録します。
 
+## 2026-10-02
+
+- v1.0.1 の GitHub Release を公開した（ユーザーの明示指示でエージェントが `gh release create --verify-tag` で公開。タグ `v1.0.1` は `main` の
+  8fa99f3、署名済み APK と `.sha256`。公開した APK の SHA-256 の一致を確認）。ライブ中の誤特定の修正とキャッシュを消す操作を含む。
+  `README.md` の状態表・`site/app.json`・`site/index.html`・`docs/RELEASE.md`・DESIGN・BL-058 へ反映した。
+
 ## 2026-09-29
 
 - Google Play での公開を検討したが、非公式 API を使う非公式アプリであり Play の審査・ポリシーにそぐわないため、GitHub Releases のみで
