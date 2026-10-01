@@ -113,7 +113,8 @@
 - `resolve.VideoResolver.resolve(TrackMetadata)`（PLAN 4.3）: 次の順に試し、確定した時点で打ち切る。
   1. `videoIdHints` の先頭 → `Confirmed(METADATA)`（キャッシュにも登録）。公式アプリは動画IDを公開しないため（Q-02）、
      現状は常に手順2以降で特定する。公式アプリの変化に備えて残す
-  2. `ResolutionCache`（キーは `TrackMetadata.identity`）→ `Confirmed(CACHE)`
+  2. `ResolutionCache`（キーは `TrackMetadata.identity`）→ `Confirmed(CACHE)`。長さが 0 以下（ライブ・プレミア中）はキーが同名の
+     別配信と衝突するため、キャッシュの読み出しも保存（自動確定・`remember`・動画 ID 由来）もしない
   3. 長さが 0 以下（ライブ・プレミア中）でチャンネル名があれば、`search(チャンネル名, liveOnly = true)`（検索の絞り込み
      「ライブ」`params`）の結果のうちライブ表示のあるものを同じ規則で採点し、確定すれば `Confirmed(LIVE)`。
      確定しなければ（確度不足・0 件・通信失敗）手順4へ進む。

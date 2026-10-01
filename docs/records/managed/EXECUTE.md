@@ -6,6 +6,30 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-02 12:00
+  summary: 長さが不明な（ライブ・プレミア中の）動画は特定のキャッシュを読み書きしないようにした
+  details:
+    変更内容: >-
+      YouTube の同期で別の動画のチャットを取得することがある不具合の調査と修正。MediaSession に動画 ID は無く（Q-02）、特定は
+      キャッシュ → 検索で決まる。キャッシュのキー（タイトル・チャンネル名・長さ）は、長さが 0 のライブ中は「タイトル・チャンネル名」だけになり、
+      同名の過去・次回の配信と衝突する。キャッシュは永続化され期限が無いため、一度保存されると検索せずに別の動画で確定し続ける。
+      VideoResolver で、長さが 0 以下の動画はキャッシュの読み出し・保存（自動確定・ユーザー選択・MediaSession の動画 ID 由来のすべて）を行わないようにした。
+      ライブ中は毎回、手順3（配信中の動画との照合）か検索で特定する。既に保存済みの長さ 0 のキーは読まれなくなる（削除はしない）。
+      実機での再現確認と、切り替え直後の識別キーの時間差は BL-071・BL-072 として人手検証へ登録した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolver.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolverTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/PLAN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 追加した 2 件のテスト（キャッシュに同名の過去配信があっても今のライブ動画を特定する、長さ不明は保存しない）を含め全件成功
+    関連ID:
+      - BL-071
+      - BL-072
 - date: 2026-09-28 00:40
   summary: リリースビルドを 1 コマンドで行うスクリプト（scripts/release-build.bat・.ps1）を追加した
   details:
