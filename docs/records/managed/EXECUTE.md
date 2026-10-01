@@ -6,6 +6,29 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-02 14:00
+  summary: キャッシュを消した直後に、見ている動画の特定を自動でやり直すようにした
+  details:
+    変更内容: >-
+      ユーザー指示により、「キャッシュを消す」を押した直後に見ている動画の特定をやり直すようにした。OverlayEvent に
+      ResolutionCacheCleared を追加し、MainActivity がキャッシュを消した後に送る。WatchCoordinator はこれを受けて、手動で指定した動画
+      （キャッシュを使わない）と再生を検出していない間を除き、resolveAndOpen をやり直す（実行中の処理は取り消す）。
+      Toast と説明文の文言を「停止して開始し直す」案内から「見ている動画を特定し直す」へ改めた。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinator.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 消去後に検索で特定し直すテストと、手動指定の動画は変えないテストを含め全件成功。実機での確認は BL-073
+    関連ID:
+      - BL-073
 - date: 2026-10-02 13:00
   summary: HOME 画面に動画特定のキャッシュを消すボタンを追加した
   details:

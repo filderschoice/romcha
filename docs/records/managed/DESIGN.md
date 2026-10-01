@@ -288,7 +288,7 @@
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
 - HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
   URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、動画特定のキャッシュを消すボタン（誤った動画のチャットが出る時の対処。押すと端末内の対応を消し、
-  表示中の動画には反映されないため Toast で「オーバーレイを停止して開始し直す」ことを案内する）、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+  `OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定をやり直させる）、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
@@ -323,7 +323,7 @@
   （表示の土台＝タイトル・候補を保持して `io.publish` する）、`SessionEnvironment(nowPlaying, screenOn, settings, clock, manualTimer)`
   （`settings` は `SessionSettings(liveDelaySeconds, syncOffsetMs, maxVisible, topChatOnly)`）、
   `SessionIo(requestedVideo, takeRequestedVideo, events, publish)`、`ChatBackend`（videoInfo・replay・live・search）。
-- `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択）を命令のキューへ入れ、命令ごとに
+- `WatchCoordinator`: 入力（再生中の動画の識別キーの変化、共有・URL 入力の指定、候補の選択、キャッシュの消去 `ResolutionCacheCleared`）を命令のキューへ入れ、命令ごとに
   実行中の処理を取り消して新しい処理を始める。
   - 再生中の動画の変化（F-VID-03）: 識別キー（タイトル・チャンネル名・長さ）が変わったら `VideoResolver` で特定し直す。
     再生を検出していなければ「公式アプリの再生を検出していません」。確定なら開く（他の候補は切り替え候補として表示）、

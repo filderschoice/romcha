@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
  * - 再生中の動画が変わったら（タイトル・チャンネル名・長さの変化。F-VID-03）自動特定をやり直す。
  * - 共有・URL 入力の指定（F-VID-04/05）は自動特定より優先し、その動画を見ている間は自動特定しない。
  * - 候補の選択（F-VID-02）はキャッシュへ覚え、以後は同じ動画を通信なしで確定する。
+ * - キャッシュが消されたら（アプリ画面の操作）、手動指定でなければ見ている動画の特定をやり直す。
  * - 動画の状態（アーカイブ／ライブ・プレミア）に応じた取得と表示は [ChatPlayer] が行う。
  *
  * [run] は単一スレッドのディスパッチャー（本番はメインスレッド）で実行する。
@@ -43,6 +44,8 @@ class WatchCoordinator(
         data class Choose(
             val videoId: String,
         ) : Command
+
+        data object ResolutionCacheCleared : Command
     }
 
     private val nowPlaying = env.nowPlaying
@@ -73,7 +76,11 @@ class WatchCoordinator(
             }
             launch {
                 io.events.collect { event ->
-                    if (event is OverlayEvent.CandidateSelected) commands.send(Command.Choose(event.videoId))
+                    when (event) {
+                        is OverlayEvent.CandidateSelected -> commands.send(Command.Choose(event.videoId))
+                        OverlayEvent.ResolutionCacheCleared -> commands.send(Command.ResolutionCacheCleared)
+                        OverlayEvent.StopRequested -> Unit
+                    }
                 }
             }
             for (command in commands) {
@@ -96,7 +103,17 @@ class WatchCoordinator(
                 suspend { player.open(command.videoId, alternatives) }
             }
             Command.PlaybackChanged -> planForPlayback()
+            Command.ResolutionCacheCleared -> planForClearedCache()
         }
+
+    /**
+     * キャッシュが消された時、見ている動画の特定をやり直す。手動で指定した動画（キャッシュを使わない）と、
+     * 再生を検出していない間は何もしない。
+     */
+    private fun planForClearedCache(): (suspend () -> Unit)? {
+        if (pinned != null || nowPlaying.value.metadata == null) return null
+        return suspend { resolveAndOpen() }
+    }
 
     private fun planForPlayback(): (suspend () -> Unit)? {
         val metadata = nowPlaying.value.metadata

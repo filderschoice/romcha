@@ -167,6 +167,7 @@ class MainActivity : ComponentActivity() {
 
             override fun clearResolutionCache() {
                 PersistentResolutionCache.shared(this@MainActivity).clear()
+                OverlayChannel.send(OverlayEvent.ResolutionCacheCleared)
                 Toast.makeText(this@MainActivity, R.string.cache_cleared, Toast.LENGTH_LONG).show()
             }
 

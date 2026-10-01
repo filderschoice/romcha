@@ -228,6 +228,43 @@ class WatchCoordinatorTest {
         }
 
     @Test
+    fun キャッシュが消されたら見ている動画の特定をやり直す() =
+        runTest {
+            val h = Harness(this)
+            h.backend.replayVideo("video000001", "古い動画")
+            h.searchable("video000002", "配信A")
+            h.play("配信A")
+            h.cache.put(h.nowPlaying.value.metadata!!.identity, "video000001")
+            advanceTimeBy(1_000)
+            assertEquals(listOf("m_video000001"), h.published.messages.map { it.id })
+
+            h.cache.clear()
+            h.events.emit(OverlayEvent.ResolutionCacheCleared)
+            advanceTimeBy(1_000)
+
+            assertEquals(listOf("配信A チャンネル"), h.backend.searchQueries)
+            assertEquals(listOf("m_video000002"), h.published.messages.map { it.id })
+        }
+
+    @Test
+    fun キャッシュが消されても手動で指定した動画は変えない() =
+        runTest {
+            val h = Harness(this)
+            h.backend.replayVideo("manual00001", "指定した動画")
+            h.searchable("video000002", "配信B")
+            h.requested.value = "manual00001"
+            advanceTimeBy(500)
+            h.play("別の表記のタイトル")
+            advanceTimeBy(1_000)
+
+            h.events.emit(OverlayEvent.ResolutionCacheCleared)
+            advanceTimeBy(1_000)
+
+            assertTrue(h.backend.searchQueries.isEmpty())
+            assertEquals("指定した動画", h.published.title)
+        }
+
+    @Test
     fun 手動で指定した動画を優先し再生中の動画が変わるまで自動特定しない() =
         runTest {
             val h = Harness(this)
