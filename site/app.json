@@ -12,6 +12,7 @@
   "icon": "assets/icon.svg",
   "page": "index.html",
   "links": {
+    "homepage": "https://filderschoice.github.io/romcha/",
     "repository": "https://github.com/filderschoice/romcha",
     "download": "https://github.com/filderschoice/romcha/releases/latest"
   },

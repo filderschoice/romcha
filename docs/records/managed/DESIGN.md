@@ -26,8 +26,10 @@
   （タグ `v1.0.1` は `main` の 8fa99f3、署名済み `romcha-v1.0.1.apk` と `.sha256`。公開した APK の SHA-256 の一致を確認済み）。
   初版は v1.0.0（2026-09-28）。
   リポジトリが非公開（private）の間は、認証なしの `releases/latest` が 404 を返すため「更新を確認」は `NoRelease`
-  （「公開されている版はまだありません。」）になり、一般の利用者は Releases も開けない（2026-09-28 実機・API で確認）。
-  公開後に「更新を確認」が最新と判定するかは未確認（BL-058）
+  （「公開されている版はまだありません。」）になり、一般の利用者は Releases も開けなかった（2026-09-28 実機・API で確認）。
+  リポジトリは 2026-10-04 に公開（public）済みで、`releases/latest` は認証なしで 200 を返す（API で確認）。
+  About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、Pull Request 必須。Repository admin は bypass）を
+  設定し、Dependabot alerts を有効にした。公開後の「更新を確認」が最新と判定するかは実機では未確認（BL-058）
 
 ## 実装済み機能要件
 
@@ -362,14 +364,16 @@
 ### アプリ紹介ポートフォリオ（`site/`）
 
 - 静的な 1 ページ（`index.html`・`style.css`・`assets/*.svg`）。ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
-  リンクは相対パスで、公開先を選ばない（公開方法は未定で、リポジトリ内に置くだけ。2026-09-27 ユーザー判断）。
+  リンクは相対パスで、公開先を選ばない。公開は GitHub Pages の `gh-pages` ブランチ（`git subtree push --prefix site origin gh-pages`。
+  Actions は使わず、`site/.nojekyll` を置く）。公開URLは <https://filderschoice.github.io/romcha/>（2026-10-04 ユーザー判断。sesami-wear と同じ方式）。
 - 構成: ヘッダー（ページ内ナビ）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
   仕組みの図 → 使い方の手順 → プライバシーと免責 → 入手（仕様表）→ フッター。
 - 他アプリのテンプレートを兼ねる: 差し替え箇所に `TEMPLATE:` のコメント、アプリごとの色は `style.css` の `:root` の
   `--accent`・`--accent-strong`・`--accent-soft`（ライト・ダーク）だけ。ライト／ダークは `prefers-color-scheme`、760px 以下で 1 列。
 - 将来の repo 横断の一覧ページ向けに、概要を `site/app.json`（`schema: app-portfolio.v1`。キーは `site/README.md`）に置く。
-- 画像は SVG の図解（アイコンはランチャーアイコンと同じ意匠）。図解であることを `alt` に書く。実機のスクリーンショットは
-  第三者の情報が写るため人が撮影・選定して差し替える（BL-061）。
+- 画像は SVG の図解（アイコンはランチャーアイコンと同じ意匠）。図解であることを `alt` に書く。画面イメージ（`assets/screen.svg`）は
+  架空の動画とダミーのチャット（「視聴者A」等。上位チャットを含む）で描く。実機では YouTube の動画とチャットの時刻を同期した画面を
+  撮れず、実画面には第三者の情報も写るため、スクリーンショットへは差し替えない（2026-10-04 ユーザー判断）。公開方法は BL-061。
 - 機能・版・動作環境を変えたら、README とあわせて `index.html`・`app.json` も更新する。
 
 ## 非機能要件
@@ -395,7 +399,8 @@
   SHA-256 を `sha256sum` 形式の `.sha256` へ書き出す。アセット名の固定は GitHub 追従インストーラ（Obtainium 等）のため。
   R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。
 - 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.1 / 10001）。
-  鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`（人が実行する）。
+  鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`。鍵・署名ビルド・タグの push は人が実行し、
+  Releases の公開はユーザーの明示指示があればエージェントが実行してよい（自律ループ内では実行しない。2026-10-04 ユーザー判断）。
 - リリースビルドのスクリプト（BL-063）: `scripts/release-build.bat` が `scripts/release-build.ps1`（UTF-8 BOM 付き・CRLF。
   Windows PowerShell 5.1 でも日本語を読めるように）を pwsh 優先で呼ぶ。署名情報の事前確認（値は表示しない。ドライブ文字の `:` の
   エスケープは lint の判定に任せ、スクリプトでは確かめない）→ `-VersionName` 指定時の版の書き換え（失敗時は戻す）

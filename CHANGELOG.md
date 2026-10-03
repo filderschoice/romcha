@@ -4,6 +4,21 @@
 
 ## 2026-10-04
 
+- ポートフォリオ（`site/`）を GitHub Pages で公開する準備をした（sesami-wear と同じ `gh-pages` ブランチ方式。ユーザー判断）。
+  `site/.nojekyll` の追加、`site/app.json` の `links.homepage`、`site/index.html` の `og:url`・`canonical`、
+  `site/README.md` の公開手順、README・DESIGN・VERIFICATION を更新した。公開（`gh-pages` の push と Pages の設定）は
+  `main` へのマージ後にユーザーが行う（BL-061）。
+- Releases の公開の運用方針を改めた（ユーザー判断）。ユーザーが明示的に指示した場合に限り、エージェントが `gh release create --verify-tag` で
+  公開してよい。鍵・署名ビルド・タグの push は引き続き人が行い、自律ループ実行モード内では公開しない。
+  `docs/RELEASE.md` と DESIGN の記述を合わせ、BL-065 を完了として BACKLOG から削除した。
+- ポートフォリオ（`site/`）の画面イメージ `site/assets/screen.svg` を、架空の動画とダミーのチャット（上位チャットを含む）による図解へ
+  描き直した。実機では YouTube の動画とチャットの時刻を同期した画面を撮れないため、スクリーンショットへの差し替えはしない
+  （ユーザー判断）。`site/index.html` の `alt` と `site/README.md` を合わせた。BL-061 は公開方法の決定だけに絞った。
+  BL-058 は P2・P4・K1 の確認結果（OK）を反映し、残る P3（次の版の公開後）を `docs/VERIFICATION.md` に残した。
+- リポジトリを公開（public）にし、公開時の設定を行った。About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、
+  Pull Request 必須。Repository admin は bypass）を設定し、Dependabot alerts を有効にした。BL-069 を完了として BACKLOG から削除し、
+  BL-059（Dependency graph が Gradle の依存を検出するかは再確認待ち）と BL-058 の記述を更新した。
+  README・RELEASE・DESIGN・VERIFICATION の「リポジトリが非公開」の記述を公開済みの内容へ改めた。
 - 脆弱性の報告方法を示す `SECURITY.md` を追加した（窓口は GitHub Issues。悪用手順・個人情報を書かないお願いと対象外を記載）。
   `README.md` の「問題の報告」節から参照した（BL-074）。
 - リポジトリの公開（public 化）前の再点検を行った。履歴全体に秘密情報（鍵・トークン・パスワード）が無いことを確認した。
