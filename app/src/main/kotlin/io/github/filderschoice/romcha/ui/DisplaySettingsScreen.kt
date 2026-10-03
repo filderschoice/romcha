@@ -96,6 +96,10 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             }
             NgWordsInput(settings.ngWords)
             MaxVisibleSlider(settings.maxVisible)
+            Text(stringResource(R.string.display_window), style = MaterialTheme.typography.titleMedium)
+            SwitchRow(R.string.display_large_header_buttons, settings.largeHeaderButtons) { on ->
+                DisplaySettingsStore.update { it.copy(largeHeaderButtons = on) }
+            }
             Text(stringResource(R.string.display_font_hint), style = MaterialTheme.typography.bodySmall)
         }
     }

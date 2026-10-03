@@ -6,6 +6,29 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 17:20
+  summary: フローティングのヘッダーのボタンの大きさを 36dp と 48dp から表示設定で選べるようにした
+  details:
+    変更内容: >-
+      DisplaySettings に largeHeaderButtons（既定 false。SharedPreferences display の largeHeaderButtons）を追加し、
+      ヘッダーの設定・最小化・隠すのボタンの大きさを headerButtonSize（false で従来の 36dp、true で推奨の 48dp）で決めるようにした。
+      アプリの表示設定画面に「フローティングウィンドウ」の見出しと「ヘッダーのボタンを大きくする」のスイッチを追加し、
+      文字サイズ・背景の案内文をその見出しの下へ移した。既定値は従来の見た目を維持する（ユーザー判断で設定による切り替えとした）。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/HeaderButtonSizeTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 追加した HeaderButtonSizeTest を含め全件成功。実機での見た目は BL-082（人手検証）
+    関連ID:
+      - BL-081
 - date: 2026-10-04 17:05
   summary: 表示設定画面のスイッチ・テーマの行を、行全体のタップで切り替えられるようにした
   details:

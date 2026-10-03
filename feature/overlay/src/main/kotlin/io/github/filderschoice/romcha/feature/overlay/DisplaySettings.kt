@@ -30,6 +30,7 @@ enum class ThemeMode {
  * @property topChatOnly YouTube の「上位のチャット」だけを取得する（F-CHAT-07。既定は「すべてのチャット」）
  * @property theme テーマ（F-VIEW-05。既定はシステム追従で、従来の見た目と同じ）
  * @property maxVisible 表示保持件数の上限（F-VIEW-04。[MIN_VISIBLE]〜[MAX_VISIBLE]、[VISIBLE_STEP] 刻み。N-04）
+ * @property largeHeaderButtons フローティングのヘッダーのボタンを推奨の 48dp にする（BL-081。既定は従来の 36dp）
  */
 data class DisplaySettings(
     val showAuthorName: Boolean = true,
@@ -42,6 +43,7 @@ data class DisplaySettings(
     val maxVisible: Int = DEFAULT_VISIBLE,
     val topChatOnly: Boolean = false,
     val theme: ThemeMode = ThemeMode.SYSTEM,
+    val largeHeaderButtons: Boolean = false,
 ) {
     companion object {
         const val DEFAULT_VISIBLE = 500
@@ -72,6 +74,7 @@ object DisplaySettingsStore {
     private const val KEY_MAX_VISIBLE = "maxVisible"
     private const val KEY_TOP_CHAT_ONLY = "topChatOnly"
     private const val KEY_THEME = "theme"
+    private const val KEY_LARGE_HEADER_BUTTONS = "largeHeaderButtons"
 
     private var prefs: SharedPreferences? = null
     private val mutableState = MutableStateFlow(DisplaySettings())
@@ -96,6 +99,7 @@ object DisplaySettingsStore {
                 maxVisible = DisplaySettings.clampVisible(loaded.getInt(KEY_MAX_VISIBLE, defaults.maxVisible)),
                 topChatOnly = loaded.getBoolean(KEY_TOP_CHAT_ONLY, defaults.topChatOnly),
                 theme = ThemeMode.entries.find { it.name == loaded.getString(KEY_THEME, null) } ?: defaults.theme,
+                largeHeaderButtons = loaded.getBoolean(KEY_LARGE_HEADER_BUTTONS, defaults.largeHeaderButtons),
             )
     }
 
@@ -118,6 +122,7 @@ object DisplaySettingsStore {
             putInt(KEY_MAX_VISIBLE, next.maxVisible)
             putBoolean(KEY_TOP_CHAT_ONLY, next.topChatOnly)
             putString(KEY_THEME, next.theme.name)
+            putBoolean(KEY_LARGE_HEADER_BUTTONS, next.largeHeaderButtons)
         }
     }
 }

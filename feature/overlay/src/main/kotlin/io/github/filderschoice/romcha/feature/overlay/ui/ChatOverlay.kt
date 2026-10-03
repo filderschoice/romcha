@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
@@ -93,7 +94,14 @@ private fun Window(
     // 不透明度はヘッダーとチャット欄の両方に掛ける（F-OVL-03）。色味だけを変えてドラッグできる範囲を見分けやすくする
     val alpha = OverlayFormat.clampOpacity(settings.opacity)
     Column(modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp))) {
-        Header(state, alpha, touchThrough, actions, onToggleSettings = { showSettings = !showSettings })
+        Header(
+            state = state,
+            alpha = alpha,
+            touchThrough = touchThrough,
+            buttonSize = headerButtonSize(display.largeHeaderButtons),
+            actions = actions,
+            onToggleSettings = { showSettings = !showSettings },
+        )
         Column(
             modifier =
                 Modifier.weight(
@@ -128,11 +136,15 @@ private fun Window(
     }
 }
 
+/** ヘッダーのボタンの大きさ（BL-081）。既定は小さいウィンドウでもタイトル欄の幅を残す 36dp、大きくする設定で推奨の 48dp */
+internal fun headerButtonSize(large: Boolean): Dp = if (large) 48.dp else 36.dp
+
 @Composable
 private fun Header(
     state: OverlayUiState,
     alpha: Float,
     touchThrough: Boolean,
+    buttonSize: Dp,
     actions: OverlayActions,
     onToggleSettings: () -> Unit,
 ) {
@@ -164,13 +176,16 @@ private fun Header(
                 fontSize = 10.sp,
             )
         }
-        IconButton(onClick = onToggleSettings, modifier = Modifier.size(36.dp)) {
+        IconButton(onClick = onToggleSettings, modifier = Modifier.size(buttonSize)) {
             Icon(Icons.Default.Settings, stringResource(R.string.overlay_settings), tint = SubTextColor)
         }
-        IconButton(onClick = { actions.onWindowModeChange(WindowMode.Minimized) }, modifier = Modifier.size(36.dp)) {
+        IconButton(
+            onClick = { actions.onWindowModeChange(WindowMode.Minimized) },
+            modifier = Modifier.size(buttonSize),
+        ) {
             Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.overlay_minimize), tint = SubTextColor)
         }
-        IconButton(onClick = { actions.onCommand(OverlayCommand.HIDE) }, modifier = Modifier.size(36.dp)) {
+        IconButton(onClick = { actions.onCommand(OverlayCommand.HIDE) }, modifier = Modifier.size(buttonSize)) {
             Icon(Icons.Default.Close, stringResource(R.string.overlay_hide), tint = SubTextColor)
         }
     }
