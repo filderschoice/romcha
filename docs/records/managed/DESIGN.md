@@ -332,6 +332,8 @@
   - 画面の状態は `UpdateState`（Idle・Checking・Done(result)）を `MainActivity` が持ち、`lifecycleScope` で確認する（確認中は再押下を無視）。
     状態は保存しない。解析は `kotlinx-serialization-json` の `JsonElement` を使い、`app` の単体テスト（MockWebServer）で検証する
     （品質ゲートの `testDebugUnitTest` に含めるため、独立モジュールにはしない）。
+- 表示設定画面のスイッチ・テーマの行は、行全体を `toggleable`（`Role.Switch`）・`selectable`（`Role.RadioButton`、親に
+  `selectableGroup`）にし、部品側の操作は null にする。行の高さは 48dp 以上（BL-079。タップ領域とスクリーンリーダーのため）。
 - OSS ライセンス（F-APP-03）: AboutLibraries（Gradle プラグインがビルド時に依存一覧を生成し、`LibrariesContainer` で表示）。
 - 文言は日本語のみ（英語リソースは未対応。N-11 は SHOULD）。
 

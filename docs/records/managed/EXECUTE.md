@@ -6,6 +6,24 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 17:05
+  summary: 表示設定画面のスイッチ・テーマの行を、行全体のタップで切り替えられるようにした
+  details:
+    変更内容: >-
+      SwitchRow の行に toggleable（Role.Switch）を付けて Switch の onCheckedChange を null にし、テーマの行に selectable
+      （Role.RadioButton。親に selectableGroup）を付けて RadioButton の onClick を null にした。行の高さの下限を 48dp にした。
+      設定の値・保存先・既定値は変えていない。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 全件成功。Compose の UI テストは無いため、タップ領域と TalkBack の読み上げは BL-082（人手検証）で確かめる
+    関連ID:
+      - BL-079
 - date: 2026-10-04 16:55
   summary: フローティングのチャット一覧が空の時に案内文を出すようにした
   details:
