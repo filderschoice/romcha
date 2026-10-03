@@ -27,8 +27,8 @@ android {
         minSdk = 34
         targetSdk = 36
         // versionCode は MAJOR × 10000 + MINOR × 100 + PATCH（docs/RELEASE.md 2章）
-        versionCode = 10001
-        versionName = "1.0.1"
+        versionCode = 10002
+        versionName = "1.0.2"
     }
 
     signingConfigs {
