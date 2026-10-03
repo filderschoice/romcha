@@ -26,8 +26,10 @@
   （タグ `v1.0.1` は `main` の 8fa99f3、署名済み `romcha-v1.0.1.apk` と `.sha256`。公開した APK の SHA-256 の一致を確認済み）。
   初版は v1.0.0（2026-09-28）。
   リポジトリが非公開（private）の間は、認証なしの `releases/latest` が 404 を返すため「更新を確認」は `NoRelease`
-  （「公開されている版はまだありません。」）になり、一般の利用者は Releases も開けない（2026-09-28 実機・API で確認）。
-  公開後に「更新を確認」が最新と判定するかは未確認（BL-058）
+  （「公開されている版はまだありません。」）になり、一般の利用者は Releases も開けなかった（2026-09-28 実機・API で確認）。
+  リポジトリは 2026-10-04 に公開（public）済みで、`releases/latest` は認証なしで 200 を返す（API で確認）。
+  About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、Pull Request 必須。Repository admin は bypass）を
+  設定し、Dependabot alerts を有効にした。公開後の「更新を確認」が最新と判定するかは実機では未確認（BL-058）
 
 ## 実装済み機能要件
 

@@ -30,8 +30,8 @@ BACKLOG の人手検証タスクのうち、未確認の項目を実機で行う
 | 章 | タスク | 進め方 |
 | --- | --- | --- |
 | 1 章 | BL-073（C5） | 別の動画のチャットが偶発的に出た時だけ行う。出なければ保留 |
-| 2 章 | BL-058（更新を確認・キーストア） | BL-069（公開）が済んでから。K1 は公開前でも行える |
-| 3 章 | BL-069・BL-059・BL-061 | GitHub の設定と画像選定。端末は不要 |
+| 2 章 | BL-058（更新を確認・キーストア） | 公開（2026-10-04）済みのため実施できる |
+| 3 章 | BL-059・BL-061 | GitHub の設定と画像選定。端末は不要 |
 
 ## 0. 準備
 
@@ -90,7 +90,7 @@ adb -s <シリアル> shell appops get io.github.filderschoice.romcha SYSTEM_ALE
 
 ## 2. BL-058: 公開後の「更新を確認」とキーストアのバックアップ
 
-前提: BL-069（リポジトリの public 化）が済んでいること。非公開の間は「公開されている版はまだありません。」になります
+前提: リポジトリは 2026-10-04 に公開済みです。非公開の間は「公開されている版はまだありません。」になっていました
 （2026-09-28 確認済み）。署名済み APK は GitHub Releases の v1.0.0 と v1.0.1 から取得します。
 
 | 番号 | 操作 | 確認 | 結果 |
@@ -103,14 +103,13 @@ adb -s <シリアル> shell appops get io.github.filderschoice.romcha SYSTEM_ALE
 
 最後に、使い続ける版を入れ直してください（デバッグ版が必要なら `.\gradlew.bat :app:installDebug`。署名が違うため先にアンインストール）。
 
-## 3. 端末を使わない人手作業（BL-069・BL-059・BL-061）
+## 3. 端末を使わない人手作業（BL-059・BL-061）
 
 結果は表ではなく、完了したかどうかを結果の記録の「その他」へ書いてください。
 
 | 番号 | 作業 | 確認 | 結果 |
 | --- | --- | --- | --- |
-| G1 | BL-069: GitHub の Settings でリポジトリを public にする。About の説明（description）と topics を設定する。必要なら Private vulnerability reporting を有効にする | ログアウトした状態のブラウザーでリポジトリを開ける。About に説明が出ている | 未実施 |
-| G2 | BL-059: Settings の Advanced Security（Code security）で Dependency graph と Dependabot alerts を有効にする。Insights → Dependency graph を開く | Gradle の依存（gradle/libs.versions.toml の OkHttp・Compose 等）が一覧に出る。出ない場合はその旨を書く（dependency submission の検討を起票する） | 未実施 |
+| G2 | BL-059: Settings の Advanced Security（Code security）で Dependency graph が有効なことを確かめる（Dependabot alerts は 2026-10-04 に有効化済み）。Insights → Dependency graph を開く | Gradle の依存（gradle/libs.versions.toml の OkHttp・Compose 等）が一覧に出る。出ない場合はその旨を書く（dependency submission の検討を起票する） | 未実施 |
 | G3 | BL-061: ポートフォリオ用のスクリーンショットを撮影・選定する。配信者名・チャット本文・アイコンなど第三者の情報が写っていないか確認する。公開方法（GitHub Pages 等）を決める | 差し替える画像が決まっている（`site/assets/` への差し替えはエージェントへ依頼する）。公開方法が決まっている | 未実施 |
 
 ## 4. 結果の記録

@@ -4,6 +4,10 @@
 
 ## 2026-10-04
 
+- リポジトリを公開（public）にし、公開時の設定を行った。About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、
+  Pull Request 必須。Repository admin は bypass）を設定し、Dependabot alerts を有効にした。BL-069 を完了として BACKLOG から削除し、
+  BL-059（Dependency graph が Gradle の依存を検出するかは再確認待ち）と BL-058 の記述を更新した。
+  README・RELEASE・DESIGN・VERIFICATION の「リポジトリが非公開」の記述を公開済みの内容へ改めた。
 - 脆弱性の報告方法を示す `SECURITY.md` を追加した（窓口は GitHub Issues。悪用手順・個人情報を書かないお願いと対象外を記載）。
   `README.md` の「問題の報告」節から参照した（BL-074）。
 - リポジトリの公開（public 化）前の再点検を行った。履歴全体に秘密情報（鍵・トークン・パスワード）が無いことを確認した。
