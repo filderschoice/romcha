@@ -23,39 +23,21 @@
   根拠: >-
     ボタンと消去処理は実装済みだが、実機でのオーバーレイ動作中の挙動は自動検証できないため人手検証へ分けた。
     BL-071 は同名のライブで誤特定が再現せず閉じたため、C5 は偶発的に誤特定が起きた時に確かめる。
-- id: BL-061
-  区分: 人手検証
+- id: BL-076
+  区分: 品質ゲート
   タスク内容: >-
-    ポートフォリオ（site/）を GitHub Pages で公開する（sesami-wear と同じ gh-pages ブランチ方式。2026-10-04 ユーザー判断）。
-    エージェントは site/.nojekyll・app.json の homepage・index.html の canonical・site/README.md の手順を用意済み。
-    残りはユーザーの作業で、この作業ブランチを main へマージしたあと、main で git subtree push --prefix site origin gh-pages を実行して
-    gh-pages を push する。その後、Pages の設定（Source を gh-pages の / (root)）をエージェントへ依頼するか、Settings → Pages で行い、
-    公開URL（https://filderschoice.github.io/romcha/）で画像とリンクが表示されることを確かめる
+    Dependabot alerts が Gradle の依存を検出できるよう、dependency submission（GitHub Actions のワークフローで Gradle の依存グラフを
+    GitHub へ提出する）を導入するかを決める。2026-10-04 時点で、Dependency graph の SBOM にはリポジトリ自身の 1 件だけが出ており、
+    gradle/libs.versions.toml の依存（OkHttp・Compose 等）は検出されていない（Dependabot alerts 自体は有効化済み）。
+    導入する場合は .github/workflows にワークフローを追加する（エージェントが作成し、人がレビューして取り込む）
   優先度: P3
-  状態: 進行中
+  状態: 要確認
   担当: ユーザー
-  完了条件: 公開URLでポートフォリオが表示され、画像とリンクが正しく動く
+  完了条件: 導入する・しないの方針が決まり、導入する場合は Gradle の依存が Dependency graph に表示される
   依存: []
   根拠: >-
-    画面イメージは実機のスクリーンショットではなく図解（site/assets/screen.svg）とした（2026-10-04 ユーザー判断。エージェントが作成済み）。
-    git push はユーザーが実行する（guardrails 5.3）。Pages の設定と公開は外部への発信のため、自律ループ内では実行しない。
-- id: BL-059
-  区分: 人手検証
-  タスク内容: >-
-    Insights の Dependency graph に Gradle の依存（gradle/libs.versions.toml の OkHttp・Compose 等）が表示されるかを確かめる
-    （Dependabot alerts は 2026-10-04 に有効化済み。Dependency graph の有効化は画面で確認する）
-  優先度: P3
-  状態: 進行中
-  担当: ユーザー
-  完了条件: >-
-    Dependabot alerts が有効で、Gradle の依存が検出されている。検出されない場合は、dependency submission（GitHub Actions の追加。
-    CI 定義の変更のため人が判断）を検討するタスクを起票する
-  依存: []
-  根拠: >-
-    2026-09-27 ユーザー判断で、脆弱性チェックの代替手段は Dependabot アラートとした（BL-057 を閉じて切り出し）。
-    ローカルの品質ゲートには入れない。Gradle の version catalog がどこまで静的に検出されるかは未確認のため、有効化後に確かめる。
-    2026-10-04 のリポジトリ公開直後は、dependency-graph の SBOM にリポジトリ自身の 1 件だけが出て、Gradle の依存は未検出だった
-    （解析が未完了の可能性があるため、時間をおいて再確認する）
+    CI 定義の変更は自律ループの禁止範囲（guardrails 12.2）で、本リポジトリには CI が無く新設になるため、既定値を選ばず要確認として保留する。
+    BL-059（Dependabot alerts の有効化と検出の確認）は、有効化の完了と未検出の確認をもって閉じ、残りを本タスクへ切り出した。
 - id: BL-058
   区分: 人手検証
   タスク内容: >-
