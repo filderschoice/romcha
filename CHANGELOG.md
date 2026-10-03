@@ -4,6 +4,11 @@
 
 ## 2026-10-04
 
+- ポートフォリオ（`site/`）を GitHub Pages で公開した（<https://filderschoice.github.io/romcha/>）。`gh-pages` ブランチ（`/ (root)`）から配信され、
+  トップ・CSS・`app.json`・画像の取得と、ページ内のリンクを確認した。BL-061 を完了として BACKLOG から削除し、
+  `docs/VERIFICATION.md` から端末を使わない作業の章を除いた。
+- BL-059 を閉じた。Dependabot alerts は有効だが、Dependency graph に Gradle の依存は検出されなかったため、
+  dependency submission（GitHub Actions）を導入するかの判断を BL-076（要確認）へ切り出した。
 - ポートフォリオ（`site/`）を GitHub Pages で公開する準備をした（sesami-wear と同じ `gh-pages` ブランチ方式。ユーザー判断）。
   `site/.nojekyll` の追加、`site/app.json` の `links.homepage`、`site/index.html` の `og:url`・`canonical`、
   `site/README.md` の公開手順、README・DESIGN・VERIFICATION を更新した。公開（`gh-pages` の push と Pages の設定）は

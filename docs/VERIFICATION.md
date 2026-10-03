@@ -9,7 +9,7 @@ BACKLOG の人手検証タスクのうち、未確認の項目を実機で行う
 | 対象端末 | Pixel 8 Pro（Android 17）。USB 接続（以下の `<シリアル>` は `adb devices -l` で表示される端末のシリアル番号に置き換える） |
 | 対象アプリ | Romcha 1.0.1（`io.github.filderschoice.romcha`、versionCode 10001）。1 章はデバッグ版、2 章は Releases の署名済み APK |
 | 公式アプリ | YouTube 21.38.130（2026-09-27 時点の端末の版） |
-| 所要時間の目安 | 1 章 誤特定が起きた時だけ（数分）、2 章 約 15 分、3 章 作業による |
+| 所要時間の目安 | 1 章 誤特定が起きた時だけ（数分）、2 章 約 15 分 |
 | 最終実施日 | 2026/10/03 |
 
 「結果」欄の記入値:
@@ -31,7 +31,6 @@ BACKLOG の人手検証タスクのうち、未確認の項目を実機で行う
 | --- | --- | --- |
 | 1 章 | BL-073（C5） | 別の動画のチャットが偶発的に出た時だけ行う。出なければ保留 |
 | 2 章 | BL-058（P3 のみ） | 次の版を公開した後。それまで保留 |
-| 3 章 | BL-059・BL-061 | GitHub の設定と Pages の公開。端末は不要 |
 
 ## 0. 準備
 
@@ -100,16 +99,7 @@ adb -s <シリアル> shell appops get io.github.filderschoice.romcha SYSTEM_ALE
 
 最後に、使い続ける版を入れ直してください（デバッグ版が必要なら `.\gradlew.bat :app:installDebug`。署名が違うため先にアンインストール）。
 
-## 3. 端末を使わない人手作業（BL-059・BL-061）
-
-結果は表ではなく、完了したかどうかを結果の記録の「その他」へ書いてください。
-
-| 番号 | 作業 | 確認 | 結果 |
-| --- | --- | --- | --- |
-| G2 | BL-059: Settings の Advanced Security（Code security）で Dependency graph が有効なことを確かめる（Dependabot alerts は 2026-10-04 に有効化済み）。Insights → Dependency graph を開く | Gradle の依存（gradle/libs.versions.toml の OkHttp・Compose 等）が一覧に出る。出ない場合はその旨を書く（dependency submission の検討を起票する） | 未実施 |
-| G3 | BL-061: この作業ブランチを main へマージしたあと、main で `git subtree push --prefix site origin gh-pages` を実行する（site/README.md「GitHub Pages での公開」）。Pages の設定をエージェントへ依頼するか、Settings → Pages で Source を gh-pages の / (root) にする | <https://filderschoice.github.io/romcha/> で画像とリンクが表示される | 未実施 |
-
-## 4. 結果の記録
+## 3. 結果の記録
 
 各表の「結果」欄と、冒頭の「最終実施日」を記入して保存し、エージェントへ「VERIFICATION の結果を記入した」と
 伝えてください（途中までの記入でも構いません。`未実施` の項目は次回に回します）。スクリーンショット・診断情報・
