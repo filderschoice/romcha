@@ -6,6 +6,28 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 17:30
+  summary: HOME 画面を整理し、権限のたたみ表示とボタン名の区別を行った
+  details:
+    変更内容: >-
+      権限がすべて許可済み（PermissionStatus.nextStep が null）なら、権限カード 3 枚を「すべて許可済みです」の 1 行にたたみ、
+      見出しの横の「詳細を表示」「たたむ」で開閉する（開閉状態は rememberSaveable。未許可があれば従来どおり常に 3 項目を出す）。
+      HOME の「終了」を「フローティング表示を終了」にし、省略せずに収まるよう開始・終了のボタンを全幅で縦に並べた。
+      フローティングの歯車ボタンの名前（contentDescription）を「表示設定」から「ウィンドウの設定」にし、アプリの「表示設定」画面と区別した。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 全件成功。たたみ表示の判定は既存の PermissionStatus.nextStep（PermissionStatusTest で検証済み）を使う。
+      実機での表示は BL-082（人手検証）
+    関連ID:
+      - BL-080
 - date: 2026-10-04 17:20
   summary: フローティングのヘッダーのボタンの大きさを 36dp と 48dp から表示設定で選べるようにした
   details:

@@ -83,13 +83,31 @@ private fun Disclaimer() {
     }
 }
 
+/** 権限案内（F-APP-01）。すべて許可済みなら 1 行にたたみ、開くと各権限を確かめられる（BL-080）。 */
 @Composable
 private fun Permissions(
     status: PermissionStatus,
     actions: HomeActions,
 ) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val allGranted = status.nextStep == null
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(R.string.permissions_title), style = MaterialTheme.typography.titleMedium)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(R.string.permissions_title),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.weight(1f),
+            )
+            if (allGranted) {
+                TextButton(onClick = { expanded = !expanded }) {
+                    Text(stringResource(if (expanded) R.string.permissions_collapse else R.string.permissions_expand))
+                }
+            }
+        }
+        if (allGranted && !expanded) {
+            Text(stringResource(R.string.permissions_all_granted), style = MaterialTheme.typography.bodyMedium)
+            return@Column
+        }
         PermissionStep.entries.forEach { step ->
             PermissionRow(
                 step = step,
@@ -146,11 +164,14 @@ private fun OverlayControls(
     status: PermissionStatus,
     actions: HomeActions,
 ) {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Button(onClick = actions::startOverlay, enabled = status.canStartOverlay) {
+    // ボタン名を省略せずに書くと横に並ばないため縦に並べる（BL-080。「終了」だけでは何を終えるのか分からなかった）
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Button(onClick = actions::startOverlay, enabled = status.canStartOverlay, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.overlay_start))
         }
-        OutlinedButton(onClick = actions::stopOverlay) { Text(stringResource(R.string.overlay_stop)) }
+        OutlinedButton(onClick = actions::stopOverlay, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.overlay_stop))
+        }
     }
 }
 

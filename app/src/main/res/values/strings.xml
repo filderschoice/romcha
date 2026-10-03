@@ -10,11 +10,14 @@
     <string name="permission_notification_access_description">公式アプリの再生位置（再生中の動画・位置・速度）を読み取るために必要です。Android の仕組み上この名前の権限ですが、本アプリは通知の内容を読みません。</string>
     <string name="permission_post_notifications">通知の表示</string>
     <string name="permission_post_notifications_description">表示中であることを示す常駐通知と、そこからの表示切り替え・終了に使います。</string>
+    <string name="permissions_all_granted">すべて許可済みです</string>
+    <string name="permissions_expand">詳細を表示</string>
+    <string name="permissions_collapse">たたむ</string>
     <string name="permission_granted">許可済み</string>
     <string name="permission_not_granted">未許可</string>
     <string name="permission_open_settings">設定を開く</string>
     <string name="overlay_start">フローティング表示を開始</string>
-    <string name="overlay_stop">終了</string>
+    <string name="overlay_stop">フローティング表示を終了</string>
     <string name="overlay_permission_required">「他のアプリの上に重ねて表示」を許可してください</string>
     <string name="url_title">URL で開く</string>
     <string name="url_label">YouTube の動画 URL</string>
