@@ -4,6 +4,12 @@
 
 ## 2026-10-04
 
+- v1.0.2 を公開した（タグ `v1.0.2` は `main` の 1c4049c、署名済み `romcha-v1.0.2.apk` と `.sha256`。
+  SHA-256 は `1f87415c…8f2e3c`）。UI/UX 改善（BL-077〜BL-081）を含む。README の「状態」、`site/index.html` の
+  版表記・機能カード・使い方、`site/app.json` の version、DESIGN の配布と版を v1.0.2 に合わせた（BL-085）。
+  実機確認が済んだ BL-058（P3）・BL-073（C5）・BL-082 を BACKLOG から削除し、`docs/VERIFICATION.md` の結果を反映した。
+  リリースノートの原本は GitHub Releases。
+
 - `docs/VERIFICATION.md` に BL-082（UI/UX 改善の実機確認）の 3 章（U1〜U9）を追加し、結果の記録を 4 章へ繰り下げた（BL-084）。
   BL-082 のタスク内容は観点を手順書へ寄せて要約にした。BL-073 の完了条件が指していた章番号（3 章 → 1 章）の古い記述を直した。
 
