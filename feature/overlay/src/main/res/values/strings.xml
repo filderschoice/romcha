@@ -19,6 +19,8 @@
     <string name="overlay_manual_cancel">取消</string>
     <string name="overlay_live_delay">遅延 %1$d 秒</string>
     <string name="overlay_jump_to_latest">最新へ</string>
+    <string name="overlay_empty_no_messages">まだ表示するチャットはありません</string>
+    <string name="overlay_empty_filtered">絞り込みの条件に合うチャットはありません</string>
     <string name="overlay_sticker">（スーパーステッカー）</string>
     <string name="overlay_channel_name">フローティング表示</string>
     <string name="overlay_notification_title">Romcha を表示中</string>

@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
 import io.github.filderschoice.romcha.feature.overlay.ChatFilter
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
+import io.github.filderschoice.romcha.feature.overlay.EmptyHint
 import io.github.filderschoice.romcha.feature.overlay.NoticeLevel
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
@@ -119,6 +121,7 @@ private fun Window(
                         ChatFilter.apply(state.messages, display).takeLast(display.maxVisible)
                     }
                 MessageList(shown, settings.fontScale, display)
+                EmptyHint.of(state, shown)?.let { EmptyHintText(it, Modifier.align(Alignment.Center)) }
                 ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
             }
         }
@@ -186,6 +189,26 @@ private fun Notice(notice: OverlayNotice) {
         color = OverlayTextColor,
         fontSize = 12.sp,
         modifier = Modifier.fillMaxWidth().background(band).padding(horizontal = 8.dp, vertical = 4.dp),
+    )
+}
+
+/** 一覧が空の時の案内（BL-078）。一覧が真っ白で状況が分からなくならないようにする */
+@Composable
+private fun EmptyHintText(
+    hint: EmptyHint,
+    modifier: Modifier,
+) {
+    val text =
+        when (hint) {
+            EmptyHint.NO_MESSAGES -> R.string.overlay_empty_no_messages
+            EmptyHint.FILTERED_OUT -> R.string.overlay_empty_filtered
+        }
+    Text(
+        text = stringResource(text),
+        color = SubTextColor,
+        fontSize = 12.sp,
+        textAlign = TextAlign.Center,
+        modifier = modifier.padding(horizontal = 12.dp),
     )
 }
 

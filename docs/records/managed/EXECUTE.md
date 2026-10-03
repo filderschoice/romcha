@@ -6,6 +6,28 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 16:55
+  summary: フローティングのチャット一覧が空の時に案内文を出すようにした
+  details:
+    変更内容: >-
+      EmptyHint（NO_MESSAGES・FILTERED_OUT）と判定 EmptyHint.of を追加した。表示するメッセージが空で、動画を開いており（タイトルあり）
+      お知らせ帯が無い時に、取得済みのメッセージがあれば「絞り込みの条件に合うチャットはありません」、無ければ
+      「まだ表示するチャットはありません」を一覧の中央に副文字色で出す。判定は表示直前の絞り込み・件数の切り詰め後の一覧で行う。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 1 回目は detekt の TooManyFunctions（OverlayFormat の関数が上限 11 に達した）で失敗し、判定を EmptyHint の
+      companion へ移して解消した。追加したテスト 3 件を含め全件成功。実機での見た目は BL-082（人手検証）
+    関連ID:
+      - BL-078
 - date: 2026-10-04 16:40
   summary: フローティングのお知らせ帯を案内（中立色）と失敗（赤）で色分けした
   details:
