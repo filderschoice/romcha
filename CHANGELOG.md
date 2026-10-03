@@ -4,6 +4,10 @@
 
 ## 2026-10-04
 
+- ポートフォリオ（`site/`）の画面イメージ `site/assets/screen.svg` を、架空の動画とダミーのチャット（上位チャットを含む）による図解へ
+  描き直した。実機では YouTube の動画とチャットの時刻を同期した画面を撮れないため、スクリーンショットへの差し替えはしない
+  （ユーザー判断）。`site/index.html` の `alt` と `site/README.md` を合わせた。BL-061 は公開方法の決定だけに絞った。
+  BL-058 は P2・P4・K1 の確認結果（OK）を反映し、残る P3（次の版の公開後）を `docs/VERIFICATION.md` に残した。
 - リポジトリを公開（public）にし、公開時の設定を行った。About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、
   Pull Request 必須。Repository admin は bypass）を設定し、Dependabot alerts を有効にした。BL-069 を完了として BACKLOG から削除し、
   BL-059（Dependency graph が Gradle の依存を検出するかは再確認待ち）と BL-058 の記述を更新した。
