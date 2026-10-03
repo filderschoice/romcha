@@ -6,6 +6,37 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 12:00
+  summary: 実データの fixture から配信者・動画の情報を除き、作成スクリプトにも同じ置き換えを加えた
+  details:
+    変更内容: >-
+      リポジトリの公開に向けた点検で、fixtures/real/ に配信者名・動画タイトル（ハッシュタグを含む）・チャンネルID・ハンドル・動画IDと、
+      それらを内部に符号化した継続トークン等が残っていることを確認した（視聴者の情報は置き換え済み）。ユーザー判断により
+      scripts/fetch-real-fixtures.py に OwnerAnonymizer を追加し、視聴者の置き換えの後に配信者名を「配信者N」、動画タイトルを
+      「動画タイトルN」、チャンネルIDを UCchannel＋連番、ハンドルを /@channelN、動画IDを video＋連番、continuation・params・メッセージの id 等の
+      不透明な値を「tokenN」へ置き換え、URL の pp クエリを削除する。保存前の検査に配信者の情報を加え、置き換え済みの値を元の値と
+      みなさないようにして、置き換え済みの fixture を --raw-dir に指定しても同じ結果になるようにした。
+      既存の fixture へは --raw-dir で通信せずに適用した。過去の履歴には元の値が残る（履歴は書き換えない）。
+    変更ファイル:
+      - scripts/fetch-real-fixtures.py
+      - core/chat/src/test/resources/fixtures/real/live_chunk.json
+      - core/chat/src/test/resources/fixtures/real/next_live.json
+      - core/chat/src/test/resources/fixtures/real/next_replay.json
+      - core/chat/src/test/resources/fixtures/real/replay_chunk.json
+      - core/chat/src/test/resources/fixtures/real/search_results.json
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/RealResponseFixtureTest.kt
+      - README.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      python scripts/fetch-real-fixtures.py --raw-dir core/chat/src/test/resources/fixtures/real（2回実行して結果が変わらないこと）、
+      元の配信者名・タイトル・チャンネルID・動画ID と、それらの base64 符号化が出力に無いことの検索、
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 元の値の残存は 0 件、2 回目の実行で差分なし。RealResponseFixtureTest 5 件を含め全件成功（スキップ 0 件）
+    関連ID:
+      - BL-075
 - date: 2026-10-02 14:00
   summary: キャッシュを消した直後に、見ている動画の特定を自動でやり直すようにした
   details:

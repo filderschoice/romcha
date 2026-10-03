@@ -5,12 +5,12 @@
         {
           "liveChatReplayContinuationData": {
             "timeUntilLastMessageMsec": 5000,
-            "continuation": "op2w0wR9Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEKOafvlZAAEgDUgggALABAPgBAHIGCAQYATAAeAA%3D"
+            "continuation": "token4"
           }
         },
         {
           "playerSeekContinuationData": {
-            "continuation": "op2w0wR9Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEKOafvlZAAEgEUgggALABAPgBAHIGCAQYATAAeAA%3D"
+            "continuation": "token5"
           }
         }
       ],
@@ -120,7 +120,7 @@
                   "selected": true,
                   "continuation": {
                     "reloadContinuationData": {
-                      "continuation": "op2w0wR6Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEQAFSCCAAsAEA-AEAcgwIBBgBIAAoATAAOAA%3D"
+                      "continuation": "token6"
                     }
                   },
                   "accessibility": {
@@ -135,7 +135,7 @@
                   "selected": false,
                   "continuation": {
                     "reloadContinuationData": {
-                      "continuation": "op2w0wR6Gl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEQAFSCCAAsAEA-AEAcgwIARgBIAAoATAAOAA%3D"
+                      "continuation": "token7"
                     }
                   },
                   "accessibility": {
@@ -167,7 +167,7 @@
                           "tag": "PAlive_viewer_leaderboard"
                         },
                         "globalConfiguration": {
-                          "params": "wgovGAEiKSonChhVQ0JwTHQ1b1duRG5HMW5pNWYzM2djRVESCzltUTJpb2VheTRJMAE%3D"
+                          "params": "token8"
                         }
                       }
                     }
@@ -192,7 +192,7 @@
                           "tag": "PAlive_viewer_leaderboard"
                         },
                         "globalConfiguration": {
-                          "params": "wgovGAEiKSonChhVQ0JwTHQ1b1duRG5HMW5pNWYzM2djRVESCzltUTJpb2VheTRJMAE%3D"
+                          "params": "token8"
                         }
                       }
                     }
@@ -205,8 +205,8 @@
                   "accessibilityId": "id.ui.pdg.leaderboard.entrypoint"
                 }
               },
-              "entryPointStateEntityKey": "Egs5bVEyaW9lYXk0SSCzBCgB",
-              "pointsEntityKey": "Egs5bVEyaW9lYXk0SSC0BCgB",
+              "entryPointStateEntityKey": "token9",
+              "pointsEntityKey": "token10",
               "isImmersive": false,
               "isCameo": false
             }
@@ -222,7 +222,7 @@
                 "addChatItemAction": {
                   "item": {
                     "liveChatViewerEngagementMessageRenderer": {
-                      "id": "CiMKIVJFUExBWV9WRU0yMDI2LzA5LzI2LTIyOjA0OjA5LjQ1OQ%3D%3D",
+                      "id": "token11",
                       "timestampUsec": "1790485449459494",
                       "icon": {
                         "iconType": "YOUTUBE_ROUND"
@@ -253,7 +253,7 @@
                         "runs": [
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -286,7 +286,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -319,7 +319,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -369,7 +369,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNQeWg3ZnpHaEpjREZWM2V3Z1FkOW80SlN3",
+                      "id": "token13",
                       "timestampUsec": "1790161421302410",
                       "authorBadges": [
                         {
@@ -403,7 +403,7 @@
                       }
                     }
                   },
-                  "clientId": "CPyh7fzGhJcDFV3ewgQd9o4JSw"
+                  "clientId": "token14"
                 }
               }
             ],
@@ -441,7 +441,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLN0J0UDNHaEpjREZkWHA1d01kaW5VY09R",
+                      "id": "token15",
                       "timestampUsec": "1790161422461389",
                       "authorBadges": [
                         {
@@ -475,7 +475,7 @@
                       }
                     }
                   },
-                  "clientId": "CK7BtP3GhJcDFdXp5wMdinUcOQ"
+                  "clientId": "token16"
                 }
               }
             ],
@@ -493,7 +493,7 @@
                         "runs": [
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -526,7 +526,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -559,7 +559,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -609,7 +609,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNQR01rWURIaEpjREZSVEN3Z1FkQTJJcWh3",
+                      "id": "token17",
                       "timestampUsec": "1790161428175309",
                       "authorBadges": [
                         {
@@ -643,7 +643,7 @@
                       }
                     }
                   },
-                  "clientId": "CPGMkYDHhJcDFRTCwgQdA2Iqhw"
+                  "clientId": "token18"
                 }
               }
             ],
@@ -681,7 +681,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNNN1Y2NERIaEpjREZlWGQ1d01kLVBVZTFB",
+                      "id": "token19",
                       "timestampUsec": "1790161429662104",
                       "authorBadges": [
                         {
@@ -715,7 +715,7 @@
                       }
                     }
                   },
-                  "clientId": "CM7V64DHhJcDFeXd5wMd-PUe1A"
+                  "clientId": "token20"
                 }
               }
             ],
@@ -753,7 +753,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNMQ2Zpb0hIaEpjREZUSEU1d01kZUxzcTJn",
+                      "id": "token21",
                       "timestampUsec": "1790161430162810",
                       "authorBadges": [
                         {
@@ -787,7 +787,7 @@
                       }
                     }
                   },
-                  "clientId": "CLCfioHHhJcDFTHE5wMdeLsq2g"
+                  "clientId": "token22"
                 }
               }
             ],
@@ -825,7 +825,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNKdWFyb0hIaEpjREZhSGg1d01kXzBzbHdR",
+                      "id": "token23",
                       "timestampUsec": "1790161430746041",
                       "authorBadges": [
                         {
@@ -859,7 +859,7 @@
                       }
                     }
                   },
-                  "clientId": "CJuaroHHhJcDFaHh5wMd_0slwQ"
+                  "clientId": "token24"
                 }
               }
             ],
@@ -897,7 +897,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNJejJ4WUhIaEpjREZUNUZUQWdkT0M4eWpB",
+                      "id": "token25",
                       "timestampUsec": "1790161431140982",
                       "authorBadges": [
                         {
@@ -931,7 +931,7 @@
                       }
                     }
                   },
-                  "clientId": "CIz2xYHHhJcDFT5FTAgdOC8yjA"
+                  "clientId": "token26"
                 }
               }
             ],
@@ -969,7 +969,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNNWGRnWUxIaEpjREZlX0x3Z1Fkd0lVWlNn",
+                      "id": "token27",
                       "timestampUsec": "1790161432117962",
                       "authorBadges": [
                         {
@@ -1003,7 +1003,7 @@
                       }
                     }
                   },
-                  "clientId": "CMXdgYLHhJcDFe_LwgQdwIUZSg"
+                  "clientId": "token28"
                 }
               }
             ],
@@ -1041,7 +1041,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLaS0xNExIaEpjREZlN001d01keVVzRUNR",
+                      "id": "token29",
                       "timestampUsec": "1790161433523882",
                       "authorBadges": [
                         {
@@ -1075,7 +1075,7 @@
                       }
                     }
                   },
-                  "clientId": "CKi-14LHhJcDFe7M5wMdyUsECQ"
+                  "clientId": "token30"
                 }
               }
             ],
@@ -1113,7 +1113,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNQSFZtSVBIaEpjREZSalg1d01kNHlNWmFn",
+                      "id": "token31",
                       "timestampUsec": "1790161434593208",
                       "authorBadges": [
                         {
@@ -1147,7 +1147,7 @@
                       }
                     }
                   },
-                  "clientId": "CPHVmIPHhJcDFRjX5wMd4yMZag"
+                  "clientId": "token32"
                 }
               }
             ],
@@ -1185,7 +1185,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNKNjJ4SVBIaEpjREZhQWlkZ1lkNkhjVW5n",
+                      "id": "token33",
                       "timestampUsec": "1790161435311374",
                       "authorBadges": [
                         {
@@ -1219,7 +1219,7 @@
                       }
                     }
                   },
-                  "clientId": "CJ62xIPHhJcDFaAidgYd6HcUng"
+                  "clientId": "token34"
                 }
               }
             ],
@@ -1257,7 +1257,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNPbXN4WVBIaEpjREZWM2V3Z1FkOW80SlN3",
+                      "id": "token35",
                       "timestampUsec": "1790161435319587",
                       "authorExternalChannelId": "UCanonymous0000000000012",
                       "timestampText": {
@@ -1265,7 +1265,7 @@
                       }
                     }
                   },
-                  "clientId": "COmsxYPHhJcDFV3ewgQd9o4JSw"
+                  "clientId": "token36"
                 }
               }
             ],
@@ -1303,7 +1303,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNQcUszb1BIaEpjREZlTnJUQWdkazYwdDBB",
+                      "id": "token37",
                       "timestampUsec": "1790161435725103",
                       "authorBadges": [
                         {
@@ -1337,7 +1337,7 @@
                       }
                     }
                   },
-                  "clientId": "CPqK3oPHhJcDFeNrTAgdk60t0A"
+                  "clientId": "token38"
                 }
               }
             ],
@@ -1375,7 +1375,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNPTFpsNFRIaEpjREZlNDlyUVlkTXJBV1RB",
+                      "id": "token39",
                       "timestampUsec": "1790161436673550",
                       "authorBadges": [
                         {
@@ -1409,7 +1409,7 @@
                       }
                     }
                   },
-                  "clientId": "COLZl4THhJcDFe49rQYdMrAWTA"
+                  "clientId": "token40"
                 }
               }
             ],
@@ -1447,7 +1447,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNOejluNFRIaEpjREZhSGg1d01kXzBzbHdR",
+                      "id": "token41",
                       "timestampUsec": "1790161436804538",
                       "authorBadges": [
                         {
@@ -1481,7 +1481,7 @@
                       }
                     }
                   },
-                  "clientId": "CNz9n4THhJcDFaHh5wMd_0slwQ"
+                  "clientId": "token42"
                 }
               }
             ],
@@ -1519,7 +1519,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNNMncwNFRIaEpjREZZRVNkZ1lkaExvWjhR",
+                      "id": "token43",
                       "timestampUsec": "1790161437651253",
                       "authorBadges": [
                         {
@@ -1553,7 +1553,7 @@
                       }
                     }
                   },
-                  "clientId": "CM2w04THhJcDFYESdgYdhLoZ8Q"
+                  "clientId": "token44"
                 }
               }
             ],
@@ -1591,7 +1591,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNOUGx1WVhIaEpjREZmSVZkZ1lkUlJ3eURR",
+                      "id": "token45",
                       "timestampUsec": "1790161439328347",
                       "authorBadges": [
                         {
@@ -1625,7 +1625,7 @@
                       }
                     }
                   },
-                  "clientId": "CNPluYXHhJcDFfIVdgYdRRwyDQ"
+                  "clientId": "token46"
                 }
               }
             ],
@@ -1663,7 +1663,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLejN2b1hIaEpjREZYM0d3Z1FkUWJJUmlB",
+                      "id": "token47",
                       "timestampUsec": "1790161439409369",
                       "authorBadges": [
                         {
@@ -1697,7 +1697,7 @@
                       }
                     }
                   },
-                  "clientId": "CKz3voXHhJcDFX3GwgQdQbIRiA"
+                  "clientId": "token48"
                 }
               }
             ],
@@ -1715,7 +1715,7 @@
                         "runs": [
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -1748,7 +1748,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -1781,7 +1781,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -1831,7 +1831,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNNS0o4WVhIaEpjREZjWGV3Z1FkSmtFN2Fn",
+                      "id": "token49",
                       "timestampUsec": "1790161440230603",
                       "authorBadges": [
                         {
@@ -1865,7 +1865,7 @@
                       }
                     }
                   },
-                  "clientId": "CMKJ8YXHhJcDFcXewgQdJkE7ag"
+                  "clientId": "token50"
                 }
               }
             ],
@@ -1883,7 +1883,7 @@
                         "runs": [
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/CZroZMPDCNGR_9EPzJqOkA4",
+                              "emojiId": "UCchannel000000000000001/token51",
                               "shortcuts": [
                                 ":_kao:",
                                 ":kao:"
@@ -1933,7 +1933,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLWC14NGJIaEpjREZRYkU1d01kYkpZcmtR",
+                      "id": "token52",
                       "timestampUsec": "1790161441659796",
                       "authorBadges": [
                         {
@@ -1967,7 +1967,7 @@
                       }
                     }
                   },
-                  "clientId": "CKX-x4bHhJcDFQbE5wMdbJYrkQ"
+                  "clientId": "token53"
                 }
               }
             ],
@@ -2005,7 +2005,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNKNkc1SWJIaEpjREZXZkV3Z1FkQUo0akl3",
+                      "id": "token54",
                       "timestampUsec": "1790161442117718",
                       "authorBadges": [
                         {
@@ -2039,7 +2039,7 @@
                       }
                     }
                   },
-                  "clientId": "CJ6G5IbHhJcDFWfEwgQdAJ4jIw"
+                  "clientId": "token55"
                 }
               }
             ],
@@ -2077,7 +2077,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLZjJfb2JIaEpjREZSRUpkZ1lkMU9JN21R",
+                      "id": "token56",
                       "timestampUsec": "1790161442557819",
                       "authorBadges": [
                         {
@@ -2111,7 +2111,7 @@
                       }
                     }
                   },
-                  "clientId": "CKf2_obHhJcDFREJdgYd1OI7mQ"
+                  "clientId": "token57"
                 }
               }
             ],
@@ -2149,7 +2149,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNMQ3UySWZIaEpjREZVeGZUQWdkeWpVRFd3",
+                      "id": "token58",
                       "timestampUsec": "1790161444022999",
                       "authorBadges": [
                         {
@@ -2183,7 +2183,7 @@
                       }
                     }
                   },
-                  "clientId": "CLCu2IfHhJcDFUxfTAgdyjUDWw"
+                  "clientId": "token59"
                 }
               }
             ],
@@ -2221,7 +2221,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLYXgzNGZIaEpjREZXbkN3Z1FkMjNRZnFB",
+                      "id": "token60",
                       "timestampUsec": "1790161444133967",
                       "authorBadges": [
                         {
@@ -2255,7 +2255,7 @@
                       }
                     }
                   },
-                  "clientId": "CKax34fHhJcDFWnCwgQd23QfqA"
+                  "clientId": "token61"
                 }
               }
             ],
@@ -2293,7 +2293,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNMaXloSWpIaEpjREZiREx3Z1Fkb3BRZWlB",
+                      "id": "token62",
                       "timestampUsec": "1790161444744459",
                       "authorBadges": [
                         {
@@ -2327,7 +2327,7 @@
                       }
                     }
                   },
-                  "clientId": "CLiyhIjHhJcDFbDLwgQdopQeiA"
+                  "clientId": "token63"
                 }
               }
             ],
@@ -2365,7 +2365,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLaXVyWWpIaEpjREZRWEV3Z1FkajJveGhB",
+                      "id": "token64",
                       "timestampUsec": "1790161445414531",
                       "authorExternalChannelId": "UCanonymous0000000000023",
                       "timestampText": {
@@ -2373,7 +2373,7 @@
                       }
                     }
                   },
-                  "clientId": "CKiurYjHhJcDFQXEwgQdj2oxhA"
+                  "clientId": "token65"
                 }
               }
             ],
@@ -2391,7 +2391,7 @@
                         "runs": [
                           {
                             "emoji": {
-                              "emojiId": "UCkszU2WH9gy1mb0dV-11UJg/ygF1XpGUMMjk8gSDrI2wCw",
+                              "emojiId": "UCchannel000000000000002/token66",
                               "shortcuts": [
                                 ":chillwdog:"
                               ],
@@ -2439,7 +2439,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNPN0wtNGpIaEpjREZYSEh3Z1FkNXJNWDVR",
+                      "id": "token67",
                       "timestampUsec": "1790161446697913",
                       "authorBadges": [
                         {
@@ -2473,7 +2473,7 @@
                       }
                     }
                   },
-                  "clientId": "CO7L-4jHhJcDFXHHwgQd5rMX5Q"
+                  "clientId": "token68"
                 }
               }
             ],
@@ -2511,7 +2511,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLeVQ3SW5IaEpjREZlTHM1d01kQXZ3cC1n",
+                      "id": "token69",
                       "timestampUsec": "1790161448542485",
                       "authorBadges": [
                         {
@@ -2545,7 +2545,7 @@
                       }
                     }
                   },
-                  "clientId": "CKyT7InHhJcDFeLs5wMdAvwp-g"
+                  "clientId": "token70"
                 }
               }
             ],
@@ -2583,7 +2583,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNNWFRtNHZIaEpjREZmOGlkZ1lkYWo0WmFB",
+                      "id": "token71",
                       "timestampUsec": "1790161451420252",
                       "authorBadges": [
                         {
@@ -2617,7 +2617,7 @@
                       }
                     }
                   },
-                  "clientId": "CMXTm4vHhJcDFf8idgYdaj4ZaA"
+                  "clientId": "token72"
                 }
               }
             ],
@@ -2655,7 +2655,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNPeUdnSXpIaEpjREZjOHpkZ1lkQzZjajdn",
+                      "id": "token73",
                       "timestampUsec": "1790161453063686",
                       "authorBadges": [
                         {
@@ -2689,7 +2689,7 @@
                       }
                     }
                   },
-                  "clientId": "COyGgIzHhJcDFc8zdgYdC6cj7g"
+                  "clientId": "token74"
                 }
               }
             ],
@@ -2727,7 +2727,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNPX2tqWXpIaEpjREZlWGQ1d01kLVBVZTFB",
+                      "id": "token75",
                       "timestampUsec": "1790161453283558",
                       "authorBadges": [
                         {
@@ -2761,7 +2761,7 @@
                       }
                     }
                   },
-                  "clientId": "CO_kjYzHhJcDFeXd5wMd-PUe1A"
+                  "clientId": "token76"
                 }
               }
             ],
@@ -2799,7 +2799,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLdU9ub3pIaEpjREZlNDlyUVlkTXJBV1RB",
+                      "id": "token77",
                       "timestampUsec": "1790161453554968",
                       "authorBadges": [
                         {
@@ -2833,7 +2833,7 @@
                       }
                     }
                   },
-                  "clientId": "CKuOnozHhJcDFe49rQYdMrAWTA"
+                  "clientId": "token78"
                 }
               }
             ],
@@ -2871,7 +2871,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLMkdwWXpIaEpjREZiMFlyUVlkVFRzVHh3",
+                      "id": "token79",
                       "timestampUsec": "1790161453670457",
                       "authorBadges": [
                         {
@@ -2905,7 +2905,7 @@
                       }
                     }
                   },
-                  "clientId": "CK2GpYzHhJcDFb0YrQYdTTsTxw"
+                  "clientId": "token80"
                 }
               }
             ],
@@ -2923,7 +2923,7 @@
                         "runs": [
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -2956,7 +2956,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -2989,7 +2989,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -3039,7 +3039,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNPYll6NDNIaEpjREZZWEx3Z1FkYVU0UTNn",
+                      "id": "token81",
                       "timestampUsec": "1790161456465465",
                       "authorBadges": [
                         {
@@ -3073,7 +3073,7 @@
                       }
                     }
                   },
-                  "clientId": "CObYz43HhJcDFYXLwgQdaU4Q3g"
+                  "clientId": "token82"
                 }
               }
             ],
@@ -3111,7 +3111,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNMdkoySV9IaEpjREZVN3M1d01kTjBzR3ln",
+                      "id": "token83",
                       "timestampUsec": "1790161460807471",
                       "authorExternalChannelId": "UCanonymous0000000000029",
                       "timestampText": {
@@ -3119,7 +3119,7 @@
                       }
                     }
                   },
-                  "clientId": "CLvJ2I_HhJcDFU7s5wMdN0sGyg"
+                  "clientId": "token84"
                 }
               }
             ],
@@ -3157,7 +3157,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNJMjR6NUhIaEpjREZXbkN3Z1FkMjNRZnFB",
+                      "id": "token85",
                       "timestampUsec": "1790161464853868",
                       "authorBadges": [
                         {
@@ -3191,7 +3191,7 @@
                       }
                     }
                   },
-                  "clientId": "CI24z5HHhJcDFWnCwgQd23QfqA"
+                  "clientId": "token86"
                 }
               }
             ],
@@ -3229,7 +3229,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNNLVdnNUxIaEpjREZlTHM1d01kQXZ3cC1n",
+                      "id": "token87",
                       "timestampUsec": "1790161465697234",
                       "authorBadges": [
                         {
@@ -3263,7 +3263,7 @@
                       }
                     }
                   },
-                  "clientId": "CM-Wg5LHhJcDFeLs5wMdAvwp-g"
+                  "clientId": "token88"
                 }
               }
             ],
@@ -3301,7 +3301,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNPcmJsNUxIaEpjREZacm41d01kRG80VjJB",
+                      "id": "token89",
                       "timestampUsec": "1790161466028957",
                       "authorBadges": [
                         {
@@ -3335,7 +3335,7 @@
                       }
                     }
                   },
-                  "clientId": "COrbl5LHhJcDFZrn5wMdDo4V2A"
+                  "clientId": "token90"
                 }
               }
             ],
@@ -3353,7 +3353,7 @@
                         "runs": [
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -3386,7 +3386,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -3419,7 +3419,7 @@
                           },
                           {
                             "emoji": {
-                              "emojiId": "UCBpLt5oWnDnG1ni5f33gcEQ/yt1dZcS3L4KG8wSphZmwBg",
+                              "emojiId": "UCchannel000000000000001/token12",
                               "shortcuts": [
                                 ":_dog:",
                                 ":dog:"
@@ -3469,7 +3469,7 @@
                           }
                         ]
                       },
-                      "id": "ChwKGkNLYmlycExIaEpjREZjTEh3Z1FkeHY4Nkt3",
+                      "id": "token91",
                       "timestampUsec": "1790161466411055",
                       "authorBadges": [
                         {
@@ -3503,7 +3503,7 @@
                       }
                     }
                   },
-                  "clientId": "CKbirpLHhJcDFcLHwgQdxv86Kw"
+                  "clientId": "token92"
                 }
               }
             ],

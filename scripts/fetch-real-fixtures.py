@@ -20,7 +20,16 @@
 - 追跡用の値（``trackingParams`` 等）、再生用の署名付き URL（取得した端末の IP アドレスを含む）と、
   解析に使わない大きな部分木は削除する
 
-保存前に、元の投稿者名・チャンネルID・動画配信サーバーの URL が出力に残っていないかを検査し、残っていれば保存を中止する。
+置き換える情報（配信者・動画に関わるもの。BL-075）:
+
+- 配信者名（``ownerText``・``longBylineText``・``shortBylineText``・``videoOwnerRenderer`` の ``title``）→「配信者N」
+- 動画タイトル（``videoPrimaryInfoRenderer``・``videoRenderer`` の ``title``。ハッシュタグを含む）→「動画タイトルN」
+- チャンネルID（``UC`` で始まる値）→ ``UCchannel`` ＋連番、ハンドル（``/@...``）→ ``/@channelN``、動画ID → ``video`` ＋連番
+- 動画ID・チャンネルIDを内部に符号化した値（``continuation``・``params``・メッセージの ``id`` 等）→「tokenN」
+- URL の ``pp`` クエリ（検索語を符号化した値）は削除する
+
+保存前に、元の投稿者名・チャンネルID・配信者名・動画タイトル・動画ID・動画配信サーバーの URL が出力に残っていないかを検査し、
+残っていれば保存を中止する。置き換え済みの fixture を ``--raw-dir`` に指定しても同じ結果になる（置き換えをやり直せる）。
 元の応答はファイルへ保存しない（--keep-raw を指定した場合のみ、指定したリポジトリ外のディレクトリへ保存する）。
 
 使い方:
@@ -300,7 +309,129 @@ class Anonymizer:
         return message
 
     def leaks(self, text: str) -> list[str]:
-        return [value for value in [*self.names, *self.channel_ids] if len(value) >= 2 and value in text]
+        # 仮の値と同じもの（置き換え済みの fixture を入力にした場合）は残っていても問題ない
+        originals = [*(n for n, fake in self.names.items() if n != fake), *(c for c, f in self.channel_ids.items() if c != f)]
+        return [value for value in originals if len(value) >= 2 and value in text]
+
+
+# ---- 配信者に関わる情報の置き換え -------------------------------------------------
+
+# 配信者名を持つキー（検索結果の動画・next 応答の投稿者欄）
+OWNER_TEXT_KEYS = {"ownerText", "longBylineText", "shortBylineText"}
+# 動画タイトルを持つ親（この直下の title を置き換える）
+TITLE_PARENTS = {"videoRenderer", "videoPrimaryInfoRenderer"}
+# 動画ID・チャンネルID等を内部に符号化した不透明な値（継続トークン・メッセージID等）。解析は値の中身を読まない
+TOKEN_KEYS = {
+    "continuation",
+    "params",
+    "playerParams",
+    "clientId",
+    "id",
+    "targetItemId",
+    "entryPointStateEntityKey",
+    "pointsEntityKey",
+    "objectId",
+    "topic",
+}
+VIDEO_ID_KEYS = {"videoId", "videoIds", "addedVideoId", "removedVideoId"}
+CHANNEL_ID_PATTERN = re.compile(r"UC[0-9A-Za-z_-]{22}")
+HANDLE_PATTERN = re.compile(r"/@[0-9A-Za-z._-]+")
+WATCH_ID_PATTERN = re.compile(r"[?&]v=([0-9A-Za-z_-]{11})")
+# 出力に残さない URL のクエリ（検索語を符号化した値）
+QUERY_DROP_PATTERN = re.compile(r"&pp=[^&]*")
+
+
+class OwnerAnonymizer:
+    """配信者名・動画タイトル・チャンネルID・ハンドル・動画ID・不透明なトークンを全ファイルで一貫した仮の値へ置き換える。
+
+    視聴者の情報（Anonymizer）を置き換えた後に適用する。既に仮の値になっているもの（UCanonymous 等）は対象にしない。
+    """
+
+    def __init__(self) -> None:
+        self.owners: dict[str, str] = {}
+        self.titles: dict[str, str] = {}
+        self.title_runs: set[str] = set()
+        self.channel_ids: dict[str, str] = {}
+        self.video_ids: dict[str, str] = {}
+        self.handles: dict[str, str] = {}
+        self.tokens: dict[str, str] = {}
+
+    @staticmethod
+    def _add(table: dict[str, str], original: str, fake: str) -> None:
+        if original and original not in table:
+            table[original] = fake
+
+    def collect(self, node, key: str | None = None, parent: str | None = None) -> None:
+        if isinstance(node, list):
+            for v in node:
+                self.collect(v, key, parent)
+            return
+        if isinstance(node, str):
+            for channel_id in CHANNEL_ID_PATTERN.findall(node):
+                if not channel_id.startswith(("UCanonymous", "UCchannel")):
+                    self._add(self.channel_ids, channel_id, f"UCchannel{len(self.channel_ids) + 1:015d}")
+            for handle in HANDLE_PATTERN.findall(node):
+                if not re.fullmatch(r"/@channel\d+", handle):
+                    self._add(self.handles, handle, f"/@channel{len(self.handles) + 1}")
+            video_ids = WATCH_ID_PATTERN.findall(node)
+            if key in VIDEO_ID_KEYS:
+                video_ids.append(node)
+            for video_id in video_ids:
+                if not re.fullmatch(r"video\d{6}", video_id):
+                    self._add(self.video_ids, video_id, f"video{len(self.video_ids) + 1:06d}")
+            return
+        if not isinstance(node, dict):
+            return
+        for k, v in node.items():
+            if k in OWNER_TEXT_KEYS or (k == "title" and parent == "videoOwnerRenderer"):
+                self._add(self.owners, text_of(v), f"配信者{len(self.owners) + 1}")
+            if k == "title" and parent in TITLE_PARENTS:
+                self._add(self.titles, text_of(v), f"動画タイトル{len(self.titles) + 1}")
+                self.title_runs.update(run.get("text", "") for run in v.get("runs", []) if isinstance(run, dict))
+            self.collect(v, k, k if isinstance(v, dict) else parent)
+
+    def replace_text(self, text: str) -> str:
+        for table in (self.titles, self.owners):
+            for original in sorted(table, key=len, reverse=True):
+                text = text.replace(original, table[original])
+        for table in (self.channel_ids, self.video_ids, self.handles):
+            for original, fake in table.items():
+                text = text.replace(original, fake)
+        return QUERY_DROP_PATTERN.sub("", text)
+
+    def token(self, value: str) -> str:
+        if value not in self.tokens:
+            self.tokens[value] = f"token{len(self.tokens) + 1}"
+        return self.tokens[value]
+
+    def anonymize(self, node, key: str | None = None, parent: str | None = None):
+        if isinstance(node, list):
+            return [self.anonymize(v, key, parent) for v in node]
+        if isinstance(node, str):
+            if key in TOKEN_KEYS:
+                return self.token(node)
+            if key == "emojiId" and "/" in node:
+                channel_id, _, emoji = node.partition("/")
+                return f"{self.replace_text(channel_id)}/{self.token(emoji)}"
+            return self.replace_text(node)
+        if not isinstance(node, dict):
+            return node
+        result = {}
+        for k, v in node.items():
+            if k in OWNER_TEXT_KEYS or (k == "title" and parent == "videoOwnerRenderer"):
+                result[k] = {"runs": [{"text": self.owners.get(text_of(v), "配信者")}]}
+            elif k == "title" and parent in TITLE_PARENTS:
+                result[k] = {"runs": [{"text": self.titles.get(text_of(v), "動画タイトル")}]}
+            else:
+                result[k] = self.anonymize(v, k, k if isinstance(v, dict) else parent)
+        return result
+
+    def leaks(self, text: str) -> list[str]:
+        tables = (self.owners, self.titles, self.channel_ids, self.video_ids, self.handles)
+        # 仮の値と同じもの（置き換え済みの fixture を入力にした場合）は残っていても問題ない
+        originals = [original for table in tables for original, fake in table.items() if original != fake]
+        originals += [run for run in self.title_runs if len(run.strip()) >= 4 and run not in self.titles.values()]
+        return [value for value in originals if len(value) >= 2 and value in text]
 
 
 def build(raw: dict[str, dict]) -> dict[str, str]:
@@ -308,17 +439,29 @@ def build(raw: dict[str, dict]) -> dict[str, str]:
     anonymizer = Anonymizer()
     for response in pruned.values():
         anonymizer.collect(response)
+    viewer_anonymized = {name: anonymizer.anonymize(response) for name, response in pruned.items()}
+    owner_anonymizer = OwnerAnonymizer()
+    for response in viewer_anonymized.values():
+        owner_anonymizer.collect(response)
     outputs = {}
-    for name, response in pruned.items():
-        text = json.dumps(anonymizer.anonymize(response), ensure_ascii=False, indent=2) + "\n"
+    for name, response in viewer_anonymized.items():
+        text = json.dumps(owner_anonymizer.anonymize(response), ensure_ascii=False, indent=2) + "\n"
         leaked = anonymizer.leaks(text)
         if leaked:
             sys.exit(f"{name}: 置き換え後も投稿者の情報が {len(leaked)} 件残っているため保存を中止しました")
+        owner_leaked = owner_anonymizer.leaks(text)
+        if owner_leaked:
+            sys.exit(f"{name}: 置き換え後も配信者の情報が {len(owner_leaked)} 件残っているため保存を中止しました")
         forbidden = [value for value in FORBIDDEN_SUBSTRINGS if value in text]
         if forbidden:
             sys.exit(f"{name}: 取得した端末の情報を含む URL（{', '.join(forbidden)}）が残っているため保存を中止しました")
         outputs[name] = text
     print(f"投稿者 {len(anonymizer.names)} 人、コメント {anonymizer.comment_count} 件を置き換えました")
+    print(
+        f"配信者 {len(owner_anonymizer.owners)} 件、動画タイトル {len(owner_anonymizer.titles)} 件、"
+        f"チャンネルID {len(owner_anonymizer.channel_ids)} 件、動画ID {len(owner_anonymizer.video_ids)} 件、"
+        f"トークン {len(owner_anonymizer.tokens)} 件を置き換えました"
+    )
     return outputs
 
 

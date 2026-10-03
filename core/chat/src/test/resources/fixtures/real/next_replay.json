@@ -9,27 +9,7 @@
                 "title": {
                   "runs": [
                     {
-                      "text": "【SILENT HILL f】 DAY07｜1周目最終回！世界線どうなってんのぉ！？【"
-                    },
-                    {
-                      "text": "#ヴイアラ",
-                      "navigationEndpoint": {
-                        "commandMetadata": {
-                          "webCommandMetadata": {
-                            "url": "/hashtag/%E3%83%B4%E3%82%A4%E3%82%A2%E3%83%A9",
-                            "webPageType": "WEB_PAGE_TYPE_BROWSE",
-                            "rootVe": 6827,
-                            "apiUrl": "/youtubei/v1/browse"
-                          }
-                        },
-                        "browseEndpoint": {
-                          "browseId": "FEhashtag",
-                          "params": "6gUQCgzjg7TjgqTjgqLjg6kYAQ%3D%3D"
-                        }
-                      }
-                    },
-                    {
-                      "text": " / レトラ】※ネタバレあり"
+                      "text": "動画タイトル1"
                     }
                   ]
                 }
@@ -42,21 +22,7 @@
                     "title": {
                       "runs": [
                         {
-                          "text": "レトラ / Letora Utagawa 【ヴイアラ / 876プロ】",
-                          "navigationEndpoint": {
-                            "commandMetadata": {
-                              "webCommandMetadata": {
-                                "url": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ",
-                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
-                                "rootVe": 3611,
-                                "apiUrl": "/youtubei/v1/browse"
-                              }
-                            },
-                            "browseEndpoint": {
-                              "browseId": "UCBpLt5oWnDnG1ni5f33gcEQ",
-                              "canonicalBaseUrl": "/channel/UCBpLt5oWnDnG1ni5f33gcEQ"
-                            }
-                          }
+                          "text": "配信者1"
                         }
                       ]
                     }
@@ -72,7 +38,7 @@
           "continuations": [
             {
               "reloadContinuationData": {
-                "continuation": "op2w0wRyGl5DaWtxSndvWVZVTkNjRXgwTlc5WGJrUnVSekZ1YVRWbU16Tm5ZMFZSRWdzNWJWRXlhVzlsWVhrMFNSb1Q2cWpkdVFFTkNnczViVkV5YVc5bFlYazBTU0FCTUFBJTNEQAFyDAgEGAIgACgAMAA4AHgB"
+                "continuation": "token1"
               }
             }
           ],
@@ -182,7 +148,7 @@
                       "selected": true,
                       "continuation": {
                         "reloadContinuationData": {
-                          "continuation": "op2w0wQSGgBAAXIMCAQYACAAKAEwADgA"
+                          "continuation": "token2"
                         }
                       },
                       "accessibility": {
@@ -197,7 +163,7 @@
                       "selected": false,
                       "continuation": {
                         "reloadContinuationData": {
-                          "continuation": "op2w0wQSGgBAAXIMCAEYACAAKAEwADgA"
+                          "continuation": "token3"
                         }
                       },
                       "accessibility": {

@@ -11,7 +11,7 @@ import org.junit.Test
 /**
  * YouTube の実応答から作った fixture（`fixtures/real/`）で各 Parser を検証する（BL-022）。
  *
- * fixture は `scripts/fetch-real-fixtures.py` で作る（投稿者の情報は置き換え済み）。内容は取得した動画で変わるため、
+ * fixture は `scripts/fetch-real-fixtures.py` で作る（投稿者・配信者・動画の情報は置き換え済み）。内容は取得した動画で変わるため、
  * 値ではなく構造（解析できること・必要な値があること）だけを確かめる。fixture が無い場合はスキップする。
  */
 class RealResponseFixtureTest {
