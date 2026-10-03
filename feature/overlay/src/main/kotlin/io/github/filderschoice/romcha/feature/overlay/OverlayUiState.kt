@@ -34,6 +34,21 @@ data class OverlayCandidate(
     val channelName: String,
 )
 
+/** お知らせの種類。帯の色を分け、正常な待ち状態がエラーに見えないようにする。 */
+enum class NoticeLevel {
+    /** 案内（読み込み中・特定中・画面オフで停止中・再接続中など）。中立色の帯 */
+    INFO,
+
+    /** 失敗・利用できない状態（通信失敗・チャット無効・特定できないなど）。赤帯 */
+    ERROR,
+}
+
+/** フローティングウィンドウのお知らせ文。 */
+data class OverlayNotice(
+    val text: String,
+    val level: NoticeLevel,
+)
+
 /**
  * フローティングウィンドウの表示内容。
  *
@@ -45,7 +60,7 @@ data class OverlayUiState(
     val messages: List<ChatMessage> = emptyList(),
     val positionMs: Long = 0,
     val indicator: SyncIndicator = SyncIndicator.NOT_DETECTED,
-    val notice: String? = null,
+    val notice: OverlayNotice? = null,
     val candidates: List<OverlayCandidate> = emptyList(),
 )
 

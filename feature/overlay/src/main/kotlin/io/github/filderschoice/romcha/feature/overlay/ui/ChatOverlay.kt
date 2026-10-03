@@ -37,7 +37,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -50,8 +49,10 @@ import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
 import io.github.filderschoice.romcha.feature.overlay.ChatFilter
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
+import io.github.filderschoice.romcha.feature.overlay.NoticeLevel
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
+import io.github.filderschoice.romcha.feature.overlay.OverlayNotice
 import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.R
@@ -172,13 +173,19 @@ private fun Header(
     }
 }
 
+/** お知らせ帯。案内は中立色、失敗は赤で塗り分ける */
 @Composable
-private fun Notice(text: String) {
+private fun Notice(notice: OverlayNotice) {
+    val band =
+        when (notice.level) {
+            NoticeLevel.INFO -> LocalOverlayColors.current.infoBand
+            NoticeLevel.ERROR -> ErrorBand
+        }
     Text(
-        text = text,
+        text = notice.text,
         color = OverlayTextColor,
         fontSize = 12.sp,
-        modifier = Modifier.fillMaxWidth().background(Color(0x66B71C1C)).padding(horizontal = 8.dp, vertical = 4.dp),
+        modifier = Modifier.fillMaxWidth().background(band).padding(horizontal = 8.dp, vertical = 4.dp),
     )
 }
 

@@ -6,6 +6,32 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 16:40
+  summary: フローティングのお知らせ帯を案内（中立色）と失敗（赤）で色分けした
+  details:
+    変更内容: >-
+      お知らせ文を OverlayNotice（文と NoticeLevel の INFO・ERROR）にし、SessionMessages で種類を決めるようにした。
+      読み込み中・特定中・未検出・候補の選択・画面オフで停止中・リプレイの準備待ち・再接続中は INFO、通信失敗・HTTP エラー・解析失敗・
+      特定できない・チャット無効・リプレイ無しは ERROR。INFO の帯は OverlayColors.infoBand（暗色 #78909C・明色 #90A4AE、40%）、
+      ERROR は従来の赤帯（#B71C1C、40%）。チャット無効の文は応答の文言を優先する処理を SessionMessages.chatUnavailable へ移した。
+      文言そのものは変えていない。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColors.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessagesTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 追加した SessionMessagesTest 4 件と既存の WatchCoordinatorTest を含め全件成功。
+      実機での見た目は未確認（人手検証。他の UI 改善とまとめて確認する）
+    関連ID:
+      - BL-077
 - date: 2026-10-04 12:00
   summary: 実データの fixture から配信者・動画の情報を除き、作成スクリプトにも同じ置き換えを加えた
   details:
