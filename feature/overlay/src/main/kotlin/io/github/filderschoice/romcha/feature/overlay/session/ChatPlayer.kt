@@ -68,7 +68,7 @@ internal class ChatPlayer(
                 publisher.show(
                     OverlayUiState(
                         title = title,
-                        notice = info.message ?: SessionMessages.CHAT_UNAVAILABLE,
+                        notice = SessionMessages.chatUnavailable(info.message),
                         candidates = alternatives,
                     ),
                 )

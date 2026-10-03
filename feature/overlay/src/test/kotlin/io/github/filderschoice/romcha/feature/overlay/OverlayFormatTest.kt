@@ -2,6 +2,7 @@ package io.github.filderschoice.romcha.feature.overlay
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -20,6 +21,27 @@ class OverlayFormatTest {
         assertTrue(OverlayFormat.prefersDarkText(0xFF1DE9B6.toInt()))
         assertFalse(OverlayFormat.prefersDarkText(0xFF1E88E5.toInt()))
         assertFalse(OverlayFormat.prefersDarkText(0xFFD00000.toInt()))
+    }
+
+    @Test
+    fun 動画を開いていてチャットが無い時はまだ無い旨の案内を出す() {
+        val state = OverlayUiState(title = "動画")
+        assertEquals(EmptyHint.NO_MESSAGES, EmptyHint.of(state, emptyList()))
+    }
+
+    @Test
+    fun 取得したチャットが絞り込みですべて隠れた時はその旨の案内を出す() {
+        val state = OverlayUiState(title = "動画", messages = listOf(chatMessage(videoOffsetMs = 0, timestampUsec = 0)))
+        assertEquals(EmptyHint.FILTERED_OUT, EmptyHint.of(state, emptyList()))
+    }
+
+    @Test
+    fun 表示するチャットがある時とお知らせ帯がある時と動画を開いていない時は案内を出さない() {
+        val messages = listOf(chatMessage(videoOffsetMs = 0, timestampUsec = 0))
+        assertNull(EmptyHint.of(OverlayUiState(title = "動画", messages = messages), messages))
+        val notice = OverlayNotice("読み込み中", NoticeLevel.INFO)
+        assertNull(EmptyHint.of(OverlayUiState(title = "動画", notice = notice), emptyList()))
+        assertNull(EmptyHint.of(OverlayUiState(), emptyList()))
     }
 
     @Test

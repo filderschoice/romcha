@@ -128,6 +128,35 @@ object OverlayFormat {
     private const val PERCENT = 100
 }
 
+/** チャット一覧が空の理由（BL-078）。 */
+enum class EmptyHint {
+    /** まだ表示するチャットが無い（読み込み直後・チャットの少ない区間） */
+    NO_MESSAGES,
+
+    /** 取得したチャットがすべて絞り込み（F-VIEW-03）で隠れた */
+    FILTERED_OUT,
+    ;
+
+    companion object {
+        /**
+         * チャット一覧が空の時に出す案内。出さない時は null。
+         *
+         * 動画を開いていない時（タイトル無し）とお知らせ帯が出ている時は、そちらが状況を示すため出さない。
+         *
+         * @param shown 絞り込み・件数の切り詰め後に表示するメッセージ
+         */
+        fun of(
+            state: OverlayUiState,
+            shown: List<ChatMessage>,
+        ): EmptyHint? =
+            when {
+                shown.isNotEmpty() || state.title == null || state.notice != null -> null
+                state.messages.isNotEmpty() -> FILTERED_OUT
+                else -> NO_MESSAGES
+            }
+    }
+}
+
 /** 画面の向き。ウィンドウの位置・大きさを向きごとに記憶する（F-OVL-06）。 */
 enum class ScreenOrientation {
     PORTRAIT,

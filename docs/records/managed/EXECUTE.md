@@ -6,6 +6,117 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 17:30
+  summary: HOME 画面を整理し、権限のたたみ表示とボタン名の区別を行った
+  details:
+    変更内容: >-
+      権限がすべて許可済み（PermissionStatus.nextStep が null）なら、権限カード 3 枚を「すべて許可済みです」の 1 行にたたみ、
+      見出しの横の「詳細を表示」「たたむ」で開閉する（開閉状態は rememberSaveable。未許可があれば従来どおり常に 3 項目を出す）。
+      HOME の「終了」を「フローティング表示を終了」にし、省略せずに収まるよう開始・終了のボタンを全幅で縦に並べた。
+      フローティングの歯車ボタンの名前（contentDescription）を「表示設定」から「ウィンドウの設定」にし、アプリの「表示設定」画面と区別した。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 全件成功。たたみ表示の判定は既存の PermissionStatus.nextStep（PermissionStatusTest で検証済み）を使う。
+      実機での表示は BL-082（人手検証）
+    関連ID:
+      - BL-080
+- date: 2026-10-04 17:20
+  summary: フローティングのヘッダーのボタンの大きさを 36dp と 48dp から表示設定で選べるようにした
+  details:
+    変更内容: >-
+      DisplaySettings に largeHeaderButtons（既定 false。SharedPreferences display の largeHeaderButtons）を追加し、
+      ヘッダーの設定・最小化・隠すのボタンの大きさを headerButtonSize（false で従来の 36dp、true で推奨の 48dp）で決めるようにした。
+      アプリの表示設定画面に「フローティングウィンドウ」の見出しと「ヘッダーのボタンを大きくする」のスイッチを追加し、
+      文字サイズ・背景の案内文をその見出しの下へ移した。既定値は従来の見た目を維持する（ユーザー判断で設定による切り替えとした）。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/HeaderButtonSizeTest.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 追加した HeaderButtonSizeTest を含め全件成功。実機での見た目は BL-082（人手検証）
+    関連ID:
+      - BL-081
+- date: 2026-10-04 17:05
+  summary: 表示設定画面のスイッチ・テーマの行を、行全体のタップで切り替えられるようにした
+  details:
+    変更内容: >-
+      SwitchRow の行に toggleable（Role.Switch）を付けて Switch の onCheckedChange を null にし、テーマの行に selectable
+      （Role.RadioButton。親に selectableGroup）を付けて RadioButton の onClick を null にした。行の高さの下限を 48dp にした。
+      設定の値・保存先・既定値は変えていない。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 全件成功。Compose の UI テストは無いため、タップ領域と TalkBack の読み上げは BL-082（人手検証）で確かめる
+    関連ID:
+      - BL-079
+- date: 2026-10-04 16:55
+  summary: フローティングのチャット一覧が空の時に案内文を出すようにした
+  details:
+    変更内容: >-
+      EmptyHint（NO_MESSAGES・FILTERED_OUT）と判定 EmptyHint.of を追加した。表示するメッセージが空で、動画を開いており（タイトルあり）
+      お知らせ帯が無い時に、取得済みのメッセージがあれば「絞り込みの条件に合うチャットはありません」、無ければ
+      「まだ表示するチャットはありません」を一覧の中央に副文字色で出す。判定は表示直前の絞り込み・件数の切り詰め後の一覧で行う。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 1 回目は detekt の TooManyFunctions（OverlayFormat の関数が上限 11 に達した）で失敗し、判定を EmptyHint の
+      companion へ移して解消した。追加したテスト 3 件を含め全件成功。実機での見た目は BL-082（人手検証）
+    関連ID:
+      - BL-078
+- date: 2026-10-04 16:40
+  summary: フローティングのお知らせ帯を案内（中立色）と失敗（赤）で色分けした
+  details:
+    変更内容: >-
+      お知らせ文を OverlayNotice（文と NoticeLevel の INFO・ERROR）にし、SessionMessages で種類を決めるようにした。
+      読み込み中・特定中・未検出・候補の選択・画面オフで停止中・リプレイの準備待ち・再接続中は INFO、通信失敗・HTTP エラー・解析失敗・
+      特定できない・チャット無効・リプレイ無しは ERROR。INFO の帯は OverlayColors.infoBand（暗色 #78909C・明色 #90A4AE、40%）、
+      ERROR は従来の赤帯（#B71C1C、40%）。チャット無効の文は応答の文言を優先する処理を SessionMessages.chatUnavailable へ移した。
+      文言そのものは変えていない。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColors.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessagesTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ./gradlew ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 追加した SessionMessagesTest 4 件と既存の WatchCoordinatorTest を含め全件成功。
+      実機での見た目は未確認（人手検証。他の UI 改善とまとめて確認する）
+    関連ID:
+      - BL-077
 - date: 2026-10-04 12:00
   summary: 実データの fixture から配信者・動画の情報を除き、作成スクリプトにも同じ置き換えを加えた
   details:

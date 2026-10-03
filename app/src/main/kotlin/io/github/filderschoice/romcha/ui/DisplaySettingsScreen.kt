@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -32,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.feature.overlay.ChatFilter
@@ -91,6 +96,10 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             }
             NgWordsInput(settings.ngWords)
             MaxVisibleSlider(settings.maxVisible)
+            Text(stringResource(R.string.display_window), style = MaterialTheme.typography.titleMedium)
+            SwitchRow(R.string.display_large_header_buttons, settings.largeHeaderButtons) { on ->
+                DisplaySettingsStore.update { it.copy(largeHeaderButtons = on) }
+            }
             Text(stringResource(R.string.display_font_hint), style = MaterialTheme.typography.bodySmall)
         }
     }
@@ -118,18 +127,28 @@ private fun NgWordsInput(saved: List<String>) {
     }
 }
 
-/** テーマ（F-VIEW-05）。システム追従ではフローティングウィンドウは従来どおり暗色。 */
+/** テーマ（F-VIEW-05）。システム追従ではフローティングウィンドウは従来どおり暗色。行全体のタップで選ぶ（BL-079）。 */
 @Composable
 private fun ThemeSelector(theme: ThemeMode) {
     Column {
         Text(stringResource(R.string.display_theme), style = MaterialTheme.typography.titleMedium)
-        ThemeMode.entries.forEach { mode ->
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                RadioButton(
-                    selected = theme == mode,
-                    onClick = { DisplaySettingsStore.update { it.copy(theme = mode) } },
-                )
-                Text(stringResource(themeLabel(mode)))
+        Column(modifier = Modifier.selectableGroup()) {
+            ThemeMode.entries.forEach { mode ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = MIN_ROW_HEIGHT)
+                            .selectable(
+                                selected = theme == mode,
+                                role = Role.RadioButton,
+                                onClick = { DisplaySettingsStore.update { it.copy(theme = mode) } },
+                            ),
+                ) {
+                    RadioButton(selected = theme == mode, onClick = null)
+                    Text(stringResource(themeLabel(mode)), modifier = Modifier.padding(start = 12.dp))
+                }
             }
         }
     }
@@ -157,14 +176,25 @@ private fun MaxVisibleSlider(count: Int) {
     }
 }
 
+/** スイッチの行。行全体のタップで切り替え、スクリーンリーダーには 1 つのスイッチとして読ませる（BL-079）。 */
 @Composable
 internal fun SwitchRow(
     label: Int,
     checked: Boolean,
     onChange: (Boolean) -> Unit,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .heightIn(min = MIN_ROW_HEIGHT)
+                .toggleable(value = checked, role = Role.Switch, onValueChange = onChange),
+    ) {
         Text(stringResource(label), modifier = Modifier.weight(1f))
-        Switch(checked = checked, onCheckedChange = onChange)
+        Switch(checked = checked, onCheckedChange = null)
     }
 }
+
+/** 行のタップ領域の最小の高さ（Material の推奨タッチターゲット） */
+private val MIN_ROW_HEIGHT = 48.dp

@@ -37,12 +37,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.filderschoice.romcha.core.chat.ChatMessage
@@ -50,8 +51,11 @@ import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.AutoScrollPolicy
 import io.github.filderschoice.romcha.feature.overlay.ChatFilter
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
+import io.github.filderschoice.romcha.feature.overlay.EmptyHint
+import io.github.filderschoice.romcha.feature.overlay.NoticeLevel
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
+import io.github.filderschoice.romcha.feature.overlay.OverlayNotice
 import io.github.filderschoice.romcha.feature.overlay.OverlaySettings
 import io.github.filderschoice.romcha.feature.overlay.OverlayUiState
 import io.github.filderschoice.romcha.feature.overlay.R
@@ -90,7 +94,14 @@ private fun Window(
     // 不透明度はヘッダーとチャット欄の両方に掛ける（F-OVL-03）。色味だけを変えてドラッグできる範囲を見分けやすくする
     val alpha = OverlayFormat.clampOpacity(settings.opacity)
     Column(modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp))) {
-        Header(state, alpha, touchThrough, actions, onToggleSettings = { showSettings = !showSettings })
+        Header(
+            state = state,
+            alpha = alpha,
+            touchThrough = touchThrough,
+            buttonSize = headerButtonSize(display.largeHeaderButtons),
+            actions = actions,
+            onToggleSettings = { showSettings = !showSettings },
+        )
         Column(
             modifier =
                 Modifier.weight(
@@ -118,17 +129,22 @@ private fun Window(
                         ChatFilter.apply(state.messages, display).takeLast(display.maxVisible)
                     }
                 MessageList(shown, settings.fontScale, display)
+                EmptyHint.of(state, shown)?.let { EmptyHintText(it, Modifier.align(Alignment.Center)) }
                 ResizeHandle(actions, Modifier.align(Alignment.BottomEnd))
             }
         }
     }
 }
 
+/** ヘッダーのボタンの大きさ（BL-081）。既定は小さいウィンドウでもタイトル欄の幅を残す 36dp、大きくする設定で推奨の 48dp */
+internal fun headerButtonSize(large: Boolean): Dp = if (large) 48.dp else 36.dp
+
 @Composable
 private fun Header(
     state: OverlayUiState,
     alpha: Float,
     touchThrough: Boolean,
+    buttonSize: Dp,
     actions: OverlayActions,
     onToggleSettings: () -> Unit,
 ) {
@@ -160,25 +176,54 @@ private fun Header(
                 fontSize = 10.sp,
             )
         }
-        IconButton(onClick = onToggleSettings, modifier = Modifier.size(36.dp)) {
+        IconButton(onClick = onToggleSettings, modifier = Modifier.size(buttonSize)) {
             Icon(Icons.Default.Settings, stringResource(R.string.overlay_settings), tint = SubTextColor)
         }
-        IconButton(onClick = { actions.onWindowModeChange(WindowMode.Minimized) }, modifier = Modifier.size(36.dp)) {
+        IconButton(
+            onClick = { actions.onWindowModeChange(WindowMode.Minimized) },
+            modifier = Modifier.size(buttonSize),
+        ) {
             Icon(Icons.Default.KeyboardArrowDown, stringResource(R.string.overlay_minimize), tint = SubTextColor)
         }
-        IconButton(onClick = { actions.onCommand(OverlayCommand.HIDE) }, modifier = Modifier.size(36.dp)) {
+        IconButton(onClick = { actions.onCommand(OverlayCommand.HIDE) }, modifier = Modifier.size(buttonSize)) {
             Icon(Icons.Default.Close, stringResource(R.string.overlay_hide), tint = SubTextColor)
         }
     }
 }
 
+/** お知らせ帯。案内は中立色、失敗は赤で塗り分ける */
 @Composable
-private fun Notice(text: String) {
+private fun Notice(notice: OverlayNotice) {
+    val band =
+        when (notice.level) {
+            NoticeLevel.INFO -> LocalOverlayColors.current.infoBand
+            NoticeLevel.ERROR -> ErrorBand
+        }
     Text(
-        text = text,
+        text = notice.text,
         color = OverlayTextColor,
         fontSize = 12.sp,
-        modifier = Modifier.fillMaxWidth().background(Color(0x66B71C1C)).padding(horizontal = 8.dp, vertical = 4.dp),
+        modifier = Modifier.fillMaxWidth().background(band).padding(horizontal = 8.dp, vertical = 4.dp),
+    )
+}
+
+/** 一覧が空の時の案内（BL-078）。一覧が真っ白で状況が分からなくならないようにする */
+@Composable
+private fun EmptyHintText(
+    hint: EmptyHint,
+    modifier: Modifier,
+) {
+    val text =
+        when (hint) {
+            EmptyHint.NO_MESSAGES -> R.string.overlay_empty_no_messages
+            EmptyHint.FILTERED_OUT -> R.string.overlay_empty_filtered
+        }
+    Text(
+        text = stringResource(text),
+        color = SubTextColor,
+        fontSize = 12.sp,
+        textAlign = TextAlign.Center,
+        modifier = modifier.padding(horizontal = 12.dp),
     )
 }
 
