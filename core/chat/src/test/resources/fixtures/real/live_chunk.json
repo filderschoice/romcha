@@ -6,13 +6,13 @@
           "invalidationContinuationData": {
             "invalidationId": {
               "objectSource": 1056,
-              "objectId": "Y2hhdH5tdVdkY0hWaVdXMA==",
-              "topic": "chat~muWdcHViWW0",
+              "objectId": "token103",
+              "topic": "token104",
               "subscribeToGcmTopics": true,
               "protoCreationTimestampMs": "1790485451202"
             },
             "timeoutMs": 10000,
-            "continuation": "0ofMyAOUAhpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRCjZtIP9_Y2XAzAAQAJKbggAGAAgAEoIEAAYACAAMABQq5Wqiv6NlwNYBHgAogEEGgIIPKoBDBAAGgAiACoECAAQALABAMABAMgBq5Wqiv6NlwPiAQsIy8fi1QYQ2f_FRugBAPgBAIgCAJACAJoCCwjLx-LVBhDZ_8VGiAMAUMz0wv39jZcDWLv52or_jJcDggEGCAQYATAAiAEAoAHlwa2K_o2XA7IBALoBAggK0AHJx-LVBg%3D%3D"
+            "continuation": "token105"
           }
         }
       ],
@@ -181,7 +181,7 @@
                   "selected": true,
                   "continuation": {
                     "reloadContinuationData": {
-                      "continuation": "0ofMyAPkARpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRDABSm4IABgAIABKCBAAGAAgADAAUKuVqor-jZcDWAR4AKIBBBoCCDyqAQwQABoAIgAqBAgAEACwAQDAAQDIAauVqor-jZcD4gELCMvH4tUGENn_xUboAQD4AQCIAgCQAgCaAgsIy8fi1QYQ2f_FRogDAIIBDAgEGAEgACgBMAA4AKgBAQ%3D%3D"
+                      "continuation": "token106"
                     }
                   },
                   "accessibility": {
@@ -196,7 +196,7 @@
                   "selected": false,
                   "continuation": {
                     "reloadContinuationData": {
-                      "continuation": "0ofMyAPkARpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRDABSm4IABgAIABKCBAAGAAgADAAUKuVqor-jZcDWAR4AKIBBBoCCDyqAQwQABoAIgAqBAgAEACwAQDAAQDIAauVqor-jZcD4gELCMvH4tUGENn_xUboAQD4AQCIAgCQAgCaAgsIy8fi1QYQ2f_FRogDAIIBDAgBGAEgACgBMAA4AKgBAQ%3D%3D"
+                      "continuation": "token107"
                     }
                   },
                   "accessibility": {
@@ -228,7 +228,7 @@
                           "tag": "PAlive_viewer_leaderboard"
                         },
                         "globalConfiguration": {
-                          "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                          "params": "token108"
                         }
                       }
                     }
@@ -253,7 +253,7 @@
                           "tag": "PAlive_viewer_leaderboard"
                         },
                         "globalConfiguration": {
-                          "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                          "params": "token108"
                         }
                       }
                     }
@@ -266,8 +266,8 @@
                   "accessibilityId": "id.ui.pdg.leaderboard.entrypoint"
                 }
               },
-              "entryPointStateEntityKey": "EgttdVdkY0hWaVdXMCCzBCgB",
-              "pointsEntityKey": "EgttdVdkY0hWaVdXMCC0BCgB",
+              "entryPointStateEntityKey": "token109",
+              "pointsEntityKey": "token110",
               "isImmersive": false,
               "isCameo": false,
               "experiments": {
@@ -306,7 +306,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNLdXVySXoxalpjREZVbjM1d01kSkJvQ3Zn",
+                "id": "token111",
                 "timestampUsec": "1790483039467386",
                 "authorBadges": [
                   {
@@ -337,7 +337,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CKuurIz1jZcDFUn35wMdJBoCvg"
+            "clientId": "token112"
           }
         },
         {
@@ -368,7 +368,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNMVDI4WXoxalpjREZXN0Y1d01kay1vaG1R",
+                "id": "token113",
                 "timestampUsec": "1790483040601454",
                 "authorBadges": [
                   {
@@ -412,7 +412,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CLT28Yz1jZcDFW7F5wMdk-ohmQ"
+            "clientId": "token114"
           }
         },
         {
@@ -537,12 +537,12 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNPbmpqNUgxalpjREZabnp3Z1Fkc0VzWGRR",
+                "id": "token115",
                 "timestampUsec": "1790483049485916",
                 "authorExternalChannelId": "UCanonymous0000000000034"
               }
             },
-            "clientId": "COnjj5H1jZcDFZnzwgQdsEsXdQ"
+            "clientId": "token116"
           }
         },
         {
@@ -573,7 +573,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNPek0tNUgxalpjREZiSVFkZ1lkcG8wU09B",
+                "id": "token117",
                 "timestampUsec": "1790483051251667",
                 "authorBadges": [
                   {
@@ -617,7 +617,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "COzM-5H1jZcDFbIQdgYdpo0SOA"
+            "clientId": "token118"
           }
         },
         {
@@ -648,7 +648,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNQYVc1NVgxalpjREZaakl3Z1FkYVI0YXpn",
+                "id": "token119",
                 "timestampUsec": "1790483059302109",
                 "authorBadges": [
                   {
@@ -679,7 +679,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CPaW55X1jZcDFZjIwgQdaR4azg"
+            "clientId": "token120"
           }
         },
         {
@@ -710,7 +710,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNNYXE2cHoxalpjREZkckV3Z1FkV1U4OC1n",
+                "id": "token121",
                 "timestampUsec": "1790483074035965",
                 "authorBadges": [
                   {
@@ -754,7 +754,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CMaq6pz1jZcDFdrEwgQdWU88-g"
+            "clientId": "token122"
           }
         },
         {
@@ -785,7 +785,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNPcW1uNkwxalpjREZhVjZUQWdkamM0cS1R",
+                "id": "token123",
                 "timestampUsec": "1790483085388436",
                 "authorBadges": [
                   {
@@ -829,7 +829,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "COqmn6L1jZcDFaV6TAgdjc4q-Q"
+            "clientId": "token124"
           }
         },
         {
@@ -889,12 +889,12 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNJbl9scWYxalpjREZZUlFUQWdkSXdnZm93",
+                "id": "token125",
                 "timestampUsec": "1790483095739211",
                 "authorExternalChannelId": "UCanonymous0000000000034"
               }
             },
-            "clientId": "CIn_lqf1jZcDFYRQTAgdIwgfow"
+            "clientId": "token126"
           }
         },
         {
@@ -953,7 +953,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNKZUJfcWoxalpjREZaSEh3Z1FkLVo4bkZ3",
+                "id": "token127",
                 "timestampUsec": "1790483099525791",
                 "authorBadges": [
                   {
@@ -984,7 +984,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CJeB_qj1jZcDFZHHwgQd-Z8nFw"
+            "clientId": "token128"
           }
         },
         {
@@ -1015,7 +1015,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNPRHNoTFgxalpjREZlN001d01kM3BNVzFR",
+                "id": "token129",
                 "timestampUsec": "1790483124802078",
                 "authorBadges": [
                   {
@@ -1059,7 +1059,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CODshLX1jZcDFe7M5wMd3pMW1Q"
+            "clientId": "token130"
           }
         },
         {
@@ -1119,7 +1119,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNKU0VrYjMxalpjREZkYkV3Z1FkZEhrS0R3",
+                "id": "token131",
                 "timestampUsec": "1790483141778445",
                 "authorBadges": [
                   {
@@ -1150,7 +1150,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CJSEkb31jZcDFdbEwgQddHkKDw"
+            "clientId": "token132"
           }
         },
         {
@@ -1181,12 +1181,12 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNJdmp5cl8xalpjREZVQURkZ1lkTlBjSmNB",
+                "id": "token133",
                 "timestampUsec": "1790483146918333",
                 "authorExternalChannelId": "UCanonymous0000000000034"
               }
             },
-            "clientId": "CIvjyr_1jZcDFUADdgYdNPcJcA"
+            "clientId": "token134"
           }
         },
         {
@@ -1217,7 +1217,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNKcXFtY0wxalpjREZiSVFkZ1lkcG8wU09B",
+                "id": "token135",
                 "timestampUsec": "1790483152400667",
                 "authorBadges": [
                   {
@@ -1261,7 +1261,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CJqqmcL1jZcDFbIQdgYdpo0SOA"
+            "clientId": "token136"
           }
         },
         {
@@ -1292,12 +1292,12 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNQRG4yY1AxalpjREZaZm01d01kak5vcXZ3",
+                "id": "token137",
                 "timestampUsec": "1790483155554041",
                 "authorExternalChannelId": "UCanonymous0000000000034"
               }
             },
-            "clientId": "CPDn2cP1jZcDFZfm5wMdjNoqvw"
+            "clientId": "token138"
           }
         },
         {
@@ -1328,7 +1328,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNJT0Y1c2oxalpjREZVVEl3Z1FkemxrRXlB",
+                "id": "token139",
                 "timestampUsec": "1790483166238964",
                 "authorBadges": [
                   {
@@ -1372,7 +1372,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CIOF5sj1jZcDFUTIwgQdzlkEyA"
+            "clientId": "token140"
           }
         },
         {
@@ -1431,12 +1431,12 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNKalV0TTcxalpjREZUVENMUUFkOTRvRHdn",
+                "id": "token141",
                 "timestampUsec": "1790483178014290",
                 "authorExternalChannelId": "UCanonymous0000000000034"
               }
             },
-            "clientId": "CJjUtM71jZcDFTTCLQAd94oDwg"
+            "clientId": "token142"
           }
         },
         {
@@ -1467,7 +1467,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNQemwtTkQxalpjREZiclo1d01keUhJb1hR",
+                "id": "token143",
                 "timestampUsec": "1790483183325046",
                 "authorBadges": [
                   {
@@ -1498,7 +1498,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CPzl-ND1jZcDFbrZ5wMdyHIoXQ"
+            "clientId": "token144"
           }
         },
         {
@@ -1529,7 +1529,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNNaVUtZFAxalpjREZSRUpkZ1lkbTBvUldR",
+                "id": "token145",
                 "timestampUsec": "1790483189625056",
                 "authorBadges": [
                   {
@@ -1573,7 +1573,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CMiU-dP1jZcDFREJdgYdm0oRWQ"
+            "clientId": "token146"
           }
         },
         {
@@ -1604,7 +1604,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNLM3BoLUwxalpjREZVSkVRd1VkLWtncmxR",
+                "id": "token147",
                 "timestampUsec": "1790483219222669",
                 "authorBadges": [
                   {
@@ -1648,7 +1648,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CK3ph-L1jZcDFUJEQwUd-kgrlQ"
+            "clientId": "token148"
           }
         },
         {
@@ -1707,7 +1707,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNMZVJqdWoxalpjREZlMTdUQWdkel9vYkhR",
+                "id": "token149",
                 "timestampUsec": "1790483231910659",
                 "authorBadges": [
                   {
@@ -1738,7 +1738,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CLeRjuj1jZcDFe17TAgdz_obHQ"
+            "clientId": "token150"
           }
         },
         {
@@ -1793,12 +1793,12 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNOSGlxZXIxalpjREZhWi1UQWdkc1VNZ2Zn",
+                "id": "token151",
                 "timestampUsec": "1790483236556649",
                 "authorExternalChannelId": "UCanonymous0000000000034"
               }
             },
-            "clientId": "CNHiqer1jZcDFaZ-TAgdsUMgfg"
+            "clientId": "token152"
           }
         },
         {
@@ -1829,7 +1829,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNON011X0wxalpjREZhbElUQWdkLVJFOFBn",
+                "id": "token153",
                 "timestampUsec": "1790483253627515",
                 "authorBadges": [
                   {
@@ -1860,7 +1860,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CN7Mu_L1jZcDFalITAgd-RE8Pg"
+            "clientId": "token154"
           }
         },
         {
@@ -1891,7 +1891,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNJal8wUFAxalpjREZiNFJkZ1lkLUhvbVp3",
+                "id": "token155",
                 "timestampUsec": "1790483256070101",
                 "authorBadges": [
                   {
@@ -1935,7 +1935,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CIj_0PP1jZcDFb4RdgYd-HomZw"
+            "clientId": "token156"
           }
         },
         {
@@ -1966,7 +1966,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNKRExtUG4xalpjREZUSEU1d01kdlpBUm1R",
+                "id": "token157",
                 "timestampUsec": "1790483267731703",
                 "authorBadges": [
                   {
@@ -2010,7 +2010,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CJDLmPn1jZcDFTHE5wMdvZARmQ"
+            "clientId": "token158"
           }
         },
         {
@@ -2041,7 +2041,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNLbXJxdjcxalpjREZTZkV3Z1FkRi1VczlB",
+                "id": "token159",
                 "timestampUsec": "1790483278515381",
                 "authorBadges": [
                   {
@@ -2072,12 +2072,12 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "CKmrqv71jZcDFSfEwgQdF-Us9A"
+            "clientId": "token160"
           }
         },
         {
           "replaceChatItemAction": {
-            "targetItemId": "ChwKGkNLbXJxdjcxalpjREZTZkV3Z1FkRi1VczlB",
+            "targetItemId": "token159",
             "replacementItem": {
               "liveChatTextMessageRenderer": {
                 "message": {
@@ -2104,7 +2104,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNLbXJxdjcxalpjREZTZkV3Z1FkRi1VczlB",
+                "id": "token159",
                 "timestampUsec": "1790483278515381",
                 "authorBadges": [
                   {
@@ -2194,7 +2194,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNPV0dtbzMyalpjREZkTTdkZ1lkcl9RUjl3",
+                "id": "token161",
                 "timestampUsec": "1790483309698901",
                 "authorBadges": [
                   {
@@ -2225,7 +2225,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000032"
               }
             },
-            "clientId": "COWGmo32jZcDFdM7dgYdr_QR9w"
+            "clientId": "token162"
           }
         },
         {
@@ -2256,7 +2256,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNLdnk3SkgyalpjREZZSEg1d01kc3M4ZDF3",
+                "id": "token163",
                 "timestampUsec": "1790483319447181",
                 "authorBadges": [
                   {
@@ -2300,7 +2300,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CKvy7JH2jZcDFYHH5wMdss8d1w"
+            "clientId": "token164"
           }
         },
         {
@@ -2331,7 +2331,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNQLTAyNV8yalpjREZmdDdUQWdkOXg4Um5n",
+                "id": "token165",
                 "timestampUsec": "1790483348519406",
                 "authorBadges": [
                   {
@@ -2375,7 +2375,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CP-025_2jZcDFft7TAgd9x8Rng"
+            "clientId": "token166"
           }
         },
         {
@@ -2406,17 +2406,17 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNMNmgyNlQyalpjREZmN1hMUUFkam1JZTJ3",
+                "id": "token167",
                 "timestampUsec": "1790483359002349",
                 "authorExternalChannelId": "UCanonymous0000000000034"
               }
             },
-            "clientId": "CL6h26T2jZcDFf7XLQAdjmIe2w"
+            "clientId": "token168"
           }
         },
         {
           "removeChatItemAction": {
-            "targetItemId": "ChwKGkNJVDV4YXIyalpjREZZVVFkZ1lkZDNRMVln"
+            "targetItemId": "token169"
           }
         },
         {
@@ -2447,7 +2447,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNLYmducjcyalpjREZRWklUQWdkazRJaGV3",
+                "id": "token170",
                 "timestampUsec": "1790483412537737",
                 "authorBadges": [
                   {
@@ -2491,7 +2491,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CKbgnr72jZcDFQZITAgdk4Ihew"
+            "clientId": "token171"
           }
         },
         {
@@ -2522,7 +2522,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNOeXYxc1QyalpjREZaZm01d01kak5vcXZ3",
+                "id": "token172",
                 "timestampUsec": "1790483426030747",
                 "authorExternalChannelId": "UCanonymous0000000000035",
                 "beforeContentButtons": [
@@ -2538,7 +2538,7 @@
                               "tag": "PAlive_viewer_leaderboard"
                             },
                             "globalConfiguration": {
-                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                              "params": "token108"
                             }
                           }
                         }
@@ -2555,7 +2555,7 @@
                 ]
               }
             },
-            "clientId": "CNyv1sT2jZcDFZfm5wMdjNoqvw"
+            "clientId": "token173"
           }
         },
         {
@@ -2586,7 +2586,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNQTFlwTTcyalpjREZhOTlUQWdkVm9zc21R",
+                "id": "token174",
                 "timestampUsec": "1790483446191212",
                 "authorBadges": [
                   {
@@ -2630,7 +2630,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CPLYpM72jZcDFa99TAgdVossmQ"
+            "clientId": "token175"
           }
         },
         {
@@ -2661,7 +2661,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNNTGE2dHoyalpjREZlRmpUQWdkVHpReEhB",
+                "id": "token176",
                 "timestampUsec": "1790483476695356",
                 "authorExternalChannelId": "UCanonymous0000000000035",
                 "beforeContentButtons": [
@@ -2677,7 +2677,7 @@
                               "tag": "PAlive_viewer_leaderboard"
                             },
                             "globalConfiguration": {
-                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                              "params": "token108"
                             }
                           }
                         }
@@ -2694,12 +2694,12 @@
                 ]
               }
             },
-            "clientId": "CMLa6tz2jZcDFeFjTAgdTzQxHA"
+            "clientId": "token177"
           }
         },
         {
           "replaceChatItemAction": {
-            "targetItemId": "ChwKGkNNTGE2dHoyalpjREZlRmpUQWdkVHpReEhB",
+            "targetItemId": "token176",
             "replacementItem": {
               "liveChatTextMessageRenderer": {
                 "message": {
@@ -2726,7 +2726,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNNTGE2dHoyalpjREZlRmpUQWdkVHpReEhB",
+                "id": "token176",
                 "timestampUsec": "1790483476695356",
                 "authorExternalChannelId": "UCanonymous0000000000035",
                 "beforeContentButtons": [
@@ -2742,7 +2742,7 @@
                               "tag": "PAlive_viewer_leaderboard"
                             },
                             "globalConfiguration": {
-                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                              "params": "token108"
                             }
                           }
                         }
@@ -2828,7 +2828,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNLeWw1ZUgyalpjREZUWW1kZ1lkd3JNV0pR",
+                "id": "token178",
                 "timestampUsec": "1790483487097199",
                 "authorExternalChannelId": "UCanonymous0000000000035",
                 "beforeContentButtons": [
@@ -2844,7 +2844,7 @@
                               "tag": "PAlive_viewer_leaderboard"
                             },
                             "globalConfiguration": {
-                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                              "params": "token108"
                             }
                           }
                         }
@@ -2861,7 +2861,7 @@
                 ]
               }
             },
-            "clientId": "CKyl5eH2jZcDFTYmdgYdwrMWJQ"
+            "clientId": "token179"
           }
         },
         {
@@ -2892,7 +2892,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNJZXlyT2oyalpjREZlMTdUQWdkel9vYkhR",
+                "id": "token180",
                 "timestampUsec": "1790483500839420",
                 "authorBadges": [
                   {
@@ -2936,7 +2936,7 @@
                 "authorExternalChannelId": "UCanonymous0000000000033"
               }
             },
-            "clientId": "CIeyrOj2jZcDFe17TAgdz_obHQ"
+            "clientId": "token181"
           }
         },
         {
@@ -3006,7 +3006,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNQajZpdjcyalpjREZVdkV3Z1FkcjJZMVZB",
+                "id": "token182",
                 "timestampUsec": "1790483546428844",
                 "authorExternalChannelId": "UCanonymous0000000000035",
                 "beforeContentButtons": [
@@ -3022,7 +3022,7 @@
                               "tag": "PAlive_viewer_leaderboard"
                             },
                             "globalConfiguration": {
-                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                              "params": "token108"
                             }
                           }
                         }
@@ -3039,12 +3039,12 @@
                 ]
               }
             },
-            "clientId": "CPj6iv72jZcDFUvEwgQdr2Y1VA"
+            "clientId": "token183"
           }
         },
         {
           "replaceChatItemAction": {
-            "targetItemId": "ChwKGkNQajZpdjcyalpjREZVdkV3Z1FkcjJZMVZB",
+            "targetItemId": "token182",
             "replacementItem": {
               "liveChatTextMessageRenderer": {
                 "message": {
@@ -3110,7 +3110,7 @@
                     }
                   ]
                 },
-                "id": "ChwKGkNQajZpdjcyalpjREZVdkV3Z1FkcjJZMVZB",
+                "id": "token182",
                 "timestampUsec": "1790483546428844",
                 "authorExternalChannelId": "UCanonymous0000000000035",
                 "beforeContentButtons": [
@@ -3126,7 +3126,7 @@
                               "tag": "PAlive_viewer_leaderboard"
                             },
                             "globalConfiguration": {
-                              "params": "wgovGAAiKSonChhVQ2tjR0J6WlFLTE12TU8zSWJUNVRnTGcSC211V2RjSFZpV1cwMAE%3D"
+                              "params": "token108"
                             }
                           }
                         }

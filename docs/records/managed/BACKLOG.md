@@ -27,12 +27,16 @@
   区分: 人手検証
   タスク内容: >-
     リポジトリの公開（public 化）と公開時の設定。Settings でリポジトリを public にし、About の説明（description）・topics を設定する。
-    必要なら Private vulnerability reporting を有効にする。公開後に BL-058（「更新を確認」）と BL-059（Dependabot）を確かめる
+    main へ ruleset（Settings の Rules）を設定し、ブランチの削除と force push を禁止して、Pull Request 経由の変更を必須にする。
+    公開後に BL-058（「更新を確認」）と BL-059（Dependabot）を確かめる
   優先度: P3
   状態: 未着手
   担当: ユーザー
-  完了条件: リポジトリが public で、About の説明が設定されている
+  完了条件: リポジトリが public で、About の説明が設定され、main に ruleset が設定されている
   依存: []
+  根拠: >-
+    2026-10-04 の点検でユーザー判断により、main の ruleset を公開時の設定に加えた。脆弱性の報告窓口は Issues とし（SECURITY.md）、
+    Private vulnerability reporting は使わない。コミットに記録された作者のメールアドレスは、履歴を書き換えずにそのまま公開する。
 - id: BL-065
   区分: 品質ゲート
   タスク内容: >-

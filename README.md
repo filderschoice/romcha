@@ -138,7 +138,7 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ### テストについて
 
 チャット取得の単体テストは、既知の応答構造に基づく合成データ（`core/chat/src/test/resources/fixtures/`）と
-MockWebServer で行い、YouTube へは通信しません。実際の応答から作ったデータ（`fixtures/real/`、投稿者の情報は置き換え済み）
+MockWebServer で行い、YouTube へは通信しません。実際の応答から作ったデータ（`fixtures/real/`、投稿者・配信者・動画の情報は置き換え済み）
 でも解析を確かめています。このデータは `python scripts/fetch-real-fixtures.py --replay <動画ID>` で作り直せます
 （YouTube へ通信します）。
 
@@ -164,6 +164,7 @@ MockWebServer で行い、YouTube へは通信しません。実際の応答か�
   アプリの「診断情報を表示」の内容を添えると調査が速くなります（再生中の動画のタイトル等が含まれるため、必要に応じて伏せてください）。
 - 報告は公開されます。アカウント名・メールアドレス・視聴履歴など、個人に関わる情報は書かないでください
   （スクリーンショットに写る配信者名・チャットの投稿者名も、必要がなければ隠してください）。
+- 脆弱性と思われる問題の報告方法は [`SECURITY.md`](SECURITY.md) を参照してください。
 
 ## ライセンス
 

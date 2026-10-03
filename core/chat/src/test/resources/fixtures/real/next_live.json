@@ -9,7 +9,7 @@
                 "title": {
                   "runs": [
                     {
-                      "text": "🔵羽田空港 ライブカメラ Haneda Airport Live September 27, 2026   生中継 2026年9月27日 羽田空港ライブ"
+                      "text": "動画タイトル6"
                     }
                   ]
                 }
@@ -22,21 +22,7 @@
                     "title": {
                       "runs": [
                         {
-                          "text": "Japan 8K12K TV ",
-                          "navigationEndpoint": {
-                            "commandMetadata": {
-                              "webCommandMetadata": {
-                                "url": "/@japan8k12ktv6",
-                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
-                                "rootVe": 3611,
-                                "apiUrl": "/youtubei/v1/browse"
-                              }
-                            },
-                            "browseEndpoint": {
-                              "browseId": "UCkcGBzZQKLMvMO3IbT5TgLg",
-                              "canonicalBaseUrl": "/@japan8k12ktv6"
-                            }
-                          }
+                          "text": "配信者2"
                         }
                       ]
                     }
@@ -52,7 +38,7 @@
           "continuations": [
             {
               "reloadContinuationData": {
-                "continuation": "0ofMyAOEARpeQ2lrcUp3b1lWVU5yWTBkQ2VscFJTMHhOZGsxUE0wbGlWRFZVWjB4bkVndHRkVmRrWTBoV2FWZFhNQm9UNnFqZHVRRU5DZ3R0ZFZka1kwaFdhVmRYTUNBQk1BQSUzRDABggEMCAQYAiAAKAAwADgAiAEBoAHyhoWK_o2XA6gBALIBAA%3D%3D"
+                "continuation": "token100"
               }
             }
           ],
@@ -190,7 +176,7 @@
                       "selected": true,
                       "continuation": {
                         "reloadContinuationData": {
-                          "continuation": "0ofMyAMWGgAwAYIBDAgEGAAgACgBMAA4AKgBAQ%3D%3D"
+                          "continuation": "token101"
                         }
                       },
                       "accessibility": {
@@ -205,7 +191,7 @@
                       "selected": false,
                       "continuation": {
                         "reloadContinuationData": {
-                          "continuation": "0ofMyAMWGgAwAYIBDAgBGAAgACgBMAA4AKgBAQ%3D%3D"
+                          "continuation": "token102"
                         }
                       },
                       "accessibility": {
