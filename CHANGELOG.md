@@ -4,6 +4,13 @@
 
 ## 2026-10-04
 
+- ポートフォリオ（`site/`）を GitHub Pages で公開する準備をした（sesami-wear と同じ `gh-pages` ブランチ方式。ユーザー判断）。
+  `site/.nojekyll` の追加、`site/app.json` の `links.homepage`、`site/index.html` の `og:url`・`canonical`、
+  `site/README.md` の公開手順、README・DESIGN・VERIFICATION を更新した。公開（`gh-pages` の push と Pages の設定）は
+  `main` へのマージ後にユーザーが行う（BL-061）。
+- Releases の公開の運用方針を改めた（ユーザー判断）。ユーザーが明示的に指示した場合に限り、エージェントが `gh release create --verify-tag` で
+  公開してよい。鍵・署名ビルド・タグの push は引き続き人が行い、自律ループ実行モード内では公開しない。
+  `docs/RELEASE.md` と DESIGN の記述を合わせ、BL-065 を完了として BACKLOG から削除した。
 - ポートフォリオ（`site/`）の画面イメージ `site/assets/screen.svg` を、架空の動画とダミーのチャット（上位チャットを含む）による図解へ
   描き直した。実機では YouTube の動画とチャットの時刻を同期した画面を撮れないため、スクリーンショットへの差し替えはしない
   （ユーザー判断）。`site/index.html` の `alt` と `site/README.md` を合わせた。BL-061 は公開方法の決定だけに絞った。

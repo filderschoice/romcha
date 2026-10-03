@@ -40,15 +40,59 @@ Romcha を紹介する静的な 1 ページです。ほかのアプリでも同�
 | `status` | `released`（公開済み）/ `beta` / `development` |
 | `version` / `license` | 現在の版とライセンス |
 | `icon` / `page` | アイコンとページの、`app.json` からの相対パス |
-| `links` | `repository`・`download` などの外部リンク |
+| `links` | `homepage`（公開URL）・`repository`・`download` などの外部リンク |
 | `updated` | 最終更新日（`YYYY-MM-DD`） |
 
 一覧ページは、各アプリの `app.json` を集めてカードを並べ、`page` へリンクする想定です（一覧ページ自体は未作成）。
 
 ## Romcha での運用
 
-- 公開方法（GitHub Pages 等）は未定で、現在はリポジトリ内に置くだけです（2026-09-27 ユーザー判断）。
+- GitHub Pages で公開します（2026-10-04 ユーザー判断。sesami-wear と同じ `gh-pages` ブランチ方式）。公開URLは
+  <https://filderschoice.github.io/romcha/> です。公開の手順は下記「GitHub Pages での公開」を参照してください。
 - `assets/screen.svg` は、架空の動画とダミーのチャットで描いた図解です（実機のスクリーンショットではない）。
   実機では YouTube の動画とチャットの時刻を同期した画面を撮れないため、実画面への差し替えはしません（2026-10-04 ユーザー判断）。
   投稿者名・チャット本文は架空のもの（「視聴者A」等）で、第三者の情報を含みません。
 - 機能・版・動作環境を変えたときは、`index.html` と `app.json` も README と合わせて更新します。
+
+## GitHub Pages での公開
+
+`site/` の中身だけを `gh-pages` ブランチへ切り出し、GitHub Pages の「Deploy from a branch」で配信します。
+GitHub Actions のワークフローは使いません（本リポジトリには CI が無く、Pages の公開元フォルダには
+`/ (root)` か `/docs` しか選べないため）。公開される範囲は `gh-pages` に載る `site/` の中身だけです。
+`site/.nojekyll` は、Jekyll の処理を止めてそのまま配信するための空ファイルです（消さないでください）。
+`git push` はユーザーが実行します（エージェントは実行しません）。
+
+### 初回の設定（1 回だけ）
+
+1. `site/` の変更を `main` へマージしたあと、`main` を最新にした状態で `gh-pages` ブランチを作って push する。
+
+   ```bash
+   git checkout main
+   git pull
+   git subtree push --prefix site origin gh-pages
+   ```
+
+2. GitHub のリポジトリの Settings → Pages で、Source を「Deploy from a branch」、Branch を `gh-pages` の
+   `/ (root)` にして保存する（`gh api -X POST repos/filderschoice/romcha/pages -f "source[branch]=gh-pages" -f "source[path]=/"`
+   でも設定できる。エージェントへ依頼してよい）。
+3. 数分後に <https://filderschoice.github.io/romcha/> を開き、画像とリンクが表示されることを確かめる。
+
+### 更新するとき
+
+`site/` の変更を `main` へマージしたあと、`main` で同じコマンドを実行します。`gh-pages` の履歴は
+`site/` の履歴から毎回同じ形で作られるため、通常は早送りで反映されます。
+
+```bash
+git checkout main
+git pull
+git subtree push --prefix site origin gh-pages
+```
+
+`gh-pages` を直接編集しないでください（次の push が早送りにならず失敗します）。失敗した場合は、
+`gh-pages` を `site/` の履歴で作り直します（公開中の内容は `site/` と同じなので失われるものはありません）。
+
+```bash
+git push origin "$(git subtree split --prefix site main)":refs/heads/gh-pages --force
+```
+
+アプリのリリースで機能・版・画面が変わったときは、`index.html` と `app.json` を更新して上記の手順で反映します。

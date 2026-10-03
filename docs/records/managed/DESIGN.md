@@ -364,7 +364,8 @@
 ### アプリ紹介ポートフォリオ（`site/`）
 
 - 静的な 1 ページ（`index.html`・`style.css`・`assets/*.svg`）。ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
-  リンクは相対パスで、公開先を選ばない（公開方法は未定で、リポジトリ内に置くだけ。2026-09-27 ユーザー判断）。
+  リンクは相対パスで、公開先を選ばない。公開は GitHub Pages の `gh-pages` ブランチ（`git subtree push --prefix site origin gh-pages`。
+  Actions は使わず、`site/.nojekyll` を置く）。公開URLは <https://filderschoice.github.io/romcha/>（2026-10-04 ユーザー判断。sesami-wear と同じ方式）。
 - 構成: ヘッダー（ページ内ナビ）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
   仕組みの図 → 使い方の手順 → プライバシーと免責 → 入手（仕様表）→ フッター。
 - 他アプリのテンプレートを兼ねる: 差し替え箇所に `TEMPLATE:` のコメント、アプリごとの色は `style.css` の `:root` の
@@ -398,7 +399,8 @@
   SHA-256 を `sha256sum` 形式の `.sha256` へ書き出す。アセット名の固定は GitHub 追従インストーラ（Obtainium 等）のため。
   R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。
 - 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.1 / 10001）。
-  鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`（人が実行する）。
+  鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`。鍵・署名ビルド・タグの push は人が実行し、
+  Releases の公開はユーザーの明示指示があればエージェントが実行してよい（自律ループ内では実行しない。2026-10-04 ユーザー判断）。
 - リリースビルドのスクリプト（BL-063）: `scripts/release-build.bat` が `scripts/release-build.ps1`（UTF-8 BOM 付き・CRLF。
   Windows PowerShell 5.1 でも日本語を読めるように）を pwsh 優先で呼ぶ。署名情報の事前確認（値は表示しない。ドライブ文字の `:` の
   エスケープは lint の判定に任せ、スクリプトでは確かめない）→ `-VersionName` 指定時の版の書き換え（失敗時は戻す）

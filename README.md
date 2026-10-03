@@ -133,7 +133,8 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 | `feature:overlay` | フローティングウィンドウ、セッション統合 |
 
 設計の詳細は [`docs/records/managed/DESIGN.md`](docs/records/managed/DESIGN.md) を参照してください。
-アプリを紹介するポートフォリオ（静的な 1 ページ。他アプリのテンプレートを兼ねる）は [`site/`](site/README.md) にあります。
+アプリを紹介するポートフォリオ（静的な 1 ページ。他アプリのテンプレートを兼ねる）の原本は [`site/`](site/README.md) にあり、
+GitHub Pages（<https://filderschoice.github.io/romcha/>）で公開します。
 
 ### テストについて
 

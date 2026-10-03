@@ -31,7 +31,7 @@ BACKLOG の人手検証タスクのうち、未確認の項目を実機で行う
 | --- | --- | --- |
 | 1 章 | BL-073（C5） | 別の動画のチャットが偶発的に出た時だけ行う。出なければ保留 |
 | 2 章 | BL-058（P3 のみ） | 次の版を公開した後。それまで保留 |
-| 3 章 | BL-059・BL-061 | GitHub の設定と公開方法の判断。端末は不要 |
+| 3 章 | BL-059・BL-061 | GitHub の設定と Pages の公開。端末は不要 |
 
 ## 0. 準備
 
@@ -107,7 +107,7 @@ adb -s <シリアル> shell appops get io.github.filderschoice.romcha SYSTEM_ALE
 | 番号 | 作業 | 確認 | 結果 |
 | --- | --- | --- | --- |
 | G2 | BL-059: Settings の Advanced Security（Code security）で Dependency graph が有効なことを確かめる（Dependabot alerts は 2026-10-04 に有効化済み）。Insights → Dependency graph を開く | Gradle の依存（gradle/libs.versions.toml の OkHttp・Compose 等）が一覧に出る。出ない場合はその旨を書く（dependency submission の検討を起票する） | 未実施 |
-| G3 | BL-061: ポートフォリオ（site/）の公開方法（GitHub Pages 等）を決める（画面イメージは図解 `site/assets/screen.svg` に決定済み） | 公開方法が決まっている | 未実施 |
+| G3 | BL-061: この作業ブランチを main へマージしたあと、main で `git subtree push --prefix site origin gh-pages` を実行する（site/README.md「GitHub Pages での公開」）。Pages の設定をエージェントへ依頼するか、Settings → Pages で Source を gh-pages の / (root) にする | <https://filderschoice.github.io/romcha/> で画像とリンクが表示される | 未実施 |
 
 ## 4. 結果の記録
 
