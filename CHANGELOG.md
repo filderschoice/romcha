@@ -4,6 +4,13 @@
 
 ## 2026-10-04
 
+- ドキュメントを最新化した（自律ループ）。アプリの作成背景（YouTube 公式アプリの小窓ではチャットが見えなくなるため、
+  フローティングに対応したチャットビューワーが欲しかった）を、`README.md` の「作成の背景」、`site/index.html` の「作った理由」節と
+  ヒーロー文・description、`site/README.md`、DESIGN の「作成の背景」へ追記した。`site/app.json` の `updated` を更新した。
+  「作った理由」には、小窓ではチャットが見えない状態と Romcha で浮かべた状態を比べる図解
+  `site/assets/floating.svg`（架空の名前・チャットのダミー）も載せた。
+  他のドキュメントは実装・公開状況と整合していることを機械検査（リンク到達性・時点情報の抽出）で確認した。
+
 - ポートフォリオ（`site/`）を GitHub Pages で公開した（<https://filderschoice.github.io/romcha/>）。`gh-pages` ブランチ（`/ (root)`）から配信され、
   トップ・CSS・`app.json`・画像の取得と、ページ内のリンクを確認した。BL-061 を完了として BACKLOG から削除し、
   `docs/VERIFICATION.md` から端末を使わない作業の章を除いた。

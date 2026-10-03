@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- TEMPLATE: タイトル・説明・テーマ色 -->
   <title>Romcha（ロムチャ）— 見るだけのフローティングチャットビューワー</title>
-  <meta name="description" content="YouTube 公式アプリと同期して、アーカイブやライブのチャットをフローティングウィンドウで表示する Android アプリ。">
+  <meta name="description" content="YouTube 公式アプリを小窓にするとチャットが見えなくなるため作った、チャットをフローティングウィンドウで表示する Android アプリ。">
   <meta name="theme-color" content="#263238">
   <meta property="og:type" content="website">
   <!-- TEMPLATE: 公開URL（GitHub Pages）。公開しない場合は og:url と canonical を削除する -->
@@ -29,6 +29,7 @@
         <span>Romcha</span>
       </a>
       <nav class="nav" aria-label="ページ内の移動">
+        <a href="#why">作った理由</a>
         <a href="#features">機能</a>
         <a href="#how">仕組み</a>
         <a href="#usage">使い方</a>
@@ -47,7 +48,7 @@
           <span class="eyebrow">Android アプリ</span>
           <h1>Romcha<br>見るだけの<br>チャットビューワー</h1>
           <p class="lead">
-            YouTube 公式アプリで動画を見ながら、そのチャットを小さなウィンドウで。
+            YouTube の小窓（フローティング）ではチャットが見えなくなるので、チャットのほうを小さなウィンドウで浮かべます。
             再生位置を自動で読み取り、アーカイブのチャットを当時のタイミングで流します。
           </p>
           <div class="actions">
@@ -59,6 +60,24 @@
         <div class="hero-visual">
           <img src="assets/screen.svg" alt="動画アプリの再生画面の上に、半透明のチャットウィンドウが重なり、動画の位置に合わせてチャットが流れている様子の図解（動画と投稿者名、チャットはすべて架空）" width="360" height="720">
         </div>
+      </div>
+    </section>
+
+    <!-- ================= 作成の背景 ================= -->
+    <section id="why">
+      <div class="container">
+        <h2>作った理由</h2>
+        <p class="section-lead">YouTube の小窓（フローティング）では、チャットが見えなくなります。</p>
+        <p>
+          YouTube 公式アプリは動画を小窓にして他のアプリを使えますが、小窓にするとチャット（コメント）が表示されません。
+          小窓で動画を流したままチャットも追いたい、つまり<strong>フローティングに対応したチャットビューワーが欲しい</strong>、
+          というのが Romcha を作った動機です。公式アプリの再生位置を読み取り、チャットを別のフローティングウィンドウへ
+          同期して表示します。
+        </p>
+        <figure class="figure spaced">
+          <img src="assets/floating.svg" alt="左は、YouTube 公式アプリの動画を小窓にすると動画だけが隅に出てチャットが見えない図。右は、Romcha を使うと小窓の動画の横にチャットのウィンドウが浮かぶ図（図解で、実際の画面ではありません。名前とチャットは架空）" width="720" height="360">
+          <figcaption>左: 小窓にするとチャットが見えない。右: Romcha なら小窓の動画の横にチャットも浮かべられる（図解）。</figcaption>
+        </figure>
       </div>
     </section>
 
