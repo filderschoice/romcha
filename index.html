@@ -55,7 +55,7 @@
             <a class="button primary" href="https://github.com/filderschoice/romcha/releases/latest">APK をダウンロード</a>
             <a class="button" href="https://github.com/filderschoice/romcha">ソースコード</a>
           </div>
-          <p class="meta">v1.0.2 ・ Android 14 以上 ・ MIT License ・ 無料・広告なし</p>
+          <p class="meta">v1.0.3 ・ Android 14 以上 ・ MIT License ・ 無料・広告なし</p>
         </div>
         <div class="hero-visual">
           <img src="assets/screen.svg" alt="動画アプリの再生画面の上に、半透明のチャットウィンドウが重なり、動画の位置に合わせてチャットが流れている様子の図解（動画と投稿者名、チャットはすべて架空）" width="360" height="720">
@@ -156,11 +156,16 @@
     <section id="privacy">
       <div class="container">
         <h2>プライバシーと注意</h2>
-        <p class="section-lead">ログイン機能、解析・広告の SDK はありません。</p>
+        <p class="section-lead">ログイン機能、広告・利用状況の解析の SDK はありません（クラッシュ情報の送信のみ）。</p>
         <!-- TEMPLATE: プライバシー（箇条書き）と免責（notice） -->
         <ul class="plain-list">
           <li>「通知へのアクセス」は再生位置を読むための Android の仕組み上の権限で、通知の内容は読みません。</li>
-          <li>通信先は YouTube（チャットの取得・画像）と、「更新を確認」を押した時の GitHub API だけです。</li>
+          <li>通信先は YouTube（チャットの取得・画像）と、「更新を確認」を押した時の GitHub API と、クラッシュ情報の送信先（Google の Firebase Crashlytics）だけです。</li>
+          <li>
+            クラッシュ情報は、アプリが異常終了した時にだけ送ります。内容はエラーの内容（スタックトレース）・アプリの版・Android の版・端末の機種・
+            匿名のインストール識別子で、チャットの内容や動画の URL は送りません。<strong>既定でオン</strong>で、HOME 画面の
+            「クラッシュ情報の送信」のスイッチでいつでもオフにできます。
+          </li>
           <li>設定と動画の特定結果は端末内にのみ保存し、バックアップの対象外にしています。</li>
         </ul>
         <div class="notice spaced">
