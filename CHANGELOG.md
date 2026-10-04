@@ -4,6 +4,10 @@
 
 ## 2026-10-04
 
+- クラッシュ情報の送信（Firebase Crashlytics。BL-088・BL-089）の要件変更を DESIGN・PLAN N-05・README のプライバシー欄へ反映した（BL-090）。
+  外部通信を利用者の操作に限る方針の例外として、クラッシュ情報を既定オンで送り、設定でオフにできる。site は未公開の機能を載せない方針のため、
+  公開する版が決まった時に反映する（BL-092）。
+
 - アプリの動作状況の収集方針を決定した（ユーザー判断）。Firebase Crashlytics のみを採用し（Analytics は入れない）、送信は既定オン＋設定でオプトアウト、
   google-services.json は公開リポジトリへ含めない。BL-087 を閉じ、実装を BL-088（Gradle 組込み）・BL-089（設定とオプトアウト）・
   BL-090（ドキュメント反映）・BL-091（Firebase 準備と実機確認。人手検証）へ分解して `docs/records/managed/BACKLOG.md` へ登録した。
