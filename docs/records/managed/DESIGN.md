@@ -331,7 +331,8 @@
 - クラッシュ情報の送信（BL-088・BL-089。2026-10-04 ユーザー判断。外部通信を利用者の操作に限る従来方針の例外）: Firebase Crashlytics のみを使い、
   Analytics は入れない。送信は既定オンで、HOME の「クラッシュ情報の送信」のスイッチでオフにできる（`CrashReportingSettings`。
   `SharedPreferences` の `crash_reporting` の `enabled`、既定 true）。Manifest の
-  `firebase_crashlytics_collection_enabled=false` で自動収集を止め、`RomchaApplication` が起動時に設定値を `FirebaseCrashlytics.isCrashlyticsCollectionEnabled` へ反映する。
+  `firebase_crashlytics_collection_enabled=false` で自動収集を止め、
+  `RomchaApplication` が起動時に設定値を `FirebaseCrashlytics.isCrashlyticsCollectionEnabled` へ反映する。
   送る内容はクラッシュ時のスタックトレース・アプリの版・OS の版・端末の機種・匿名のインストール識別子で、チャット内容・動画 URL は送らない。
   `app/google-services.json` は公開リポジトリへ含めず（`.gitignore`）、無いビルドではプラグインを適用せず（`BuildConfig.FIREBASE_ENABLED`=false）
   初期化も設定項目の表示もしない。`androidx.fragment` は Firebase が古い版を引き込み lint が失敗するため明示している。
