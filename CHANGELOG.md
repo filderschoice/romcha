@@ -4,6 +4,12 @@
 
 ## 2026-10-04
 
+- アプリの動作状況の収集方針を決定した（ユーザー判断）。Firebase Crashlytics のみを採用し（Analytics は入れない）、送信は既定オン＋設定でオプトアウト、
+  google-services.json は公開リポジトリへ含めない。BL-087 を閉じ、実装を BL-088（Gradle 組込み）・BL-089（設定とオプトアウト）・
+  BL-090（ドキュメント反映）・BL-091（Firebase 準備と実機確認。人手検証）へ分解して `docs/records/managed/BACKLOG.md` へ登録した。
+  これは外部通信を利用者の操作に限る従来方針の変更で、DESIGN.md は BL-090 で改める。BL-076（dependency submission）は
+  Actions の利用コストをユーザーが確認してから判断するため、要確認のまま保留。
+
 - アプリの利用状況・動作状況の把握について検討し、`docs/records/managed/BACKLOG.md` へ登録した。
   GitHub の統計を複数リポジトリ分まとめて蓄積する非公開リポジトリ app-pulse の導入（BL-086。人手検証。本リポジトリの変更は不要）と、
   アプリの動作状況の収集方針の判断（BL-087。要確認。自動送信の可否など）。配布・関心の指標は GitHub 側を正とし、アプリ側では取らない。

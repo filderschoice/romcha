@@ -6,24 +6,61 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
-- id: BL-087
+- id: BL-091
+  区分: 人手検証
+  タスク内容: >-
+    Crashlytics を実際に動かすための Firebase 側の準備と実機確認を行う。Firebase プロジェクトの作成、Android アプリ
+    （io.github.filderschoice.romcha）の登録、google-services.json の取得とリポジトリのルートでなく app/ へのローカル配置（コミットしない）、
+    リリース署名ビルドでのテストクラッシュ送信と Firebase コンソールでの受信確認、設定のオフ時に送信されないことの確認。
+    Analytics は有効化しない（Crashlytics のみ）。Firebase の課金プランは無料の Spark のままにする
+  優先度: P2
+  状態: 未着手
+  担当: ユーザー
+  完了条件: テストクラッシュが Firebase コンソールに届き、設定オフでは届かないことを確認している
+  依存: [BL-089]
+  根拠: >-
+    Firebase プロジェクトの作成と google-services.json の取得はアカウント操作と秘密情報の取り扱いを伴い、エージェントが行えないため、
+    区分を人手検証にして自律ループの完了判定から除外する。
+- id: BL-090
+  区分: 品質ゲート
+  タスク内容: >-
+    Crashlytics 導入に伴う要件変更をドキュメントへ反映する。DESIGN.md（外部通信の方針を「利用者の操作に限る」から、クラッシュ情報の
+    既定オン＋設定でオプトアウトへ改める。2026-10-04 ユーザー判断）、README のプライバシー欄と site のプライバシーと免責に
+    収集項目（クラッシュ時のスタックトレース・版・OS・端末機種・匿名のインストール識別子）、送信先（Google の Firebase Crashlytics）、
+    オフにする手順を明記する。Analytics は使わず、チャット内容・動画 URL・入力値は送らないことも書く。CHANGELOG を更新する
+  優先度: P2
+  状態: 未着手
+  担当: AIエージェント
+  完了条件: DESIGN・README・site の記述が実装（BL-088・BL-089）と一致し、markdownlint と validate-records が成功している
+  依存: [BL-089]
+- id: BL-089
   区分: 機能追加
   タスク内容: >-
-    アプリの動作状況（クラッシュ・ANR・機能の成否・版と OS の分布）を、利用者情報を集めずに把握する手段の方針を決める。
-    配布・関心の指標（DL 数・閲覧数・Star）は GitHub 側の統計を正とし（BL-086）、アプリ側では取らない。
-    候補は (1) Firebase Crashlytics のみ（Analytics は入れない。Google への自動送信を伴う）、
-    (2) 設定画面から診断情報をコピーして利用者が任意で提出する方式（Android 標準の ApplicationExitInfo を端末内で取得して含める。自動送信なし）、
-    (3) 版・OS・成否カウンタだけを送る自前の匿名 ping（Cloudflare Workers の無料枠。端末識別子は送らない）。費用はいずれも 0 円。
-    判断が必要な点は、自動送信を許容するか、許容する場合に既定をオンにするかオプトインにするか、Crashlytics の google-services.json を公開リポジトリへ含めるか。
-    いずれの案もアプリの外部通信を増やすため、要件変更として DESIGN.md への反映と README・サイトでの収集項目の明記が前提になる。方針が決まるまで実装には着手しない
-  優先度: P3
-  状態: 要確認
-  担当: ユーザー
-  完了条件: 採用する手段（または収集しない判断）が決まり、採用する場合は実装タスクが起票されている
+    クラッシュ情報の送信の設定を追加する。既定はオン、設定画面で利用者がオフにでき、値は永続化する。
+    Manifest で Crashlytics の自動収集を無効にし（firebase_crashlytics_collection_enabled=false）、アプリ起動時に設定値で
+    setCrashlyticsCollectionEnabled を呼ぶ。オフにした時点で以降の送信を止める。設定画面に送信内容の短い説明を置く。
+    Firebase が無効なビルド（google-services.json が無い）では設定項目を出さず何もしない。設定値の読み書きに単体テストを付ける
+  優先度: P2
+  状態: 未着手
+  担当: AIエージェント
+  完了条件: 設定のオン・オフが永続化され、起動時に反映される。設定値のテストが成功し、品質ゲートがすべて成功している
+  依存: [BL-088]
+- id: BL-088
+  区分: 機能追加
+  タスク内容: >-
+    Firebase Crashlytics を Gradle へ組み込む。libs.versions.toml へ Firebase BoM・crashlytics-ktx・google-services と
+    crashlytics の Gradle プラグインを追加し、app/google-services.json が存在するときだけプラグインを適用する
+    （無いときは Crashlytics 無効でビルドできる。公開リポジトリのクローンだけでビルドが通るようにするため）。
+    google-services.json を .gitignore へ追加する。Analytics 用の依存は入れない。リリースのみで有効にし、debug では収集しない。
+    aboutlibraries のライセンス一覧に Firebase が出ることを確認する
+  優先度: P2
+  状態: 未着手
+  担当: AIエージェント
+  完了条件: google-services.json が無い状態で品質ゲートがすべて成功し、assembleRelease も成功する。.gitignore に除外が入っている
   依存: []
   根拠: >-
-    外部への自動送信とプライバシーに関わる判断で、既定値を選べないため要確認として保留する（guardrails 12.4）。
-    本リポジトリの規約は外部通信を要件で定義された操作に限定しており、追加には要件の変更が要る。
+    google-services.json を公開リポジトリへ含めない判断（2026-10-04 ユーザー判断）に合わせ、json 無しでもビルドできる構成を既定にする。
+    依存の追加であり削除・ダウングレードではないため、guardrails 12.2 の禁止範囲に当たらない。
 - id: BL-086
   区分: 人手検証
   タスク内容: >-
