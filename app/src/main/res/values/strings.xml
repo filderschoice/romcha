@@ -59,6 +59,9 @@
     <string name="cache_clear">キャッシュを消す</string>
     <string name="cache_cleared">動画特定のキャッシュを消しました。オーバーレイを表示中なら、見ている動画を特定し直します。</string>
     <string name="cache_hint">別の動画のチャットが表示される時に押してください。過去に特定した「動画 → 動画ID」の対応を端末内から消し、見ている動画は特定し直します。</string>
+    <string name="crash_title">クラッシュ情報の送信</string>
+    <string name="crash_switch">クラッシュ情報を送信する</string>
+    <string name="crash_hint">アプリが異常終了した時に、原因の調査のため、エラーの内容・アプリの版・OS の版・端末の機種・匿名のインストール識別子を Google の Firebase Crashlytics へ送ります。チャットの内容や動画の URL は送りません。オフにするとこれ以降は送りません。</string>
     <string name="update_title">アップデート</string>
     <string name="update_current">現在の版: %1$s</string>
     <string name="update_check">更新を確認</string>
