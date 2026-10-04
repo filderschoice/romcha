@@ -44,23 +44,7 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: 設定のオン・オフが永続化され、起動時に反映される。設定値のテストが成功し、品質ゲートがすべて成功している
-  依存: [BL-088]
-- id: BL-088
-  区分: 機能追加
-  タスク内容: >-
-    Firebase Crashlytics を Gradle へ組み込む。libs.versions.toml へ Firebase BoM・crashlytics-ktx・google-services と
-    crashlytics の Gradle プラグインを追加し、app/google-services.json が存在するときだけプラグインを適用する
-    （無いときは Crashlytics 無効でビルドできる。公開リポジトリのクローンだけでビルドが通るようにするため）。
-    google-services.json を .gitignore へ追加する。Analytics 用の依存は入れない。リリースのみで有効にし、debug では収集しない。
-    aboutlibraries のライセンス一覧に Firebase が出ることを確認する
-  優先度: P2
-  状態: 未着手
-  担当: AIエージェント
-  完了条件: google-services.json が無い状態で品質ゲートがすべて成功し、assembleRelease も成功する。.gitignore に除外が入っている
   依存: []
-  根拠: >-
-    google-services.json を公開リポジトリへ含めない判断（2026-10-04 ユーザー判断）に合わせ、json 無しでもビルドできる構成を既定にする。
-    依存の追加であり削除・ダウングレードではないため、guardrails 12.2 の禁止範囲に当たらない。
 - id: BL-086
   区分: 人手検証
   タスク内容: >-

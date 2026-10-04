@@ -14,6 +14,9 @@ captures/
 keystore.properties
 signing.properties
 
+# Firebase の設定（公開リポジトリへ含めない。BL-088）
+google-services.json
+
 # OS
 .DS_Store
 Thumbs.db

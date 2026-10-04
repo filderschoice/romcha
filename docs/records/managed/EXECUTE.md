@@ -6,6 +6,28 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 18:30
+  summary: Firebase Crashlytics を Gradle へ組み込んだ（google-services.json が無いときは無効でビルドできる構成）
+  details:
+    変更内容: >-
+      libs.versions.toml へ Firebase BoM（33.7.0）・crashlytics・google-services プラグイン（4.4.2）・crashlytics プラグイン（3.0.2）と
+      androidx.fragment（1.8.5）を追加した。app/build.gradle.kts は app/google-services.json があるときだけ両プラグインを適用し、
+      BuildConfig.FIREBASE_ENABLED で有無を実行時に判別できるようにした。google-services.json は .gitignore へ追加した。
+      Analytics の依存は入れていない。Firebase が推移的に古い Fragment を引き込み lint の InvalidFragmentVersionForActivityResult が
+      出たため、Fragment を明示した。
+    変更ファイル:
+      - .gitignore
+      - build.gradle.kts
+      - app/build.gradle.kts
+      - gradle/libs.versions.toml
+      - docs/records/managed/BACKLOG.md
+    検証コマンド: >-
+      ./gradlew --no-daemon ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      ./gradlew --no-daemon :app:assembleRelease、npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - google-services.json が無い状態で全ゲートと assembleRelease が成功。json ありの動作は BL-091（人手検証）で確認する
+    関連ID:
+      - BL-088
 - date: 2026-10-04 17:30
   summary: HOME 画面を整理し、権限のたたみ表示とボタン名の区別を行った
   details:
