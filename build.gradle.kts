@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.aboutlibraries) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.firebase.crashlytics) apply false
 }
 
 // 静的解析は全モジュール共通の設定で適用する（CLAUDE.md「本リポジトリの品質ゲート定義」）

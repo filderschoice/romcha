@@ -16,6 +16,13 @@ val localProperties =
         val file = rootProject.file("local.properties")
         if (file.isFile) file.inputStream().use { load(it) }
     }
+// Crashlytics（BL-088）。google-services.json は公開リポジトリへ含めない（.gitignore 済み）ため、無いときは
+// プラグインを適用せず Crashlytics 無効でビルドする（クローンしただけでビルドできるようにする）
+val hasFirebaseConfig = file("google-services.json").isFile
+if (hasFirebaseConfig) {
+    apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
+}
 val hasReleaseSigning = !localProperties.getProperty("RELEASE_STORE_FILE").isNullOrBlank()
 
 android {
@@ -29,6 +36,7 @@ android {
         // versionCode は MAJOR × 10000 + MINOR × 100 + PATCH（docs/RELEASE.md 2章）
         versionCode = 10002
         versionName = "1.0.2"
+        buildConfigField("boolean", "FIREBASE_ENABLED", hasFirebaseConfig.toString())
     }
 
     signingConfigs {
@@ -114,6 +122,12 @@ dependencies {
     implementation(libs.aboutlibraries.compose)
     // 更新確認（F-APP-02）の応答の解析。OkHttp は core:chat から api 依存で受け取る
     implementation(libs.kotlinx.serialization.json)
+
+    // クラッシュ情報の収集（BL-088）。Analytics の依存は入れない
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    // Firebase が推移的に古い Fragment（1.3.0 未満）を引き込み、lint の InvalidFragmentVersionForActivityResult になるため明示する
+    implementation(libs.androidx.fragment)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

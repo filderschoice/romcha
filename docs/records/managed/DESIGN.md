@@ -314,7 +314,7 @@
 - `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
 - HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、動画特定のキャッシュを消すボタン（誤った動画のチャットが出る時の対処。押すと端末内の対応を消し、
+  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、動画特定のキャッシュを消すボタン（直下にクラッシュ情報の送信のスイッチ。Firebase 有効のビルドのみ）（誤った動画のチャットが出る時の対処。押すと端末内の対応を消し、
   `OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定をやり直させる）、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
@@ -328,10 +328,19 @@
   共有から開いた場合は画面を閉じて公式アプリへ戻る。URL が無い場合はトーストで知らせる。
 - 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
   MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
+- クラッシュ情報の送信（BL-088・BL-089。2026-10-04 ユーザー判断。外部通信を利用者の操作に限る従来方針の例外）: Firebase Crashlytics のみを使い、
+  Analytics は入れない。送信は既定オンで、HOME の「クラッシュ情報の送信」のスイッチでオフにできる（`CrashReportingSettings`。
+  `SharedPreferences` の `crash_reporting` の `enabled`、既定 true）。Manifest の
+  `firebase_crashlytics_collection_enabled=false` で自動収集を止め、
+  `RomchaApplication` が起動時に設定値を `FirebaseCrashlytics.isCrashlyticsCollectionEnabled` へ反映する。
+  送る内容はクラッシュ時のスタックトレース・アプリの版・OS の版・端末の機種・匿名のインストール識別子で、チャット内容・動画 URL は送らない。
+  `app/google-services.json` は公開リポジトリへ含めず（`.gitignore`）、無いビルドではプラグインを適用せず（`BuildConfig.FIREBASE_ENABLED`=false）
+  初期化も設定項目の表示もしない。`androidx.fragment` は Firebase が古い版を引き込み lint が失敗するため明示している。
+  動作状況の把握はこの手段に限り、配布・関心の指標は GitHub 側の統計（app-pulse。BL-086）を正とする。
 - 更新の確認（F-APP-02。PLAN 6章）: HOME の「アップデート」欄（診断情報の上）に現在の版（`BuildConfig.VERSION_NAME`）と
   「更新を確認」を置く。押した時だけ `UpdateChecker.check` が `GET https://api.github.com/repos/filderschoice/romcha/releases/latest`
   （`Accept: application/vnd.github+json`・`X-GitHub-Api-Version: 2022-11-28`・`User-Agent: Romcha/<版>`。認証なし）を呼ぶ。
-  起動時の自動確認はしない（外部通信を利用者の操作に限るため。2026-09-27 ユーザー判断）。
+  更新の確認は起動時に自動では行わない（利用者の操作に限るため。2026-09-27 ユーザー判断）。
   - 応答の `tag_name` を `AppVersion`（SemVer。先頭 `v` 可、`+` 以降は無視、プレリリースは同番号の正式版より古い）で読み、
     現在の版より新しければ `Available`、そうでなければ `UpToDate`。404 は `NoRelease`（未公開）、その他の HTTP エラー（回数制限の
     403・429 を含む）は `HttpError`、通信断は `NetworkError`、形式違いは `InvalidResponse`。現在の版を読めなければ通信しない。

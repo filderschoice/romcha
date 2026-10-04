@@ -6,6 +6,55 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-04 19:10
+  summary: クラッシュ情報の送信を既定オン・設定でオプトアウトにした（Crashlytics。json が無いビルドでは何もしない）
+  details:
+    変更内容: >-
+      RomchaApplication を追加し、起動時に CrashReporting.init で保存済みの設定を Crashlytics の収集の有効・無効へ反映する。
+      Manifest で firebase_crashlytics_collection_enabled=false として自動収集を止め、設定がオンの時だけ有効にする。
+      設定値は CrashReportingSettings（BooleanStore 経由で SharedPreferences crash_reporting の enabled に永続化。既定 true）で扱い、
+      HOME 画面に「クラッシュ情報の送信」のスイッチと送信内容の説明を追加した（BuildConfig.FIREBASE_ENABLED が false なら出さない）。
+      CrashReportingSettingsTest で既定値・読み込み・永続化と反映を検証した。detekt の TooManyFunctions を避けるため
+      セクションを CrashReportingSection.kt へ分けた。
+    変更ファイル:
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/kotlin/io/github/filderschoice/romcha/RomchaApplication.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/crash/CrashReporting.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/crash/CrashReportingSettings.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/CrashReportingSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/res/values/strings.xml
+      - app/src/test/kotlin/io/github/filderschoice/romcha/crash/CrashReportingSettingsTest.kt
+      - docs/records/managed/BACKLOG.md
+    検証コマンド: >-
+      ./gradlew --no-daemon ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test :app:assembleRelease、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 全件成功。Firebase 有効時の実際の送信・オフ時に送らないことは BL-091（人手検証）で確認する
+    関連ID:
+      - BL-089
+- date: 2026-10-04 18:30
+  summary: Firebase Crashlytics を Gradle へ組み込んだ（google-services.json が無いときは無効でビルドできる構成）
+  details:
+    変更内容: >-
+      libs.versions.toml へ Firebase BoM（33.7.0）・crashlytics・google-services プラグイン（4.4.2）・crashlytics プラグイン（3.0.2）と
+      androidx.fragment（1.8.5）を追加した。app/build.gradle.kts は app/google-services.json があるときだけ両プラグインを適用し、
+      BuildConfig.FIREBASE_ENABLED で有無を実行時に判別できるようにした。google-services.json は .gitignore へ追加した。
+      Analytics の依存は入れていない。Firebase が推移的に古い Fragment を引き込み lint の InvalidFragmentVersionForActivityResult が
+      出たため、Fragment を明示した。
+    変更ファイル:
+      - .gitignore
+      - build.gradle.kts
+      - app/build.gradle.kts
+      - gradle/libs.versions.toml
+      - docs/records/managed/BACKLOG.md
+    検証コマンド: >-
+      ./gradlew --no-daemon ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      ./gradlew --no-daemon :app:assembleRelease、npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - google-services.json が無い状態で全ゲートと assembleRelease が成功。json ありの動作は BL-091（人手検証）で確認する
+    関連ID:
+      - BL-088
 - date: 2026-10-04 17:30
   summary: HOME 画面を整理し、権限のたたみ表示とボタン名の区別を行った
   details:
