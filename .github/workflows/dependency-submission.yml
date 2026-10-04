@@ -1,0 +1,22 @@
+# Gradle の依存グラフを GitHub の Dependency graph へ提出する（Dependabot alerts が Gradle の依存を検出するため。BL-076）。
+# ビルド・テスト・署名は行わない。秘密情報は使わず、権限は依存グラフの提出に必要な最小限にする。
+name: Dependency submission
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/dependency-submission@v4

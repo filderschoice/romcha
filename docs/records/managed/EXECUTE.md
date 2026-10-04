@@ -6,6 +6,48 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-05 11:00
+  summary: v1.0.3 の公開に向けて版を上げ、site・README・DESIGN をクラッシュ情報の送信の内容へ更新した
+  details:
+    変更内容: >-
+      versionName を 1.0.3、versionCode を 10003 へ上げた（署名ビルドの scripts/release-build が書き換えた値をそのまま取り込んだ）。
+      site/index.html の版表記とプライバシー欄を、クラッシュ情報の送信（送信先 Firebase Crashlytics・収集項目・既定オン・
+      HOME 画面のスイッチでオフ）を載せる内容へ改め、site/app.json の version と updated、README の状態、DESIGN の配布と版を合わせた。
+      タグと Release の作成・push は人が行う。
+    変更ファイル:
+      - app/build.gradle.kts
+      - site/index.html
+      - site/app.json
+      - README.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      scripts/release-build（ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test と署名ビルド。
+      ユーザー実行）、npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 署名ビルドの実機（Pixel 8 Pro）で v1.0.3 の動作を確認済み。site の表示はデプロイ後に人が確認する
+    関連ID:
+      - BL-092
+- date: 2026-10-05 10:00
+  summary: Gradle の依存グラフを GitHub へ提出するワークフローを追加した（dependency submission。ユーザー承認済み）
+  details:
+    変更内容: >-
+      .github/workflows/dependency-submission.yml を新設した。main への push と手動実行で gradle/actions/dependency-submission を実行し、
+      Dependabot alerts が Gradle の依存を検出できるようにする。ビルド・テスト・署名はせず、秘密情報も使わない（権限は contents write のみ）。
+      CI 定義の変更は guardrails 12.2 の禁止範囲だが、BL-076 の確認質問でユーザーが導入を承認した。取り込みと表示の確認は BL-093 へ切り出した。
+    変更ファイル:
+      - .github/workflows/dependency-submission.yml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - ワークフローの実行確認は push 後に人が行う（BL-093）
+    関連ID:
+      - BL-076
+      - BL-093
 - date: 2026-10-04 19:10
   summary: クラッシュ情報の送信を既定オン・設定でオプトアウトにした（Crashlytics。json が無いビルドでは何もしない）
   details:

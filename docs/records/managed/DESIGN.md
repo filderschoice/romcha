@@ -28,7 +28,9 @@
   「キャッシュを消す」の表示と再取得・誤特定からの回復（BL-073 の C1〜C5）、UI/UX 改善（BL-077〜BL-081。BL-082 の U1〜U9）は確認済み。動画切り替え直後に識別キー（タイトル・チャンネル）が
   混ざる状態は見られず（BL-072。MediaSession は切り替え時に一瞬 `metadata = null` で BUFFERING になり、次の取得で新しい値が揃う。
   1 秒間隔の記録で長さは確認できていない）、特定を遅らせる待ち（デバウンス）は入れない
-- 配布: v1.0.2（versionCode 10002。お知らせ帯の色分け・空の一覧の案内文・表示設定の行全体のタップ・HOME 画面の整理・ヘッダーのボタンの大きさの切り替え）の
+- 配布: v1.0.3（versionCode 10003。クラッシュ情報の送信を追加。BL-088・BL-089・BL-092。署名ビルドの実機で、設定オン時の送信とオフ時の
+  非送信を確認済み〈BL-091〉。site・README は v1.0.3 の内容へ更新済みで、タグ・Release の作成は未実施）。直前の版は v1.0.2
+  （versionCode 10002。お知らせ帯の色分け・空の一覧の案内文・表示設定の行全体のタップ・HOME 画面の整理・ヘッダーのボタンの大きさの切り替え）の
   GitHub Release を 2026-10-04 に作成済み（タグ `v1.0.2` は `main` の 1c4049c、署名済み `romcha-v1.0.2.apk` と `.sha256`。
   Release の APK の SHA-256 がビルド時の値と一致することを確認済み）。v1.0.1 は 2026-10-02（タグは 8fa99f3）、初版は v1.0.0（2026-09-28）。
   v1.0.1 を入れた端末で新版の通知が出てリリースのページが開くこと（BL-058 の P3）は確認済み。
@@ -36,7 +38,9 @@
   （「公開されている版はまだありません。」）になり、一般の利用者は Releases も開けなかった（2026-09-28 実機・API で確認）。
   リポジトリは 2026-10-04 に公開（public）済みで、`releases/latest` は認証なしで 200 を返す（API で確認）。
   About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、Pull Request 必須。Repository admin は bypass）を
-  設定し、Dependabot alerts を有効にした（公開直後は Gradle の依存が Dependency graph に未検出。dependency submission の導入は BL-076）。公開後の「更新を確認」が最新と判定するかは実機では未確認（BL-058）
+  設定し、Dependabot alerts を有効にした（公開直後は Gradle の依存が Dependency graph に未検出。
+  dependency submission は .github/workflows/dependency-submission.yml で提出する。取り込みと表示の確認は BL-093）。
+  公開後の「更新を確認」が最新と判定するかは実機では未確認（BL-058）
 
 ## 実装済み機能要件
 
@@ -429,7 +433,7 @@
   `:app:releaseDist` がリリース APK を `app/build/dist/romcha-vX.Y.Z.apk`（未署名なら `-unsigned` を付ける。公開事故の防止）へ置き、
   SHA-256 を `sha256sum` 形式の `.sha256` へ書き出す。アセット名の固定は GitHub 追従インストーラ（Obtainium 等）のため。
   R8（`isMinifyEnabled`）は無効のまま（有効化は動作確認の範囲が広がるため別途判断）。
-- 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.2 / 10002）。
+- 版: `versionName` は SemVer でタグ `vX.Y.Z` と一致させ、`versionCode` は `MAJOR × 10000 + MINOR × 100 + PATCH`（現在 1.0.3 / 10003）。
   鍵の作成・署名ビルド・タグ・Releases 公開・ロールバックの手順は `docs/RELEASE.md`。鍵・署名ビルド・タグの push は人が実行し、
   Releases の公開はユーザーの明示指示があればエージェントが実行してよい（自律ループ内では実行しない。2026-10-04 ユーザー判断）。
 - リリースビルドのスクリプト（BL-063）: `scripts/release-build.bat` が `scripts/release-build.ps1`（UTF-8 BOM 付き・CRLF。
