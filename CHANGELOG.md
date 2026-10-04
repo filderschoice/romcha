@@ -2,6 +2,11 @@
 
 このリポジトリの主要な変更は本ファイルに記録します。
 
+## 2026-10-05
+
+- Gradle の依存グラフを GitHub へ提出するワークフロー `.github/workflows/dependency-submission.yml` を追加した（BL-076。ユーザーが導入を承認）。
+  取り込みと Dependency graph への表示の確認は BL-093（人手検証）。
+
 ## 2026-10-04
 
 - クラッシュ情報の送信（Firebase Crashlytics。BL-088・BL-089）の要件変更を DESIGN・PLAN N-05・README のプライバシー欄へ反映した（BL-090）。

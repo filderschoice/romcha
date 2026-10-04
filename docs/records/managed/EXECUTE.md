@@ -6,6 +6,24 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-05 10:00
+  summary: Gradle の依存グラフを GitHub へ提出するワークフローを追加した（dependency submission。ユーザー承認済み）
+  details:
+    変更内容: >-
+      .github/workflows/dependency-submission.yml を新設した。main への push と手動実行で gradle/actions/dependency-submission を実行し、
+      Dependabot alerts が Gradle の依存を検出できるようにする。ビルド・テスト・署名はせず、秘密情報も使わない（権限は contents write のみ）。
+      CI 定義の変更は guardrails 12.2 の禁止範囲だが、BL-076 の確認質問でユーザーが導入を承認した。取り込みと表示の確認は BL-093 へ切り出した。
+    変更ファイル:
+      - .github/workflows/dependency-submission.yml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - ワークフローの実行確認は push 後に人が行う（BL-093）
+    関連ID:
+      - BL-076
+      - BL-093
 - date: 2026-10-04 19:10
   summary: クラッシュ情報の送信を既定オン・設定でオプトアウトにした（Crashlytics。json が無いビルドでは何もしない）
   details:

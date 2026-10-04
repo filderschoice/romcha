@@ -36,7 +36,9 @@
   （「公開されている版はまだありません。」）になり、一般の利用者は Releases も開けなかった（2026-09-28 実機・API で確認）。
   リポジトリは 2026-10-04 に公開（public）済みで、`releases/latest` は認証なしで 200 を返す（API で確認）。
   About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、Pull Request 必須。Repository admin は bypass）を
-  設定し、Dependabot alerts を有効にした（公開直後は Gradle の依存が Dependency graph に未検出。dependency submission の導入は BL-076）。公開後の「更新を確認」が最新と判定するかは実機では未確認（BL-058）
+  設定し、Dependabot alerts を有効にした（公開直後は Gradle の依存が Dependency graph に未検出。
+  dependency submission は .github/workflows/dependency-submission.yml で提出する。取り込みと表示の確認は BL-093）。
+  公開後の「更新を確認」が最新と判定するかは実機では未確認（BL-058）
 
 ## 実装済み機能要件
 
