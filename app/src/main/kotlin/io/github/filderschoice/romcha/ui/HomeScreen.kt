@@ -64,6 +64,8 @@ internal fun HomeScreen(
             UrlInput(enabled = status.canStartOverlay, onOpen = actions::openVideo)
             OutlinedButton(onClick = onOpenDisplaySettings) { Text(stringResource(R.string.display_title)) }
             CacheSection(actions)
+            BackupSection()
+            ResetSection(actions)
             CrashReportingSection()
             UpdateSection(currentVersion = update.currentVersion, state = update.state, actions = actions)
             Diagnostics(nowPlaying)

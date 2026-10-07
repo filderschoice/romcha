@@ -32,6 +32,7 @@ class BackupRulesTest {
     fun マニフェストはバックアップを許可している() {
         val manifest = File("src/main/AndroidManifest.xml").readText()
         assertTrue(manifest.contains("android:allowBackup=\"true\""))
+        assertTrue(manifest.contains("android:backupAgent=\".backup.RomchaBackupAgent\""))
         assertTrue(manifest.contains("android:dataExtractionRules=\"@xml/data_extraction_rules\""))
     }
 }

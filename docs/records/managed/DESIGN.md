@@ -421,6 +421,13 @@
   端末間移行の対象にして、再インストール時に復元する。`<include>` を書いたものだけが対象になるため、動画の特定結果のキャッシュ
   （`filesDir`）など設定以外は含まれない。設定の保存先を増やした時は同ファイルへ追記する（`BackupRulesTest` が対象を固定している）。
   復元した位置・大きさは表示時に画面内へ収めるため、画面の違う端末でも使える。
+  - 切り替え（BL-097）: HOME 画面の「設定のバックアップ」スイッチ（`ui/BackupSection.kt`。既定オン）。規則は静的なため、
+    `RomchaBackupAgent`（`BackupAgentHelper`）が `onFullBackup` でスイッチを見て、オフなら書き出さない。スイッチの値
+    （`BackupSettings`。SharedPreferences `backup_control`）は復元で上書きされないよう規則に含めない。オフ後のバックアップは空になり、
+    クラウド上の古い設定も次回のバックアップで置き換わる場合がある。
+  - 初期化（BL-097）: HOME 画面の「設定を初期化する」（`ui/ResetSection.kt`。確認ダイアログ付き）。オーバーレイを止めてから
+    `OverlaySettingsReset.resetAll` で `overlay` の保存値を消し、表示設定（NG ワード含む）を初期値へ戻す。
+    バックアップ・クラッシュ情報のスイッチとキャッシュは変えない。
 
 ## 実装制約
 

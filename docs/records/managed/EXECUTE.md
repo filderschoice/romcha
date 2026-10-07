@@ -6,6 +6,37 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-08 14:00
+  summary: 設定のバックアップを HOME 画面のスイッチで切り替えられるようにし、設定の初期化を追加した
+  details:
+    変更内容: >-
+      BackupSettings（既定オン。保存先 backup_control は復元で上書きされないようバックアップ規則に含めない）と、オフの間は
+      onFullBackup で何も書き出さない RomchaBackupAgent を追加し、マニフェストの backupAgent に指定した。HOME 画面へ
+      BackupSection（スイッチ）と ResetSection（確認ダイアログ付きの初期化）を追加した。初期化はオーバーレイを止めてから
+      OverlaySettingsReset で overlay の保存値を消し、表示設定を初期値へ戻す。BackupSettingsTest を追加し BackupRulesTest を更新した。
+    変更ファイル:
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/kotlin/io/github/filderschoice/romcha/backup/BackupSettings.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/backup/RomchaBackupAgent.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/BackupSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/ResetSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeActions.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/res/values/strings.xml
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlaySettingsReset.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/backup/BackupSettingsTest.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/BackupRulesTest.kt
+      - README.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - スイッチ・初期化の実機での動作は BL-096（人手検証）に含めた
 - date: 2026-10-08 12:00
   summary: アプリの設定を自動バックアップの対象にし、再インストール時に復元できるようにした
   details:
