@@ -70,7 +70,13 @@ internal class OverlayWindow<T>(
                         WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                         WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     PixelFormat.TRANSLUCENT,
-                ).apply { gravity = Gravity.TOP or Gravity.START }
+                ).apply {
+                    gravity = Gravity.TOP or Gravity.START
+                    // 横画面では切り欠き・ナビゲーションバーが画面の左右に来て、既定では窓がそれを避けて配置・クリップされ、
+                    // 画面端に寄せた退避のつまみが見えなくなる。切り欠きの領域にも描画し、システムバーを避ける配置を無効にする
+                    layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+                    fitInsetsTypes = 0
+                }
         val composeView =
             ComposeView(owner).apply {
                 setViewTreeLifecycleOwner(owner)

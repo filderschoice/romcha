@@ -6,6 +6,23 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-08 10:00
+  summary: 横画面で画面端へ退避したつまみが見えなくなる問題に対し、オーバーレイ窓を切り欠き領域にも描画するようにした
+  details:
+    変更内容: >-
+      原因は、横画面では切り欠きやナビゲーションバーが画面の左右に来て、オーバーレイ窓の既定（layoutInDisplayCutoutMode=DEFAULT、
+      fitInsetsTypes=システムバー）ではその領域を避けて配置・クリップされるためと推定した（実機では未確認）。
+      OverlayWindow の LayoutParams に layoutInDisplayCutoutMode=ALWAYS と fitInsetsTypes=0 を設定した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      Gradle のゲートは成功。横画面での表示は実機でないと確認できず、BL-094 で人手検証とする
 - date: 2026-10-05 11:00
   summary: v1.0.3 の公開に向けて版を上げ、site・README・DESIGN をクラッシュ情報の送信の内容へ更新した
   details:

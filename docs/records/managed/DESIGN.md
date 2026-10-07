@@ -265,6 +265,8 @@
     つまみを内側へ 24dp 以上スワイプするかタップすると、退避した側の端に寄せた通常表示で復帰する。つまみは上下にドラッグで動かせる。
     表示状態は `WindowMode`（Normal・Minimized・Stashed(side)）で表し、`OverlayActions.onWindowModeChange` で切り替える。
     退避の向きは左右のみ、状態は保存しない。
+    横画面では切り欠き・ナビゲーションバーが左右に来て窓が避けられるため、`LayoutParams` に
+    `layoutInDisplayCutoutMode=ALWAYS` と `fitInsetsTypes=0` を設定し、つまみを画面の端まで描画する。
   - 設定パネル（`ui/SettingsPanel.kt`。高さ 200dp を上限にスクロール）: 不透明度・文字サイズ・表示遅延（LIVE の時）または
     同期の補正と手動タイマー（それ以外）・アプリを開く・タッチ透過。
   - アプリを開く（BL-052）: 設定パネルの「アプリを開く」で、サービスがアプリの起動用インテント（`FLAG_ACTIVITY_NEW_TASK`）を
