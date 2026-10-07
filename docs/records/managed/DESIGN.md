@@ -140,6 +140,9 @@
      長さ ±2 秒一致 20。比較は NFKC 正規化・小文字化・空白除去後。1 位が 80 点以上かつ 2 位との差 10 点以上なら
      `Confirmed(SEARCH, alternatives=他の候補)`、それ以外で 1 点以上の候補があれば `Ambiguous`（上位 5 件）、無ければ `NotFound`。
      通信失敗は `Failed`。
+     タイトル＋チャンネル名の検索で 1 点以上の候補が無い時（長い検索語は YouTube の検索で 0 件になることがある。BL-098）は、
+     `search(タイトル)` だけで検索し直して採点する（再検索の通信失敗は無視して最初の結果を使う）。
+     調査用に件数と点数だけを `java.util.logging`（`romcha.resolve`・`romcha.search`）へ出す（タイトル・チャンネル名は出さない）。
   - ユーザーが候補を選んだら `remember()` でキャッシュへ登録する（`ResolutionSource.USER`）。
   - `InMemoryResolutionCache`: 最大 200 件の LRU。`snapshot()` で永続化用に取り出せる（端末内にのみ保存。N-06）。
 - 検索元 `VideoSearchSource.search(query, liveOnly)`。本番は `InnerTubeClient.search`（`liveOnly` で `params = SEARCH_PARAMS_LIVE`。

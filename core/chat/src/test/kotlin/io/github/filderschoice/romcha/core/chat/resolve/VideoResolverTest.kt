@@ -252,6 +252,29 @@ class VideoResolverTest {
         }
 
     @Test
+    fun タイトルとチャンネル名の検索で候補が無ければタイトルだけで検索し直す() =
+        runTest {
+            val found = listOf(candidate("title000000", metadata.title))
+            val search =
+                object : VideoSearchSource {
+                    val queries = mutableListOf<String>()
+
+                    override suspend fun search(
+                        query: String,
+                        liveOnly: Boolean,
+                    ): FetchResult<List<SearchCandidate>> {
+                        queries += query
+                        return FetchResult.Success(if (query == metadata.title) found else emptyList())
+                    }
+                }
+
+            val result = VideoResolver(search, InMemoryResolutionCache()).resolve(metadata)
+
+            assertEquals(Resolution.Confirmed("title000000", ResolutionSource.SEARCH), result)
+            assertEquals(listOf("${metadata.title} ${metadata.channelName}", metadata.title), search.queries)
+        }
+
+    @Test
     fun 検索結果の長さ表記を読む() {
         assertEquals(3_723_000L, SearchResultParser.parseDuration("1:02:03"))
         assertEquals(754_000L, SearchResultParser.parseDuration("12:34"))

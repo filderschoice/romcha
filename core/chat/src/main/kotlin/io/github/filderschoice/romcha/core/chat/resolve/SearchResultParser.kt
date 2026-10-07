@@ -7,6 +7,8 @@ import io.github.filderschoice.romcha.core.chat.internal.text
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import java.util.logging.Logger
 
 /**
  * 検索結果の動画1件（PLAN 4.3 手順4）。
@@ -47,10 +49,17 @@ object SearchResultParser {
                 .obj("primaryContents")
                 .obj("sectionListRenderer")
                 .arr("contents") ?: return null
-        return sections
-            .flatMap { it.obj("itemSectionRenderer").arr("contents").orEmpty() }
-            .mapNotNull { it.obj("videoRenderer")?.let(::parseVideo) }
+        val items = sections.flatMap { it.obj("itemSectionRenderer").arr("contents").orEmpty() }
+        val videos = items.mapNotNull { it.obj("videoRenderer")?.let(::parseVideo) }
+        if (videos.isEmpty()) {
+            // 想定の構造で動画が 1 件も読めない時は、仕様変更の調査のため項目の種別（キー名）だけを記録する（内容は記録しない）
+            val kinds = items.map { (it as? JsonObject)?.keys?.joinToString("+").orEmpty() }
+            log.warning("検索結果に videoRenderer が無い。sections=${sections.size} items=${items.size} kinds=$kinds")
+        }
+        return videos
     }
+
+    private val log = Logger.getLogger("romcha.search")
 
     private fun parseVideo(video: JsonElement): SearchCandidate? {
         val videoId = video.str("videoId") ?: return null

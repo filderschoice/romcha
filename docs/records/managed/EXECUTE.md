@@ -6,6 +6,26 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-08 16:00
+  summary: 長い検索語で YouTube の検索が 0 件になり動画を特定できない不具合を、タイトルだけの再検索で直した
+  details:
+    変更内容: >-
+      実機の診断情報ではタイトル・チャンネル・長さ（9342000 ms）は取れており、logcat で検索応答が backgroundPromoRenderer のみ
+      （検索結果なし）と分かった。タイトルとチャンネル名をつなげた検索語では 0 件になるため、VideoResolver は関連する候補
+      （点数が 0 より大きいもの）が無い時にタイトルだけで検索し直す。再検索が失敗しても最初の結果を使う。調査用に SearchResultParser と
+      VideoResolver へ java.util.logging のログ（件数・点数・応答の項目種別のみ）を足した。再検索のテストを追加した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolver.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/SearchResultParser.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolverTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py、実機（Pixel 8 Pro）で再現と修正後の確認
+    検証結果: >-
+      成功 - 修正前は候補 0 件、修正後は候補 19 件・最高 100 点で自動確定
 - date: 2026-10-08 14:00
   summary: 設定のバックアップを HOME 画面のスイッチで切り替えられるようにし、設定の初期化を追加した
   details:
