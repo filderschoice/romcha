@@ -6,6 +6,28 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-08 12:00
+  summary: アプリの設定を自動バックアップの対象にし、再インストール時に復元できるようにした
+  details:
+    変更内容: >-
+      allowBackup を true にし、data_extraction_rules.xml を除外式から設定の SharedPreferences（overlay・display・crash_reporting）
+      だけを include する式に改めた（クラウドバックアップと端末間移行の両方）。動画の特定結果のキャッシュは対象外のまま。
+      対象を固定する BackupRulesTest を追加し、README・site のプライバシー欄・DESIGN・CHANGELOG を合わせた。
+    変更ファイル:
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/res/xml/data_extraction_rules.xml
+      - app/src/test/kotlin/io/github/filderschoice/romcha/BackupRulesTest.kt
+      - README.md
+      - site/index.html
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 実機での復元の確認は BL-096（人手検証）
 - date: 2026-10-08 10:00
   summary: 横画面で画面端へ退避したつまみが見えなくなる問題に対し、オーバーレイ窓を切り欠き領域にも描画するようにした
   details:

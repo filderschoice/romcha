@@ -416,8 +416,11 @@
 ## 非機能要件
 
 - PLAN.md 3章（N-01〜N-11）に従う。
-- バックアップ: 設定・履歴は端末内のみ（N-06）。`data_extraction_rules.xml` でクラウドバックアップと端末間移行から除外し、
-  `allowBackup=false` とする。
+- バックアップ（BL-095。2026-10-08 ユーザー判断で、設定の復元のために変更）: `allowBackup=true` とし、`data_extraction_rules.xml` で
+  設定の SharedPreferences（`overlay`・`display`・`crash_reporting`）だけをクラウドバックアップ（Google の自動バックアップ）と
+  端末間移行の対象にして、再インストール時に復元する。`<include>` を書いたものだけが対象になるため、動画の特定結果のキャッシュ
+  （`filesDir`）など設定以外は含まれない。設定の保存先を増やした時は同ファイルへ追記する（`BackupRulesTest` が対象を固定している）。
+  復元した位置・大きさは表示時に画面内へ収めるため、画面の違う端末でも使える。
 
 ## 実装制約
 
