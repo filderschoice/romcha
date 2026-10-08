@@ -6,21 +6,6 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
-- id: BL-114
-  区分: 人手検証
-  タスク内容: >-
-    BL-112 の対応は `main` へマージ済みで、Dependabot アラートは 61 件から 2 件（medium）へ減った（2026-10-09 確認）。残りは kotlin-gradle-plugin
-    （BL-113 で保留）と commons-lang3（commons-compress の更新で引き込まれた。ビルドツール側のみ。`gradle/security-patches.txt` に 3.18.0 を追加済み）。
-    commons-lang3 の対応を `main` へマージし、dependency submission の実行後に、commons-lang3 のアラートが閉じて残りが kotlin-gradle-plugin だけに
-    なることを GitHub の Security タブで確認する。新しく出るアラートがあれば、スキル `dependabot-alert-triage` に沿って起票する
-  優先度: P3
-  状態: 未着手
-  担当: ユーザー
-  完了条件: commons-lang3 のアラートが閉じている。残るアラートは BL-113 の理由が記録されたものだけである
-  依存: []
-  根拠: >-
-    マージ・ワークフローの実行・アラートの再評価は GitHub 上で行われ、エージェントは扱えない（外部への発信になるため Dependabot アラートの
-    却下もしない）ため、区分を人手検証にして自律ループの完了判定から除外する。
 - id: BL-113
   区分: 品質ゲート
   タスク内容: >-
@@ -37,17 +22,16 @@
 - id: BL-110
   区分: 人手検証
   タスク内容: >-
-    リリース作業を行う。版の更新（1.1.0・versionCode 10100）と README・site・DESIGN の版表記は 2026-10-09 に済み。残りは、
-    このブランチの Pull Request のマージ、`scripts\release-build.bat`（署名ビルド。版は更新済みなので指定不要）と署名ビルドの実機確認
-    （docs/RELEASE.md 3〜4 章）、`main` でのタグ `v1.1.0` の作成と push、GitHub Releases の公開、site の公開（gh-pages への反映）、公開後の確認（7 章）
-  優先度: P2
-  状態: 進行中
+    v1.1.0 は 2026-10-09 に公開済み（署名ビルド・タグ `v1.1.0`・GitHub Release・site の公開。API で確認済み）。残りは、公開後の実機の確認
+    （docs/RELEASE.md 7 章）で、公開した版を入れた端末で「更新を確認」が「最新の版です。」になること（P2）と、1 つ前の版（v1.0.3）を入れた端末で
+    「新しい版 1.1.0 が公開されています。」と「ダウンロードページを開く」が出てリリースのページが開くこと（P3）を確かめる
+  優先度: P3
+  状態: 未着手
   担当: ユーザー
-  完了条件: 新しい版の Release が公開され、docs/RELEASE.md 7 章の P1〜P3 を満たし、site が公開されている
+  完了条件: RELEASE.md 7 章の P2・P3 を満たしている（P1 は確認済み）
   依存: []
   根拠: >-
-    署名鍵とパスワード・コミットと push・タグの push・Releases の公開は人が行う（docs/RELEASE.md。自律ループでは外部への発信にあたる）ため、
-    区分を人手検証にして完了判定から除外する。版は新機能（言語の切り替え・設定画面の再編）を含むため MINOR を上げて 1.1.0 とした。
+    実機での操作は人が行うため、区分を人手検証にして自律ループの完了判定から除外する。
 - id: BL-096
   区分: 人手検証
   タスク内容: >-
@@ -65,19 +49,6 @@
   根拠: >-
     バックアップの実行と復元は Google アカウントに紐づく端末の状態に依存し、エージェントが扱えないため、区分を人手検証にして
     自律ループの完了判定から除外する。
-- id: BL-093
-  区分: 人手検証
-  タスク内容: >-
-    dependency submission のワークフロー（.github/workflows/dependency-submission.yml。BL-076 で作成）をレビューして main へ取り込み、
-    Actions の実行が成功して Gradle の依存（OkHttp・Compose 等）が Dependency graph に表示されることを確認する。
-    失敗する場合は Actions のログを基にワークフローを直す
-  優先度: P3
-  状態: 未着手
-  担当: ユーザー
-  完了条件: Dependency graph の SBOM に gradle/libs.versions.toml の依存が表示されている
-  依存: []
-  根拠: >-
-    ワークフローの取り込み（push・PR のマージ）と GitHub 上での実行確認は人が行うため、区分を人手検証にして自律ループの完了判定から除外する。
 ```
 
 <!-- COPILOT_RECORDS:END -->

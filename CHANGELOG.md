@@ -4,6 +4,12 @@
 
 ## 2026-10-09
 
+- v1.1.0 を公開した
+  （タグ `v1.1.0` は `main` の 686b08f、署名済み `romcha-v1.1.0.apk` と `.sha256`。SHA-256 は `a8bf7df9…fba553`）。署名証明書は v1.0.3 と同じ鍵で、
+  ダウンロードした APK のハッシュが `.sha256` と一致することを確認した。site（日本語・英語）も `gh-pages` へ公開した。
+  公開後は Dependabot アラートが kotlin-gradle-plugin の 1 件（BL-113 で保留）だけになり（BL-114 完了）、依存グラフ（SBOM）に Gradle の依存が
+  載っていることを API で確認した（BL-093 完了）。BL-110 は、残りの実機確認（P2・P3）だけにした。DESIGN の「配布」を実績に合わせた。
+
 - Dependabot アラートが、BL-112 の対応のマージ後に 61 件から 2 件（medium）へ減ったことを確認した。残りは kotlin-gradle-plugin（BL-113 で保留）と、
   commons-compress の更新で引き込まれた commons-lang3 で、後者は `gradle/security-patches.txt` に 3.18.0 を追加して対応した（ビルドツール側のみ。
   実行時の依存は変わらない）。スキル `dependabot-alert-triage` に、この落とし穴を追記した。
