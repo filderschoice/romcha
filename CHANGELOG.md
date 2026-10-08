@@ -4,6 +4,17 @@
 
 ## 2026-10-09
 
+- Dependabot アラートが、BL-112 の対応のマージ後に 61 件から 2 件（medium）へ減ったことを確認した。残りは kotlin-gradle-plugin（BL-113 で保留）と、
+  commons-compress の更新で引き込まれた commons-lang3 で、後者は `gradle/security-patches.txt` に 3.18.0 を追加して対応した（ビルドツール側のみ。
+  実行時の依存は変わらない）。スキル `dependabot-alert-triage` に、この落とし穴を追記した。
+
+- `docs/VERIFICATION.md` の S6（ライトテーマと大きい文字サイズでの見え方）が OK となり、BL-102（設定画面の再編の実機確認）を完了として BACKLOG から削除した。
+  確認済みの S6 は VERIFICATION から削除した（BL-115 の修正後の再確認）。
+
+- フローティングウィンドウのライトテーマで、暗い動画の上だと文字が背景と同化して読めない不具合を修正した（BL-115）。濃い文字が半透明の白の背景を
+  通して沈むため、ライトだけ文字に白の縁取りを付け、補助の文字・アイコンの色を濃くした（ダークは変更なし）。実機で暗い壁紙と動画の上でも
+  読めることを確認した。`docs/VERIFICATION.md` の S1〜S5（設定画面・言語・チャット未生成の案内）は OK のため削除し、BL-105 を完了とした。
+
 - Dependabot アラート 61 件（critical 11・high 43・medium 6・low 1）を調べ、すべてビルドツール側の依存（AGP などのプラグインのクラスパスと、
   ktlint・lint の設定）で、APK に入る実行時の依存には無いことを確認した（BL-112）。netty・bouncycastle・logback・jose4j・jdom2・protobuf・
   commons-compress は `gradle/security-patches.txt` の修正版へ上げた（実行時の依存は変わらない）。`kotlin-gradle-plugin`（medium）は

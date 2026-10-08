@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
@@ -73,11 +75,14 @@ fun ChatOverlay(
     manualTimer: PlaybackSnapshot?,
     actions: OverlayActions,
 ) {
-    CompositionLocalProvider(LocalOverlayColors provides OverlayColors.of(display.theme)) {
-        when (mode) {
-            WindowMode.Normal -> Window(state, settings, display, touchThrough, manualTimer, actions)
-            WindowMode.Minimized -> Bubble(state.indicator, settings.opacity, actions)
-            is WindowMode.Stashed -> StashTab(mode.side, settings.opacity, actions)
+    val colors = OverlayColors.of(display.theme)
+    CompositionLocalProvider(LocalOverlayColors provides colors) {
+        ProvideTextStyle(TextStyle(shadow = colors.textShadow)) {
+            when (mode) {
+                WindowMode.Normal -> Window(state, settings, display, touchThrough, manualTimer, actions)
+                WindowMode.Minimized -> Bubble(state.indicator, settings.opacity, actions)
+                is WindowMode.Stashed -> StashTab(mode.side, settings.opacity, actions)
+            }
         }
     }
 }

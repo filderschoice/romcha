@@ -73,6 +73,9 @@ done
 - **`archives` 設定に依存の制約は付けられない**（`Dependency constraints can not be declared against the archives configuration`）。
   全設定へ一律に制約を付けようとせず、`resolutionStrategy.eachDependency` を使う。
 - `plugins {}` より前に書けるのは `buildscript {}` だけ。`buildscript` の中では、ルートの変数を使えず、ファイルを読み直す。
+- **ライブラリを上げると、その依存が新しいアラートとして現れることがある**（初回は commons-compress 1.21 → 1.26.0 で commons-lang3 3.14.0 が
+  引き込まれ、マージ後に commons-lang3 の medium が 1 件出た）。マージ後にアラートを取り直して、残りと新規を `security-patches.txt` へ追記する
+  （手順 1〜4 をもう一度流す）。
 - Dependabot の件数は、ビルドツール側のライブラリが 1 つ上がっても**マージして dependency submission が再実行されるまで減らない**。
   ローカルで件数が変わらないことを失敗と判断しない。
 - Windows の Git Bash では `/tmp` と Python から見える `/tmp` が違う。一時ファイルはスクラッチパッドへ置く。
