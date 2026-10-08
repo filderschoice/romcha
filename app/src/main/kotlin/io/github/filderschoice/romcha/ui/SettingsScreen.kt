@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.backup.BackupSettings
@@ -84,14 +85,17 @@ internal fun SettingsScreen(
     }
 }
 
-/** グループの見出し。リスト項目の左端にそろえる。 */
+/** グループの見出し。リスト項目の左端にそろえる（親が余白を持つ画面では [horizontalPadding] を 0 にする）。 */
 @Composable
-internal fun SettingsGroup(title: Int) {
+internal fun SettingsGroup(
+    title: Int,
+    horizontalPadding: Dp = 16.dp,
+) {
     Text(
         stringResource(title),
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
+        modifier = Modifier.padding(start = horizontalPadding, end = horizontalPadding, top = 16.dp, bottom = 4.dp),
     )
 }
 

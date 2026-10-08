@@ -34,7 +34,9 @@
       ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
       python scripts/validate-records.py
     検証結果: >-
-      成功 - 品質ゲートがすべて成功。画面の見た目の実機確認は行っていない
+      成功 - 品質ゲートがすべて成功。実機（Pixel 8 Pro）で、歯車から設定画面、表示設定への遷移、戻る操作（表示設定→設定→ホーム）、
+      三点メニュー（診断情報・ライセンス）の表示を確認した。確認で、表示設定のグループ見出しが項目より右にずれていた（親の余白との二重）ため、
+      見出しの左右の余白を引数にして直した。ライト／ダーク・大きいフォントでの確認は残る（BL-102）
     関連ID:
       - BL-101
 - date: 2026-10-08 20:00

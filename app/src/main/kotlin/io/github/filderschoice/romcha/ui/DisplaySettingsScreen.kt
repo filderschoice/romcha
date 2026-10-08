@@ -71,7 +71,7 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
                 ).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            SettingsGroup(R.string.display_items)
+            SettingsGroup(R.string.display_items, horizontalPadding = 0.dp)
             SwitchRow(R.string.display_author_name, settings.showAuthorName) { on ->
                 DisplaySettingsStore.update { it.copy(showAuthorName = on) }
             }
@@ -82,7 +82,7 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
                 DisplaySettingsStore.update { it.copy(showTime = on) }
             }
             HorizontalDivider()
-            SettingsGroup(R.string.display_chat_kind)
+            SettingsGroup(R.string.display_chat_kind, horizontalPadding = 0.dp)
             SwitchRow(R.string.display_top_chat_only, settings.topChatOnly, R.string.display_top_chat_hint) { on ->
                 DisplaySettingsStore.update { it.copy(topChatOnly = on) }
             }
@@ -98,7 +98,7 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             }
             NgWordsInput(settings.ngWords)
             HorizontalDivider()
-            SettingsGroup(R.string.display_window)
+            SettingsGroup(R.string.display_window, horizontalPadding = 0.dp)
             MaxVisibleSlider(settings.maxVisible)
             SwitchRow(R.string.display_large_header_buttons, settings.largeHeaderButtons) { on ->
                 DisplaySettingsStore.update { it.copy(largeHeaderButtons = on) }
@@ -136,7 +136,7 @@ private fun NgWordsInput(saved: List<String>) {
 @Composable
 private fun ThemeSelector(theme: ThemeMode) {
     Column {
-        SettingsGroup(R.string.display_theme)
+        SettingsGroup(R.string.display_theme, horizontalPadding = 0.dp)
         Column(modifier = Modifier.selectableGroup()) {
             ThemeMode.entries.forEach { mode ->
                 Row(
