@@ -3,33 +3,44 @@ package io.github.filderschoice.romcha.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +51,8 @@ import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.backup.BackupSettings
 import io.github.filderschoice.romcha.crash.CrashReporting
+import io.github.filderschoice.romcha.language.AppLanguage
+import io.github.filderschoice.romcha.language.AppLanguageSettings
 
 /**
  * 設定の入口（BL-101）。ホームには操作だけを置き、設定はここへグループ化して集める。
@@ -74,6 +87,7 @@ internal fun SettingsScreen(
                 navigates = true,
                 onClick = onOpenDisplaySettings,
             )
+            LanguageAction()
             HorizontalDivider()
             SettingsGroup(R.string.settings_group_privacy)
             BackupSwitch()
@@ -106,7 +120,7 @@ internal fun SettingsGroup(
 /**
  * 別の画面や操作へ進む項目。行全体がタップ領域。
  *
- * [navigates] が true の項目は別の画面へ進むため、行末に矢印を出し、アイコンへ背景色を付けて、その場で動作する項目と見分けられるようにする。
+ * [navigates] が true の項目は別の画面へ進むため、行末に矢印を出して、その場で動作する項目と見分けられるようにする。
  */
 @Composable
 internal fun SettingsLink(
@@ -116,31 +130,26 @@ internal fun SettingsLink(
     navigates: Boolean = false,
     onClick: () -> Unit,
 ) {
-    ListItem(
-        headlineContent = { Text(stringResource(title)) },
-        supportingContent = { Text(stringResource(summary)) },
-        leadingContent = {
-            if (navigates) {
-                Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primaryContainer) {
-                    Icon(
-                        icon,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.padding(8.dp),
-                    )
-                }
-            } else {
-                Icon(icon, contentDescription = null)
-            }
-        },
-        trailingContent =
-            if (navigates) {
-                { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) }
-            } else {
-                null
-            },
-        modifier = Modifier.clickable(role = Role.Button, onClick = onClick),
-    )
+    // ListItem は説明が複数行になると行末の要素が上に寄るため、矢印を縦方向の中央に置ける Row で組む
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(role = Role.Button, onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        Icon(icon, contentDescription = null)
+        Column(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
+            Text(stringResource(title), style = MaterialTheme.typography.bodyLarge)
+            Text(
+                stringResource(summary),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        if (navigates) Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
+    }
 }
 
 /** スイッチの項目。行全体のタップで切り替え、スクリーンリーダーには 1 つのスイッチとして読ませる。 */
@@ -182,3 +191,54 @@ private fun CrashReportingSwitch() {
 private fun CacheAction(actions: HomeActions) {
     SettingsLink(Icons.Filled.Build, R.string.cache_clear, R.string.cache_hint, onClick = actions::clearResolutionCache)
 }
+
+/** 表示言語の選択（BL-104）。選ぶと OS が画面を作り直して、アプリとフローティングウィンドウの言語が切り替わる。 */
+@Composable
+private fun LanguageAction() {
+    val context = LocalContext.current
+    var choosing by rememberSaveable { mutableStateOf(false) }
+    SettingsLink(Icons.Filled.Place, R.string.language_title, R.string.language_summary) { choosing = true }
+    if (choosing) {
+        val current = AppLanguageSettings.current(context)
+        AlertDialog(
+            onDismissRequest = { choosing = false },
+            title = { Text(stringResource(R.string.language_title)) },
+            text = {
+                Column(modifier = Modifier.selectableGroup()) {
+                    AppLanguage.entries.forEach { language ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 48.dp)
+                                    .selectable(
+                                        selected = language == current,
+                                        role = Role.RadioButton,
+                                        onClick = {
+                                            choosing = false
+                                            AppLanguageSettings.set(context, language)
+                                        },
+                                    ),
+                        ) {
+                            RadioButton(selected = language == current, onClick = null)
+                            Text(stringResource(languageLabel(language)), modifier = Modifier.padding(start = 12.dp))
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(
+                    onClick = { choosing = false },
+                ) { Text(stringResource(R.string.language_cancel)) }
+            },
+        )
+    }
+}
+
+private fun languageLabel(language: AppLanguage): Int =
+    when (language) {
+        AppLanguage.JAPANESE -> R.string.language_ja
+        AppLanguage.ENGLISH -> R.string.language_en
+    }

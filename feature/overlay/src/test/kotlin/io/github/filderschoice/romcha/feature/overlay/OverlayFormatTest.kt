@@ -39,7 +39,7 @@ class OverlayFormatTest {
     fun 表示するチャットがある時とお知らせ帯がある時と動画を開いていない時は案内を出さない() {
         val messages = listOf(chatMessage(videoOffsetMs = 0, timestampUsec = 0))
         assertNull(EmptyHint.of(OverlayUiState(title = "動画", messages = messages), messages))
-        val notice = OverlayNotice("読み込み中", NoticeLevel.INFO)
+        val notice = OverlayNotice(NoticeMessage.Raw("読み込み中"), NoticeLevel.INFO)
         assertNull(EmptyHint.of(OverlayUiState(title = "動画", notice = notice), emptyList()))
         assertNull(EmptyHint.of(OverlayUiState(), emptyList()))
     }
@@ -141,7 +141,7 @@ class OverlayFormatTest {
 
     @Test
     fun 同期状態の表示文() {
-        assertEquals("同期中", OverlayFormat.indicatorLabel(SyncIndicator.SYNCING))
-        assertEquals("未検出", OverlayFormat.indicatorLabel(SyncIndicator.NOT_DETECTED))
+        assertEquals(R.string.indicator_syncing, OverlayFormat.indicatorLabel(SyncIndicator.SYNCING))
+        assertEquals(R.string.indicator_not_detected, OverlayFormat.indicatorLabel(SyncIndicator.NOT_DETECTED))
     }
 }

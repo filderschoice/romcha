@@ -3,6 +3,7 @@ package io.github.filderschoice.romcha.feature.overlay.session
 import io.github.filderschoice.romcha.core.chat.FetchFailure
 import io.github.filderschoice.romcha.core.sync.FetchStatus
 import io.github.filderschoice.romcha.feature.overlay.NoticeLevel
+import io.github.filderschoice.romcha.feature.overlay.NoticeMessage
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -18,7 +19,7 @@ class SessionMessagesTest {
             SessionMessages.SCREEN_OFF,
             SessionMessages.liveEnded(1),
             SessionMessages.describe(FetchStatus.Retrying(2, FetchFailure.Network(null))),
-        ).forEach { assertEquals(it?.text, NoticeLevel.INFO, it?.level) }
+        ).forEach { assertEquals(it?.message.toString(), NoticeLevel.INFO, it?.level) }
     }
 
     @Test
@@ -30,12 +31,12 @@ class SessionMessagesTest {
             SessionMessages.chatUnavailable("チャットはオフになっています"),
             SessionMessages.describe(FetchFailure.Network(null)),
             SessionMessages.describe(FetchStatus.Failed(FetchFailure.Http(500))),
-        ).forEach { assertEquals(it?.text, NoticeLevel.ERROR, it?.level) }
+        ).forEach { assertEquals(it?.message.toString(), NoticeLevel.ERROR, it?.level) }
     }
 
     @Test
     fun チャット無効の説明は応答の文言を優先し無ければ既定文にする() {
-        assertEquals("チャットはオフになっています", SessionMessages.chatUnavailable("チャットはオフになっています").text)
+        assertEquals(NoticeMessage.Raw("チャットはオフになっています"), SessionMessages.chatUnavailable("チャットはオフになっています").message)
         assertEquals(SessionMessages.CHAT_UNAVAILABLE, SessionMessages.chatUnavailable(null))
     }
 

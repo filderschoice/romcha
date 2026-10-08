@@ -53,6 +53,7 @@ import io.github.filderschoice.romcha.feature.overlay.ChatFilter
 import io.github.filderschoice.romcha.feature.overlay.DisplaySettings
 import io.github.filderschoice.romcha.feature.overlay.EmptyHint
 import io.github.filderschoice.romcha.feature.overlay.NoticeLevel
+import io.github.filderschoice.romcha.feature.overlay.NoticeMessage
 import io.github.filderschoice.romcha.feature.overlay.OverlayCandidate
 import io.github.filderschoice.romcha.feature.overlay.OverlayFormat
 import io.github.filderschoice.romcha.feature.overlay.OverlayNotice
@@ -169,7 +170,9 @@ private fun Header(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            val status = "${OverlayFormat.indicatorLabel(state.indicator)}  ${OverlayFormat.position(state.positionMs)}"
+            val status = "${stringResource(
+                OverlayFormat.indicatorLabel(state.indicator),
+            )}  ${OverlayFormat.position(state.positionMs)}"
             Text(
                 text = if (touchThrough) "$status  ${stringResource(R.string.overlay_touch_through_on)}" else status,
                 color = SubTextColor,
@@ -192,6 +195,7 @@ private fun Header(
 }
 
 /** お知らせ帯。案内は中立色、失敗は赤で塗り分ける */
+@Suppress("SpreadOperator") // 書式の引数は 1〜2 個で、配列のコピーは問題にならない
 @Composable
 private fun Notice(notice: OverlayNotice) {
     val band =
@@ -200,7 +204,11 @@ private fun Notice(notice: OverlayNotice) {
             NoticeLevel.ERROR -> ErrorBand
         }
     Text(
-        text = notice.text,
+        text =
+            when (val message = notice.message) {
+                is NoticeMessage.Res -> stringResource(message.id, *message.args.toTypedArray())
+                is NoticeMessage.Raw -> message.text
+            },
         color = OverlayTextColor,
         fontSize = 12.sp,
         modifier = Modifier.fillMaxWidth().background(band).padding(horizontal = 8.dp, vertical = 4.dp),

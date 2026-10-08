@@ -32,7 +32,7 @@
     <string name="settings_title">設定</string>
     <string name="more_menu">その他のメニュー</string>
     <string name="display_title">表示設定</string>
-    <string name="display_summary">表示する項目・絞り込み・NG ワード・フローティングウィンドウ・テーマ</string>
+    <string name="display_summary">チャットに表示する項目や絞り込み・NG ワード、フローティングウィンドウの設定、テーマを変えます。</string>
     <string name="settings_group_privacy">プライバシーとバックアップ</string>
     <string name="settings_group_data">データ</string>
     <string name="display_items">表示する項目</string>
@@ -84,4 +84,9 @@
     <string name="update_open_page">ダウンロードページを開く</string>
     <string name="update_no_browser">ブラウザーが見つかりません。</string>
     <string name="update_hint">タップした時だけ GitHub の公開情報（最新版の番号）を確認します。インストールはダウンロードページから行ってください。</string>
+    <string name="language_title">言語</string>
+    <string name="language_summary">アプリの表示言語を日本語と English から選びます。</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_en">English</string>
+    <string name="language_cancel">キャンセル</string>
 </resources>

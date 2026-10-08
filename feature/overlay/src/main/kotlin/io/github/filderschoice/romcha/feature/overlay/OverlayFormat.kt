@@ -1,5 +1,6 @@
 package io.github.filderschoice.romcha.feature.overlay
 
+import androidx.annotation.StringRes
 import io.github.filderschoice.romcha.core.chat.ChatMessage
 import java.time.Instant
 import java.time.ZoneId
@@ -47,14 +48,15 @@ object OverlayFormat {
         return "%d:%02d".format(time.hour, time.minute)
     }
 
-    /** 同期状態の表示文（F-OVL-09）。 */
-    fun indicatorLabel(indicator: SyncIndicator): String =
+    /** 同期状態の表示文（F-OVL-09）の文字列リソース。表示する時に端末の言語で解決する（BL-104）。 */
+    @StringRes
+    fun indicatorLabel(indicator: SyncIndicator): Int =
         when (indicator) {
-            SyncIndicator.SYNCING -> "同期中"
-            SyncIndicator.PAUSED -> "一時停止"
-            SyncIndicator.NOT_DETECTED -> "未検出"
-            SyncIndicator.LIVE -> "ライブ"
-            SyncIndicator.MANUAL -> "手動"
+            SyncIndicator.SYNCING -> R.string.indicator_syncing
+            SyncIndicator.PAUSED -> R.string.indicator_paused
+            SyncIndicator.NOT_DETECTED -> R.string.indicator_not_detected
+            SyncIndicator.LIVE -> R.string.indicator_live
+            SyncIndicator.MANUAL -> R.string.indicator_manual
         }
 
     /**

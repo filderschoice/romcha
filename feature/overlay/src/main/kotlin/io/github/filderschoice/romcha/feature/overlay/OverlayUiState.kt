@@ -1,5 +1,6 @@
 package io.github.filderschoice.romcha.feature.overlay
 
+import androidx.annotation.StringRes
 import io.github.filderschoice.romcha.core.chat.ChatMessage
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,9 +44,24 @@ enum class NoticeLevel {
     ERROR,
 }
 
-/** フローティングウィンドウのお知らせ文。 */
+/**
+ * お知らせ文。表示する時に端末の言語で解決するため、文字列リソースの ID と引数で持つ（BL-104）。
+ * YouTube の応答に含まれる文言のように翻訳できないものだけを [Raw] で持つ。
+ */
+sealed interface NoticeMessage {
+    data class Res(
+        @StringRes val id: Int,
+        val args: List<Any> = emptyList(),
+    ) : NoticeMessage
+
+    data class Raw(
+        val text: String,
+    ) : NoticeMessage
+}
+
+/** フローティングウィンドウのお知らせ。 */
 data class OverlayNotice(
-    val text: String,
+    val message: NoticeMessage,
     val level: NoticeLevel,
 )
 

@@ -327,7 +327,8 @@
   権限案内（F-APP-01）、フローティング表示の開始／終了、URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、
   免責表示（F-APP-04）。
 - 設定画面 `SettingsScreen` の構成（リスト形式。`ListItem` のアイコン・タイトル・短い説明、グループ見出し付き）:
-  表示設定（`DISPLAY` へ遷移。行末の矢印とアイコンの背景色で、その場で動作する項目と見分ける。BL-103）→「プライバシーとバックアップ」（設定のバックアップ、クラッシュ情報の送信＝Firebase 有効のビルドのみ）→
+  表示設定（`DISPLAY` へ遷移。行末の矢印で、その場で動作する項目と見分ける。BL-103）→
+  言語（ダイアログで日本語／English を選ぶ。BL-104）→「プライバシーとバックアップ」（設定のバックアップ、クラッシュ情報の送信＝Firebase 有効のビルドのみ）→
   「データ」（動画特定のキャッシュを消す。押すと端末内の対応を消し、`OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定を
   やり直させる。設定を初期化する＝確認ダイアログ付き）→「アップデート」（F-APP-02）。戻るは HOME へ（`DISPLAY` からは `SETTINGS` へ）。
 - 表示設定画面は「表示する項目」「チャットの絞り込み」「フローティングウィンドウ」「テーマ」のグループに分け、補足は項目の直下に短く添える。
@@ -367,7 +368,20 @@
 - 表示設定画面のスイッチ・テーマの行は、行全体を `toggleable`（`Role.Switch`）・`selectable`（`Role.RadioButton`、親に
   `selectableGroup`）にし、部品側の操作は null にする。行の高さは 48dp 以上（BL-079。タップ領域とスクリーンリーダーのため）。
 - OSS ライセンス（F-APP-03）: AboutLibraries（Gradle プラグインがビルド時に依存一覧を生成し、`LibrariesContainer` で表示）。
-- 文言は日本語のみ（英語リソースは未対応。N-11 は SHOULD）。
+- 文言は日本語（既定）と英語（BL-104。「多言語対応」の節を参照。N-11 は SHOULD）。
+
+### 多言語対応（BL-104）
+
+- 対応言語は日本語と英語のみ。**既定は日本語**（2026-10-09 ユーザー指示）。文字列の既定（`values`）を日本語、英語を `values-en` に置く
+  （`app`・`feature:overlay`・`core:media` の 3 モジュール）。キーは両方で同じにそろえ、lint（MissingTranslation）で欠けを検出する。
+- 言語の切り替えは OS のアプリ別言語（`LocaleManager`。`AppLanguageSettings`）。`locales_config.xml` で `ja`・`en` を宣言する。
+  独自の保存値は持たず、設定のバックアップ・初期化の対象外。変更すると OS が画面を作り直し、フローティングウィンドウも追従する。
+- 初回の起動時だけ、アプリ別言語が未設定なら日本語にする（`initializeDefault`。英語の端末でも最初は日本語）。選択肢は日本語と English の
+  2 つで「システムに合わせる」は設けない。
+- フローティングウィンドウのお知らせは、文字列リソースの ID と引数（`NoticeMessage.Res`）で持ち、表示する時に解決する
+  （`SessionMessages`）。YouTube の応答に含まれるチャット無効の文言だけは翻訳できないため `NoticeMessage.Raw` でそのまま出す。
+  同期状態の表示は `OverlayFormat.indicatorLabel` が文字列リソース ID を返す。
+- ログ・診断情報・開発者向けの失敗理由（`InvalidResponse` など）は翻訳しない。
 
 ### セッション統合（`feature:overlay` の `session` パッケージ）
 

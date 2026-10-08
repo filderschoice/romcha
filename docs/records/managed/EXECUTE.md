@@ -6,6 +6,47 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 14:00
+  summary: 日本語と英語に対応し、設定画面から言語を切り替えられるようにした
+  details:
+    変更内容: >-
+      文字列を日本語（既定）と values-en の英語に分け（app・feature:overlay・core:media）、フローティングウィンドウのお知らせと同期状態を
+      文字列リソース ID で持って表示時に解決するようにした（NoticeMessage）。言語の切り替えは LocaleManager（AppLanguageSettings。
+      初回の起動時に未設定なら日本語にする）で、設定画面の「言語」ダイアログから日本語／English を選ぶ。locales_config.xml を追加した。
+      あわせて設定画面の表示設定の行を、矢印を縦中央にそろえ、補足説明を文章にし、アイコンの枠は付けないようにした（BL-103 の追加調整）。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/language/AppLanguage.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/RomchaApplication.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/SettingsScreen.kt
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/res/xml/locales_config.xml
+      - app/src/main/res/values/strings.xml
+      - app/src/main/res/values-en/strings.xml
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/values-en/strings.xml
+      - core/media/src/main/res/values-en/strings.xml
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/AppLanguageTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessagesTest.kt
+      - README.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で言語ダイアログから English を選び、設定画面・ホーム・フローティングウィンドウの
+      同期状態の表示を確認
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で English へ即時に切り替わり、フローティングウィンドウの「Syncing」も英語になった。
+      初回の起動でアプリ別言語が ja に設定されることを確認した。英語の端末での初回の起動と画面全体の見た目の確認は残る（BL-105）
+    関連ID:
+      - BL-103
+      - BL-104
 - date: 2026-10-09 12:00
   summary: 設定画面の表示設定を、別の画面へ進む項目だと分かる表現にした
   details:

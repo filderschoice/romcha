@@ -31,4 +31,22 @@
     <string name="overlay_open_app">アプリを開く</string>
     <string name="overlay_touch_through">タッチ透過にする（解除は通知から）</string>
     <string name="overlay_touch_through_on">タッチ透過中</string>
+    <string name="notice_not_detected">公式アプリの再生を検出していません</string>
+    <string name="notice_resolving">再生中の動画を特定しています…</string>
+    <string name="notice_ambiguous">動画を特定できませんでした。候補から選んでください</string>
+    <string name="notice_not_found">動画を特定できません。公式アプリの「共有」または URL 入力で指定してください</string>
+    <string name="notice_loading_video">チャットを読み込んでいます…</string>
+    <string name="notice_chat_unavailable">この動画ではチャットを利用できません</string>
+    <string name="notice_replay_not_provided">配信は終了しました。チャットのリプレイは利用できません</string>
+    <string name="notice_screen_off">画面オフのためチャットの取得を停止しています</string>
+    <string name="notice_live_ended">配信は終了しました。チャットのリプレイの準備を待っています（%1$d 回目）</string>
+    <string name="notice_network">通信できません。接続を確認してください</string>
+    <string name="notice_http">YouTube からエラーが返されました（HTTP %1$d）</string>
+    <string name="notice_parse">チャットの解析に失敗しました（YouTube の仕様変更の可能性があります）</string>
+    <string name="notice_retrying">再接続しています（%1$d 回目）</string>
+    <string name="indicator_syncing">同期中</string>
+    <string name="indicator_paused">一時停止</string>
+    <string name="indicator_not_detected">未検出</string>
+    <string name="indicator_live">ライブ</string>
+    <string name="indicator_manual">手動</string>
 </resources>
