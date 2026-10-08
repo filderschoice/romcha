@@ -6,6 +6,25 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-08 18:00
+  summary: 設定のバックアップが書き出されない不具合を、バックアップを全体方式に固定して直した
+  details:
+    変更内容: >-
+      実機の bmgr で、バックアップが KeyValueBackupTask（キー値方式）で呼ばれ、RomchaBackupAgent の onFullBackup が使われず
+      設定ファイルが書き出されないと分かった。マニフェストへ android:fullBackupOnly=true を付け、BackupRulesTest でも固定した。
+      修正後は FullBackup で overlay.xml と display.xml が書き出され、復元で戻ること、キャッシュ（files）は戻らないこと、
+      スイッチをオフにすると書き出されず（Transport rejected）復元もされないことを確認した。
+    変更ファイル:
+      - app/src/main/AndroidManifest.xml
+      - app/src/test/kotlin/io/github/filderschoice/romcha/BackupRulesTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、adb shell bmgr backupnow / restore（ローカル転送先）
+    検証結果: >-
+      成功 - Google アカウントへの実際のバックアップと、アンインストール・再インストールでの自動復元は BL-096（人手検証）で確認する
 - date: 2026-10-08 16:00
   summary: 長い検索語で YouTube の検索が 0 件になり動画を特定できない不具合を、タイトルだけの再検索で直した
   details:

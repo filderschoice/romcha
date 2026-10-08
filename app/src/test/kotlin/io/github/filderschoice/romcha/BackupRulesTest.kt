@@ -33,6 +33,8 @@ class BackupRulesTest {
         val manifest = File("src/main/AndroidManifest.xml").readText()
         assertTrue(manifest.contains("android:allowBackup=\"true\""))
         assertTrue(manifest.contains("android:backupAgent=\".backup.RomchaBackupAgent\""))
+        // 付けないと、バックアップエージェントがキー値方式で呼ばれ、規則どおりのファイルが書き出されない
+        assertTrue(manifest.contains("android:fullBackupOnly=\"true\""))
         assertTrue(manifest.contains("android:dataExtractionRules=\"@xml/data_extraction_rules\""))
     }
 }

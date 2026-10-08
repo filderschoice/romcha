@@ -8,6 +8,7 @@
         android:name=".RomchaApplication"
         android:allowBackup="true"
         android:backupAgent=".backup.RomchaBackupAgent"
+        android:fullBackupOnly="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
