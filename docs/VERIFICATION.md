@@ -74,7 +74,7 @@ adb -s <シリアル> shell appops get io.github.filderschoice.romcha SYSTEM_ALE
 - 画面の記録: `adb -s <シリアル> shell screencap -p /sdcard/shot.png` の後に
   `adb -s <シリアル> pull /sdcard/shot.png shot-<番号>.png`（手元の端末でスクリーンショットでもよい。
   PowerShell で `exec-out ... >` とリダイレクトすると版によって画像が壊れるため使わない）
-- 診断情報: Romcha の「診断情報を表示（公式アプリの再生情報）」の文字列は長押しで選択・コピーできる。
+- 診断情報: Romcha の三点メニュー →「診断情報」（公式アプリの再生情報）の文字列は長押しで選択・コピーできる。
   メモアプリ等に貼って保存する。表示される `title` / `channel` / `duration` が、動画の特定に使う 3 つの値（識別キー）。
 - 動画のタイトル・チャンネル名・URL は、検証に使った動画を後から特定できるように控える。
 - 配信者名・チャット本文など第三者の情報が写った画像は、共有の前にその部分を隠す。

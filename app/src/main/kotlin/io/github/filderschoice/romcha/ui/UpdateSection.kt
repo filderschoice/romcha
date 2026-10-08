@@ -1,15 +1,19 @@
 package io.github.filderschoice.romcha.ui
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.update.UpdateCheckResult
@@ -41,20 +45,27 @@ internal fun UpdateSection(
     state: UpdateState,
     actions: HomeActions,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(R.string.update_title), style = MaterialTheme.typography.titleMedium)
-        Text(stringResource(R.string.update_current, currentVersion), style = MaterialTheme.typography.bodySmall)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            OutlinedButton(onClick = actions::checkForUpdate, enabled = state != UpdateState.Checking) {
-                Text(stringResource(R.string.update_check))
+    val result = (state as? UpdateState.Done)?.result
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.update_check)) },
+        supportingContent = {
+            Column {
+                Text(stringResource(R.string.update_current, currentVersion))
+                updateMessage(state)?.let { Text(it, color = MaterialTheme.colorScheme.primary) }
+                Text(stringResource(R.string.update_hint))
             }
-            val result = (state as? UpdateState.Done)?.result
-            if (result is UpdateCheckResult.Available) {
-                Button(onClick = actions::openReleasePage) { Text(stringResource(R.string.update_open_page)) }
-            }
+        },
+        leadingContent = { Icon(Icons.Filled.Refresh, contentDescription = null) },
+        modifier =
+            Modifier.clickable(
+                enabled = state != UpdateState.Checking,
+                role = Role.Button,
+            ) { actions.checkForUpdate() },
+    )
+    if (result is UpdateCheckResult.Available) {
+        Button(onClick = actions::openReleasePage, modifier = Modifier.padding(horizontal = 16.dp)) {
+            Text(stringResource(R.string.update_open_page))
         }
-        updateMessage(state)?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-        Text(stringResource(R.string.update_hint), style = MaterialTheme.typography.bodySmall)
     }
 }
 

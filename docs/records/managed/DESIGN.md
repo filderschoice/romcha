@@ -321,11 +321,16 @@
 
 ### アプリ画面（`app`）
 
-- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
+- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`SETTINGS`（設定）・`DISPLAY`（表示設定）・`DIAGNOSTICS`（診断情報）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
-- HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、動画特定のキャッシュを消すボタン（直下にクラッシュ情報の送信のスイッチ。Firebase 有効のビルドのみ）（誤った動画のチャットが出る時の対処。押すと端末内の対応を消し、
-  `OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定をやり直させる）、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+- HOME の構成（BL-101。操作だけに絞る）: トップバー（アプリ名、右に歯車＝設定、三点メニュー＝診断情報・OSS ライセンス）、副題、
+  権限案内（F-APP-01）、フローティング表示の開始／終了、URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、
+  免責表示（F-APP-04）。
+- 設定画面 `SettingsScreen` の構成（リスト形式。`ListItem` のアイコン・タイトル・短い説明、グループ見出し付き）:
+  表示設定（`DISPLAY` へ遷移）→「プライバシーとバックアップ」（設定のバックアップ、クラッシュ情報の送信＝Firebase 有効のビルドのみ）→
+  「データ」（動画特定のキャッシュを消す。押すと端末内の対応を消し、`OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定を
+  やり直させる。設定を初期化する＝確認ダイアログ付き）→「アップデート」（F-APP-02）。戻るは HOME へ（`DISPLAY` からは `SETTINGS` へ）。
+- 表示設定画面は「表示する項目」「チャットの絞り込み」「フローティングウィンドウ」「テーマ」のグループに分け、補足は項目の直下に短く添える。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
@@ -347,7 +352,7 @@
   `app/google-services.json` は公開リポジトリへ含めず（`.gitignore`）、無いビルドではプラグインを適用せず（`BuildConfig.FIREBASE_ENABLED`=false）
   初期化も設定項目の表示もしない。`androidx.fragment` は Firebase が古い版を引き込み lint が失敗するため明示している。
   動作状況の把握はこの手段に限り、配布・関心の指標は GitHub 側の統計（app-pulse。BL-086）を正とする。
-- 更新の確認（F-APP-02。PLAN 6章）: HOME の「アップデート」欄（診断情報の上）に現在の版（`BuildConfig.VERSION_NAME`）と
+- 更新の確認（F-APP-02。PLAN 6章）: 設定画面の「アップデート」欄に現在の版（`BuildConfig.VERSION_NAME`）と
   「更新を確認」を置く。押した時だけ `UpdateChecker.check` が `GET https://api.github.com/repos/filderschoice/romcha/releases/latest`
   （`Accept: application/vnd.github+json`・`X-GitHub-Api-Version: 2022-11-28`・`User-Agent: Romcha/<版>`。認証なし）を呼ぶ。
   更新の確認は起動時に自動では行わない（利用者の操作に限るため。2026-09-27 ユーザー判断）。
@@ -425,11 +430,11 @@
   端末間移行の対象にして、再インストール時に復元する。`<include>` を書いたものだけが対象になるため、動画の特定結果のキャッシュ
   （`filesDir`）など設定以外は含まれない。設定の保存先を増やした時は同ファイルへ追記する（`BackupRulesTest` が対象を固定している）。
   復元した位置・大きさは表示時に画面内へ収めるため、画面の違う端末でも使える。
-  - 切り替え（BL-097）: HOME 画面の「設定のバックアップ」スイッチ（`ui/BackupSection.kt`。既定オン）。規則は静的なため、
+  - 切り替え（BL-097）: 設定画面の「設定をバックアップする」スイッチ（`ui/SettingsScreen.kt`。既定オン）。規則は静的なため、
     `RomchaBackupAgent`（`BackupAgentHelper`）が `onFullBackup` でスイッチを見て、オフなら書き出さない。スイッチの値
     （`BackupSettings`。SharedPreferences `backup_control`）は復元で上書きされないよう規則に含めない。オフ後のバックアップは空になり、
     クラウド上の古い設定も次回のバックアップで置き換わる場合がある。
-  - 初期化（BL-097）: HOME 画面の「設定を初期化する」（`ui/ResetSection.kt`。確認ダイアログ付き）。オーバーレイを止めてから
+  - 初期化（BL-097）: 設定画面の「設定を初期化する」（`ui/ResetSection.kt`。確認ダイアログ付き）。オーバーレイを止めてから
     `OverlaySettingsReset.resetAll` で `overlay` の保存値を消し、表示設定（NG ワード含む）を初期値へ戻す。
     バックアップ・クラッシュ情報のスイッチとキャッシュは変えない。
 

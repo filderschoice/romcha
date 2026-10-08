@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -64,10 +65,13 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
         },
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier =
+                Modifier.fillMaxSize().padding(
+                    padding,
+                ).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(stringResource(R.string.display_items), style = MaterialTheme.typography.titleMedium)
+            SettingsGroup(R.string.display_items)
             SwitchRow(R.string.display_author_name, settings.showAuthorName) { on ->
                 DisplaySettingsStore.update { it.copy(showAuthorName = on) }
             }
@@ -77,13 +81,11 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             SwitchRow(R.string.display_time, settings.showTime) { on ->
                 DisplaySettingsStore.update { it.copy(showTime = on) }
             }
-            ThemeSelector(settings.theme)
-            Text(stringResource(R.string.display_chat_kind), style = MaterialTheme.typography.titleMedium)
-            SwitchRow(R.string.display_top_chat_only, settings.topChatOnly) { on ->
+            HorizontalDivider()
+            SettingsGroup(R.string.display_chat_kind)
+            SwitchRow(R.string.display_top_chat_only, settings.topChatOnly, R.string.display_top_chat_hint) { on ->
                 DisplaySettingsStore.update { it.copy(topChatOnly = on) }
             }
-            Text(stringResource(R.string.display_top_chat_hint), style = MaterialTheme.typography.bodySmall)
-            Text(stringResource(R.string.display_filter), style = MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.display_filter_hint), style = MaterialTheme.typography.bodySmall)
             SwitchRow(R.string.display_only_paid, settings.onlyPaid) { on ->
                 DisplaySettingsStore.update { it.copy(onlyPaid = on) }
@@ -95,12 +97,15 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
                 DisplaySettingsStore.update { it.copy(onlyModerators = on) }
             }
             NgWordsInput(settings.ngWords)
+            HorizontalDivider()
+            SettingsGroup(R.string.display_window)
             MaxVisibleSlider(settings.maxVisible)
-            Text(stringResource(R.string.display_window), style = MaterialTheme.typography.titleMedium)
             SwitchRow(R.string.display_large_header_buttons, settings.largeHeaderButtons) { on ->
                 DisplaySettingsStore.update { it.copy(largeHeaderButtons = on) }
             }
             Text(stringResource(R.string.display_font_hint), style = MaterialTheme.typography.bodySmall)
+            HorizontalDivider()
+            ThemeSelector(settings.theme)
         }
     }
 }
@@ -131,7 +136,7 @@ private fun NgWordsInput(saved: List<String>) {
 @Composable
 private fun ThemeSelector(theme: ThemeMode) {
     Column {
-        Text(stringResource(R.string.display_theme), style = MaterialTheme.typography.titleMedium)
+        SettingsGroup(R.string.display_theme)
         Column(modifier = Modifier.selectableGroup()) {
             ThemeMode.entries.forEach { mode ->
                 Row(
@@ -165,7 +170,7 @@ private fun themeLabel(mode: ThemeMode): Int =
 @Composable
 private fun MaxVisibleSlider(count: Int) {
     Column {
-        Text(stringResource(R.string.display_max_visible, count), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.display_max_visible, count))
         Slider(
             value = count.toFloat(),
             onValueChange = { value -> DisplaySettingsStore.update { it.copy(maxVisible = value.roundToInt()) } },
@@ -176,11 +181,15 @@ private fun MaxVisibleSlider(count: Int) {
     }
 }
 
-/** スイッチの行。行全体のタップで切り替え、スクリーンリーダーには 1 つのスイッチとして読ませる（BL-079）。 */
+/**
+ * スイッチの行。行全体のタップで切り替え、スクリーンリーダーには 1 つのスイッチとして読ませる（BL-079）。
+ * [summary] を渡すと、ラベルの下に補足を小さく添える。
+ */
 @Composable
 internal fun SwitchRow(
     label: Int,
     checked: Boolean,
+    summary: Int? = null,
     onChange: (Boolean) -> Unit,
 ) {
     Row(
@@ -191,7 +200,10 @@ internal fun SwitchRow(
                 .heightIn(min = MIN_ROW_HEIGHT)
                 .toggleable(value = checked, role = Role.Switch, onValueChange = onChange),
     ) {
-        Text(stringResource(label), modifier = Modifier.weight(1f))
+        Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+            Text(stringResource(label))
+            if (summary != null) Text(stringResource(summary), style = MaterialTheme.typography.bodySmall)
+        }
         Switch(checked = checked, onCheckedChange = null)
     }
 }

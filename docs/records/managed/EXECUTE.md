@@ -6,6 +6,37 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 10:00
+  summary: 設定のメニュー構成を見直し、歯車と三点メニューを備えた設定画面へ整理した
+  details:
+    変更内容: >-
+      ホームを操作だけに絞り、トップバーに歯車（設定）と三点メニュー（診断情報・ライセンス）を追加。バックアップ・クラッシュ情報・
+      キャッシュ消去・設定の初期化・アップデートを新しい SettingsScreen にグループ化したリスト形式で移し、診断情報は専用画面にした。
+      表示設定は「表示する項目」「チャットの絞り込み」「フローティングウィンドウ」「テーマ」に分け、説明文を短くした。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/SettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DiagnosticsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/ResetSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/UpdateSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/BackupSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/CrashReportingSection.kt
+      - app/src/main/res/values/strings.xml
+      - README.md
+      - docs/VERIFICATION.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。画面の見た目の実機確認は行っていない
+    関連ID:
+      - BL-101
 - date: 2026-10-08 20:00
   summary: 退避したつまみを内側へのスワイプで戻せない不具合を、システムのジェスチャー除外で直した
   details:

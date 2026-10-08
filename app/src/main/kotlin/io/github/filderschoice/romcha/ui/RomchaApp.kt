@@ -32,7 +32,7 @@ import io.github.filderschoice.romcha.feature.overlay.DisplaySettingsStore
 import io.github.filderschoice.romcha.feature.overlay.ThemeMode
 import kotlinx.coroutines.flow.StateFlow
 
-private enum class Screen { HOME, DISPLAY, LICENSES }
+private enum class Screen { HOME, SETTINGS, DISPLAY, DIAGNOSTICS, LICENSES }
 
 @Composable
 fun RomchaApp(
@@ -56,13 +56,20 @@ fun RomchaApp(
             Screen.HOME ->
                 HomeScreen(
                     status = status,
-                    nowPlaying = nowPlaying,
-                    update = update,
                     actions = actions,
-                    onOpenDisplaySettings = { screen = Screen.DISPLAY },
+                    onOpenSettings = { screen = Screen.SETTINGS },
+                    onOpenDiagnostics = { screen = Screen.DIAGNOSTICS },
                     onOpenLicenses = { screen = Screen.LICENSES },
                 )
-            Screen.DISPLAY -> DisplaySettingsScreen(onBack = { screen = Screen.HOME })
+            Screen.SETTINGS ->
+                SettingsScreen(
+                    update = update,
+                    actions = actions,
+                    onBack = { screen = Screen.HOME },
+                    onOpenDisplaySettings = { screen = Screen.DISPLAY },
+                )
+            Screen.DISPLAY -> DisplaySettingsScreen(onBack = { screen = Screen.SETTINGS })
+            Screen.DIAGNOSTICS -> DiagnosticsScreen(nowPlaying, onBack = { screen = Screen.HOME })
             Screen.LICENSES -> LicensesScreen(onBack = { screen = Screen.HOME })
         }
     }
