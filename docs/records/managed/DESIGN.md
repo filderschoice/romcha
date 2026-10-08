@@ -265,7 +265,8 @@
     ヘッダーのドラッグ中は画面の左右の外へのはみ出しを許す（画面内に 48dp は残す。縦は画面内に収める。`StashRule.dragX`）。
     離した時に「48dp とウィンドウ幅の 3 分の 1 の大きい方」（`threshold`）以上はみ出していれば（`overshoot`・`sideFor`）その側の
     端へ退避して 28×72dp のつまみ（`ui/StashTab.kt`）だけを残し、そうでなければ画面内へ戻す（`WindowPlacement.endGesture`）。
-    つまみを内側へ 24dp 以上スワイプするかタップすると、退避した側の端に寄せた通常表示で復帰する。つまみは上下にドラッグで動かせる。
+    つまみを内側へ 24dp 以上スワイプするかタップすると、退避した側の端に寄せた通常表示で復帰する。つまみは画面端にあり OS の戻る
+    ジェスチャーの領域に入るため、`systemGestureExclusion` でスワイプを奪われないようにする（BL-100）。つまみは上下にドラッグで動かせる。
     表示状態は `WindowMode`（Normal・Minimized・Stashed(side)）で表し、`OverlayActions.onWindowModeChange` で切り替える。
     退避の向きは左右のみ、状態は保存しない。
     横画面では切り欠き・ナビゲーションバーが左右に来て窓が避けられるため、`LayoutParams` に

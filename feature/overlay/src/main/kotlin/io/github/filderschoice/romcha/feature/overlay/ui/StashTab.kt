@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -48,6 +49,8 @@ internal fun StashTab(
         modifier =
             Modifier
                 .fillMaxSize()
+                // 画面端にあるため、OS の戻るジェスチャーに内側へのスワイプを奪われないようにする
+                .systemGestureExclusion()
                 .clip(shape)
                 .background(HeaderColor.copy(alpha = OverlayFormat.clampOpacity(opacity).coerceAtLeast(MIN_ALPHA)))
                 .pointerInput(side) {

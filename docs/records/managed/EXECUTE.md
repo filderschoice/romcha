@@ -6,6 +6,24 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-08 20:00
+  summary: 退避したつまみを内側へのスワイプで戻せない不具合を、システムのジェスチャー除外で直した
+  details:
+    変更内容: >-
+      実機で、縦・横の画面の左右の端への退避は動くが、内側への adb swipe では復帰せず（タップと長押しドラッグでは復帰）、
+      画面端の OS の戻るジェスチャーにスワイプを奪われていると推定した。StashTab に systemGestureExclusion を付けると、
+      縦画面の左右・横画面の左のいずれでも内側へのスワイプで復帰した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/StashTab.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で縦横・左右の退避と復帰
+    検証結果: >-
+      成功 - 縦の左右、横の左右（右は先の確認）で退避したつまみが見え、スワイプとタップで復帰した
 - date: 2026-10-08 18:00
   summary: 設定のバックアップが書き出されない不具合を、バックアップを全体方式に固定して直した
   details:
