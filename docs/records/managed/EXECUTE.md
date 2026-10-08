@@ -6,6 +6,33 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 20:00
+  summary: 配信直後でチャットが未生成の動画に、準備中の案内と自動再確認を追加した
+  details:
+    変更内容: >-
+      YouTube がチャット情報を返さず理由も示さない時（VideoChatInfo.Unavailable の message が null）、従来は「利用できません」を表示して
+      止まっていた。ChatPlayer.awaitChat が「準備中」の案内（CHAT_PENDING）を出し、ReplaySwitcher の間隔で自動で再確認して、
+      使えるようになればそのまま表示する。準備されなければ「利用できません」に切り替える。理由が示される時（チャット無効など）は従来どおり。
+      再生位置の更新を PlaybackHold（新規）へ切り出した（BL-108 の処理。detekt の関数数の上限のため）。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/PlaybackHold.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/values-en/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）でチャットの無い通常の動画（URL 共有）を指定
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で「準備中」の案内が出て、同期状態が「同期中」と再生位置に追従した。
+      使えるようになる経路と準備されない経路はユニットテストで確認した（実機では配信直後の動画が無く、再生成の瞬間は未確認）
+    関連ID:
+      - BL-106
 - date: 2026-10-09 18:00
   summary: 言語を切り替えても起動済みのフローティングウィンドウが追従しない不具合を直した
   details:

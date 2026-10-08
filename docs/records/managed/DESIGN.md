@@ -387,8 +387,12 @@
 
 ### セッション統合（`feature:overlay` の `session` パッケージ）
 
-- チャットを出せない動画（`VideoChatInfo.Unavailable`）でも、`ChatPlayer.holdWithPlayback` が `tickIntervalMs` ごとに同期状態と
-  再生位置を更新し続ける（BL-108。動画を特定できない状態は「未検出」のまま）。
+- チャットを出せない動画（`VideoChatInfo.Unavailable`）でも、`PlaybackHold` が `tickIntervalMs` ごとに同期状態と再生位置を
+  更新し続ける（BL-108。動画を特定できない状態は「未検出」のまま）。
+- チャットを出せない理由を YouTube が示さない時（`message == null`。配信直後でリプレイが未生成の可能性）は、`ChatPlayer.awaitChat` が
+  「準備中」の案内（`SessionMessages.CHAT_PENDING`）を出し、`ReplaySwitcher`（30 秒・1 分・2 分・5 分・10 分後）で自動で再確認する
+  （BL-106）。使えるようになればリプレイ（またはライブ）をそのまま始め、準備されなければ「利用できません」にする。
+  理由が示される時（チャット無効など）は待たずに表示する。
 
 - `OverlayService` が `onCreate` で `PlaybackMonitor` を開始し、`WatchCoordinator.run()` を `lifecycleScope`（メインスレッド）で動かす。
   画面のオン・オフは `ACTION_SCREEN_ON/OFF` のレシーバー（`RECEIVER_NOT_EXPORTED`）と `PowerManager.isInteractive` で追う。

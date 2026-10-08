@@ -38,6 +38,7 @@
     <string name="notice_loading_video">チャットを読み込んでいます…</string>
     <string name="notice_chat_unavailable">この動画ではチャットを利用できません</string>
     <string name="notice_replay_not_provided">配信は終了しました。チャットのリプレイは利用できません</string>
+    <string name="notice_chat_pending">チャットはまだ利用できません。配信直後はリプレイの準備に時間がかかることがあります。自動で再確認しています</string>
     <string name="notice_screen_off">画面オフのためチャットの取得を停止しています</string>
     <string name="notice_live_ended">配信は終了しました。チャットのリプレイの準備を待っています（%1$d 回目）</string>
     <string name="notice_network">通信できません。接続を確認してください</string>

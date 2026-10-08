@@ -25,6 +25,9 @@ internal object SessionMessages {
     val REPLAY_NOT_PROVIDED = error(R.string.notice_replay_not_provided)
     val SCREEN_OFF = info(R.string.notice_screen_off)
 
+    /** チャット情報が無い理由を YouTube が示さない時。配信直後でリプレイが未生成の可能性を案内し、自動で再確認する（BL-106）。 */
+    val CHAT_PENDING = info(R.string.notice_chat_pending)
+
     /** チャット無効の説明（応答の文言。無ければ既定文。F-VID-07）。応答の文言は翻訳できないためそのまま出す。 */
     fun chatUnavailable(message: String?): OverlayNotice =
         message?.let { OverlayNotice(NoticeMessage.Raw(it), NoticeLevel.ERROR) } ?: CHAT_UNAVAILABLE

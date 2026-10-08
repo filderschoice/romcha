@@ -38,6 +38,7 @@
     <string name="notice_loading_video">Loading chat…</string>
     <string name="notice_chat_unavailable">Chat is not available for this video</string>
     <string name="notice_replay_not_provided">The stream has ended. Chat replay is not available</string>
+    <string name="notice_chat_pending">Chat is not available yet. Right after a stream ends, the replay can take a while to be prepared. Checking again automatically</string>
     <string name="notice_screen_off">Chat fetching is paused because the screen is off</string>
     <string name="notice_live_ended">The stream has ended. Waiting for the chat replay to be ready (attempt %1$d)</string>
     <string name="notice_network">Cannot connect. Check your connection</string>

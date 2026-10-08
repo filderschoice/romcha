@@ -345,10 +345,44 @@ class WatchCoordinatorTest {
     fun チャットが無効な動画は説明を表示する() =
         runTest {
             val h = Harness(this)
-            h.backend.infos["disabled001"] = VideoChatInfo.Unavailable("disabled001", "無効", "チャンネル", message = null)
+            h.backend.infos["disabled001"] =
+                VideoChatInfo.Unavailable("disabled001", "無効", "チャンネル", message = "チャットは無効です")
 
             h.requested.value = "disabled001"
             advanceTimeBy(500)
+
+            assertEquals(SessionMessages.chatUnavailable("チャットは無効です"), h.published.notice)
+        }
+
+    @Test
+    fun 理由が示されないチャットは準備中と案内して再確認し使えるようになれば表示する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.infos["fresh0000001"] = VideoChatInfo.Unavailable("fresh0000001", "配信直後", "チャンネル", message = null)
+
+            h.play("配信直後")
+
+            h.requested.value = "fresh0000001"
+            advanceTimeBy(500)
+            assertEquals(SessionMessages.CHAT_PENDING, h.published.notice)
+
+            h.backend.replayVideo("fresh0000001", "配信直後")
+            advanceTimeBy(3_000)
+
+            assertEquals(listOf("m_fresh0000001"), h.published.messages.map { it.id })
+            assertEquals(null, h.published.notice)
+        }
+
+    @Test
+    fun 理由が示されないチャットが準備されなければ待ちを終えて使えないと表示する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.infos["fresh0000002"] = VideoChatInfo.Unavailable("fresh0000002", "配信直後", "チャンネル", message = null)
+
+            h.requested.value = "fresh0000002"
+            advanceTimeBy(500)
+            assertEquals(SessionMessages.CHAT_PENDING, h.published.notice)
+            advanceTimeBy(3_000)
 
             assertEquals(SessionMessages.CHAT_UNAVAILABLE, h.published.notice)
         }
