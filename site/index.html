@@ -1,6 +1,8 @@
 <!doctype html>
 <!--
   アプリ紹介ポートフォリオ（テンプレート兼 Romcha 版）。使い方は site/README.md。
+  英語ページは en/index.html（このページの翻訳）。JavaScript を使わないため、言語の切り替えはヘッダーのリンクで行う。
+  このページを変えたら en/index.html も同じ内容に更新する。
   他アプリへ流用するときは「TEMPLATE:」の付いた箇所を差し替え、不要なセクションは丸ごと削除する。
   外部フォント・外部スクリプトは読み込まない（閲覧者の情報を第三者へ送らないため）。
 -->
@@ -16,6 +18,9 @@
   <!-- TEMPLATE: 公開URL（GitHub Pages）。公開しない場合は og:url と canonical を削除する -->
   <meta property="og:url" content="https://filderschoice.github.io/romcha/">
   <link rel="canonical" href="https://filderschoice.github.io/romcha/">
+  <link rel="alternate" hreflang="ja" href="https://filderschoice.github.io/romcha/">
+  <link rel="alternate" hreflang="en" href="https://filderschoice.github.io/romcha/en/index.html">
+  <link rel="alternate" hreflang="x-default" href="https://filderschoice.github.io/romcha/">
   <meta property="og:title" content="Romcha（ロムチャ）">
   <meta property="og:description" content="YouTube 公式アプリと同期する、見るだけのフローティングチャットビューワー（Android）">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -36,6 +41,7 @@
         <a href="#privacy">プライバシー</a>
         <a href="#download">入手</a>
       </nav>
+      <a class="lang-switch" href="en/index.html" hreflang="en" lang="en">English</a>
     </div>
   </header>
 
@@ -55,7 +61,7 @@
             <a class="button primary" href="https://github.com/filderschoice/romcha/releases/latest">APK をダウンロード</a>
             <a class="button" href="https://github.com/filderschoice/romcha">ソースコード</a>
           </div>
-          <p class="meta">v1.0.3 ・ Android 14 以上 ・ MIT License ・ 無料・広告なし</p>
+          <p class="meta">v1.1.0 ・ Android 14 以上 ・ MIT License ・ 無料・広告なし</p>
         </div>
         <div class="hero-visual">
           <img src="assets/screen.svg" alt="動画アプリの再生画面の上に、半透明のチャットウィンドウが重なり、動画の位置に合わせてチャットが流れている様子の図解（動画と投稿者名、チャットはすべて架空）" width="360" height="720">
@@ -91,7 +97,7 @@
           <li class="card">
             <span class="tag">同期</span>
             <h3>再生位置に合わせて流れる</h3>
-            <p>公式アプリの再生・一時停止・シーク・再生速度に追従し、アーカイブのチャットを当時のタイミングで表示します。</p>
+            <p>公式アプリの再生・一時停止・シーク・再生速度に追従し、アーカイブのチャットを当時のタイミングで表示します。配信直後でチャットがまだ作られていない動画は、準備中と案内して自動で再確認します。</p>
           </li>
           <li class="card">
             <span class="tag">自動特定</span>
@@ -112,6 +118,11 @@
             <span class="tag">表示</span>
             <h3>読みやすさを調整</h3>
             <p>文字サイズ、投稿者名・アイコン・時刻、NG ワードや種別での絞り込み、ライト／ダークのテーマ、絵文字画像の表示、ヘッダーのボタンの大きさの切り替え（36dp／48dp）。</p>
+          </li>
+          <li class="card">
+            <span class="tag">言語</span>
+            <h3>日本語と English</h3>
+            <p>設定画面から表示言語を切り替えられます（既定は日本語）。フローティングウィンドウの表示も、表示したまま切り替わります。</p>
           </li>
           <li class="card">
             <span class="tag">補正</span>
@@ -148,6 +159,7 @@
           <li>「フローティング表示を開始」を押し、YouTube 公式アプリでアーカイブやライブを再生します。</li>
           <li>チャットが小窓に流れます。ヘッダーをドラッグで移動、右下のつまみで大きさを変えられます。</li>
           <li>特定できないときは、公式アプリの「共有」で Romcha を選ぶか、URL を入力して開きます。</li>
+          <li>表示・言語・バックアップなどの設定は、アプリ右上の歯車（設定）から変えられます。</li>
         </ol>
       </div>
     </section>
@@ -163,10 +175,10 @@
           <li>通信先は YouTube（チャットの取得・画像）と、「更新を確認」を押した時の GitHub API と、クラッシュ情報の送信先（Google の Firebase Crashlytics）だけです。</li>
           <li>
             クラッシュ情報は、アプリが異常終了した時にだけ送ります。内容はエラーの内容（スタックトレース）・アプリの版・Android の版・端末の機種・
-            匿名のインストール識別子で、チャットの内容や動画の URL は送りません。<strong>既定でオン</strong>で、HOME 画面の
-            「クラッシュ情報の送信」のスイッチでいつでもオフにできます。
+            匿名のインストール識別子で、チャットの内容や動画の URL は送りません。<strong>既定でオン</strong>で、設定画面の
+            「クラッシュ情報を送信する」のスイッチでいつでもオフにできます。
           </li>
-          <li>動画の特定結果は端末内にのみ保存します。ウィンドウなどの設定は、再インストール時に復元できるよう Android の自動バックアップの対象です。</li>
+          <li>動画の特定結果は端末内にのみ保存します。ウィンドウなどの設定は、再インストール時に復元できるよう Android の自動バックアップの対象で、設定画面の「設定をバックアップする」でオフにできます。</li>
         </ul>
         <div class="notice spaced">
           <p>

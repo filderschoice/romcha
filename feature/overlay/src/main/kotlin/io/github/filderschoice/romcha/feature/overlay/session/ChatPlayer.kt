@@ -42,6 +42,8 @@ internal class ChatPlayer(
     private val publisher: OverlayPublisher,
     private val timing: SessionTiming,
 ) {
+    private val playbackHold = PlaybackHold(env, publisher, timing)
+
     /** 動画を開く。キャンセルされるまで（またはチャットが使えないと分かるまで）戻らない。 */
     suspend fun open(
         videoId: String,
@@ -65,17 +67,58 @@ internal class ChatPlayer(
         val title = info.title.ifEmpty { null }
         when (info) {
             is VideoChatInfo.Unavailable ->
-                publisher.show(
-                    OverlayUiState(
-                        title = title,
-                        notice = SessionMessages.chatUnavailable(info.message),
-                        candidates = alternatives,
-                    ),
-                )
+                if (info.message == null) {
+                    awaitChat(videoId, title, alternatives)
+                } else {
+                    playbackHold.showUnavailable(
+                        title,
+                        SessionMessages.chatUnavailable(info.message),
+                        alternatives,
+                    )
+                }
             is VideoChatInfo.Available -> {
                 publisher.reset(OverlayUiState(title = title, candidates = alternatives))
                 if (info.isReplay) playReplay(info.topChatToken) else playLive(videoId, info.topChatToken)
             }
+        }
+    }
+
+    /**
+     * YouTube がチャットを出せない理由を示さない時、準備中の可能性を案内して自動で再確認する（BL-106）。
+     *
+     * 配信直後のアーカイブは、YouTube がチャットのリプレイを作るまで（数時間かかることがある）チャット情報を返さない。
+     * ライブ終了後の待ち（[ReplaySwitcher]）と同じ間隔で確かめ、使えるようになればそのまま表示し、準備されなければ諦める。
+     * 待つ間も同期状態と再生位置は更新する。理由が示される場合（チャット無効など）は待たずに [showUnavailable] で表示する。
+     */
+    private suspend fun awaitChat(
+        videoId: String,
+        title: String?,
+        alternatives: List<OverlayCandidate>,
+    ) {
+        val pending = OverlayUiState(title = title, notice = SessionMessages.CHAT_PENDING, candidates = alternatives)
+        publisher.show(pending)
+        val switch =
+            coroutineScope {
+                val ticker = launch { playbackHold.hold(pending) }
+                ReplaySwitcher(VideoInfoSource { backend.videoInfo(it) }, timing.replayWaitsMs)
+                    .await(videoId)
+                    .also { ticker.cancel() }
+            }
+        when (switch) {
+            is ReplaySwitch.Ready -> {
+                publisher.reset(OverlayUiState(title = title, candidates = alternatives))
+                playReplay(switch.continuation)
+            }
+            is ReplaySwitch.StillLive -> {
+                publisher.reset(OverlayUiState(title = title, candidates = alternatives))
+                playLive(videoId, switch.continuation)
+            }
+            ReplaySwitch.Unavailable ->
+                playbackHold.showUnavailable(
+                    title,
+                    SessionMessages.CHAT_UNAVAILABLE,
+                    alternatives,
+                )
         }
     }
 

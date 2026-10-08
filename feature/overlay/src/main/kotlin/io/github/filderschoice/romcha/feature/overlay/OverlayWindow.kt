@@ -1,5 +1,6 @@
 package io.github.filderschoice.romcha.feature.overlay
 
+import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.view.Gravity
 import android.view.WindowManager
@@ -114,8 +115,13 @@ internal class OverlayWindow<T>(
     /** 移動・サイズ変更の操作の終わり。位置を保存し、画面の外へ十分はみ出して離した場合は退避する向きを返す（はみ出しが少なければ画面内へ戻す） */
     fun endGesture(): StashSide? = placement.endGesture().also { updateLayout() }
 
-    /** 画面の向きが変わったら、その向きで記憶していた位置と大きさへ切り替える（F-OVL-06） */
-    fun onConfigurationChanged() {
+    /**
+     * 画面の向きが変わったら、その向きで記憶していた位置と大きさへ切り替える（F-OVL-06）。
+     *
+     * 言語などの設定の変更は、サービスが開いたウィンドウの [ComposeView] へは OS が伝えないため、ここで渡して文言を引き直させる（BL-107）。
+     */
+    fun onConfigurationChanged(newConfig: Configuration) {
+        view?.dispatchConfigurationChanged(newConfig)
         if (view != null && placement.onConfigurationChanged()) updateLayout()
     }
 

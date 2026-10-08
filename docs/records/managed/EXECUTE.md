@@ -6,6 +6,195 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 22:00
+  summary: Dependabot アラートのビルドツール側の依存を修正版へ上げた
+  details:
+    変更内容: >-
+      アラート 61 件はすべてビルドツール側（プラグインのクラスパスと ktlint・lint の設定）の依存で、APK の実行時の依存には無かった。
+      修正版を gradle/security-patches.txt に列挙し、ルートの build.gradle.kts で buildscript のクラスパスへは依存の制約として、
+      全モジュールの設定へは eachDependency（古い時だけ上げる）として適用した。netty 4.1.137.Final、bouncycastle 1.85、logback 1.5.34、
+      jose4j 0.9.6、jdom2 2.0.6.1、protobuf 3.25.5、commons-compress 1.26.0。kotlin-gradle-plugin は保留（BL-113）。
+    変更ファイル:
+      - build.gradle.kts
+      - gradle/security-patches.txt
+      - docs/RELEASE.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test :app:assembleDebug、
+      buildEnvironment と :app:dependencies で解決された版の確認、releaseRuntimeClasspath の前後の diff、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: >-
+      成功 - 品質ゲートとデバッグビルドが成功し、releaseRuntimeClasspath は変わらない。署名ビルド（鍵を使うため人が行う）と、
+      マージ後の Dependabot アラートの再評価は未確認（BL-114）
+    関連ID:
+      - BL-112
+      - BL-113
+      - BL-114
+- date: 2026-10-09 20:00
+  summary: 配信直後でチャットが未生成の動画に、準備中の案内と自動再確認を追加した
+  details:
+    変更内容: >-
+      YouTube がチャット情報を返さず理由も示さない時（VideoChatInfo.Unavailable の message が null）、従来は「利用できません」を表示して
+      止まっていた。ChatPlayer.awaitChat が「準備中」の案内（CHAT_PENDING）を出し、ReplaySwitcher の間隔で自動で再確認して、
+      使えるようになればそのまま表示する。準備されなければ「利用できません」に切り替える。理由が示される時（チャット無効など）は従来どおり。
+      再生位置の更新を PlaybackHold（新規）へ切り出した（BL-108 の処理。detekt の関数数の上限のため）。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/PlaybackHold.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/values-en/strings.xml
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）でチャットの無い通常の動画（URL 共有）を指定
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で「準備中」の案内が出て、同期状態が「同期中」と再生位置に追従した。
+      使えるようになる経路と準備されない経路はユニットテストで確認した（実機では配信直後の動画が無く、再生成の瞬間は未確認）
+    関連ID:
+      - BL-106
+- date: 2026-10-09 18:00
+  summary: 言語を切り替えても起動済みのフローティングウィンドウが追従しない不具合を直した
+  details:
+    変更内容: >-
+      サービスが開いたウィンドウの ComposeView へは OS が設定の変更（言語）を伝えず、起動時の言語のまま残っていた。
+      OverlayService.onConfigurationChanged から OverlayWindow.onConfigurationChanged へ新しい Configuration を渡し、
+      ComposeView.dispatchConfigurationChanged で文言を引き直させ、常駐通知も作り直すようにした。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で日本語のウィンドウを表示したまま英語へ切り替え
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で、表示中のウィンドウの同期状態が切り替え直後に「Syncing」へ変わった。
+      通知の文言の切り替えは画面で確認しておらず、ユニットテストも無い（Android のサービスと WindowManager に依存するため）
+    関連ID:
+      - BL-107
+- date: 2026-10-09 16:00
+  summary: チャットを出せない動画で、同期状態と再生位置が止まったままになる不具合を直した
+  details:
+    変更内容: >-
+      VideoChatInfo.Unavailable の時、ChatPlayer.holdWithPlayback が tickIntervalMs ごとに同期状態（手動タイマー中は手動）と再生位置を
+      更新し続けるようにした。従来は「未検出 0:00」を 1 回表示して止まっていた。テストを 1 件追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機では調査時にチャットが生成済みとなり再現できず、ユニットテストで確認した
+    関連ID:
+      - BL-108
+- date: 2026-10-09 14:00
+  summary: 日本語と英語に対応し、設定画面から言語を切り替えられるようにした
+  details:
+    変更内容: >-
+      文字列を日本語（既定）と values-en の英語に分け（app・feature:overlay・core:media）、フローティングウィンドウのお知らせと同期状態を
+      文字列リソース ID で持って表示時に解決するようにした（NoticeMessage）。言語の切り替えは LocaleManager（AppLanguageSettings。
+      初回の起動時に未設定なら日本語にする）で、設定画面の「言語」ダイアログから日本語／English を選ぶ。locales_config.xml を追加した。
+      あわせて設定画面の表示設定の行を、矢印を縦中央にそろえ、補足説明を文章にし、アイコンの枠は付けないようにした（BL-103 の追加調整）。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/language/AppLanguage.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/RomchaApplication.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/SettingsScreen.kt
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/res/xml/locales_config.xml
+      - app/src/main/res/values/strings.xml
+      - app/src/main/res/values-en/strings.xml
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/values-en/strings.xml
+      - core/media/src/main/res/values-en/strings.xml
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayUiState.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormat.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessages.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/AppLanguageTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayFormatTest.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/SessionMessagesTest.kt
+      - README.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で言語ダイアログから English を選び、設定画面・ホーム・フローティングウィンドウの
+      同期状態の表示を確認
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で English へ即時に切り替わり、フローティングウィンドウの「Syncing」も英語になった。
+      初回の起動でアプリ別言語が ja に設定されることを確認した。英語の端末での初回の起動と画面全体の見た目の確認は残る（BL-105）
+    関連ID:
+      - BL-103
+      - BL-104
+- date: 2026-10-09 12:00
+  summary: 設定画面の表示設定を、別の画面へ進む項目だと分かる表現にした
+  details:
+    変更内容: >-
+      SettingsLink に navigates を追加し、true の項目は行末に矢印を出し、アイコンへ primaryContainer の円形の背景を付けた。
+      表示設定へ進む行だけに使い、キャッシュ消去・初期化のようなその場で動作する項目とは見分けられる。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/SettingsScreen.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で設定画面を確認
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で矢印と円形の背景が出ることを確認した
+    関連ID:
+      - BL-103
+- date: 2026-10-09 10:00
+  summary: 設定のメニュー構成を見直し、歯車と三点メニューを備えた設定画面へ整理した
+  details:
+    変更内容: >-
+      ホームを操作だけに絞り、トップバーに歯車（設定）と三点メニュー（診断情報・ライセンス）を追加。バックアップ・クラッシュ情報・
+      キャッシュ消去・設定の初期化・アップデートを新しい SettingsScreen にグループ化したリスト形式で移し、診断情報は専用画面にした。
+      表示設定は「表示する項目」「チャットの絞り込み」「フローティングウィンドウ」「テーマ」に分け、説明文を短くした。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/SettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DiagnosticsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/RomchaApp.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/ResetSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/UpdateSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/BackupSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/CrashReportingSection.kt
+      - app/src/main/res/values/strings.xml
+      - README.md
+      - docs/VERIFICATION.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機（Pixel 8 Pro）で、歯車から設定画面、表示設定への遷移、戻る操作（表示設定→設定→ホーム）、
+      三点メニュー（診断情報・ライセンス）の表示を確認した。確認で、表示設定のグループ見出しが項目より右にずれていた（親の余白との二重）ため、
+      見出しの左右の余白を引数にして直した。ライト／ダーク・大きいフォントでの確認は残る（BL-102）
+    関連ID:
+      - BL-101
 - date: 2026-10-08 20:00
   summary: 退避したつまみを内側へのスワイプで戻せない不具合を、システムのジェスチャー除外で直した
   details:

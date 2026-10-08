@@ -9,19 +9,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,38 +45,67 @@ import io.github.filderschoice.romcha.PermissionStatus
 import io.github.filderschoice.romcha.PermissionStep
 import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.core.chat.VideoUrlParser
-import io.github.filderschoice.romcha.core.media.NowPlaying
-import kotlinx.coroutines.flow.StateFlow
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
     status: PermissionStatus,
-    nowPlaying: StateFlow<NowPlaying>,
-    update: UpdateUiModel,
     actions: HomeActions,
-    onOpenDisplaySettings: () -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenDiagnostics: () -> Unit,
     onOpenLicenses: () -> Unit,
 ) {
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+                actions = {
+                    IconButton(onClick = onOpenSettings) {
+                        Icon(Icons.Filled.Settings, stringResource(R.string.settings_title))
+                    }
+                    MoreMenu(onOpenDiagnostics = onOpenDiagnostics, onOpenLicenses = onOpenLicenses)
+                },
+            )
+        },
+    ) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineMedium)
             Text(stringResource(R.string.app_subtitle), style = MaterialTheme.typography.bodyMedium)
-            Disclaimer()
             Permissions(status, actions)
             OverlayControls(status, actions)
             UrlInput(enabled = status.canStartOverlay, onOpen = actions::openVideo)
-            OutlinedButton(onClick = onOpenDisplaySettings) { Text(stringResource(R.string.display_title)) }
-            CacheSection(actions)
-            BackupSection()
-            ResetSection(actions)
-            CrashReportingSection()
-            UpdateSection(currentVersion = update.currentVersion, state = update.state, actions = actions)
-            Diagnostics(nowPlaying)
-            TextButton(onClick = onOpenLicenses) { Text(stringResource(R.string.licenses_title)) }
+            Disclaimer()
         }
+    }
+}
+
+/** 三点メニュー。普段は使わない情報系の画面（診断情報・ライセンス）への入口。 */
+@Composable
+private fun MoreMenu(
+    onOpenDiagnostics: () -> Unit,
+    onOpenLicenses: () -> Unit,
+) {
+    var open by rememberSaveable { mutableStateOf(false) }
+    IconButton(onClick = { open = true }) {
+        Icon(Icons.Filled.MoreVert, stringResource(R.string.more_menu))
+    }
+    DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.diagnostics_title)) },
+            onClick = {
+                open = false
+                onOpenDiagnostics()
+            },
+        )
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.licenses_title)) },
+            onClick = {
+                open = false
+                onOpenLicenses()
+            },
+        )
     }
 }
 
@@ -223,52 +258,5 @@ private fun UrlInput(
                 Text(stringResource(R.string.url_paste))
             }
         }
-    }
-}
-
-/** 動画特定のキャッシュの消去。誤った動画のチャットが出続ける時に、ユーザーが自分で実行する。 */
-@Composable
-private fun CacheSection(actions: HomeActions) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(R.string.cache_title), style = MaterialTheme.typography.titleMedium)
-        OutlinedButton(onClick = actions::clearResolutionCache) { Text(stringResource(R.string.cache_clear)) }
-        Text(stringResource(R.string.cache_hint), style = MaterialTheme.typography.bodySmall)
-    }
-}
-
-/** 公式アプリの MediaSession の診断表示（M0 の Q-01 / Q-02 を実機で確認するため）。端末の画面に表示するだけで送信しない。 */
-@Composable
-private fun Diagnostics(nowPlaying: StateFlow<NowPlaying>) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-    val state by nowPlaying.collectAsState()
-    Column {
-        TextButton(onClick = { expanded = !expanded }) {
-            Text(stringResource(if (expanded) R.string.diagnostics_hide else R.string.diagnostics_show))
-        }
-        if (expanded) {
-            SelectionContainer {
-                Text(
-                    text = diagnosticsText(state),
-                    fontFamily = FontFamily.Monospace,
-                    style = MaterialTheme.typography.bodySmall,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun diagnosticsText(state: NowPlaying): String {
-    if (!state.sessionFound) return stringResource(R.string.diagnostics_no_session)
-    val snapshot = state.snapshot
-    val metadata = state.metadata
-    return buildString {
-        appendLine("status = ${snapshot.status} / position = ${snapshot.positionMs} ms / speed = ${snapshot.speed}")
-        appendLine(
-            "title = ${metadata?.title} / channel = ${metadata?.channelName} / duration = ${metadata?.durationMs} ms",
-        )
-        appendLine("videoIdHints = ${metadata?.videoIdHints}")
-        appendLine("---")
-        state.debugLines.forEach(::appendLine)
     }
 }

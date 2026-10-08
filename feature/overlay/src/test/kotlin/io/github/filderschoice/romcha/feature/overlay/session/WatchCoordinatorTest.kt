@@ -345,12 +345,62 @@ class WatchCoordinatorTest {
     fun チャットが無効な動画は説明を表示する() =
         runTest {
             val h = Harness(this)
-            h.backend.infos["disabled001"] = VideoChatInfo.Unavailable("disabled001", "無効", "チャンネル", message = null)
+            h.backend.infos["disabled001"] =
+                VideoChatInfo.Unavailable("disabled001", "無効", "チャンネル", message = "チャットは無効です")
 
             h.requested.value = "disabled001"
             advanceTimeBy(500)
 
+            assertEquals(SessionMessages.chatUnavailable("チャットは無効です"), h.published.notice)
+        }
+
+    @Test
+    fun 理由が示されないチャットは準備中と案内して再確認し使えるようになれば表示する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.infos["fresh0000001"] = VideoChatInfo.Unavailable("fresh0000001", "配信直後", "チャンネル", message = null)
+
+            h.play("配信直後")
+
+            h.requested.value = "fresh0000001"
+            advanceTimeBy(500)
+            assertEquals(SessionMessages.CHAT_PENDING, h.published.notice)
+
+            h.backend.replayVideo("fresh0000001", "配信直後")
+            advanceTimeBy(3_000)
+
+            assertEquals(listOf("m_fresh0000001"), h.published.messages.map { it.id })
+            assertEquals(null, h.published.notice)
+        }
+
+    @Test
+    fun 理由が示されないチャットが準備されなければ待ちを終えて使えないと表示する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.infos["fresh0000002"] = VideoChatInfo.Unavailable("fresh0000002", "配信直後", "チャンネル", message = null)
+
+            h.requested.value = "fresh0000002"
+            advanceTimeBy(500)
+            assertEquals(SessionMessages.CHAT_PENDING, h.published.notice)
+            advanceTimeBy(3_000)
+
             assertEquals(SessionMessages.CHAT_UNAVAILABLE, h.published.notice)
+        }
+
+    @Test
+    fun チャットが使えない動画でも再生中は同期状態と再生位置を更新する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.infos["disabled002"] = VideoChatInfo.Unavailable("disabled002", "無効", "チャンネル", message = null)
+            h.play("無効")
+
+            h.requested.value = "disabled002"
+            advanceTimeBy(500)
+
+            assertEquals(SyncIndicator.SYNCING, h.published.indicator)
+            val first = h.published.positionMs
+            advanceTimeBy(2_000)
+            assertTrue(h.published.positionMs > first)
         }
 
     @Test

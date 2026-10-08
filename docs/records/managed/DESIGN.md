@@ -28,7 +28,8 @@
   「キャッシュを消す」の表示と再取得・誤特定からの回復（BL-073 の C1〜C5）、UI/UX 改善（BL-077〜BL-081。BL-082 の U1〜U9）は確認済み。動画切り替え直後に識別キー（タイトル・チャンネル）が
   混ざる状態は見られず（BL-072。MediaSession は切り替え時に一瞬 `metadata = null` で BUFFERING になり、次の取得で新しい値が揃う。
   1 秒間隔の記録で長さは確認できていない）、特定を遅らせる待ち（デバウンス）は入れない
-- 配布: v1.0.3（versionCode 10003。クラッシュ情報の送信を追加。BL-088・BL-089・BL-092。署名ビルドの実機で、設定オン時の送信とオフ時の
+- 配布: v1.1.0（versionCode 10100。設定画面の再編・日本語と英語の切り替え・配信直後のチャットの案内・site の英語対応・設定のバックアップと初期化。
+  BL-094〜BL-109。版の更新・README・site・DESIGN は済み。署名ビルド・タグ・Release の作成は未実施で、BL-110 で人が行う）。直前の版は v1.0.3（versionCode 10003。クラッシュ情報の送信を追加。BL-088・BL-089・BL-092。署名ビルドの実機で、設定オン時の送信とオフ時の
   非送信を確認済み〈BL-091〉。site・README は v1.0.3 の内容へ更新済みで、タグ・Release の作成は未実施）。直前の版は v1.0.2
   （versionCode 10002。お知らせ帯の色分け・空の一覧の案内文・表示設定の行全体のタップ・HOME 画面の整理・ヘッダーのボタンの大きさの切り替え）の
   GitHub Release を 2026-10-04 に作成済み（タグ `v1.0.2` は `main` の 1c4049c、署名済み `romcha-v1.0.2.apk` と `.sha256`。
@@ -73,6 +74,7 @@
 - F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
 - F-VIEW-05: ライト／ダーク／システム追従のテーマ（アプリの表示設定画面。システム追従ではフローティングは従来どおり暗色）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
+- F-APP-05（BL-101・BL-103・BL-104）: 設定画面（歯車）と三点メニュー、日本語・英語の切り替え（アプリ画面とフローティングウィンドウ。既定は日本語）
 - F-APP-02: 更新の確認（`app` の `update` パッケージ。「更新を確認」を押した時だけ GitHub Releases API へ問い合わせる）
 - R-08: リリース署名と配布物の出力（`:app:releaseDist`。実装制約を参照）
 
@@ -321,11 +323,17 @@
 
 ### アプリ画面（`app`）
 
-- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`DISPLAY`（表示設定）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
+- `MainActivity`（`singleTop`）1 画面構成。Compose で `HOME`・`SETTINGS`（設定）・`DISPLAY`（表示設定）・`DIAGNOSTICS`（診断情報）・`LICENSES` を切り替える（ナビゲーションライブラリは使わない）。
   テーマは端末の壁紙色（dynamic color）とシステムのライト／ダーク設定に従う。
-- HOME の構成（上から）: アプリ名と副題、免責表示（F-APP-04）、権限案内（F-APP-01）、フローティング表示の開始／終了、
-  URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、表示設定へのボタン、動画特定のキャッシュを消すボタン（直下にクラッシュ情報の送信のスイッチ。Firebase 有効のビルドのみ）（誤った動画のチャットが出る時の対処。押すと端末内の対応を消し、
-  `OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定をやり直させる）、アップデート（F-APP-02）、診断情報（折りたたみ）、OSS ライセンスへのリンク。
+- HOME の構成（BL-101。操作だけに絞る）: トップバー（アプリ名、右に歯車＝設定、三点メニュー＝診断情報・OSS ライセンス）、副題、
+  権限案内（F-APP-01）、フローティング表示の開始／終了、URL 入力（F-VID-05。「クリップボードから貼り付け」ボタン付き F-VID-06）、
+  免責表示（F-APP-04）。
+- 設定画面 `SettingsScreen` の構成（リスト形式。`ListItem` のアイコン・タイトル・短い説明、グループ見出し付き）:
+  表示設定（`DISPLAY` へ遷移。行末の矢印で、その場で動作する項目と見分ける。BL-103）→
+  言語（ダイアログで日本語／English を選ぶ。BL-104）→「プライバシーとバックアップ」（設定のバックアップ、クラッシュ情報の送信＝Firebase 有効のビルドのみ）→
+  「データ」（動画特定のキャッシュを消す。押すと端末内の対応を消し、`OverlayEvent.ResolutionCacheCleared` を送って見ている動画の特定を
+  やり直させる。設定を初期化する＝確認ダイアログ付き）→「アップデート」（F-APP-02）。戻るは HOME へ（`DISPLAY` からは `SETTINGS` へ）。
+- 表示設定画面は「表示する項目」「チャットの絞り込み」「フローティングウィンドウ」「テーマ」のグループに分け、補足は項目の直下に短く添える。
 - 権限案内: `PermissionStatus` で「オーバーレイ → 通知へのアクセス → 通知の表示」の順に次の未許可を強調し、各行の「設定を開く」で
   それぞれの設定画面（通知へのアクセスは `ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS` にコンポーネント名を付け、無ければ一覧画面）
   または実行時許可を出す。状態は `onResume` で読み直す。通知へのアクセスは「通知の内容を読まない」旨を説明文に書く（PLAN 4.9）。
@@ -339,7 +347,7 @@
 - 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
   MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
 - クラッシュ情報の送信（BL-088・BL-089。2026-10-04 ユーザー判断。外部通信を利用者の操作に限る従来方針の例外）: Firebase Crashlytics のみを使い、
-  Analytics は入れない。送信は既定オンで、HOME の「クラッシュ情報の送信」のスイッチでオフにできる（`CrashReportingSettings`。
+  Analytics は入れない。送信は既定オンで、設定画面の「クラッシュ情報を送信する」のスイッチでオフにできる（`CrashReportingSettings`。
   `SharedPreferences` の `crash_reporting` の `enabled`、既定 true）。Manifest の
   `firebase_crashlytics_collection_enabled=false` で自動収集を止め、
   `RomchaApplication` が起動時に設定値を `FirebaseCrashlytics.isCrashlyticsCollectionEnabled` へ反映する。
@@ -347,7 +355,7 @@
   `app/google-services.json` は公開リポジトリへ含めず（`.gitignore`）、無いビルドではプラグインを適用せず（`BuildConfig.FIREBASE_ENABLED`=false）
   初期化も設定項目の表示もしない。`androidx.fragment` は Firebase が古い版を引き込み lint が失敗するため明示している。
   動作状況の把握はこの手段に限り、配布・関心の指標は GitHub 側の統計（app-pulse。BL-086）を正とする。
-- 更新の確認（F-APP-02。PLAN 6章）: HOME の「アップデート」欄（診断情報の上）に現在の版（`BuildConfig.VERSION_NAME`）と
+- 更新の確認（F-APP-02。PLAN 6章）: 設定画面の「アップデート」欄に現在の版（`BuildConfig.VERSION_NAME`）と
   「更新を確認」を置く。押した時だけ `UpdateChecker.check` が `GET https://api.github.com/repos/filderschoice/romcha/releases/latest`
   （`Accept: application/vnd.github+json`・`X-GitHub-Api-Version: 2022-11-28`・`User-Agent: Romcha/<版>`。認証なし）を呼ぶ。
   更新の確認は起動時に自動では行わない（利用者の操作に限るため。2026-09-27 ユーザー判断）。
@@ -362,9 +370,31 @@
 - 表示設定画面のスイッチ・テーマの行は、行全体を `toggleable`（`Role.Switch`）・`selectable`（`Role.RadioButton`、親に
   `selectableGroup`）にし、部品側の操作は null にする。行の高さは 48dp 以上（BL-079。タップ領域とスクリーンリーダーのため）。
 - OSS ライセンス（F-APP-03）: AboutLibraries（Gradle プラグインがビルド時に依存一覧を生成し、`LibrariesContainer` で表示）。
-- 文言は日本語のみ（英語リソースは未対応。N-11 は SHOULD）。
+- 文言は日本語（既定）と英語（BL-104。「多言語対応」の節を参照。N-11 は SHOULD）。
+
+### 多言語対応（BL-104）
+
+- 対応言語は日本語と英語のみ。**既定は日本語**（2026-10-09 ユーザー指示）。文字列の既定（`values`）を日本語、英語を `values-en` に置く
+  （`app`・`feature:overlay`・`core:media` の 3 モジュール）。キーは両方で同じにそろえ、lint（MissingTranslation）で欠けを検出する。
+- 言語の切り替えは OS のアプリ別言語（`LocaleManager`。`AppLanguageSettings`）。`locales_config.xml` で `ja`・`en` を宣言する。
+  独自の保存値は持たず、設定のバックアップ・初期化の対象外。変更すると OS が画面を作り直す。フローティングウィンドウは OS が設定の変更を伝えないため、
+  `OverlayService.onConfigurationChanged` が `OverlayWindow.onConfigurationChanged` で
+  `ComposeView.dispatchConfigurationChanged` を呼んで文言を引き直し、通知も作り直す（BL-107）。
+- 初回の起動時だけ、アプリ別言語が未設定なら日本語にする（`initializeDefault`。英語の端末でも最初は日本語）。選択肢は日本語と English の
+  2 つで「システムに合わせる」は設けない。
+- フローティングウィンドウのお知らせは、文字列リソースの ID と引数（`NoticeMessage.Res`）で持ち、表示する時に解決する
+  （`SessionMessages`）。YouTube の応答に含まれるチャット無効の文言だけは翻訳できないため `NoticeMessage.Raw` でそのまま出す。
+  同期状態の表示は `OverlayFormat.indicatorLabel` が文字列リソース ID を返す。
+- ログ・診断情報・開発者向けの失敗理由（`InvalidResponse` など）は翻訳しない。
 
 ### セッション統合（`feature:overlay` の `session` パッケージ）
+
+- チャットを出せない動画（`VideoChatInfo.Unavailable`）でも、`PlaybackHold` が `tickIntervalMs` ごとに同期状態と再生位置を
+  更新し続ける（BL-108。動画を特定できない状態は「未検出」のまま）。
+- チャットを出せない理由を YouTube が示さない時（`message == null`。配信直後でリプレイが未生成の可能性）は、`ChatPlayer.awaitChat` が
+  「準備中」の案内（`SessionMessages.CHAT_PENDING`）を出し、`ReplaySwitcher`（30 秒・1 分・2 分・5 分・10 分後）で自動で再確認する
+  （BL-106）。使えるようになればリプレイ（またはライブ）をそのまま始め、準備されなければ「利用できません」にする。
+  理由が示される時（チャット無効など）は待たずに表示する。
 
 - `OverlayService` が `onCreate` で `PlaybackMonitor` を開始し、`WatchCoordinator.run()` を `lifecycleScope`（メインスレッド）で動かす。
   画面のオン・オフは `ACTION_SCREEN_ON/OFF` のレシーバー（`RECEIVER_NOT_EXPORTED`）と `PowerManager.isInteractive` で追う。
@@ -395,19 +425,23 @@
   - ライブの終了（F-CHAT-06）: `ReplaySwitcher` でリプレイの準備を待ち（待機中は「配信は終了しました。リプレイの準備を待っています
     （n 回目）」）、準備できればリプレイへ、まだ配信中ならライブへ戻り、準備されなければ「リプレイは利用できません」。
   - 画面オフ（N-03）: 画面が消えたら取得を止めて「画面オフのため停止中」を表示し、点いたら取得をやり直す（`transformLatest`）。
-  - 表示文は `SessionMessages` に集約する（日本語のみ）。
+  - 表示文は `SessionMessages` に集約する。文字列リソースの ID と引数で持ち、表示時に端末の言語で解決する（BL-104）。
 - `PersistentResolutionCache`: 特定のキャッシュを `filesDir/resolution-cache.json`（`[{identity, videoId}]`）へ `AtomicFile` で保存し、
   起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。`shared(context)` でプロセス内の 1 インスタンスを共有し、
-  `OverlayService` と HOME 画面が同じものを使う。`ResolutionCache.clear()` はメモリとファイルの両方を消す。
+  `OverlayService` と設定画面が同じものを使う。`ResolutionCache.clear()` はメモリとファイルの両方を消す。
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
 - `feature:overlay` は画像読み込みに Coil 2.7.0（`io.coil-kt:coil-compose`）を使う。既定の `ImageLoader`（シングルトン）で足りるため設定しない。
 
 ### アプリ紹介ポートフォリオ（`site/`）
 
-- 静的な 1 ページ（`index.html`・`style.css`・`assets/*.svg`）。ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
+- 静的なページ（日本語 `index.html`・英語 `en/index.html`・`style.css`・`assets/*.svg`・英語版の図 `assets/en/*.svg`）。
+  ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
   リンクは相対パスで、公開先を選ばない。公開は GitHub Pages の `gh-pages` ブランチ（`git subtree push --prefix site origin gh-pages`。
   Actions は使わず、`site/.nojekyll` を置く）。公開URLは <https://filderschoice.github.io/romcha/>（2026-10-04 ユーザー判断。sesami-wear と同じ方式）。
-- 構成: ヘッダー（ページ内ナビ）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
+- 多言語（BL-111。日本語が既定）: JavaScript を使わない方針のため、言語の切り替えはもう一方のページへのリンク（ヘッダー右端の
+  「English」「日本語」）にする。両ページに `hreflang` の `alternate`（`x-default` は日本語）を付け、2 ページは同じ内容に保つ。
+  英語版の図は文字だけを英語にした SVG を `assets/en/` に置く。
+- 構成: ヘッダー（ページ内ナビ・言語の切り替え）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
   仕組みの図 → 使い方の手順 → プライバシーと免責 → 入手（仕様表）→ フッター。
 - 他アプリのテンプレートを兼ねる: 差し替え箇所に `TEMPLATE:` のコメント、アプリごとの色は `style.css` の `:root` の
   `--accent`・`--accent-strong`・`--accent-soft`（ライト・ダーク）だけ。ライト／ダークは `prefers-color-scheme`、760px 以下で 1 列。
@@ -415,7 +449,7 @@
 - 画像は SVG の図解（アイコンはランチャーアイコンと同じ意匠）。図解であることを `alt` に書く。画面イメージ（`assets/screen.svg`）は
   架空の動画とダミーのチャット（「視聴者A」等。上位チャットを含む）で描く。実機では YouTube の動画とチャットの時刻を同期した画面を
   撮れず、実画面には第三者の情報も写るため、スクリーンショットへは差し替えない（2026-10-04 ユーザー判断）。公開方法は BL-061。
-- 機能・版・動作環境を変えたら、README とあわせて `index.html`・`app.json` も更新する。
+- 機能・版・動作環境を変えたら、README とあわせて `index.html`・`en/index.html`・`app.json` も更新する。
 
 ## 非機能要件
 
@@ -425,11 +459,11 @@
   端末間移行の対象にして、再インストール時に復元する。`<include>` を書いたものだけが対象になるため、動画の特定結果のキャッシュ
   （`filesDir`）など設定以外は含まれない。設定の保存先を増やした時は同ファイルへ追記する（`BackupRulesTest` が対象を固定している）。
   復元した位置・大きさは表示時に画面内へ収めるため、画面の違う端末でも使える。
-  - 切り替え（BL-097）: HOME 画面の「設定のバックアップ」スイッチ（`ui/BackupSection.kt`。既定オン）。規則は静的なため、
+  - 切り替え（BL-097）: 設定画面の「設定をバックアップする」スイッチ（`ui/SettingsScreen.kt`。既定オン）。規則は静的なため、
     `RomchaBackupAgent`（`BackupAgentHelper`）が `onFullBackup` でスイッチを見て、オフなら書き出さない。スイッチの値
     （`BackupSettings`。SharedPreferences `backup_control`）は復元で上書きされないよう規則に含めない。オフ後のバックアップは空になり、
     クラウド上の古い設定も次回のバックアップで置き換わる場合がある。
-  - 初期化（BL-097）: HOME 画面の「設定を初期化する」（`ui/ResetSection.kt`。確認ダイアログ付き）。オーバーレイを止めてから
+  - 初期化（BL-097）: 設定画面の「設定を初期化する」（`ui/ResetSection.kt`。確認ダイアログ付き）。オーバーレイを止めてから
     `OverlaySettingsReset.resetAll` で `overlay` の保存値を消し、表示設定（NG ワード含む）を初期値へ戻す。
     バックアップ・クラッシュ情報のスイッチとキャッシュは変えない。
 
@@ -458,6 +492,13 @@
   → 品質ゲートの Gradle 分（`:app:lintAnalyzeDebug --rerun` を含む。`local.properties` は lint の解析の入力に含まれず、ビルド
   キャッシュの古い結果が使われることがあるため）→ `:app:releaseDist` → `apksigner` の検証 → 次の手順の表示。版は
   `app/build.gradle.kts` を唯一の正本とし、参考にした sesami-wear の `version.properties` 方式は採らない。push・タグ・公開はしない。
+- 依存の脆弱性（BL-112。2026-10-09）: Dependabot アラートの 61 件は、すべてビルドツール側（AGP などのプラグインのクラスパスと、ktlint・lint の設定）で、
+  APK に入る実行時の依存（`releaseRuntimeClasspath`）には無い。修正版を `gradle/security-patches.txt`（`group:name:version`）に列挙し、
+  ルートの `build.gradle.kts` が buildscript のクラスパスには依存の制約（この版以上）として、全モジュールの設定には `eachDependency`
+  （要求された版が修正版より古い時だけ上げる。下げない）として適用する。対象は netty・bouncycastle（署名に使う）・logback（ktlint）・
+  jose4j・jdom2・protobuf・commons-compress。AGP・Kotlin 自体は上げない（`kotlin-gradle-plugin` の medium は修正版がベータ版のみのため BL-113 で保留）。
+  実行時の依存は変わらないことを `releaseRuntimeClasspath` の前後の比較で確認した。新しいアラートが出たら、まず出どころが APK か
+  ビルドツールかを `buildEnvironment`・`:app:dependencies` で調べ、ビルドツール側なら同じファイルへ追記する。
 - アプリ名・アイコンに YouTube のロゴ・名称を使わない（PLAN 5.5）。
 
 ## エージェント実装指示
