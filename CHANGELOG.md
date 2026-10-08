@@ -4,6 +4,11 @@
 
 ## 2026-10-09
 
+- v1.1.0 のリリースを準備した（BL-110 の準備分）。`app/build.gradle.kts` の版を 1.1.0（versionCode 10100）へ上げ、README の「状態」、`site/index.html`・
+  `site/en/index.html` の版表記、`site/app.json` の version、DESIGN の配布を合わせた。署名ビルド・タグ・Release の作成は人が行う（docs/RELEASE.md）。
+  v1.0.3 からの主な変更は、設定画面の再編（歯車・三点メニュー）、日本語と英語の切り替え、配信直後でチャットが未生成の動画の案内と自動再確認、
+  チャットを出せない時の同期状態の更新、フローティングウィンドウの言語追従、設定のバックアップと初期化、site の英語対応。
+
 - site を日本語と英語に対応した（BL-111）。日本語（既定）は `site/index.html`、英語は `site/en/index.html` で、ヘッダー右端のボタンで
   相手のページへ切り替える（JavaScript を使わない方針のため、ページを分けてリンクにした。`hreflang` も付けた）。図の中の文字も英語にした
   版を `site/assets/en/` に置いた。
