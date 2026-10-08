@@ -354,6 +354,22 @@ class WatchCoordinatorTest {
         }
 
     @Test
+    fun チャットが使えない動画でも再生中は同期状態と再生位置を更新する() =
+        runTest {
+            val h = Harness(this)
+            h.backend.infos["disabled002"] = VideoChatInfo.Unavailable("disabled002", "無効", "チャンネル", message = null)
+            h.play("無効")
+
+            h.requested.value = "disabled002"
+            advanceTimeBy(500)
+
+            assertEquals(SyncIndicator.SYNCING, h.published.indicator)
+            val first = h.published.positionMs
+            advanceTimeBy(2_000)
+            assertTrue(h.published.positionMs > first)
+        }
+
+    @Test
     fun ライブ中の動画は最新追従で表示し表示遅延を反映する() =
         runTest {
             val h = Harness(this)

@@ -6,6 +6,26 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 16:00
+  summary: チャットを出せない動画で、同期状態と再生位置が止まったままになる不具合を直した
+  details:
+    変更内容: >-
+      VideoChatInfo.Unavailable の時、ChatPlayer.holdWithPlayback が tickIntervalMs ごとに同期状態（手動タイマー中は手動）と再生位置を
+      更新し続けるようにした。従来は「未検出 0:00」を 1 回表示して止まっていた。テストを 1 件追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/session/ChatPlayer.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/session/WatchCoordinatorTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機では調査時にチャットが生成済みとなり再現できず、ユニットテストで確認した
+    関連ID:
+      - BL-108
 - date: 2026-10-09 14:00
   summary: 日本語と英語に対応し、設定画面から言語を切り替えられるようにした
   details:

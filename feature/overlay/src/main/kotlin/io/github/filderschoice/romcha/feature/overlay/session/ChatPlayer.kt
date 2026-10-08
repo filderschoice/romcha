@@ -64,18 +64,44 @@ internal class ChatPlayer(
             }
         val title = info.title.ifEmpty { null }
         when (info) {
-            is VideoChatInfo.Unavailable ->
-                publisher.show(
+            is VideoChatInfo.Unavailable -> {
+                val state =
                     OverlayUiState(
                         title = title,
                         notice = SessionMessages.chatUnavailable(info.message),
                         candidates = alternatives,
-                    ),
-                )
+                    )
+                publisher.show(state)
+                holdWithPlayback(state)
+            }
             is VideoChatInfo.Available -> {
                 publisher.reset(OverlayUiState(title = title, candidates = alternatives))
                 if (info.isReplay) playReplay(info.topChatToken) else playLive(videoId, info.topChatToken)
             }
+        }
+    }
+
+    /**
+     * チャットを出せない間も、同期状態と再生位置を更新し続ける（戻らない。BL-108）。
+     *
+     * 動画は特定できているため、公式アプリが再生中なら「同期中」と再生位置を出す。出さないと「未検出 0:00」のまま止まって見える。
+     */
+    private suspend fun holdWithPlayback(state: OverlayUiState) {
+        while (true) {
+            val manual = env.manualTimer.value
+            val snapshot = manual ?: env.nowPlaying.value.snapshot
+            publisher.frame(
+                state.copy(
+                    positionMs = PositionEstimator.estimate(snapshot, env.clock()),
+                    indicator =
+                        if (manual != null) {
+                            SyncIndicator.MANUAL
+                        } else {
+                            SessionMessages.indicator(snapshot.status, env.nowPlaying.value.sessionFound)
+                        },
+                ),
+            )
+            delay(timing.tickIntervalMs)
         }
     }
 

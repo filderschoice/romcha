@@ -385,6 +385,9 @@
 
 ### セッション統合（`feature:overlay` の `session` パッケージ）
 
+- チャットを出せない動画（`VideoChatInfo.Unavailable`）でも、`ChatPlayer.holdWithPlayback` が `tickIntervalMs` ごとに同期状態と
+  再生位置を更新し続ける（BL-108。動画を特定できない状態は「未検出」のまま）。
+
 - `OverlayService` が `onCreate` で `PlaybackMonitor` を開始し、`WatchCoordinator.run()` を `lifecycleScope`（メインスレッド）で動かす。
   画面のオン・オフは `ACTION_SCREEN_ON/OFF` のレシーバー（`RECEIVER_NOT_EXPORTED`）と `PowerManager.isInteractive` で追う。
   `onStartCommand` のたびに `PlaybackMonitor.start()` を試す（通知へのアクセスが後から許可された場合に備える）。
