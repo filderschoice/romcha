@@ -185,7 +185,9 @@ class OverlayService :
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        window.onConfigurationChanged()
+        window.onConfigurationChanged(newConfig)
+        // 通知の文言も言語に合わせて作り直す（BL-107）
+        updateNotification()
     }
 
     private fun showWindow() =

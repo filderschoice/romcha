@@ -6,6 +6,28 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 18:00
+  summary: 言語を切り替えても起動済みのフローティングウィンドウが追従しない不具合を直した
+  details:
+    変更内容: >-
+      サービスが開いたウィンドウの ComposeView へは OS が設定の変更（言語）を伝えず、起動時の言語のまま残っていた。
+      OverlayService.onConfigurationChanged から OverlayWindow.onConfigurationChanged へ新しい Configuration を渡し、
+      ComposeView.dispatchConfigurationChanged で文言を引き直させ、常駐通知も作り直すようにした。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で日本語のウィンドウを表示したまま英語へ切り替え
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で、表示中のウィンドウの同期状態が切り替え直後に「Syncing」へ変わった。
+      通知の文言の切り替えは画面で確認しておらず、ユニットテストも無い（Android のサービスと WindowManager に依存するため）
+    関連ID:
+      - BL-107
 - date: 2026-10-09 16:00
   summary: チャットを出せない動画で、同期状態と再生位置が止まったままになる不具合を直した
   details:

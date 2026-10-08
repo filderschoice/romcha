@@ -375,7 +375,8 @@
 - 対応言語は日本語と英語のみ。**既定は日本語**（2026-10-09 ユーザー指示）。文字列の既定（`values`）を日本語、英語を `values-en` に置く
   （`app`・`feature:overlay`・`core:media` の 3 モジュール）。キーは両方で同じにそろえ、lint（MissingTranslation）で欠けを検出する。
 - 言語の切り替えは OS のアプリ別言語（`LocaleManager`。`AppLanguageSettings`）。`locales_config.xml` で `ja`・`en` を宣言する。
-  独自の保存値は持たず、設定のバックアップ・初期化の対象外。変更すると OS が画面を作り直し、フローティングウィンドウも追従する。
+  独自の保存値は持たず、設定のバックアップ・初期化の対象外。変更すると OS が画面を作り直す。フローティングウィンドウは OS が設定の変更を伝えないため、
+  `OverlayService.onConfigurationChanged` が `OverlayWindow.onConfigurationChanged` で `ComposeView.dispatchConfigurationChanged` を呼んで文言を引き直し、通知も作り直す（BL-107）。
 - 初回の起動時だけ、アプリ別言語が未設定なら日本語にする（`initializeDefault`。英語の端末でも最初は日本語）。選択肢は日本語と English の
   2 つで「システムに合わせる」は設けない。
 - フローティングウィンドウのお知らせは、文字列リソースの ID と引数（`NoticeMessage.Res`）で持ち、表示する時に解決する
