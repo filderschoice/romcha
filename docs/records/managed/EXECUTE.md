@@ -6,6 +6,25 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 12:00
+  summary: 設定画面の表示設定を、別の画面へ進む項目だと分かる表現にした
+  details:
+    変更内容: >-
+      SettingsLink に navigates を追加し、true の項目は行末に矢印を出し、アイコンへ primaryContainer の円形の背景を付けた。
+      表示設定へ進む行だけに使い、キャッシュ消去・初期化のようなその場で動作する項目とは見分けられる。
+    変更ファイル:
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/SettingsScreen.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で設定画面を確認
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で矢印と円形の背景が出ることを確認した
+    関連ID:
+      - BL-103
 - date: 2026-10-09 10:00
   summary: 設定のメニュー構成を見直し、歯車と三点メニューを備えた設定画面へ整理した
   details:

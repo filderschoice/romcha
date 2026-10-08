@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Settings
@@ -21,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -68,6 +71,7 @@ internal fun SettingsScreen(
                 icon = Icons.Filled.Settings,
                 title = R.string.display_title,
                 summary = R.string.display_summary,
+                navigates = true,
                 onClick = onOpenDisplaySettings,
             )
             HorizontalDivider()
@@ -99,18 +103,42 @@ internal fun SettingsGroup(
     )
 }
 
-/** 別の画面や操作へ進む項目。行全体がタップ領域。 */
+/**
+ * 別の画面や操作へ進む項目。行全体がタップ領域。
+ *
+ * [navigates] が true の項目は別の画面へ進むため、行末に矢印を出し、アイコンへ背景色を付けて、その場で動作する項目と見分けられるようにする。
+ */
 @Composable
 internal fun SettingsLink(
     icon: ImageVector,
     title: Int,
     summary: Int,
+    navigates: Boolean = false,
     onClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(stringResource(title)) },
         supportingContent = { Text(stringResource(summary)) },
-        leadingContent = { Icon(icon, contentDescription = null) },
+        leadingContent = {
+            if (navigates) {
+                Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primaryContainer) {
+                    Icon(
+                        icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(8.dp),
+                    )
+                }
+            } else {
+                Icon(icon, contentDescription = null)
+            }
+        },
+        trailingContent =
+            if (navigates) {
+                { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) }
+            } else {
+                null
+            },
         modifier = Modifier.clickable(role = Role.Button, onClick = onClick),
     )
 }
@@ -152,5 +180,5 @@ private fun CrashReportingSwitch() {
 /** 動画特定のキャッシュの消去。誤った動画のチャットが出続ける時に、ユーザーが自分で実行する。 */
 @Composable
 private fun CacheAction(actions: HomeActions) {
-    SettingsLink(Icons.Filled.Build, R.string.cache_clear, R.string.cache_hint, actions::clearResolutionCache)
+    SettingsLink(Icons.Filled.Build, R.string.cache_clear, R.string.cache_hint, onClick = actions::clearResolutionCache)
 }
