@@ -29,8 +29,13 @@
   混ざる状態は見られず（BL-072。MediaSession は切り替え時に一瞬 `metadata = null` で BUFFERING になり、次の取得で新しい値が揃う。
   1 秒間隔の記録で長さは確認できていない）、特定を遅らせる待ち（デバウンス）は入れない
 - 配布: v1.1.0（versionCode 10100。設定画面の再編・日本語と英語の切り替え・配信直後のチャットの案内・site の英語対応・設定のバックアップと初期化。
-  BL-094〜BL-109。版の更新・README・site・DESIGN は済み。署名ビルド・タグ・Release の作成は未実施で、BL-110 で人が行う）。直前の版は v1.0.3（versionCode 10003。クラッシュ情報の送信を追加。BL-088・BL-089・BL-092。署名ビルドの実機で、設定オン時の送信とオフ時の
-  非送信を確認済み〈BL-091〉。site・README は v1.0.3 の内容へ更新済みで、タグ・Release の作成は未実施）。直前の版は v1.0.2
+  BL-094〜BL-115。2026-10-09 に GitHub Release を公開済み。タグ `v1.1.0` は `main` の 686b08f（注釈付き）、署名済み `romcha-v1.1.0.apk` と `.sha256`。
+  APK の SHA-256 は `a8bf7df9…fba553` で、ダウンロードした値が `.sha256` と一致し、署名証明書は v1.0.3 と同じ鍵。`releases/latest` は v1.1.0。
+  site（日本語・英語）は `gh-pages` へ公開済み。公開後の実機の確認（RELEASE.md の P1〜P3 と R3）は 2026-10-10 に済み。v1.0.3（リリース署名）を入れた Pixel 8 Pro で「更新を確認」が
+  「新しい版 1.1.0 が公開されています。」と「ダウンロードページを開く」（`releases/latest` を Chrome で開く）を出し、v1.1.0 の APK を上書きインストールでき、
+  設定が残り、「更新を確認」が「最新の版です。」になった）。
+  直前の版は v1.0.3（versionCode 10003。クラッシュ情報の送信を追加。BL-088・BL-089・BL-092。署名ビルドの実機で、設定オン時の送信とオフ時の
+  非送信を確認済み〈BL-091〉。GitHub Release は 2026-10-04 に作成済み）。直前の版は v1.0.2
   （versionCode 10002。お知らせ帯の色分け・空の一覧の案内文・表示設定の行全体のタップ・HOME 画面の整理・ヘッダーのボタンの大きさの切り替え）の
   GitHub Release を 2026-10-04 に作成済み（タグ `v1.0.2` は `main` の 1c4049c、署名済み `romcha-v1.0.2.apk` と `.sha256`。
   Release の APK の SHA-256 がビルド時の値と一致することを確認済み）。v1.0.1 は 2026-10-02（タグは 8fa99f3）、初版は v1.0.0（2026-09-28）。
@@ -40,7 +45,9 @@
   リポジトリは 2026-10-04 に公開（public）済みで、`releases/latest` は認証なしで 200 を返す（API で確認）。
   About の説明・topics を設定し、main に ruleset（ブランチの削除・force push の禁止、Pull Request 必須。Repository admin は bypass）を
   設定し、Dependabot alerts を有効にした（公開直後は Gradle の依存が Dependency graph に未検出。
-  dependency submission は .github/workflows/dependency-submission.yml で提出する。取り込みと表示の確認は BL-093）。
+  dependency submission は .github/workflows/dependency-submission.yml で提出する。
+  取り込みと表示は 2026-10-09 に API で確認済み。依存グラフ（SBOM）に 497 パッケージ（okhttp・material3・coil・crashlytics など）が載り、
+  Dependabot アラートも出ている。BL-093）。
   公開後の「更新を確認」が最新と判定するかは実機では未確認（BL-058）
 
 ## 実装済み機能要件
@@ -501,7 +508,8 @@
   jose4j・jdom2・protobuf・commons-compress・commons-lang3（commons-compress の更新で
   引き込まれた）。AGP・Kotlin 自体は上げない（`kotlin-gradle-plugin` の medium は修正版がベータ版のみのため BL-113 で保留）。
   実行時の依存は変わらないことを `releaseRuntimeClasspath` の前後の比較で確認した。マージ後に dependency submission が再実行され、
-  アラートは 61 件から 2 件（kotlin-gradle-plugin と commons-lang3）へ減り、commons-lang3 も追加で対応した（BL-114）。新しいアラートが出たら、まず出どころが APK か
+  アラートは 61 件から 2 件（kotlin-gradle-plugin と commons-lang3）へ減り、commons-lang3 も追加で対応して、
+  2026-10-09 の公開後は kotlin-gradle-plugin の 1 件（BL-113 で保留）だけになった（BL-114）。新しいアラートが出たら、まず出どころが APK か
   ビルドツールかを `buildEnvironment`・`:app:dependencies` で調べ、ビルドツール側なら同じファイルへ追記する。
 - アプリ名・アイコンに YouTube のロゴ・名称を使わない（PLAN 5.5）。
 
