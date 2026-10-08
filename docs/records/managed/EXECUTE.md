@@ -6,6 +6,32 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 23:30
+  summary: ライトテーマのフローティングウィンドウの文字が暗い背景で読めない不具合を直した
+  details:
+    変更内容: >-
+      ライトは濃い文字と白の半透明の背景（既定 0.6）の組み合わせで、暗い動画の上では背景が灰色にしかならず文字が沈んでいた
+      （VERIFICATION の S6 が NG）。OverlayColors に textShadow を追加し、ライトだけ白の縁取りを付けて ChatOverlay の ProvideTextStyle で
+      全ての文字へ適用した。ライトの補助の文字色を #546E7A から #37474F に濃くした（同期状態・時刻・一般の投稿者名・ヘッダーのアイコン）。
+      ダークは変更しない。テストを 1 件追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColors.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/test/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayColorsTest.kt
+      - docs/VERIFICATION.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）でライトテーマのウィンドウを暗い壁紙・ウィジェット・動画の上に重ねて確認
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功。実機で、同期状態・アイコン・投稿者名・本文が暗い背景の上でも読めることを確認した。
+      端末の文字サイズを最大にした確認は未実施（BL-102）
+    関連ID:
+      - BL-115
+      - BL-105
 - date: 2026-10-09 22:00
   summary: Dependabot アラートのビルドツール側の依存を修正版へ上げた
   details:

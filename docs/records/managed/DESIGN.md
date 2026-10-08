@@ -314,7 +314,9 @@
   切り詰めてすぐ反映する（増やした分は次に動画を開いた時から）。
 - テーマ（F-VIEW-05）: `DisplaySettings.theme`（`ThemeMode`。既定 SYSTEM＝従来の見た目）。アプリ画面は SYSTEM ならシステムの設定、
   LIGHT / DARK なら固定（`RomchaApp` の動的配色）。フローティングは `OverlayColors`（Dark / Light）を `LocalOverlayColors` で渡し、
-  SYSTEM・DARK は暗色、LIGHT は明るい配色（文字 #212121、ヘッダー #B0BEC5、背景 白、役割の色も読める濃さに変える）。
+  SYSTEM・DARK は暗色、LIGHT は明るい配色（文字 #212121、補助の文字 #37474F、ヘッダー #B0BEC5、背景 白、役割の色も読める濃さに変える）。
+  LIGHT は濃い文字が半透明の白の背景（既定の不透明度 0.6）を通して暗い動画に沈むため、`OverlayColors.textShadow`（白の縁取り。ダークは無し）を
+  `ChatOverlay` の `ProvideTextStyle` で全ての文字へ適用する（BL-115。2026-10-09 の実機で S6 が NG だった）。
   `OverlayTextColor`・`SubTextColor`・`HeaderColor` は `LocalOverlayColors` を読む `@Composable` プロパティ。
 - 画像（F-CHAT-09）: Coil（`coil-compose`）で読み込む。本文は `MessageText` で描き、カスタム絵文字・メンバースタンプを
   `InlineTextContent`（1.4em）で文中に差し込む。URL が無い・許可外・読み込み失敗なら代替テキスト、Unicode の絵文字は文字のまま。
