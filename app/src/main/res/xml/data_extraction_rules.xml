@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 設定・閲覧履歴は端末内にのみ保持する（N-06）ため、クラウドバックアップ・端末間移行の対象から外す -->
+<!--
+  アプリの設定だけをクラウドバックアップ・端末間移行の対象にし、再インストール時に復元する（BL-095）。
+  対象はウィンドウの位置・大きさ・不透明度など（overlay）、表示の絞り込みと NG ワード（display）、
+  クラッシュ情報の送信の可否（crash_reporting）。<include> を書いた時は、書いていないものは対象外になるため、
+  動画の特定結果のキャッシュ（file ドメイン）は含まれない。設定を増やした時はここへ追記する。
+-->
 <data-extraction-rules>
     <cloud-backup>
-        <exclude domain="root" />
-        <exclude domain="file" />
-        <exclude domain="database" />
-        <exclude domain="sharedpref" />
+        <include domain="sharedpref" path="overlay.xml" />
+        <include domain="sharedpref" path="display.xml" />
+        <include domain="sharedpref" path="crash_reporting.xml" />
     </cloud-backup>
     <device-transfer>
-        <exclude domain="root" />
-        <exclude domain="file" />
-        <exclude domain="database" />
-        <exclude domain="sharedpref" />
+        <include domain="sharedpref" path="overlay.xml" />
+        <include domain="sharedpref" path="display.xml" />
+        <include domain="sharedpref" path="crash_reporting.xml" />
     </device-transfer>
 </data-extraction-rules>

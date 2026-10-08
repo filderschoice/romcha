@@ -3,6 +3,7 @@ package io.github.filderschoice.romcha.core.chat.resolve
 import io.github.filderschoice.romcha.core.chat.FetchFailure
 import io.github.filderschoice.romcha.core.chat.FetchResult
 import java.text.Normalizer
+import java.util.logging.Logger
 import kotlin.math.abs
 
 /** 検索の実行元。本番は `InnerTubeClient.search`、テストは偽物を渡す。 */
@@ -136,9 +137,22 @@ class VideoResolver(
     suspend fun resolve(metadata: TrackMetadata): Resolution {
         resolveLocally(metadata)?.let { return it }
         resolveLive(metadata)?.let { return it }
-        return when (val result = search.search(buildQuery(metadata), liveOnly = false)) {
+        val query = buildQuery(metadata)
+        return when (val result = search.search(query, liveOnly = false)) {
             is FetchResult.Failure -> Resolution.Failed(result.failure)
-            is FetchResult.Success -> judge(metadata, rank(metadata, result.value), ResolutionSource.SEARCH)
+            is FetchResult.Success -> {
+                var ranked = rank(metadata, result.value)
+                // タイトルとチャンネル名をつなげた長い検索語は、YouTube の検索で 1 件も出ないことがある（実機で確認）。
+                // 関連する候補が無い時は、タイトルだけで検索し直す。失敗しても最初の結果（候補なし）を使う
+                if (ranked.none { it.score > 0 } && metadata.title.isNotBlank() && query != metadata.title) {
+                    (search.search(metadata.title, liveOnly = false) as? FetchResult.Success)?.let {
+                        ranked = rank(metadata, it.value)
+                    }
+                }
+                // 特定の失敗の調査用に、件数と点数だけを記録する（タイトル・チャンネル名は記録しない）
+                log.info("検索 候補=${ranked.size} 点数=${ranked.take(LOG_TOP).map { it.score }} 長さ=${metadata.durationMs}")
+                judge(metadata, ranked, ResolutionSource.SEARCH)
+            }
         }
     }
 
@@ -238,6 +252,8 @@ class VideoResolver(
             .joinToString(" ")
 
     private companion object {
+        val log: Logger = Logger.getLogger("romcha.resolve")
+        const val LOG_TOP = 5
         val WHITESPACE = Regex("\\s+")
 
         /** 全角・半角、大文字・小文字、空白の有無の違いを吸収する（空白はすべて除く）。 */

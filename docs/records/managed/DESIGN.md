@@ -140,6 +140,9 @@
      長さ ±2 秒一致 20。比較は NFKC 正規化・小文字化・空白除去後。1 位が 80 点以上かつ 2 位との差 10 点以上なら
      `Confirmed(SEARCH, alternatives=他の候補)`、それ以外で 1 点以上の候補があれば `Ambiguous`（上位 5 件）、無ければ `NotFound`。
      通信失敗は `Failed`。
+     タイトル＋チャンネル名の検索で 1 点以上の候補が無い時（長い検索語は YouTube の検索で 0 件になることがある。BL-098）は、
+     `search(タイトル)` だけで検索し直して採点する（再検索の通信失敗は無視して最初の結果を使う）。
+     調査用に件数と点数だけを `java.util.logging`（`romcha.resolve`・`romcha.search`）へ出す（タイトル・チャンネル名は出さない）。
   - ユーザーが候補を選んだら `remember()` でキャッシュへ登録する（`ResolutionSource.USER`）。
   - `InMemoryResolutionCache`: 最大 200 件の LRU。`snapshot()` で永続化用に取り出せる（端末内にのみ保存。N-06）。
 - 検索元 `VideoSearchSource.search(query, liveOnly)`。本番は `InnerTubeClient.search`（`liveOnly` で `params = SEARCH_PARAMS_LIVE`。
@@ -262,9 +265,12 @@
     ヘッダーのドラッグ中は画面の左右の外へのはみ出しを許す（画面内に 48dp は残す。縦は画面内に収める。`StashRule.dragX`）。
     離した時に「48dp とウィンドウ幅の 3 分の 1 の大きい方」（`threshold`）以上はみ出していれば（`overshoot`・`sideFor`）その側の
     端へ退避して 28×72dp のつまみ（`ui/StashTab.kt`）だけを残し、そうでなければ画面内へ戻す（`WindowPlacement.endGesture`）。
-    つまみを内側へ 24dp 以上スワイプするかタップすると、退避した側の端に寄せた通常表示で復帰する。つまみは上下にドラッグで動かせる。
+    つまみを内側へ 24dp 以上スワイプするかタップすると、退避した側の端に寄せた通常表示で復帰する。つまみは画面端にあり OS の戻る
+    ジェスチャーの領域に入るため、`systemGestureExclusion` でスワイプを奪われないようにする（BL-100）。つまみは上下にドラッグで動かせる。
     表示状態は `WindowMode`（Normal・Minimized・Stashed(side)）で表し、`OverlayActions.onWindowModeChange` で切り替える。
     退避の向きは左右のみ、状態は保存しない。
+    横画面では切り欠き・ナビゲーションバーが左右に来て窓が避けられるため、`LayoutParams` に
+    `layoutInDisplayCutoutMode=ALWAYS` と `fitInsetsTypes=0` を設定し、つまみを画面の端まで描画する。
   - 設定パネル（`ui/SettingsPanel.kt`。高さ 200dp を上限にスクロール）: 不透明度・文字サイズ・表示遅延（LIVE の時）または
     同期の補正と手動タイマー（それ以外）・アプリを開く・タッチ透過。
   - アプリを開く（BL-052）: 設定パネルの「アプリを開く」で、サービスがアプリの起動用インテント（`FLAG_ACTIVITY_NEW_TASK`）を
@@ -414,8 +420,18 @@
 ## 非機能要件
 
 - PLAN.md 3章（N-01〜N-11）に従う。
-- バックアップ: 設定・履歴は端末内のみ（N-06）。`data_extraction_rules.xml` でクラウドバックアップと端末間移行から除外し、
-  `allowBackup=false` とする。
+- バックアップ（BL-095。2026-10-08 ユーザー判断で、設定の復元のために変更）: `allowBackup=true` とし、`data_extraction_rules.xml` で
+  設定の SharedPreferences（`overlay`・`display`・`crash_reporting`）だけをクラウドバックアップ（Google の自動バックアップ）と
+  端末間移行の対象にして、再インストール時に復元する。`<include>` を書いたものだけが対象になるため、動画の特定結果のキャッシュ
+  （`filesDir`）など設定以外は含まれない。設定の保存先を増やした時は同ファイルへ追記する（`BackupRulesTest` が対象を固定している）。
+  復元した位置・大きさは表示時に画面内へ収めるため、画面の違う端末でも使える。
+  - 切り替え（BL-097）: HOME 画面の「設定のバックアップ」スイッチ（`ui/BackupSection.kt`。既定オン）。規則は静的なため、
+    `RomchaBackupAgent`（`BackupAgentHelper`）が `onFullBackup` でスイッチを見て、オフなら書き出さない。スイッチの値
+    （`BackupSettings`。SharedPreferences `backup_control`）は復元で上書きされないよう規則に含めない。オフ後のバックアップは空になり、
+    クラウド上の古い設定も次回のバックアップで置き換わる場合がある。
+  - 初期化（BL-097）: HOME 画面の「設定を初期化する」（`ui/ResetSection.kt`。確認ダイアログ付き）。オーバーレイを止めてから
+    `OverlaySettingsReset.resetAll` で `overlay` の保存値を消し、表示設定（NG ワード含む）を初期値へ戻す。
+    バックアップ・クラッシュ情報のスイッチとキャッシュは変えない。
 
 ## 実装制約
 

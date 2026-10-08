@@ -6,6 +6,133 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-08 20:00
+  summary: 退避したつまみを内側へのスワイプで戻せない不具合を、システムのジェスチャー除外で直した
+  details:
+    変更内容: >-
+      実機で、縦・横の画面の左右の端への退避は動くが、内側への adb swipe では復帰せず（タップと長押しドラッグでは復帰）、
+      画面端の OS の戻るジェスチャーにスワイプを奪われていると推定した。StashTab に systemGestureExclusion を付けると、
+      縦画面の左右・横画面の左のいずれでも内側へのスワイプで復帰した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/StashTab.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、実機（Pixel 8 Pro）で縦横・左右の退避と復帰
+    検証結果: >-
+      成功 - 縦の左右、横の左右（右は先の確認）で退避したつまみが見え、スワイプとタップで復帰した
+- date: 2026-10-08 18:00
+  summary: 設定のバックアップが書き出されない不具合を、バックアップを全体方式に固定して直した
+  details:
+    変更内容: >-
+      実機の bmgr で、バックアップが KeyValueBackupTask（キー値方式）で呼ばれ、RomchaBackupAgent の onFullBackup が使われず
+      設定ファイルが書き出されないと分かった。マニフェストへ android:fullBackupOnly=true を付け、BackupRulesTest でも固定した。
+      修正後は FullBackup で overlay.xml と display.xml が書き出され、復元で戻ること、キャッシュ（files）は戻らないこと、
+      スイッチをオフにすると書き出されず（Transport rejected）復元もされないことを確認した。
+    変更ファイル:
+      - app/src/main/AndroidManifest.xml
+      - app/src/test/kotlin/io/github/filderschoice/romcha/BackupRulesTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py、adb shell bmgr backupnow / restore（ローカル転送先）
+    検証結果: >-
+      成功 - Google アカウントへの実際のバックアップと、アンインストール・再インストールでの自動復元は BL-096（人手検証）で確認する
+- date: 2026-10-08 16:00
+  summary: 長い検索語で YouTube の検索が 0 件になり動画を特定できない不具合を、タイトルだけの再検索で直した
+  details:
+    変更内容: >-
+      実機の診断情報ではタイトル・チャンネル・長さ（9342000 ms）は取れており、logcat で検索応答が backgroundPromoRenderer のみ
+      （検索結果なし）と分かった。タイトルとチャンネル名をつなげた検索語では 0 件になるため、VideoResolver は関連する候補
+      （点数が 0 より大きいもの）が無い時にタイトルだけで検索し直す。再検索が失敗しても最初の結果を使う。調査用に SearchResultParser と
+      VideoResolver へ java.util.logging のログ（件数・点数・応答の項目種別のみ）を足した。再検索のテストを追加した。
+    変更ファイル:
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolver.kt
+      - core/chat/src/main/kotlin/io/github/filderschoice/romcha/core/chat/resolve/SearchResultParser.kt
+      - core/chat/src/test/kotlin/io/github/filderschoice/romcha/core/chat/resolve/VideoResolverTest.kt
+      - CHANGELOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py、実機（Pixel 8 Pro）で再現と修正後の確認
+    検証結果: >-
+      成功 - 修正前は候補 0 件、修正後は候補 19 件・最高 100 点で自動確定
+- date: 2026-10-08 14:00
+  summary: 設定のバックアップを HOME 画面のスイッチで切り替えられるようにし、設定の初期化を追加した
+  details:
+    変更内容: >-
+      BackupSettings（既定オン。保存先 backup_control は復元で上書きされないようバックアップ規則に含めない）と、オフの間は
+      onFullBackup で何も書き出さない RomchaBackupAgent を追加し、マニフェストの backupAgent に指定した。HOME 画面へ
+      BackupSection（スイッチ）と ResetSection（確認ダイアログ付きの初期化）を追加した。初期化はオーバーレイを止めてから
+      OverlaySettingsReset で overlay の保存値を消し、表示設定を初期値へ戻す。BackupSettingsTest を追加し BackupRulesTest を更新した。
+    変更ファイル:
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/kotlin/io/github/filderschoice/romcha/backup/BackupSettings.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/backup/RomchaBackupAgent.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/BackupSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/ResetSection.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/HomeActions.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/MainActivity.kt
+      - app/src/main/res/values/strings.xml
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlaySettingsReset.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/backup/BackupSettingsTest.kt
+      - app/src/test/kotlin/io/github/filderschoice/romcha/BackupRulesTest.kt
+      - README.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - スイッチ・初期化の実機での動作は BL-096（人手検証）に含めた
+- date: 2026-10-08 12:00
+  summary: アプリの設定を自動バックアップの対象にし、再インストール時に復元できるようにした
+  details:
+    変更内容: >-
+      allowBackup を true にし、data_extraction_rules.xml を除外式から設定の SharedPreferences（overlay・display・crash_reporting）
+      だけを include する式に改めた（クラウドバックアップと端末間移行の両方）。動画の特定結果のキャッシュは対象外のまま。
+      対象を固定する BackupRulesTest を追加し、README・site のプライバシー欄・DESIGN・CHANGELOG を合わせた。
+    変更ファイル:
+      - app/src/main/AndroidManifest.xml
+      - app/src/main/res/xml/data_extraction_rules.xml
+      - app/src/test/kotlin/io/github/filderschoice/romcha/BackupRulesTest.kt
+      - README.md
+      - site/index.html
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      成功 - 実機での復元の確認は BL-096（人手検証）
+- date: 2026-10-08 10:00
+  summary: 横画面で画面端へ退避したつまみが見えなくなる問題に対し、オーバーレイ窓を切り欠き領域にも描画するようにした
+  details:
+    変更内容: >-
+      原因は、横画面では切り欠きやナビゲーションバーが画面の左右に来て、オーバーレイ窓の既定（layoutInDisplayCutoutMode=DEFAULT、
+      fitInsetsTypes=システムバー）ではその領域を避けて配置・クリップされるためと推定した（実機では未確認）。
+      OverlayWindow の LayoutParams に layoutInDisplayCutoutMode=ALWAYS と fitInsetsTypes=0 を設定した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayWindow.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+      - docs/records/managed/DESIGN.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、
+      npx markdownlint-cli2、python scripts/validate-records.py
+    検証結果: >-
+      Gradle のゲートは成功。横画面での表示は実機でないと確認できず、BL-094 で人手検証とする
 - date: 2026-10-05 11:00
   summary: v1.0.3 の公開に向けて版を上げ、site・README・DESIGN をクラッシュ情報の送信の内容へ更新した
   details:

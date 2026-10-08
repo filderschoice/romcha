@@ -22,6 +22,7 @@ import io.github.filderschoice.romcha.feature.overlay.DisplaySettingsStore
 import io.github.filderschoice.romcha.feature.overlay.OverlayChannel
 import io.github.filderschoice.romcha.feature.overlay.OverlayEvent
 import io.github.filderschoice.romcha.feature.overlay.OverlayService
+import io.github.filderschoice.romcha.feature.overlay.OverlaySettingsReset
 import io.github.filderschoice.romcha.feature.overlay.session.PersistentResolutionCache
 import io.github.filderschoice.romcha.ui.HomeActions
 import io.github.filderschoice.romcha.ui.RomchaApp
@@ -169,6 +170,12 @@ class MainActivity : ComponentActivity() {
                 PersistentResolutionCache.shared(this@MainActivity).clear()
                 OverlayChannel.send(OverlayEvent.ResolutionCacheCleared)
                 Toast.makeText(this@MainActivity, R.string.cache_cleared, Toast.LENGTH_LONG).show()
+            }
+
+            override fun resetSettings() {
+                stopOverlay()
+                OverlaySettingsReset.resetAll(this@MainActivity)
+                Toast.makeText(this@MainActivity, R.string.reset_done, Toast.LENGTH_LONG).show()
             }
 
             override fun openReleasePage() {

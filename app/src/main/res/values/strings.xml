@@ -59,6 +59,16 @@
     <string name="cache_clear">キャッシュを消す</string>
     <string name="cache_cleared">動画特定のキャッシュを消しました。オーバーレイを表示中なら、見ている動画を特定し直します。</string>
     <string name="cache_hint">別の動画のチャットが表示される時に押してください。過去に特定した「動画 → 動画ID」の対応を端末内から消し、見ている動画は特定し直します。</string>
+    <string name="backup_title">設定のバックアップ</string>
+    <string name="backup_switch">設定をバックアップする</string>
+    <string name="backup_hint">ウィンドウの位置・大きさ・不透明度、表示の絞り込み、NG ワードなどの設定を、端末の自動バックアップ（Google アカウント）へ保存し、再インストール時に復元します。動画の特定結果は保存しません。オフにすると、これ以降はバックアップしません。</string>
+    <string name="reset_title">設定の初期化</string>
+    <string name="reset_button">設定を初期化する</string>
+    <string name="reset_hint">ウィンドウの位置・大きさ・不透明度・文字サイズと、表示の絞り込み・NG ワードなどを初期値へ戻します。オーバーレイは止まります。バックアップとクラッシュ情報の送信のスイッチ、動画特定のキャッシュは変わりません。</string>
+    <string name="reset_confirm">設定を初期値へ戻しますか？ この操作は取り消せません。</string>
+    <string name="reset_ok">初期化する</string>
+    <string name="reset_cancel">キャンセル</string>
+    <string name="reset_done">設定を初期化しました。</string>
     <string name="crash_title">クラッシュ情報の送信</string>
     <string name="crash_switch">クラッシュ情報を送信する</string>
     <string name="crash_hint">アプリが異常終了した時に、原因の調査のため、エラーの内容・アプリの版・OS の版・端末の機種・匿名のインストール識別子を Google の Firebase Crashlytics へ送ります。チャットの内容や動画の URL は送りません。オフにするとこれ以降は送りません。</string>
