@@ -1,0 +1,212 @@
+<!doctype html>
+<!--
+  Romcha の英語ページ（日本語ページ ../index.html の翻訳）。JavaScript を使わないため、言語の切り替えはヘッダーのリンクで行う。
+  日本語ページを変えたら、このページも同じ内容に更新する（機能・版・動作環境・プライバシー）。
+  外部フォント・外部スクリプトは読み込まない（閲覧者の情報を第三者へ送らないため）。
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Romcha — a view-only floating chat viewer</title>
+  <meta name="description" content="An Android app that shows YouTube chat in a floating window, made because chat disappears when you shrink the official app's video into a small window.">
+  <meta name="theme-color" content="#263238">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://filderschoice.github.io/romcha/en/index.html">
+  <link rel="canonical" href="https://filderschoice.github.io/romcha/en/index.html">
+  <link rel="alternate" hreflang="ja" href="https://filderschoice.github.io/romcha/">
+  <link rel="alternate" hreflang="en" href="https://filderschoice.github.io/romcha/en/index.html">
+  <link rel="alternate" hreflang="x-default" href="https://filderschoice.github.io/romcha/">
+  <meta property="og:title" content="Romcha">
+  <meta property="og:description" content="A view-only floating chat viewer that syncs with the YouTube official app (Android)">
+  <link rel="icon" href="../assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#top">
+        <img src="../assets/en/icon.svg" alt="" width="32" height="32">
+        <span>Romcha</span>
+      </a>
+      <nav class="nav" aria-label="On this page">
+        <a href="#why">Why</a>
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#usage">Usage</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#download">Download</a>
+      </nav>
+      <a class="lang-switch" href="../index.html" hreflang="ja" lang="ja">日本語</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ================= Hero ================= -->
+    <section class="hero">
+      <div class="container">
+        <div>
+          <span class="eyebrow">Android app</span>
+          <h1>Romcha<br>A view-only<br>chat viewer</h1>
+          <p class="lead">
+            Chat disappears when you shrink YouTube's video into a small floating window, so Romcha floats the chat in a small window instead.
+            It reads the playback position automatically and replays archived chat at the original timing.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/filderschoice/romcha/releases/latest">Download the APK</a>
+            <a class="button" href="https://github.com/filderschoice/romcha">Source code</a>
+          </div>
+          <p class="meta">v1.1.0 ・ Android 14 or later ・ MIT License ・ Free, no ads</p>
+        </div>
+        <div class="hero-visual">
+          <img src="../assets/en/screen.svg" alt="An illustration of a semi-transparent chat window over a video app's playback screen, with chat scrolling in sync with the video position (the video, author names and chat are all fictional)" width="360" height="720">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Why ================= -->
+    <section id="why">
+      <div class="container">
+        <h2>Why I made it</h2>
+        <p class="section-lead">Chat disappears when you shrink YouTube's video into a small window.</p>
+        <p>
+          The YouTube official app lets you shrink a video into a small window and use other apps, but the chat (comments) is not shown in that window.
+          I wanted to keep a video playing in a small window <strong>and still follow the chat, that is, a chat viewer that works with floating windows</strong>.
+          That is why I made Romcha. It reads the official app's playback position and shows the chat in a separate floating window, in sync.
+        </p>
+        <figure class="figure spaced">
+          <img src="../assets/en/floating.svg" alt="Left: the YouTube official app's video in a small window shows only the video in a corner of another app, with no chat. Right: with Romcha, a chat window floats next to the small video window (an illustration, not a real screen; names and chat are fictional)" width="720" height="360">
+          <figcaption>Left: the chat is not visible in a small window. Right: with Romcha, the chat floats next to the small video (illustration).</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= Features ================= -->
+    <section id="features">
+      <div class="container">
+        <h2>Features</h2>
+        <p class="section-lead">A view-only app with no way to write, such as posting comments (ROM = Read Only Member).</p>
+        <ul class="features">
+          <li class="card">
+            <span class="tag">Sync</span>
+            <h3>Flows with the playback position</h3>
+            <p>Follows play, pause, seek and speed of the official app, and shows archived chat at the original timing. For a video whose chat has not been generated yet, such as right after a stream ends, it says so and checks again automatically.</p>
+          </li>
+          <li class="card">
+            <span class="tag">Auto-detect</span>
+            <h3>Identifies the video you are watching</h3>
+            <p>Finds the video being played from its title, channel name and length. You can also specify it with the official app's Share or by entering a URL.</p>
+          </li>
+          <li class="card">
+            <span class="tag">Live</span>
+            <h3>Works with live streams and premieres</h3>
+            <p>While live or waiting, it follows the latest chat, with an adjustable display delay. After the stream ends, it switches to the synced replay.</p>
+          </li>
+          <li class="card">
+            <span class="tag">Window</span>
+            <h3>A small window that stays out of the way</h3>
+            <p>Move, resize, change opacity, minimize, tuck it against the screen edge, or make it touch-through so you can still operate the official app underneath.</p>
+          </li>
+          <li class="card">
+            <span class="tag">Display</span>
+            <h3>Adjust readability</h3>
+            <p>Text size, author name / icon / time, filtering by NG words and message types, light / dark theme, emoji images, and larger header buttons (36 dp / 48 dp).</p>
+          </li>
+          <li class="card">
+            <span class="tag">Language</span>
+            <h3>Japanese and English</h3>
+            <p>Switch the display language from the settings screen (Japanese by default). The floating window changes too, without closing it.</p>
+          </li>
+          <li class="card">
+            <span class="tag">Adjust</span>
+            <h3>Fix the timing by hand</h3>
+            <p>A manual timing offset (±10 seconds) and a manual timer for when the playback position is unavailable.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= How it works ================= -->
+    <section id="how">
+      <div class="container">
+        <h2>How it works</h2>
+        <p class="section-lead">The playback position is read on your device; only the chat is fetched from YouTube.</p>
+        <figure class="figure">
+          <img src="../assets/en/how-it-works.svg" alt="A diagram of the flow: Romcha reads the official app's playback position and shows the chat fetched from YouTube in a floating window in sync with that position" width="720" height="220">
+          <figcaption>
+            Reads the official app's playback state from Android's MediaSession and shows chat in sync with the position in the video.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= Usage ================= -->
+    <section id="usage">
+      <div class="container">
+        <h2>Usage</h2>
+        <p class="section-lead">Allow the permissions once, then just play a video in the official app.</p>
+        <ol class="steps">
+          <li>Open the app and follow the prompts to allow “Display over other apps”, “Notification access” and “Show notifications” (once all are allowed, the prompts collapse into one line).</li>
+          <li>Tap “Start floating window”, then play an archive or a live stream in the YouTube official app.</li>
+          <li>The chat flows in a small window. Drag the header to move it, and the handle at the bottom right to resize it.</li>
+          <li>If the video cannot be identified, choose Romcha from the official app's Share, or enter a URL.</li>
+          <li>Display, language, backup and other settings are in the gear (Settings) at the top right of the app.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= Privacy ================= -->
+    <section id="privacy">
+      <div class="container">
+        <h2>Privacy and notes</h2>
+        <p class="section-lead">No sign-in, and no advertising or analytics SDKs (only crash reports are sent).</p>
+        <ul class="plain-list">
+          <li>“Notification access” is a permission Android requires to read the playback position. Romcha does not read the content of your notifications.</li>
+          <li>The app talks only to YouTube (chat and images), to the GitHub API when you tap “Check for updates”, and to the crash report destination (Google's Firebase Crashlytics).</li>
+          <li>
+            Crash reports are sent only when the app crashes. They contain the error details (stack trace), the app version, the Android version, the device model and an
+            anonymous installation ID, and never chat content or video URLs. They are <strong>on by default</strong>, and you can turn them off any time with the
+            “Send crash reports” switch on the settings screen.
+          </li>
+          <li>Identified videos are stored on the device only. Window and other settings are included in Android's automatic backup so they can be restored after a reinstall; you can turn that off with “Back up settings” on the settings screen.</li>
+        </ul>
+        <div class="notice spaced">
+          <p>
+            This is an unofficial app and is not affiliated with YouTube or Google. It fetches chat in an undocumented way
+            (the same requests the YouTube web app uses), so it may stop working without notice when YouTube changes.
+            Use it at your own discretion and responsibility.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Download ================= -->
+    <section id="download">
+      <div class="container">
+        <h2>Download</h2>
+        <p class="section-lead">Signed APKs are distributed on GitHub Releases (not on Google Play).</p>
+        <table class="spec">
+          <tbody>
+            <tr><th scope="row">Requirements</th><td>Android 14 (API 34) or later, and the YouTube official app</td></tr>
+            <tr><th scope="row">Tested device</th><td>Pixel 8 Pro (Android 17)</td></tr>
+            <tr><th scope="row">Price</th><td>Free (no ads)</td></tr>
+            <tr><th scope="row">License</th><td>MIT License</td></tr>
+            <tr><th scope="row">Updates</th><td>Check the latest version with “Check for updates” in the app, then install over the old one in the same way</td></tr>
+          </tbody>
+        </table>
+        <div class="actions spaced">
+          <a class="button primary" href="https://github.com/filderschoice/romcha/releases/latest">See the latest release</a>
+          <a class="button" href="https://github.com/filderschoice/romcha#readme">README</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© 2026 filderschoice ・ MIT License</span>
+      <span>YouTube is a trademark of Google LLC. This app is not affiliated with Google.</span>
+    </div>
+  </footer>
+</body>
+</html>
