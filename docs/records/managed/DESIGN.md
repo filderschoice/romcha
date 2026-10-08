@@ -73,6 +73,7 @@
 - F-VIEW-04: 表示保持件数の上限（100〜1000、100 刻み、既定 500。アプリの表示設定画面）
 - F-VIEW-05: ライト／ダーク／システム追従のテーマ（アプリの表示設定画面。システム追従ではフローティングは従来どおり暗色）
 - F-CHAT-09: カスタム絵文字・メンバースタンプ・スーパーステッカーの画像表示（`feature:overlay` の `MessageText`・`ImagePolicy`）
+- F-APP-05（BL-101・BL-103・BL-104）: 設定画面（歯車）と三点メニュー、日本語・英語の切り替え（アプリ画面とフローティングウィンドウ。既定は日本語）
 - F-APP-02: 更新の確認（`app` の `update` パッケージ。「更新を確認」を押した時だけ GitHub Releases API へ問い合わせる）
 - R-08: リリース署名と配布物の出力（`:app:releaseDist`。実装制約を参照）
 
@@ -345,7 +346,7 @@
 - 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
   MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
 - クラッシュ情報の送信（BL-088・BL-089。2026-10-04 ユーザー判断。外部通信を利用者の操作に限る従来方針の例外）: Firebase Crashlytics のみを使い、
-  Analytics は入れない。送信は既定オンで、HOME の「クラッシュ情報の送信」のスイッチでオフにできる（`CrashReportingSettings`。
+  Analytics は入れない。送信は既定オンで、設定画面の「クラッシュ情報を送信する」のスイッチでオフにできる（`CrashReportingSettings`。
   `SharedPreferences` の `crash_reporting` の `enabled`、既定 true）。Manifest の
   `firebase_crashlytics_collection_enabled=false` で自動収集を止め、
   `RomchaApplication` が起動時に設定値を `FirebaseCrashlytics.isCrashlyticsCollectionEnabled` へ反映する。
@@ -423,10 +424,10 @@
   - ライブの終了（F-CHAT-06）: `ReplaySwitcher` でリプレイの準備を待ち（待機中は「配信は終了しました。リプレイの準備を待っています
     （n 回目）」）、準備できればリプレイへ、まだ配信中ならライブへ戻り、準備されなければ「リプレイは利用できません」。
   - 画面オフ（N-03）: 画面が消えたら取得を止めて「画面オフのため停止中」を表示し、点いたら取得をやり直す（`transformLatest`）。
-  - 表示文は `SessionMessages` に集約する（日本語のみ）。
+  - 表示文は `SessionMessages` に集約する。文字列リソースの ID と引数で持ち、表示時に端末の言語で解決する（BL-104）。
 - `PersistentResolutionCache`: 特定のキャッシュを `filesDir/resolution-cache.json`（`[{identity, videoId}]`）へ `AtomicFile` で保存し、
   起動時に読み込む。壊れていれば空から始める（端末内のみ。N-06）。`shared(context)` でプロセス内の 1 インスタンスを共有し、
-  `OverlayService` と HOME 画面が同じものを使う。`ResolutionCache.clear()` はメモリとファイルの両方を消す。
+  `OverlayService` と設定画面が同じものを使う。`ResolutionCache.clear()` はメモリとファイルの両方を消す。
 - `core:chat` は `InnerTubeClient` のコンストラクターが OkHttp の型を公開するため、OkHttp を `api` 依存にする。
 - `feature:overlay` は画像読み込みに Coil 2.7.0（`io.coil-kt:coil-compose`）を使う。既定の `ImageLoader`（シングルトン）で足りるため設定しない。
 

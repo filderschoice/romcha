@@ -6,6 +6,21 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- id: BL-110
+  区分: 人手検証
+  タスク内容: >-
+    リリース作業を行う。版を 1.1.0 へ上げる（`scripts\release-build.bat -VersionName 1.1.0`。versionCode は 10100）、署名ビルドの実機確認、
+    タグの作成と push、GitHub Releases の公開（docs/RELEASE.md 2〜7 章）。公開の前後で `site/index.html` のヒーロー（v1.0.3）・
+    `site/app.json` の `version`／`updated`・README「状態」の版の表記を新しい版へ更新する
+  優先度: P2
+  状態: 未着手
+  担当: ユーザー
+  完了条件: 新しい版の Release が公開され、docs/RELEASE.md 7 章の P1〜P3 を満たし、site と README の版の表記が公開した版と一致している
+  依存: []
+  根拠: >-
+    署名鍵とパスワード・タグの push・Releases の公開は人が行う（docs/RELEASE.md。自律ループでは外部への発信にあたる）ため、
+    区分を人手検証にして完了判定から除外する。版は新機能（言語の切り替え・設定画面の再編）を含むため MINOR を上げる案（1.1.0）とし、
+    確定は人が行う。ドキュメントと site は版の表記以外を BL-109 で最新化済みで、版の表記だけがこの作業の後に残る。
 - id: BL-105
   区分: 人手検証
   タスク内容: >-
