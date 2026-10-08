@@ -433,10 +433,14 @@
 
 ### アプリ紹介ポートフォリオ（`site/`）
 
-- 静的な 1 ページ（`index.html`・`style.css`・`assets/*.svg`）。ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
+- 静的なページ（日本語 `index.html`・英語 `en/index.html`・`style.css`・`assets/*.svg`・英語版の図 `assets/en/*.svg`）。
+  ビルド不要。JavaScript・外部フォント・外部 CDN を読み込まない。
   リンクは相対パスで、公開先を選ばない。公開は GitHub Pages の `gh-pages` ブランチ（`git subtree push --prefix site origin gh-pages`。
   Actions は使わず、`site/.nojekyll` を置く）。公開URLは <https://filderschoice.github.io/romcha/>（2026-10-04 ユーザー判断。sesami-wear と同じ方式）。
-- 構成: ヘッダー（ページ内ナビ）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
+- 多言語（BL-111。日本語が既定）: JavaScript を使わない方針のため、言語の切り替えはもう一方のページへのリンク（ヘッダー右端の
+  「English」「日本語」）にする。両ページに `hreflang` の `alternate`（`x-default` は日本語）を付け、2 ページは同じ内容に保つ。
+  英語版の図は文字だけを英語にした SVG を `assets/en/` に置く。
+- 構成: ヘッダー（ページ内ナビ・言語の切り替え）→ ヒーロー（分類・名前・一言説明・入手ボタン・版と動作環境・画面イメージ）→ 機能カード →
   仕組みの図 → 使い方の手順 → プライバシーと免責 → 入手（仕様表）→ フッター。
 - 他アプリのテンプレートを兼ねる: 差し替え箇所に `TEMPLATE:` のコメント、アプリごとの色は `style.css` の `:root` の
   `--accent`・`--accent-strong`・`--accent-soft`（ライト・ダーク）だけ。ライト／ダークは `prefers-color-scheme`、760px 以下で 1 列。
@@ -444,7 +448,7 @@
 - 画像は SVG の図解（アイコンはランチャーアイコンと同じ意匠）。図解であることを `alt` に書く。画面イメージ（`assets/screen.svg`）は
   架空の動画とダミーのチャット（「視聴者A」等。上位チャットを含む）で描く。実機では YouTube の動画とチャットの時刻を同期した画面を
   撮れず、実画面には第三者の情報も写るため、スクリーンショットへは差し替えない（2026-10-04 ユーザー判断）。公開方法は BL-061。
-- 機能・版・動作環境を変えたら、README とあわせて `index.html`・`app.json` も更新する。
+- 機能・版・動作環境を変えたら、README とあわせて `index.html`・`en/index.html`・`app.json` も更新する。
 
 ## 非機能要件
 

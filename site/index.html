@@ -1,6 +1,8 @@
 <!doctype html>
 <!--
   アプリ紹介ポートフォリオ（テンプレート兼 Romcha 版）。使い方は site/README.md。
+  英語ページは en/index.html（このページの翻訳）。JavaScript を使わないため、言語の切り替えはヘッダーのリンクで行う。
+  このページを変えたら en/index.html も同じ内容に更新する。
   他アプリへ流用するときは「TEMPLATE:」の付いた箇所を差し替え、不要なセクションは丸ごと削除する。
   外部フォント・外部スクリプトは読み込まない（閲覧者の情報を第三者へ送らないため）。
 -->
@@ -16,6 +18,9 @@
   <!-- TEMPLATE: 公開URL（GitHub Pages）。公開しない場合は og:url と canonical を削除する -->
   <meta property="og:url" content="https://filderschoice.github.io/romcha/">
   <link rel="canonical" href="https://filderschoice.github.io/romcha/">
+  <link rel="alternate" hreflang="ja" href="https://filderschoice.github.io/romcha/">
+  <link rel="alternate" hreflang="en" href="https://filderschoice.github.io/romcha/en/index.html">
+  <link rel="alternate" hreflang="x-default" href="https://filderschoice.github.io/romcha/">
   <meta property="og:title" content="Romcha（ロムチャ）">
   <meta property="og:description" content="YouTube 公式アプリと同期する、見るだけのフローティングチャットビューワー（Android）">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -36,6 +41,7 @@
         <a href="#privacy">プライバシー</a>
         <a href="#download">入手</a>
       </nav>
+      <a class="lang-switch" href="en/index.html" hreflang="en" lang="en">English</a>
     </div>
   </header>
 

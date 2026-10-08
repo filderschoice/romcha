@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="t d" font-family="'Hiragino Sans','Yu Gothic UI','Noto Sans JP','Noto Sans CJK JP',Meiryo,sans-serif">
+  <title id="t">Why Romcha exists (illustration)</title>
+  <desc id="d">Left: the YouTube official app’s video in a small window shows only the video in a corner of another app, with no chat. Right: with Romcha, a chat window floats next to the small video window. The video, names and chat are all fictional, and this is not a real screen.</desc>
+  <!-- 図解（実機のスクリーンショットではない）。名前・チャット本文はすべて架空のダミー -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b5b7a"/>
+      <stop offset="1" stop-color="#e0a574"/>
+    </linearGradient>
+  </defs>
+  <g id="before">
+    <rect x="20" y="20" width="320" height="320" rx="22" fill="#0f1417" stroke="#37474F" stroke-width="3"/>
+    <rect x="34" y="48" width="292" height="26" rx="6" fill="#263238"/>
+    <rect x="34" y="88" width="292" height="14" rx="4" fill="#263238"/>
+    <rect x="34" y="112" width="220" height="14" rx="4" fill="#263238"/>
+    <rect x="34" y="136" width="260" height="14" rx="4" fill="#263238"/>
+    <rect x="34" y="160" width="180" height="14" rx="4" fill="#263238"/>
+    <text x="180" y="250" font-size="12" text-anchor="middle" fill="#90a4ae">Using another app</text>
+    <!-- 小窓の動画（チャットなし） -->
+    <rect x="186" y="250" width="132" height="74" rx="8" fill="url(#sky)" stroke="#eceff1" stroke-width="2"/>
+    <path d="M186 324 L186 300 L226 280 L256 306 L290 286 L318 304 L318 324Z" fill="#162330" opacity=".85"/>
+    
+  </g>
+  <g id="after">
+    <rect x="380" y="20" width="320" height="320" rx="22" fill="#0f1417" stroke="#37474F" stroke-width="3"/>
+    <rect x="394" y="48" width="292" height="26" rx="6" fill="#263238"/>
+    <rect x="394" y="88" width="292" height="14" rx="4" fill="#263238"/>
+    <rect x="394" y="112" width="220" height="14" rx="4" fill="#263238"/>
+    <rect x="394" y="136" width="260" height="14" rx="4" fill="#263238"/>
+    <!-- 小窓の動画 -->
+    <rect x="396" y="226" width="132" height="74" rx="8" fill="url(#sky)" stroke="#eceff1" stroke-width="2"/>
+    <path d="M396 300 L396 276 L436 256 L466 282 L500 262 L528 280 L528 300Z" fill="#162330" opacity=".85"/>
+    <!-- Romcha のチャットウィンドウ -->
+    <rect x="540" y="130" width="146" height="190" rx="10" fill="#101619" stroke="#26a69a" stroke-width="2" opacity=".96"/>
+    <rect x="540" y="130" width="146" height="22" rx="10" fill="#00897b"/>
+    <rect x="540" y="142" width="146" height="10" fill="#00897b"/>
+    <text x="552" y="146" font-size="10" font-weight="700" fill="#fff">Romcha</text>
+    <g font-size="9" fill="#eceff1">
+      <text x="550" y="172"><tspan fill="#80cbc4">Viewer A</tspan> It has started!</text>
+      <text x="550" y="194"><tspan fill="#80cbc4">Viewer B</tspan> Been waiting</text>
+      <text x="550" y="216"><tspan fill="#80cbc4">Viewer C</tspan> Nice view</text>
+      <text x="550" y="238"><tspan fill="#80cbc4">Viewer D</tspan> Great sound</text>
+      <text x="550" y="260"><tspan fill="#80cbc4">Viewer E</tspan> Good evening</text>
+    </g>
+  </g>
+  <path d="M345 180 H375" stroke="#26a69a" stroke-width="3" fill="none"/>
+  <path d="M370 172 L380 180 L370 188" stroke="#26a69a" stroke-width="3" fill="none"/>
+</svg>

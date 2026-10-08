@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img" aria-labelledby="t d" font-family="system-ui, sans-serif">
+  <title id="t">How it works</title>
+  <desc id="d">A diagram of the flow: Romcha reads the official app’s playback position on the device, and shows the chat fetched from YouTube in a floating window in sync with that position.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10z" fill="#26a69a"/>
+    </marker>
+  </defs>
+  <g fill="none" stroke="#26a69a" stroke-width="2.5" marker-end="url(#a)">
+    <path d="M178 70 H262"/>
+    <path d="M458 70 H542"/>
+    <path d="M360 176 V120"/>
+  </g>
+  <g font-size="15" text-anchor="middle">
+    <rect x="8" y="30" width="170" height="80" rx="14" fill="#eceff1" stroke="#90a4ae"/>
+    <text x="93" y="64" fill="#263238" font-weight="700">YouTube official app</text>
+    <text x="93" y="88" fill="#455a64" font-size="12">Playing video and position</text>
+
+    <rect x="262" y="30" width="196" height="80" rx="14" fill="#263238"/>
+    <text x="360" y="64" fill="#eceff1" font-weight="700">Romcha</text>
+    <text x="360" y="88" fill="#b0bec5" font-size="12">Video ID and position sync</text>
+
+    <rect x="542" y="30" width="170" height="80" rx="14" fill="#e0f2f1" stroke="#26a69a"/>
+    <text x="627" y="64" fill="#00695c" font-weight="700">Floating window</text>
+    <text x="627" y="88" fill="#00796b" font-size="12">Chat flows with position</text>
+
+    <rect x="262" y="176" width="196" height="40" rx="12" fill="#eceff1" stroke="#90a4ae"/>
+    <text x="360" y="201" fill="#263238" font-size="13">YouTube (chat fetch only)</text>
+
+    <text x="220" y="58" fill="#00796b" font-size="11">MediaSession</text>
+    <text x="500" y="58" fill="#00796b" font-size="11">View</text>
+  </g>
+</svg>
