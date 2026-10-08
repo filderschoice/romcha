@@ -4,6 +4,11 @@
 
 ## 2026-10-09
 
+- Dependabot アラート 61 件（critical 11・high 43・medium 6・low 1）を調べ、すべてビルドツール側の依存（AGP などのプラグインのクラスパスと、
+  ktlint・lint の設定）で、APK に入る実行時の依存には無いことを確認した（BL-112）。netty・bouncycastle・logback・jose4j・jdom2・protobuf・
+  commons-compress は `gradle/security-patches.txt` の修正版へ上げた（実行時の依存は変わらない）。`kotlin-gradle-plugin`（medium）は
+  修正版がベータ版のみのため保留し（BL-113。要確認）、マージ後のアラートの再評価の確認は人手検証とした（BL-114）。
+
 - v1.1.0 のリリースを準備した（BL-110 の準備分）。`app/build.gradle.kts` の版を 1.1.0（versionCode 10100）へ上げ、README の「状態」、`site/index.html`・
   `site/en/index.html` の版表記、`site/app.json` の version、DESIGN の配布を合わせた。署名ビルド・タグ・Release の作成は人が行う（docs/RELEASE.md）。
   v1.0.3 からの主な変更は、設定画面の再編（歯車・三点メニュー）、日本語と英語の切り替え、配信直後でチャットが未生成の動画の案内と自動再確認、

@@ -6,6 +6,33 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-09 22:00
+  summary: Dependabot アラートのビルドツール側の依存を修正版へ上げた
+  details:
+    変更内容: >-
+      アラート 61 件はすべてビルドツール側（プラグインのクラスパスと ktlint・lint の設定）の依存で、APK の実行時の依存には無かった。
+      修正版を gradle/security-patches.txt に列挙し、ルートの build.gradle.kts で buildscript のクラスパスへは依存の制約として、
+      全モジュールの設定へは eachDependency（古い時だけ上げる）として適用した。netty 4.1.137.Final、bouncycastle 1.85、logback 1.5.34、
+      jose4j 0.9.6、jdom2 2.0.6.1、protobuf 3.25.5、commons-compress 1.26.0。kotlin-gradle-plugin は保留（BL-113）。
+    変更ファイル:
+      - build.gradle.kts
+      - gradle/security-patches.txt
+      - docs/RELEASE.md
+      - CHANGELOG.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test :app:assembleDebug、
+      buildEnvironment と :app:dependencies で解決された版の確認、releaseRuntimeClasspath の前後の diff、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: >-
+      成功 - 品質ゲートとデバッグビルドが成功し、releaseRuntimeClasspath は変わらない。署名ビルド（鍵を使うため人が行う）と、
+      マージ後の Dependabot アラートの再評価は未確認（BL-114）
+    関連ID:
+      - BL-112
+      - BL-113
+      - BL-114
 - date: 2026-10-09 20:00
   summary: 配信直後でチャットが未生成の動画に、準備中の案内と自動再確認を追加した
   details:

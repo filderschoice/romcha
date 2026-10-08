@@ -492,6 +492,13 @@
   → 品質ゲートの Gradle 分（`:app:lintAnalyzeDebug --rerun` を含む。`local.properties` は lint の解析の入力に含まれず、ビルド
   キャッシュの古い結果が使われることがあるため）→ `:app:releaseDist` → `apksigner` の検証 → 次の手順の表示。版は
   `app/build.gradle.kts` を唯一の正本とし、参考にした sesami-wear の `version.properties` 方式は採らない。push・タグ・公開はしない。
+- 依存の脆弱性（BL-112。2026-10-09）: Dependabot アラートの 61 件は、すべてビルドツール側（AGP などのプラグインのクラスパスと、ktlint・lint の設定）で、
+  APK に入る実行時の依存（`releaseRuntimeClasspath`）には無い。修正版を `gradle/security-patches.txt`（`group:name:version`）に列挙し、
+  ルートの `build.gradle.kts` が buildscript のクラスパスには依存の制約（この版以上）として、全モジュールの設定には `eachDependency`
+  （要求された版が修正版より古い時だけ上げる。下げない）として適用する。対象は netty・bouncycastle（署名に使う）・logback（ktlint）・
+  jose4j・jdom2・protobuf・commons-compress。AGP・Kotlin 自体は上げない（`kotlin-gradle-plugin` の medium は修正版がベータ版のみのため BL-113 で保留）。
+  実行時の依存は変わらないことを `releaseRuntimeClasspath` の前後の比較で確認した。新しいアラートが出たら、まず出どころが APK か
+  ビルドツールかを `buildEnvironment`・`:app:dependencies` で調べ、ビルドツール側なら同じファイルへ追記する。
 - アプリ名・アイコンに YouTube のロゴ・名称を使わない（PLAN 5.5）。
 
 ## エージェント実装指示

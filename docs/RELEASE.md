@@ -86,6 +86,9 @@ scripts\release-build.bat -VersionName 1.0.1
   スクリプトは app の lint の解析（`:app:lintAnalyzeDebug`）を毎回やり直します。
 - 実体は `scripts/release-build.ps1` で、`.bat` は pwsh（PowerShell 7）があればそれで、無ければ Windows PowerShell で実行します。
 
+- ビルドツールの依存（netty・bouncycastle など。署名に使う bouncycastle を含む）は、Dependabot アラートへの対応として
+  `gradle/security-patches.txt` の修正版へ上げています（BL-112）。署名ビルドの後の署名の検証（スクリプトの表の 5、または 3.2 の `apksigner`）で、署名が正しいことを必ず確認してください。
+
 ### 3.2 手動で作る
 
 ```sh
