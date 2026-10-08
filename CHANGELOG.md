@@ -4,6 +4,10 @@
 
 ## 2026-10-09
 
+- Dependabot アラートが、BL-112 の対応のマージ後に 61 件から 2 件（medium）へ減ったことを確認した。残りは kotlin-gradle-plugin（BL-113 で保留）と、
+  commons-compress の更新で引き込まれた commons-lang3 で、後者は `gradle/security-patches.txt` に 3.18.0 を追加して対応した（ビルドツール側のみ。
+  実行時の依存は変わらない）。スキル `dependabot-alert-triage` に、この落とし穴を追記した。
+
 - `docs/VERIFICATION.md` の S6（ライトテーマと大きい文字サイズでの見え方）が OK となり、BL-102（設定画面の再編の実機確認）を完了として BACKLOG から削除した。
   確認済みの S6 は VERIFICATION から削除した（BL-115 の修正後の再確認）。
 

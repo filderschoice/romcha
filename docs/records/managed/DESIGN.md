@@ -498,8 +498,10 @@
   APK に入る実行時の依存（`releaseRuntimeClasspath`）には無い。修正版を `gradle/security-patches.txt`（`group:name:version`）に列挙し、
   ルートの `build.gradle.kts` が buildscript のクラスパスには依存の制約（この版以上）として、全モジュールの設定には `eachDependency`
   （要求された版が修正版より古い時だけ上げる。下げない）として適用する。対象は netty・bouncycastle（署名に使う）・logback（ktlint）・
-  jose4j・jdom2・protobuf・commons-compress。AGP・Kotlin 自体は上げない（`kotlin-gradle-plugin` の medium は修正版がベータ版のみのため BL-113 で保留）。
-  実行時の依存は変わらないことを `releaseRuntimeClasspath` の前後の比較で確認した。新しいアラートが出たら、まず出どころが APK か
+  jose4j・jdom2・protobuf・commons-compress・commons-lang3（commons-compress の更新で
+  引き込まれた）。AGP・Kotlin 自体は上げない（`kotlin-gradle-plugin` の medium は修正版がベータ版のみのため BL-113 で保留）。
+  実行時の依存は変わらないことを `releaseRuntimeClasspath` の前後の比較で確認した。マージ後に dependency submission が再実行され、
+  アラートは 61 件から 2 件（kotlin-gradle-plugin と commons-lang3）へ減り、commons-lang3 も追加で対応した（BL-114）。新しいアラートが出たら、まず出どころが APK か
   ビルドツールかを `buildEnvironment`・`:app:dependencies` で調べ、ビルドツール側なら同じファイルへ追記する。
 - アプリ名・アイコンに YouTube のロゴ・名称を使わない（PLAN 5.5）。
 

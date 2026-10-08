@@ -9,13 +9,14 @@
 - id: BL-114
   区分: 人手検証
   タスク内容: >-
-    BL-112 の対応を `main` へマージした後、dependency submission のワークフロー（.github/workflows/dependency-submission.yml）が
-    実行され、Dependabot アラートの件数（2026-10-09 時点で 61 件）が減ることを GitHub の Security タブで確認する。
-    減らない・新しく出る場合は、残った依存の出どころ（ビルドツール側か APK に入る依存か）を調べて起票する
+    BL-112 の対応は `main` へマージ済みで、Dependabot アラートは 61 件から 2 件（medium）へ減った（2026-10-09 確認）。残りは kotlin-gradle-plugin
+    （BL-113 で保留）と commons-lang3（commons-compress の更新で引き込まれた。ビルドツール側のみ。`gradle/security-patches.txt` に 3.18.0 を追加済み）。
+    commons-lang3 の対応を `main` へマージし、dependency submission の実行後に、commons-lang3 のアラートが閉じて残りが kotlin-gradle-plugin だけに
+    なることを GitHub の Security タブで確認する。新しく出るアラートがあれば、スキル `dependabot-alert-triage` に沿って起票する
   優先度: P3
   状態: 未着手
   担当: ユーザー
-  完了条件: 対応したライブラリのアラートが閉じている。残るアラートは BL-113 などの理由が記録されている
+  完了条件: commons-lang3 のアラートが閉じている。残るアラートは BL-113 の理由が記録されたものだけである
   依存: []
   根拠: >-
     マージ・ワークフローの実行・アラートの再評価は GitHub 上で行われ、エージェントは扱えない（外部への発信になるため Dependabot アラートの
