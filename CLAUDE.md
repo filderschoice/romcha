@@ -12,14 +12,11 @@ Claude Code 固有の差分と追加規約です。全エージェント共通�
 | 項目 | Claude Code での差分 |
 | --- | --- |
 | git操作 | 自律ループ実行モード中の作業ブランチへの `git add` / `git commit` のみ実行してよい。`git push` はモードを問わず常にユーザーが実行する |
-| 指示参照の優先順位 1位 | Claude Code ハーネスのシステムプロンプト |
 | PR説明文・コードレビュー・PR作成 | `.github/instructions/pr.instructions.md` を自動適用する機構が無いため、Skill `pr-create` の手順で同ファイルを**明示的に読んでから**従う |
-| 記録ファイルの編集権限 | `.claude/settings.json` の `permissions.allow` により権限プロンプトなしで反映される（下記） |
 
 ## 本リポジトリの品質ゲート定義（MUST）
 
-全エージェント共通で使用する正本です。自律ループ実行モードでは各イテレーションで実行し、記録へ残します。
-`区分: 人手検証` のBACKLOGタスクは合否判定から除外します。
+全エージェント共通で使用する正本です。`区分: 人手検証` のBACKLOGタスクは合否判定から除外します。
 Windows の PowerShell では `./gradlew` を `.\gradlew.bat` と読み替えます。
 
 | ゲート | コマンド | 合否基準 |
@@ -38,13 +35,8 @@ Gradle の依存が検出されるかは BACKLOG の人手検証で確かめま�
 
 ## 記録ファイルの権限設定（MUST）
 
-`docs/records/managed/` 配下の3ファイルは、`.claude/settings.json` の `permissions.allow` により権限プロンプト
-なしで編集できます（人手編集を前提とせず、妥当性はコミット前の差分確認と `FORMAT.md` 準拠で担保するため）。
-ルールファイル（`CLAUDE.md` / `rules/` / `CONTRIBUTING.md`）・`.github/` 配下・`docs/records/spec/FORMAT.md` の
-編集は確認を挟みます。自律ループ実行モードでは、各イテレーションの完了を記録ファイルの更新契機とします。
-
-<!-- 配布バンドルの .claude/settings.json は記録ファイル関連の許可のみを含む。本リポジトリ固有の許可を追加する
-場合は、確認を挟まずに編集させてよい範囲かを判断してから permissions.allow へ追記する。 -->
+`docs/records/managed/` 配下の3ファイルは `.claude/settings.json` の `permissions.allow` により権限プロンプトなしで
+編集できます（妥当性はコミット前の差分確認と `FORMAT.md` 準拠で担保する）。それ以外の編集は確認を挟みます。
 
 ## 自律ループ実行モード（Loop Engineering）
 

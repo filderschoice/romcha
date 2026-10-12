@@ -2,6 +2,23 @@
 
 このリポジトリの主要な変更は本ファイルに記録します。
 
+## 2026-10-13
+
+- ガードレール・エージェント指示ルールを配布元 copilot-rules v0.28.0 へ追従した（スキル `guardrail-rules-sync`）。
+  規範（禁止事項・git操作の範囲・品質ゲート・記録の更新）の追加・削除は無い。
+  - そのままコピー: `rules/guardrails-unified.v1.md`（3.4 禁止カテゴリの列挙を1文の要約へ縮め、定義を
+    `rules/guardrails-app.v1.md` 3.4 へ移設）、`rules/guardrails-app.v1.md`、`docs/guidelines/RULE.md`、
+    `docs/guidelines/ADOPTION.md`、`.github/copilot-instructions.md`（「提示の仕方」を新設。編集できるエージェントは
+    編集をもってコード・差分の提示に代える）
+  - スキル: `autonomous-loop`・`docs-consistency-review`・`pr-create` を配布元の版へ置き換えた
+    （`pr-create` の `model: haiku` は配布元も同じ指定）
+  - マージ: `CLAUDE.md` から、共通規約と重複する行（指示参照の優先順位1位、記録ファイルの編集権限）と
+    権限設定の節の冗長な記述を削除した。品質ゲートの具体コマンド、脆弱性チェックの判断は維持
+  - 取り込まない: `dependabot-alert-triage`（本リポジトリ固有の Gradle 向け版を維持）、`.github/CODEOWNERS`、
+    `.markdownlint-cli2.yaml`（コメントの差のみ）、`.vscode/extensions.json`
+  - 常時読み込みの変化（バイト）: `CLAUDE.md` 5684 → 4780、`rules/guardrails-unified.v1.md` 8358 → 7702、
+    `.github/copilot-instructions.md` 11489 → 11909（提示の仕方を新設したため増加）
+
 ## 2026-10-12
 
 - リポジトリ内スキルの実行モデルの固定を棚卸しした（スキル `skill-model-pinning`）。`pr-create` だけ `model: haiku` を指定した
