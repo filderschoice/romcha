@@ -43,6 +43,7 @@
 | `.claude/skills/docs-consistency-review/SKILL.md` | ドキュメント整合性レビューの汎用スキル | Claude Code のみ・任意 |
 | `.claude/skills/autonomous-loop/SKILL.md` | 自律ループ実行モードの実行手順 | Claude Code のみ・モード採用時は必須 |
 | `.claude/skills/pr-create/SKILL.md` | PR作成の実行手順（`gh` での反映） | Claude Code のみ・任意 |
+| `.claude/skills/dependabot-alert-triage/SKILL.md` | Dependabot アラートの出どころ切り分けと対応手順 | Claude Code のみ・任意 |
 
 補足:
 
