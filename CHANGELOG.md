@@ -2,6 +2,15 @@
 
 このリポジトリの主要な変更は本ファイルに記録します。
 
+## 2026-10-12
+
+- リポジトリ内スキルの実行モデルの固定を棚卸しした（スキル `skill-model-pinning`）。`pr-create` だけ `model: haiku` を指定した
+  （手順が定型で判断材料がリポジトリに揃い、`git push` とマージはユーザーが実行するため）。`autonomous-loop`（実装・判断そのものが成果物）、
+  `dependabot-alert-triage`（アラートの切り分けと修正版の選定が判断）、`docs-consistency-review`（横断点検の判断が成果物）は指定しない。
+  指定はスキルを実行したターンの間だけ効く。
+- リポジトリ外の変更: ユーザー共通スキル（`~/.claude/skills/`）は変更なし。既存の指定（`backlog-summary`・`commit-changes` は haiku、
+  `github-release-publish`・`prune-merged-branches` は sonnet）は分類基準に合致していた。残りは参照用または判断を伴うため指定しない。
+
 ## 2026-10-09
 
 - v1.1.0 の公開後の実機の確認が済み、BL-110 を完了として BACKLOG から削除した（RELEASE.md の P2・P3・R3）。v1.0.3 の署名済み APK を入れた Pixel 8 Pro で、
