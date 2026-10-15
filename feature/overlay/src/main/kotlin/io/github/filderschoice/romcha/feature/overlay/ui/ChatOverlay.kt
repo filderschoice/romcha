@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
@@ -73,13 +74,14 @@ fun ChatOverlay(
     touchThrough: Boolean,
     mode: WindowMode,
     manualTimer: PlaybackSnapshot?,
+    canResume: Boolean,
     actions: OverlayActions,
 ) {
     val colors = OverlayColors.of(display.theme)
     CompositionLocalProvider(LocalOverlayColors provides colors) {
         ProvideTextStyle(TextStyle(shadow = colors.textShadow)) {
             when (mode) {
-                WindowMode.Normal -> Window(state, settings, display, touchThrough, manualTimer, actions)
+                WindowMode.Normal -> Window(state, settings, display, touchThrough, manualTimer, canResume, actions)
                 WindowMode.Minimized -> Bubble(state.indicator, settings.opacity, actions)
                 is WindowMode.Stashed -> StashTab(mode.side, settings.opacity, actions)
             }
@@ -94,6 +96,7 @@ private fun Window(
     display: DisplaySettings,
     touchThrough: Boolean,
     manualTimer: PlaybackSnapshot?,
+    canResume: Boolean,
     actions: OverlayActions,
 ) {
     var showSettings by remember { mutableStateOf(false) }
@@ -104,6 +107,7 @@ private fun Window(
             state = state,
             alpha = alpha,
             touchThrough = touchThrough,
+            canResume = canResume,
             buttonSize = headerButtonSize(display.largeHeaderButtons),
             actions = actions,
             onToggleSettings = { showSettings = !showSettings },
@@ -142,6 +146,9 @@ private fun Window(
     }
 }
 
+/** 押せない再開ボタンのアイコンの不透明度 */
+private const val DISABLED_ICON_ALPHA = 0.35f
+
 /** ヘッダーのボタンの大きさ（BL-081）。既定は小さいウィンドウでもタイトル欄の幅を残す 36dp、大きくする設定で推奨の 48dp */
 internal fun headerButtonSize(large: Boolean): Dp = if (large) 48.dp else 36.dp
 
@@ -150,6 +157,7 @@ private fun Header(
     state: OverlayUiState,
     alpha: Float,
     touchThrough: Boolean,
+    canResume: Boolean,
     buttonSize: Dp,
     actions: OverlayActions,
     onToggleSettings: () -> Unit,
@@ -182,6 +190,14 @@ private fun Header(
                 text = if (touchThrough) "$status  ${stringResource(R.string.overlay_touch_through_on)}" else status,
                 color = SubTextColor,
                 fontSize = 10.sp,
+            )
+        }
+        // 一時停止中だけ押せる。ウィンドウは通常 FLAG_NOT_FOCUSABLE のため、タップしても前面アプリのフォーカスは動かない
+        IconButton(onClick = actions::onResume, enabled = canResume, modifier = Modifier.size(buttonSize)) {
+            Icon(
+                Icons.Default.PlayArrow,
+                stringResource(R.string.overlay_resume),
+                tint = if (canResume) SubTextColor else SubTextColor.copy(alpha = DISABLED_ICON_ALPHA),
             )
         }
         IconButton(onClick = onToggleSettings, modifier = Modifier.size(buttonSize)) {

@@ -25,7 +25,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import io.github.filderschoice.romcha.R
 import io.github.filderschoice.romcha.core.media.NowPlaying
+import io.github.filderschoice.romcha.core.media.ResumeDiagnostics
+import io.github.filderschoice.romcha.core.media.ResumeEvent
+import io.github.filderschoice.romcha.core.media.ResumeStats
 import kotlinx.coroutines.flow.StateFlow
+import java.text.DateFormat
+import java.util.Date
 
 /** 公式アプリの MediaSession の診断表示（M0 の Q-01 / Q-02 を実機で確認するため）。端末の画面に表示するだけで送信しない。 */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +41,7 @@ internal fun DiagnosticsScreen(
 ) {
     BackHandler(onBack = onBack)
     val state by nowPlaying.collectAsState()
+    val resume by ResumeDiagnostics.stats.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,7 +59,7 @@ internal fun DiagnosticsScreen(
         ) {
             SelectionContainer {
                 Text(
-                    text = diagnosticsText(state),
+                    text = resumeText(resume) + diagnosticsText(state),
                     fontFamily = FontFamily.Monospace,
                     style = MaterialTheme.typography.bodySmall,
                 )
@@ -76,4 +82,19 @@ private fun diagnosticsText(state: NowPlaying): String {
         appendLine("---")
         state.debugLines.forEach(::appendLine)
     }
+}
+
+/** 自動再開の実績（BL-118）。まだ一度も動いていなければ何も出さない。時刻は端末の時刻 */
+@Composable
+private fun resumeText(stats: ResumeStats): String {
+    val event = stats.lastEvent ?: return ""
+    val time = DateFormat.getTimeInstance(DateFormat.MEDIUM).format(Date(stats.lastEventAtMs))
+    val last =
+        when (event) {
+            ResumeEvent.RESUMED -> R.string.diagnostics_resume_last_resumed
+            ResumeEvent.LIMIT_REACHED -> R.string.diagnostics_resume_last_limit
+            ResumeEvent.FAILED -> R.string.diagnostics_resume_last_failed
+        }
+    return stringResource(R.string.diagnostics_resume_stats, stats.resumedCount, stats.limitReachedCount) +
+        "\n" + stringResource(last, time) + "\n---\n"
 }

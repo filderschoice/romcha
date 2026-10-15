@@ -10,9 +10,11 @@ import android.content.res.Configuration
 import android.os.PowerManager
 import android.os.SystemClock
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +22,7 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import io.github.filderschoice.romcha.core.chat.resolve.VideoResolver
+import io.github.filderschoice.romcha.core.media.AutoResumer
 import io.github.filderschoice.romcha.core.media.PlaybackMonitor
 import io.github.filderschoice.romcha.core.sync.PlaybackSnapshot
 import io.github.filderschoice.romcha.feature.overlay.session.InnerTubeBackend
@@ -35,6 +38,7 @@ import io.github.filderschoice.romcha.feature.overlay.ui.OverlayCommand
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -95,6 +99,19 @@ class OverlayService :
             IntentFilter(Intent.ACTION_SCREEN_ON).apply { addAction(Intent.ACTION_SCREEN_OFF) }
         ContextCompat.registerReceiver(this, screenReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
         lifecycleScope.launch { createCoordinator().run() }
+        // 設定オンかつ画面オンの間、一時停止を検知して自動で再開する（BL-118）
+        val autoResumer =
+            AutoResumer(
+                nowPlaying = monitor.state,
+                active =
+                    combine(
+                        screenOn,
+                        DisplaySettingsStore.state.map { it.autoResume },
+                    ) { screen, on -> screen && on },
+                resume = monitor::resume,
+                log = { Log.i(LOG_TAG, it) },
+            )
+        lifecycleScope.launch { autoResumer.run() }
     }
 
     private fun createCoordinator(): WatchCoordinator {
@@ -196,6 +213,7 @@ class OverlayService :
             val current by settings.collectAsState()
             val timer by manualTimer.collectAsState()
             val display by DisplaySettingsStore.state.collectAsState()
+            val canResume by remember { monitor.state.map { it.canResume } }.collectAsState(false)
             ChatOverlay(
                 state = state,
                 settings = current,
@@ -203,6 +221,7 @@ class OverlayService :
                 touchThrough = touchThrough.value,
                 mode = windowMode.value,
                 manualTimer = timer,
+                canResume = canResume,
                 actions = actions,
             )
         }
@@ -264,12 +283,18 @@ class OverlayService :
                     )
             }
 
+            override fun onResume() {
+                val accepted = monitor.resume()
+                Log.i(LOG_TAG, "manual resume, accepted=" + accepted)
+            }
+
             override fun onInputFocus(focused: Boolean) {
                 window.focusable = focused
             }
         }
 
     companion object {
+        private const val LOG_TAG = "Romcha.AutoResume"
         private const val NOTIFICATION_ID = OverlayNotifications.NOTIFICATION_ID
         private const val ACTION_TOGGLE = OverlayNotifications.ACTION_TOGGLE
         private const val ACTION_STOP = OverlayNotifications.ACTION_STOP
