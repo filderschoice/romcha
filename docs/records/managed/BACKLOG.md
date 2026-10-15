@@ -6,15 +6,6 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
-- id: BL-119
-  区分: 品質ゲート
-  タスク内容: DESIGN.md・PLAN.md・CHANGELOG.md・EXECUTE.md を再開機能に合わせて更新し、Markdown と記録ファイルの検証を通す
-  優先度: P2
-  状態: 未着手
-  担当: AIエージェント
-  完了条件: markdownlint と validate-records.py が成功する
-  依存: []
-    - BL-118
 - id: BL-120
   区分: 人手検証
   タスク内容: >-

@@ -6,6 +6,26 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-16 12:00
+  summary: 再開機能の設計・要件・利用手順のドキュメントを更新した
+  details:
+    変更内容: >-
+      DESIGN.md に一時停止からの再開の設計（canResume・resume()・ResumeLimiter・AutoResumer・ResumeDiagnostics・設定・通知へ追加しない判断・
+      利用者自身の一時停止との区別の手がかり案）を追記し、PLAN.md に F-OVL-10/11 とスコープの注記、README.md に使い方、CHANGELOG.md に変更を追記した。
+      あわせて、前回のコミットで BACKLOG.md の BL-119 の依存に残った 1 行（YAML の体裁の崩れ）を直した。
+    変更ファイル:
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+      - docs/PLAN.md
+      - README.md
+      - CHANGELOG.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: 成功 - 品質ゲート・markdownlint・記録ファイルの検証がすべて成功
+    関連ID:
+      - BL-119
 - date: 2026-10-16 11:00
   summary: フローティングウィンドウの「再開」ボタンと、設定でオンにする自動再開・診断表示を追加した
   details:

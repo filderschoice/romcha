@@ -59,6 +59,7 @@
 - F-VID-01/02: 動画の自動特定パイプライン手順1〜4（`core:chat` の `resolve.VideoResolver`）
 - F-SYNC-01/02: 公式アプリの MediaSession からの再生状態・メタデータ取得（`core:media` の `PlaybackMonitor`）
 - F-OVL-01〜08、F-VIEW-02、F-VID-07: フローティングウィンドウ（`feature:overlay` の `OverlayService`。画面端への退避 BL-049 を含む）
+- F-OVL-10/11（BL-116〜BL-118）: 一時停止した公式アプリの再開（ヘッダーの「再開」ボタンと、設定でオンにする自動再開）
 - F-APP-01/03/04、F-VID-04/05: アプリ画面（権限案内・共有受信・URL 入力・免責・OSS ライセンス・MediaSession 診断表示）
 - F-CHAT-04/05: ライブ・プレミア（公開中・待機中）のチャットのポーリング取得（`core:sync` の `LiveChatSession`）
 - F-SYNC-08: ライブ・プレミア中の最新追従表示と表示遅延の設定（`core:sync` の `LiveTimeline`、オーバーレイの設定パネル）
@@ -221,6 +222,28 @@
     広告中の position は広告自体の再生位置で、状態・actions も本編と同じため区別できない。広告の検知はせず、
     既知の制約として README で案内する。広告明けは位置の変化をシークとして扱い、表示し直す）。
   - デバッグ一覧（Q-02 の実機確認用）は画面表示のみで、ログへ出さない（N-07）。
+- 一時停止からの再開（BL-116〜BL-118。権限・通信先は増やさない）:
+  - 背景（実機で確認済み）: 別アプリが `AUDIOFOCUS_GAIN` で音声を取ると、YouTube はフォーカスの恒久的な喪失で一時停止し自動では戻らない。
+    このとき MediaSession は active・PAUSED で actions に PLAY を含む。YouTube の通知の再生ボタン（セッションへの直接の `play()`）では
+    再開できるが、`adb shell input keyevent` などのメディアキーでは再開しない。
+  - `NowPlaying.canResume` = PAUSED かつ actions に `ACTION_PLAY`（`MediaMapping.canResume`）。`PlaybackMonitor.resume()` が
+    `MediaController.transportControls.play()` を呼ぶ（`AudioManager.dispatchMediaKeyEvent` 系は使わない）。
+  - `ResumeLimiter`（純粋関数的。時計を注入）: 30 秒に 3 回まで。超えた呼び出しは `LIMIT_REACHED` を返して 60 秒の停止期間に入り、その間は `COOLING_DOWN`。
+  - `AutoResumer`: `combine(nowPlaying, active)` が「設定オン・画面オン・セッション有り・canResume」になった時点から 2 秒（`DEFAULT_WAIT_MS`）
+    待って `resume()` を呼ぶ。`collectLatest` のため、待機中に状態が変われば取り消す。同じ停止の間は 1 回だけ試す（再開しても止まったままなら再試行しない）。
+    画面オフ・セッション無し・非アクティブ（canResume が偽）では何もしない。ログ（タグ `Romcha.AutoResume`）には検知・待機・`play()` 呼び出し・
+    結果だけを出し、タイトルなどは出さない。
+  - `ResumeDiagnostics`（プロセス内の共有 `StateFlow<ResumeStats>`）: 再開を依頼した回数・回数制限で止めた回数・最後の出来事と時刻。
+    診断情報の画面の先頭に出す（まだ何も無ければ出さない）。
+  - 設定: `DisplaySettings.autoResume`（既定 false。保存キー `autoResume`。表示設定画面の「フローティングウィンドウ」のスイッチ）。
+    説明文で、利用者自身の一時停止と区別できず再開されることを明示する。「設定を初期化する」で既定のオフへ戻る。
+  - 手動再開: ヘッダーに「再開」ボタン（`PlayArrow`）。`canResume` のときだけ有効。ウィンドウは文字入力中以外 `FLAG_NOT_FOCUSABLE`
+    のため、タップしても前面アプリのウィンドウフォーカスは動かない（フラグの変更は不要）。
+  - 常駐通知に「再開」は追加しない（判断）: 通知シェードを引き下ろす操作はウィンドウフォーカスを動かし、相手アプリが音声を取り直して
+    再び止める恐れがある（実機の仮説）。フォーカスを動かさないウィンドウ内のボタンと自動再開で足りる。クイック設定タイルも同じ理由で採らない。
+  - 制約と今後の手がかり: MediaSession だけでは、他アプリによる停止と利用者自身の一時停止は区別できない。手がかりの案は、
+    停止の直前に他アプリの MediaSession（`getActiveSessions` で既に取得できる）が再生を始めたかどうかを見ること。新しい権限は要らないが、
+    音声を MediaSession なしで出すアプリ（ゲームなど）には効かないため、現状は実装していない。
 
 ### 同期エンジン（`core:sync`）
 
@@ -353,7 +376,7 @@
 - 動画の指定（F-VID-04/05）: 共有（`ACTION_SEND` / `text/plain`）の本文・件名、または URL 入力欄から `VideoUrlParser` で ID を取り出し、
   `OverlayChannel.requestVideo(id)` で保持してから `OverlayService.start` する（セッション開始前でも失われないよう StateFlow で保持）。
   共有から開いた場合は画面を閉じて公式アプリへ戻る。URL が無い場合はトーストで知らせる。
-- 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
+- 診断情報: アクティビティ表示中だけ `PlaybackMonitor` を動かし、先頭に自動再開の実績（`ResumeDiagnostics`。BL-118）、続けて状態・位置・速度・タイトル・チャンネル名・長さ・動画ID候補と
   MediaSession の全キーを等幅で表示する（選択してコピー可能。送信しない）。M0（Q-01 / Q-02）の実機確認に使う。
 - クラッシュ情報の送信（BL-088・BL-089。2026-10-04 ユーザー判断。外部通信を利用者の操作に限る従来方針の例外）: Firebase Crashlytics のみを使い、
   Analytics は入れない。送信は既定オンで、設定画面の「クラッシュ情報を送信する」のスイッチでオフにできる（`CrashReportingSettings`。
