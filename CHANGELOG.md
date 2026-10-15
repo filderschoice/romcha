@@ -4,6 +4,9 @@
 
 ## 2026-10-16
 
+- v1.2.0 を公開し、公開した Release の APK での実機確認が済んだ。BL-120（再開機能の 3 点の確認）を完了として BACKLOG から削除し、DESIGN.md の配布欄に v1.2.0 を追記した。
+  GitHub Release は 2026-10-16 に公開（タグ `v1.2.0` は `main` の dec5f5e、署名済み `romcha-v1.2.0.apk` と `.sha256`。
+  SHA-256 は `fb7fc676…5911b`）。README の機能一覧の「実機確認待ち」を外した。
 - v1.2.0 のリリース準備として版を更新した（`versionName` 1.2.0・`versionCode` 10200。README・site の版表記も追従）。
   含まれる変更は YouTube の一時停止を再開するボタンと自動再開（BL-116〜BL-119）。署名ビルド・タグの push・Release の公開は未実施。
   あわせて site（日英）に「再開」の機能カードを、README の機能一覧に再開ボタンの行を追加し、README のヘッダーのボタンの並び
