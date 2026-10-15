@@ -25,12 +25,14 @@ import kotlinx.coroutines.flow.asStateFlow
  * 公式アプリの再生状態。
  *
  * @property sessionFound 対象アプリの MediaSession が見つかっている
+ * @property canResume 一時停止中で、セッションが PLAY を受け付ける（再開操作を有効にしてよい。BL-116）
  * @property debugLines MediaSession の全キーと値（M0 の Q-02 確認用。画面表示のみでログへは出さない。N-07）
  */
 data class NowPlaying(
     val snapshot: PlaybackSnapshot = PlaybackSnapshot.NONE,
     val metadata: TrackMetadata? = null,
     val sessionFound: Boolean = false,
+    val canResume: Boolean = false,
     val debugLines: List<String> = emptyList(),
 )
 
@@ -98,6 +100,20 @@ class PlaybackMonitor(
         mutableState.value = NowPlaying()
     }
 
+    /**
+     * 一時停止中のセッションへ再生を依頼する（BL-116）。メディアキーではなくセッションへ直接 `play()` を呼ぶ
+     * （他アプリのオーディオフォーカス奪取で止まった再生は、メディアキーでは再開しないため）。
+     *
+     * @return 依頼した（一時停止中で PLAY が許可されていた）とき true。再生が実際に始まったかは状態の変化で分かる
+     */
+    fun resume(): Boolean {
+        val current = controller ?: return false
+        val playbackState = current.playbackState
+        if (!MediaMapping.canResume(playbackState?.state, playbackState?.actions ?: 0)) return false
+        current.transportControls.play()
+        return true
+    }
+
     private fun attach(controllers: List<MediaController>) {
         val next = controllers.firstOrNull { it.packageName == targetPackage }
         if (next?.sessionToken != controller?.sessionToken) {
@@ -139,6 +155,7 @@ class PlaybackMonitor(
                         entries = entries,
                     ),
                 sessionFound = true,
+                canResume = MediaMapping.canResume(playbackState?.state, playbackState?.actions ?: 0),
                 debugLines = MediaMapping.debugLines(entries),
             )
     }

@@ -6,6 +6,31 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-16 10:00
+  summary: YouTube の一時停止からの再開の土台を core:media に追加した（再開の依頼・回数制限・自動再開・診断の実績）
+  details:
+    変更内容: >-
+      PlaybackMonitor に MediaController.transportControls.play() を直接呼ぶ resume() を追加した（メディアキーは使わない）。
+      NowPlaying に canResume（PAUSED かつ actions に PLAY）を追加。ResumeLimiter（30 秒に 3 回、超えたら 60 秒停止）、
+      AutoResumer（一時停止から 2 秒待って再開、待機中に状態が変われば取り消し、同じ停止の間は 1 回だけ）、
+      ResumeDiagnostics（再開した回数・制限で止めた回数・最後の出来事）を追加した。ログにタイトルなどは出さない。
+      サービス・画面への接続は BL-117 / BL-118 で行う。
+    変更ファイル:
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/PlaybackMonitor.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/MediaMapping.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/ResumeLimiter.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/ResumeDiagnostics.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/AutoResumer.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/ResumeLimiterTest.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/AutoResumerTest.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/MediaMappingTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test
+    検証結果: 成功 - 品質ゲートがすべて成功
+    関連ID:
+      - BL-116
 - date: 2026-10-10 00:30
   summary: Dependabot アラートの残り 1 件（commons-lang3）を修正版へ上げた
   details:

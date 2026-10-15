@@ -6,17 +6,6 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
-- id: BL-116
-  区分: 機能追加
-  タスク内容: >-
-    YouTube の一時停止からの再開の土台を core:media に作る。PlaybackMonitor に MediaController.transportControls.play() を呼ぶ resume() と、
-    NowPlaying の canResume（PAUSED かつ actions に PLAY を含む）を追加し、再開の回数制限（30 秒に 3 回、超えたら 60 秒止める）の純粋関数 ResumeLimiter と、
-    自動再開の実績を診断画面へ渡す ResumeDiagnostics を作る
-  優先度: P1
-  状態: 未着手
-  担当: AIエージェント
-  完了条件: ResumeLimiter と canResume の判定の単体テストが成功し、品質ゲートが成功する
-  依存: []
 - id: BL-117
   区分: 機能追加
   タスク内容: >-
@@ -26,8 +15,7 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: ボタンが日英の文言で表示され、品質ゲートが成功する。実機でのウィンドウフォーカスの確認は BL-120 に分ける
-  依存:
-    - BL-116
+  依存: []
 - id: BL-118
   区分: 機能追加
   タスク内容: >-
@@ -38,8 +26,7 @@
   状態: 未着手
   担当: AIエージェント
   完了条件: 自動再開の判定の単体テストが成功し、設定・診断が日英で表示され、品質ゲートが成功する
-  依存:
-    - BL-116
+  依存: []
 - id: BL-119
   区分: 品質ゲート
   タスク内容: DESIGN.md・PLAN.md・CHANGELOG.md・EXECUTE.md を再開機能に合わせて更新し、Markdown と記録ファイルの検証を通す
