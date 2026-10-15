@@ -26,6 +26,10 @@
     <string name="url_paste">クリップボードから貼り付け</string>
     <string name="share_no_video">共有された内容に YouTube の動画 URL が見つかりません</string>
     <string name="diagnostics_title">診断情報</string>
+    <string name="diagnostics_resume_stats">自動再開: 再開 %1$d 回 / 回数制限で停止 %2$d 回</string>
+    <string name="diagnostics_resume_last_resumed">最後: %1$s に再開を依頼しました</string>
+    <string name="diagnostics_resume_last_limit">最後: %1$s に回数制限で止めました</string>
+    <string name="diagnostics_resume_last_failed">最後: %1$s に再開できませんでした</string>
     <string name="diagnostics_no_session">公式アプリの再生を検出していません（通知へのアクセスの許可と、公式アプリでの再生を確認してください）</string>
     <string name="licenses_title">オープンソースライセンス</string>
     <string name="back">戻る</string>
@@ -57,6 +61,8 @@
     <string name="display_max_visible_hint">増やすと遡れる量が増えますが、メモリを多く使います。増やした分は次に動画を開いた時から反映します。</string>
     <string name="display_window">フローティングウィンドウ</string>
     <string name="display_large_header_buttons">ヘッダーのボタンを大きくする（押しやすくなる代わりにタイトル欄が狭くなります）</string>
+    <string name="display_auto_resume">一時停止したら自動で再開する</string>
+    <string name="display_auto_resume_hint">YouTube が一時停止して 2 秒たつと、再生を再開します（30 秒に 3 回まで。超えると 1 分間止めます）。別のアプリが音声を奪って止まった場合に便利ですが、あなた自身が一時停止した場合との区別はできないため、一時停止しても再開されます。使わない時はオフにしてください。</string>
     <string name="display_font_hint">文字サイズ・背景の透過度は、フローティングウィンドウの設定ボタンから変えられます。</string>
     <string name="cache_clear">キャッシュを消す</string>
     <string name="cache_cleared">動画特定のキャッシュを消しました。オーバーレイを表示中なら、見ている動画を特定し直します。</string>

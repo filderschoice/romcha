@@ -6,6 +6,83 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-10-16 12:00
+  summary: 再開機能の設計・要件・利用手順のドキュメントを更新した
+  details:
+    変更内容: >-
+      DESIGN.md に一時停止からの再開の設計（canResume・resume()・ResumeLimiter・AutoResumer・ResumeDiagnostics・設定・通知へ追加しない判断・
+      利用者自身の一時停止との区別の手がかり案）を追記し、PLAN.md に F-OVL-10/11 とスコープの注記、README.md に使い方、CHANGELOG.md に変更を追記した。
+      あわせて、前回のコミットで BACKLOG.md の BL-119 の依存に残った 1 行（YAML の体裁の崩れ）を直した。
+    変更ファイル:
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+      - docs/PLAN.md
+      - README.md
+      - CHANGELOG.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: 成功 - 品質ゲート・markdownlint・記録ファイルの検証がすべて成功
+    関連ID:
+      - BL-119
+- date: 2026-10-16 11:00
+  summary: フローティングウィンドウの「再開」ボタンと、設定でオンにする自動再開・診断表示を追加した
+  details:
+    変更内容: >-
+      ヘッダーに「再開」ボタン（PlayArrow。canResume のときだけ有効）を追加し、タップで PlaybackMonitor.resume() を呼ぶ。ウィンドウは文字入力中以外
+      FLAG_NOT_FOCUSABLE のため前面アプリのフォーカスは動かず、フラグは変更していない。常駐通知とクイック設定タイルへは追加しない（通知シェードの
+      操作がウィンドウフォーカスを動かすため。DESIGN.md に理由を記載）。表示設定に「一時停止したら自動で再開する」（既定オフ、説明文に
+      利用者自身の一時停止と区別できない制約を明記）を追加し、OverlayService で AutoResumer を起動した（設定オンかつ画面オンの間のみ）。
+      診断情報の画面の先頭に自動再開の実績を出し、Logcat（タグ Romcha.AutoResume）に検知・待機・play() 呼び出し・結果を残す（タイトルなし）。
+      文言は日英の両方に追加した。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/ChatOverlay.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/ui/OverlayActions.kt
+      - feature/overlay/src/main/res/values/strings.xml
+      - feature/overlay/src/main/res/values-en/strings.xml
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DiagnosticsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - app/src/main/res/values-en/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test
+    検証結果: >-
+      成功 - 品質ゲートがすべて成功（英語の文言が PluralsCandidate で lint エラーになったため言い回しを直して再実行）。
+      実機での動作（ウィンドウフォーカス・再開・制限）は未確認（BL-120）
+    関連ID:
+      - BL-117
+      - BL-118
+      - BL-120
+- date: 2026-10-16 10:00
+  summary: YouTube の一時停止からの再開の土台を core:media に追加した（再開の依頼・回数制限・自動再開・診断の実績）
+  details:
+    変更内容: >-
+      PlaybackMonitor に MediaController.transportControls.play() を直接呼ぶ resume() を追加した（メディアキーは使わない）。
+      NowPlaying に canResume（PAUSED かつ actions に PLAY）を追加。ResumeLimiter（30 秒に 3 回、超えたら 60 秒停止）、
+      AutoResumer（一時停止から 2 秒待って再開、待機中に状態が変われば取り消し、同じ停止の間は 1 回だけ）、
+      ResumeDiagnostics（再開した回数・制限で止めた回数・最後の出来事）を追加した。ログにタイトルなどは出さない。
+      サービス・画面への接続は BL-117 / BL-118 で行う。
+    変更ファイル:
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/PlaybackMonitor.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/MediaMapping.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/ResumeLimiter.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/ResumeDiagnostics.kt
+      - core/media/src/main/kotlin/io/github/filderschoice/romcha/core/media/AutoResumer.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/ResumeLimiterTest.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/AutoResumerTest.kt
+      - core/media/src/test/kotlin/io/github/filderschoice/romcha/core/media/MediaMappingTest.kt
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test
+    検証結果: 成功 - 品質ゲートがすべて成功
+    関連ID:
+      - BL-116
 - date: 2026-10-10 00:30
   summary: Dependabot アラートの残り 1 件（commons-lang3）を修正版へ上げた
   details:

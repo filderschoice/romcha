@@ -31,6 +31,7 @@ enum class ThemeMode {
  * @property theme テーマ（F-VIEW-05。既定はシステム追従で、従来の見た目と同じ）
  * @property maxVisible 表示保持件数の上限（F-VIEW-04。[MIN_VISIBLE]〜[MAX_VISIBLE]、[VISIBLE_STEP] 刻み。N-04）
  * @property largeHeaderButtons フローティングのヘッダーのボタンを推奨の 48dp にする（BL-081。既定は従来の 36dp）
+ * @property autoResume 公式アプリが一時停止したら自動で再開する（BL-118。既定はオフ）
  */
 data class DisplaySettings(
     val showAuthorName: Boolean = true,
@@ -44,6 +45,7 @@ data class DisplaySettings(
     val topChatOnly: Boolean = false,
     val theme: ThemeMode = ThemeMode.SYSTEM,
     val largeHeaderButtons: Boolean = false,
+    val autoResume: Boolean = false,
 ) {
     companion object {
         const val DEFAULT_VISIBLE = 500
@@ -75,6 +77,7 @@ object DisplaySettingsStore {
     private const val KEY_TOP_CHAT_ONLY = "topChatOnly"
     private const val KEY_THEME = "theme"
     private const val KEY_LARGE_HEADER_BUTTONS = "largeHeaderButtons"
+    private const val KEY_AUTO_RESUME = "autoResume"
 
     private var prefs: SharedPreferences? = null
     private val mutableState = MutableStateFlow(DisplaySettings())
@@ -100,6 +103,7 @@ object DisplaySettingsStore {
                 topChatOnly = loaded.getBoolean(KEY_TOP_CHAT_ONLY, defaults.topChatOnly),
                 theme = ThemeMode.entries.find { it.name == loaded.getString(KEY_THEME, null) } ?: defaults.theme,
                 largeHeaderButtons = loaded.getBoolean(KEY_LARGE_HEADER_BUTTONS, defaults.largeHeaderButtons),
+                autoResume = loaded.getBoolean(KEY_AUTO_RESUME, defaults.autoResume),
             )
     }
 
@@ -123,6 +127,7 @@ object DisplaySettingsStore {
             putBoolean(KEY_TOP_CHAT_ONLY, next.topChatOnly)
             putString(KEY_THEME, next.theme.name)
             putBoolean(KEY_LARGE_HEADER_BUTTONS, next.largeHeaderButtons)
+            putBoolean(KEY_AUTO_RESUME, next.autoResume)
         }
     }
 }

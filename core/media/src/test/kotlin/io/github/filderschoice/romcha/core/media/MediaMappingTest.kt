@@ -19,6 +19,15 @@ class MediaMappingTest {
     }
 
     @Test
+    fun 再開できるのは一時停止中でPLAYが許可されている時だけ() {
+        val play = PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE
+        assertEquals(true, MediaMapping.canResume(PlaybackState.STATE_PAUSED, play))
+        assertEquals(false, MediaMapping.canResume(PlaybackState.STATE_PAUSED, PlaybackState.ACTION_PAUSE))
+        assertEquals(false, MediaMapping.canResume(PlaybackState.STATE_PLAYING, play))
+        assertEquals(false, MediaMapping.canResume(null, play))
+    }
+
+    @Test
     fun スナップショットは負の位置を0にし速度0を等速とみなす() {
         val snapshot =
             MediaMapping.toSnapshot(

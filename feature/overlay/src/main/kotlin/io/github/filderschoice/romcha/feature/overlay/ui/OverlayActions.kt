@@ -32,6 +32,9 @@ interface OverlayActions {
     /** 手動タイマーモードの操作（F-SYNC-07） */
     fun onManual(command: ManualCommand)
 
+    /** 一時停止中の公式アプリへ再生を依頼する（BL-117。ウィンドウのフォーカスを取らずに行う） */
+    fun onResume()
+
     /** 文字入力の開始・終了。入力中だけウィンドウがフォーカスを取れるようにする */
     fun onInputFocus(focused: Boolean)
 }

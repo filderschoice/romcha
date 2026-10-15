@@ -26,6 +26,10 @@
     <string name="url_paste">Paste from clipboard</string>
     <string name="share_no_video">No YouTube video URL was found in the shared content</string>
     <string name="diagnostics_title">Diagnostics</string>
+    <string name="diagnostics_resume_stats">Auto resume - resumed: %1$d, stopped by the limit: %2$d</string>
+    <string name="diagnostics_resume_last_resumed">Last: asked to resume at %1$s</string>
+    <string name="diagnostics_resume_last_limit">Last: stopped by the limit at %1$s</string>
+    <string name="diagnostics_resume_last_failed">Last: could not resume at %1$s</string>
     <string name="diagnostics_no_session">No playback detected in the official app (check that notification access is allowed and that the official app is playing)</string>
     <string name="licenses_title">Open source licenses</string>
     <string name="back">Back</string>
@@ -57,6 +61,8 @@
     <string name="display_max_visible_hint">A higher value lets you scroll back further but uses more memory. The change applies the next time you open a video.</string>
     <string name="display_window">Floating window</string>
     <string name="display_large_header_buttons">Larger header buttons (easier to tap, but the title gets narrower)</string>
+    <string name="display_auto_resume">Resume automatically when paused</string>
+    <string name="display_auto_resume_hint">Resumes YouTube 2 seconds after it pauses (up to 3 times in 30 seconds, then it stops for a minute). Useful when another app takes the audio and pauses YouTube, but it cannot tell that apart from you pausing it yourself, so a pause you make will be resumed too. Turn it off when you do not need it.</string>
     <string name="display_font_hint">Text size and background opacity can be changed from the settings button of the floating window.</string>
     <string name="cache_clear">Clear the video cache</string>
     <string name="cache_cleared">Cleared the video identification cache. If the window is showing, the current video is identified again.</string>

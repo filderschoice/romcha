@@ -103,6 +103,9 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             SwitchRow(R.string.display_large_header_buttons, settings.largeHeaderButtons) { on ->
                 DisplaySettingsStore.update { it.copy(largeHeaderButtons = on) }
             }
+            SwitchRow(R.string.display_auto_resume, settings.autoResume, R.string.display_auto_resume_hint) { on ->
+                DisplaySettingsStore.update { it.copy(autoResume = on) }
+            }
             Text(stringResource(R.string.display_font_hint), style = MaterialTheme.typography.bodySmall)
             HorizontalDivider()
             ThemeSelector(settings.theme)

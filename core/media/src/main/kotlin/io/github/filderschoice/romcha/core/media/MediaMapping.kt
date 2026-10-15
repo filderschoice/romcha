@@ -33,6 +33,12 @@ object MediaMapping {
             else -> PlaybackStatus.NONE
         }
 
+    /** 一時停止中で、セッションが PLAY を受け付ける（`actions` に `ACTION_PLAY` を含む）か。 */
+    fun canResume(
+        state: Int?,
+        actions: Long,
+    ): Boolean = state == PlaybackState.STATE_PAUSED && actions and PlaybackState.ACTION_PLAY != 0L
+
     /**
      * PlaybackState の値から [PlaybackSnapshot] を作る（F-SYNC-01）。
      *

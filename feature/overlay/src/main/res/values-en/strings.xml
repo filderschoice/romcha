@@ -4,6 +4,7 @@
     <string name="overlay_settings">Window settings</string>
     <string name="overlay_hide">Hide window</string>
     <string name="overlay_minimize">Minimize</string>
+    <string name="overlay_resume">Resume playback</string>
     <string name="overlay_restore">Restore size</string>
     <string name="overlay_unstash">Bring back on screen</string>
     <string name="overlay_opacity">Background %1$d%%</string>
