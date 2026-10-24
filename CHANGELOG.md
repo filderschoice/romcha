@@ -2,6 +2,22 @@
 
 このリポジトリの主要な変更は本ファイルに記録します。
 
+## 2026-10-24
+
+- ガードレール・エージェント指示ルールを配布元 copilot-rules v0.29.0 へ追従した（スキル `guardrail-rules-sync`）。
+  規範（禁止事項・git操作の範囲・品質ゲート・記録の更新）の追加・削除は無い。
+  - そのままコピー: `CONTRIBUTING.md`（Copilot にも効かせる固有規約は `.github/copilot-instructions.md` へ追記する旨）、
+    `docs/guidelines/ADOPTION.md`（`.github/copilot-instructions.md` を「マージする」区分へ移動、`CONTRIBUTING.local.md` の作成手順）
+  - マージ: `.markdownlint-cli2.yaml` に `gitignore: true` を追加（Git 管理外の Markdown を検査対象から外し、
+    品質ゲートの件数照合と同じ除外にそろえる）。既存の `ignores` は維持
+  - 新規作成: `CONTRIBUTING.local.md` を雛形から作成した（2026-10-24 ユーザー判断）。規定ブランチ `main`、
+    レビュー責任者は `.github/CODEOWNERS` と同じ `@filderschoice`、自律ループ実行モードは採用、例外の追跡先は BACKLOG、
+    固有の文書（`docs/PLAN.md`・`REFERENCES.md`・`RELEASE.md`・`VERIFICATION.md`、`site/`）を記載。従来の暗黙の既定を明文化したもので、運用は変わらない
+  - 取り込まない: `dependabot-alert-triage`（配布元版は汎用化したもの。本リポジトリ固有の Gradle 向け版を維持）、
+    `.github/CODEOWNERS`、`.vscode/extensions.json`、`CLAUDE.md`（配布元に変更なし）。`.github/copilot-instructions.md` は
+    配布元と同一で、固有の追記も無い
+  - 常時読み込みの変化: なし（`CLAUDE.md`・`@import` 先・スキルは変更していない）
+
 ## 2026-10-16
 
 - site（日本語・英語）を v1.2.0 の内容で `gh-pages`（`0ba6dc8`）へ公開した。公開先で版の表記「v1.2.0」と機能カード「再開」「Resume」が
