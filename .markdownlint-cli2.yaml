@@ -4,7 +4,9 @@ config:
     code_blocks: false
     tables: false
   MD060: false
-# ビルド生成物（detekt の Markdown レポート等）は対象外。git 管理対象の *.md 件数と一致させるため
+# .gitignore で除外したファイル（展開した配布バンドル等）とビルド生成物（detekt の Markdown レポート等）は対象外。
+# git 管理対象の *.md 件数（品質ゲートの合否基準）と一致させるため
+gitignore: true
 ignores:
   - "**/build/**"
   - "**/node_modules/**"
