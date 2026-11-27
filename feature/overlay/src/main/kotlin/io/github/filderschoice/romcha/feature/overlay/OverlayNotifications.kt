@@ -24,6 +24,7 @@ internal class OverlayNotifications(
         visible: Boolean,
         title: String?,
         touchThrough: Boolean = false,
+        pinned: Boolean = DisplaySettingsStore.state.value.pinNotification,
     ): Notification {
         val manager = context.getSystemService(NotificationManager::class.java)
         if (manager.getNotificationChannel(CHANNEL_ID) == null) {
@@ -43,6 +44,17 @@ internal class OverlayNotifications(
             builder.addAction(action(context.getString(R.string.overlay_action_release_touch), ACTION_RELEASE_TOUCH))
         }
         builder.addAction(action(context.getString(R.string.overlay_action_stop), ACTION_STOP))
+        if (pinned) {
+            // Android 14 以降は常駐サービスの通知もスワイプで消せるため、消されたら出し直す（固定表示）
+            builder.setDeleteIntent(
+                PendingIntent.getService(
+                    context,
+                    ACTION_REPOST.hashCode(),
+                    Intent(context, service).setAction(ACTION_REPOST),
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+                ),
+            )
+        }
         context.packageManager.getLaunchIntentForPackage(context.packageName)?.let {
             builder.setContentIntent(PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_IMMUTABLE))
         }
@@ -68,6 +80,7 @@ internal class OverlayNotifications(
         const val ACTION_TOGGLE = "io.github.filderschoice.romcha.overlay.TOGGLE"
         const val ACTION_STOP = "io.github.filderschoice.romcha.overlay.STOP"
         const val ACTION_RELEASE_TOUCH = "io.github.filderschoice.romcha.overlay.RELEASE_TOUCH"
+        const val ACTION_REPOST = "io.github.filderschoice.romcha.overlay.REPOST"
         private const val CHANNEL_ID = "overlay"
 
         /**

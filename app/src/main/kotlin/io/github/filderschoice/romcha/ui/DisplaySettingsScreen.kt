@@ -106,6 +106,13 @@ internal fun DisplaySettingsScreen(onBack: () -> Unit) {
             SwitchRow(R.string.display_auto_resume, settings.autoResume, R.string.display_auto_resume_hint) { on ->
                 DisplaySettingsStore.update { it.copy(autoResume = on) }
             }
+            SwitchRow(
+                R.string.display_pin_notification,
+                settings.pinNotification,
+                R.string.display_pin_notification_hint,
+            ) { on ->
+                DisplaySettingsStore.update { it.copy(pinNotification = on) }
+            }
             Text(stringResource(R.string.display_font_hint), style = MaterialTheme.typography.bodySmall)
             HorizontalDivider()
             ThemeSelector(settings.theme)

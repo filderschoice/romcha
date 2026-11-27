@@ -63,6 +63,8 @@
     <string name="display_large_header_buttons">ヘッダーのボタンを大きくする（押しやすくなる代わりにタイトル欄が狭くなります）</string>
     <string name="display_auto_resume">一時停止したら自動で再開する</string>
     <string name="display_auto_resume_hint">YouTube が一時停止して 2 秒たつと、再生を再開します（30 秒に 3 回まで。超えると 1 分間止めます）。別のアプリが音声を奪って止まった場合に便利ですが、あなた自身が一時停止した場合との区別はできないため、一時停止しても再開されます。使わない時はオフにしてください。</string>
+    <string name="display_pin_notification">通知を固定表示する</string>
+    <string name="display_pin_notification_hint">オンにすると、常駐通知をスワイプしても外れません（Android 14 以降は消された直後に出し直します）。オーバーレイを終了するには通知の「終了」を使ってください。</string>
     <string name="display_font_hint">文字サイズ・背景の透過度は、フローティングウィンドウの設定ボタンから変えられます。</string>
     <string name="cache_clear">キャッシュを消す</string>
     <string name="cache_cleared">動画特定のキャッシュを消しました。オーバーレイを表示中なら、見ている動画を特定し直します。</string>

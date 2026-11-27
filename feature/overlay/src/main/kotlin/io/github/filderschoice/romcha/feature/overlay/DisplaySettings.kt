@@ -32,6 +32,7 @@ enum class ThemeMode {
  * @property maxVisible 表示保持件数の上限（F-VIEW-04。[MIN_VISIBLE]〜[MAX_VISIBLE]、[VISIBLE_STEP] 刻み。N-04）
  * @property largeHeaderButtons フローティングのヘッダーのボタンを推奨の 48dp にする（BL-081。既定は従来の 36dp）
  * @property autoResume 公式アプリが一時停止したら自動で再開する（BL-118。既定はオフ）
+ * @property pinNotification 常駐通知をスワイプしても外せないようにする（BL-121。既定はオフ）
  */
 data class DisplaySettings(
     val showAuthorName: Boolean = true,
@@ -46,6 +47,7 @@ data class DisplaySettings(
     val theme: ThemeMode = ThemeMode.SYSTEM,
     val largeHeaderButtons: Boolean = false,
     val autoResume: Boolean = false,
+    val pinNotification: Boolean = false,
 ) {
     companion object {
         const val DEFAULT_VISIBLE = 500
@@ -78,6 +80,7 @@ object DisplaySettingsStore {
     private const val KEY_THEME = "theme"
     private const val KEY_LARGE_HEADER_BUTTONS = "largeHeaderButtons"
     private const val KEY_AUTO_RESUME = "autoResume"
+    private const val KEY_PIN_NOTIFICATION = "pinNotification"
 
     private var prefs: SharedPreferences? = null
     private val mutableState = MutableStateFlow(DisplaySettings())
@@ -104,6 +107,7 @@ object DisplaySettingsStore {
                 theme = ThemeMode.entries.find { it.name == loaded.getString(KEY_THEME, null) } ?: defaults.theme,
                 largeHeaderButtons = loaded.getBoolean(KEY_LARGE_HEADER_BUTTONS, defaults.largeHeaderButtons),
                 autoResume = loaded.getBoolean(KEY_AUTO_RESUME, defaults.autoResume),
+                pinNotification = loaded.getBoolean(KEY_PIN_NOTIFICATION, defaults.pinNotification),
             )
     }
 
@@ -128,6 +132,7 @@ object DisplaySettingsStore {
             putString(KEY_THEME, next.theme.name)
             putBoolean(KEY_LARGE_HEADER_BUTTONS, next.largeHeaderButtons)
             putBoolean(KEY_AUTO_RESUME, next.autoResume)
+            putBoolean(KEY_PIN_NOTIFICATION, next.pinNotification)
         }
     }
 }
