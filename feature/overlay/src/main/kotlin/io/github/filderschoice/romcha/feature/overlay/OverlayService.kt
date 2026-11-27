@@ -39,6 +39,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -91,6 +93,14 @@ class OverlayService :
         // 表示中の動画が変わったら常駐通知の本文も更新する（BL-033）
         lifecycleScope.launch {
             OverlayNotifications.titleChanges(OverlayChannel.state).collect { updateNotification() }
+        }
+        // 固定表示の設定を切り替えたら通知を作り直す（BL-121）
+        lifecycleScope.launch {
+            DisplaySettingsStore.state
+                .map { it.pinNotification }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect { updateNotification() }
         }
         monitor = PlaybackMonitor(this)
         monitor.start()
@@ -163,6 +173,7 @@ class OverlayService :
         when (intent?.action) {
             ACTION_TOGGLE -> setVisible(!visible)
             ACTION_RELEASE_TOUCH -> setTouchThrough(false)
+            ACTION_REPOST -> Unit // 通知が消された場合の出し直し（上の startForeground で済む）
             ACTION_STOP -> {
                 OverlayChannel.send(OverlayEvent.StopRequested)
                 stopSelf()
@@ -299,6 +310,7 @@ class OverlayService :
         private const val ACTION_TOGGLE = OverlayNotifications.ACTION_TOGGLE
         private const val ACTION_STOP = OverlayNotifications.ACTION_STOP
         private const val ACTION_RELEASE_TOUCH = OverlayNotifications.ACTION_RELEASE_TOUCH
+        private const val ACTION_REPOST = OverlayNotifications.ACTION_REPOST
 
         /** オーバーレイを表示する（アプリが前面にある時に呼ぶ）。オーバーレイ権限が無い場合は false。 */
         fun start(context: Context): Boolean {

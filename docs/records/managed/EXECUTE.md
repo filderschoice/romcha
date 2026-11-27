@@ -6,6 +6,31 @@
 <!-- COPILOT_RECORDS:BEGIN -->
 
 ```yaml
+- date: 2026-11-28 12:00
+  summary: 常駐通知をスワイプで外せなくする「通知を固定表示する」設定を追加した
+  details:
+    変更内容: >-
+      表示設定に「通知を固定表示する」（DisplaySettings.pinNotification。既定オフ、保存キー pinNotification）を追加した。オンの間は
+      常駐通知に deleteIntent（ACTION_REPOST）を付け、Android 14 以降でスワイプにより消されても OverlayService が startForeground で
+      出し直す（従来から setOngoing(true) のため 13 以下はスワイプで消えない）。設定の切り替え時に通知を作り直す。既定オフのため
+      既存の挙動は変えない。文言は日英の両方に追加した。実機での動作は未確認（BL-122）。
+    変更ファイル:
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/DisplaySettings.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayNotifications.kt
+      - feature/overlay/src/main/kotlin/io/github/filderschoice/romcha/feature/overlay/OverlayService.kt
+      - app/src/main/kotlin/io/github/filderschoice/romcha/ui/DisplaySettingsScreen.kt
+      - app/src/main/res/values/strings.xml
+      - app/src/main/res/values-en/strings.xml
+      - docs/records/managed/BACKLOG.md
+      - docs/records/managed/DESIGN.md
+      - docs/records/managed/EXECUTE.md
+    検証コマンド: >-
+      ktlintCheck detekt lintDebug compileDebugKotlin testDebugUnitTest :core:chat:test :core:sync:test、npx markdownlint-cli2、
+      python scripts/validate-records.py
+    検証結果: 成功 - 品質ゲートがすべて成功（実機確認は BL-122 で人手検証）
+    関連ID:
+      - BL-121
+      - BL-122
 - date: 2026-10-16 12:00
   summary: 再開機能の設計・要件・利用手順のドキュメントを更新した
   details:

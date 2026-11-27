@@ -63,6 +63,8 @@
     <string name="display_large_header_buttons">Larger header buttons (easier to tap, but the title gets narrower)</string>
     <string name="display_auto_resume">Resume automatically when paused</string>
     <string name="display_auto_resume_hint">Resumes YouTube 2 seconds after it pauses (up to 3 times in 30 seconds, then it stops for a minute). Useful when another app takes the audio and pauses YouTube, but it cannot tell that apart from you pausing it yourself, so a pause you make will be resumed too. Turn it off when you do not need it.</string>
+    <string name="display_pin_notification">Pin the notification</string>
+    <string name="display_pin_notification_hint">When on, swiping the ongoing notification does not remove it (on Android 14 and later it is posted again right after being dismissed). Use the Stop action in the notification to end the overlay.</string>
     <string name="display_font_hint">Text size and background opacity can be changed from the settings button of the floating window.</string>
     <string name="cache_clear">Clear the video cache</string>
     <string name="cache_cleared">Cleared the video identification cache. If the window is showing, the current video is identified again.</string>
